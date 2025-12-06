@@ -2,12 +2,11 @@
 title: "Linking Network Structure to Pollen Deposition Dynamics"
 subtitle: "Case study on Succisa pratensis (2022-2024)"
 author: "Jakub Štenc"
-date: last-modified
-format: 
+format:
   html:
     toc: true
-    code-fold: true
-    theme: cosmo
+  gfm:
+    output-file: README.md
 ---
 
 ```{r setup, include=FALSE}
@@ -23,22 +22,18 @@ library(tidyr)
 # Install devtools if you haven't already
 if (!require("devtools")) install.packages("devtools")
 
-# Install HanPolNet using your token
-devtools::install_github(
-  "Pollination-Ecology-Group/HanPolNet",
-  auth_token = "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",
-  force = TRUE
-)
 library(HanPolNet)
 ```
 
 # Introduction
 
-As shown in our SCAPE 2025 presentation, we have a unique dataset covering both **pollinator visitation networks** and **stigmatic pollen loads** for *Succisa pratensis* across three years (2022–2024).
+Plant-pollinator interactions form a network of interactions within community, where often plants share multiple pollinators with another plant species.
+
+As shown in my SCAPE 2025 presentation, we have a unique dataset covering both **pollinator visitation networks** and **stigmatic pollen loads** for *Succisa pratensis* across three years (2022–2024).
 
 While we have observed annual variations in pollinator sharing and heterospecific pollen (HP) receipt, we currently lack a mechanistic explanation linking the *network structure* (who visits) to the *deposition outcome* (what lands on the stigma).
 
-**I propose we test a specific hypothesis derived from Arceo-Gómez et al. (2016)**: that the shape of the relationship between Conspecific Pollen (CP) and Heterospecific Pollen (HP) on individual stigmas is determined by the **evenness** and **quality** of the pollinator assemblage.
+**I propose we test a hypothesis derived from Arceo-Gómez et al. (2016)**: that the shape of the relationship between Conspecific Pollen (CP) and Heterospecific Pollen (HP) on individual stigmas is determined by the **evenness** and **quality** of the pollinator assemblage.
 
 # The Conceptual Framework
 
@@ -61,22 +56,14 @@ If the assemblage is **uneven** (dominated by a few high-quality specialists and
 -   **Ecological Driver:** Low pollinator evenness; high variation in pollinator quality.
 
 ```{r}
-#| fig-cap: "Raw pollen deposition data (2022-2024)."
+#| fig-cap: "Visualizing the CP-HP relationship. Look for linear increases vs. exponential decays."
 #| fig-align: center
 
-# Your code for plotting the data
-# Ensure 'year' is treated as a factor for coloring
-
-plot(
-  pollen_deposition$conspecific_pollen,
-  pollen_deposition$heterospecific_pollen, 
-  col = pollen_deposition$year, 
-  pch = 16,
-  xlab = "Conspecific Pollen",
-  ylab = "Heterospecific Pollen",
-  main = "CP vs HP per Year"
-)
-
+ggplot(pollen_deposition, aes(x = conspecific_pollen, y = heterospecific_pollen, color = as.factor(year))) +
+  geom_point(alpha = 0.5) +
+  geom_smooth(method = "loess", se = FALSE, size = 1.2) + # Smoothed trend line
+  theme_minimal() +
+  labs(x = "Conspecific Pollen", y = "Heterospecific Pollen", color = "Year")
 ```
 
 ```{r}
@@ -99,17 +86,6 @@ model_exp <- nls(
 
 # Compare fits
 AIC(model_linear, model_exp)
-```
-
-```{r}
-#| fig-cap: "Visualizing the CP-HP relationship. Look for linear increases vs. exponential decays."
-#| fig-align: center
-
-ggplot(pollen_deposition, aes(x = conspecific_pollen, y = heterospecific_pollen, color = as.factor(year))) +
-  geom_point(alpha = 0.5) +
-  geom_smooth(method = "loess", se = FALSE, size = 1.2) + # Smoothed trend line
-  theme_minimal() +
-  labs(x = "Conspecific Pollen", y = "Heterospecific Pollen", color = "Year")
 ```
 
 ```{r}
@@ -151,7 +127,7 @@ knitr::kable(rbind(results_2022, results_2023, results_2024), caption = "Model C
 
 # Proposed Analysis
 
-We can strictly test this hypothesis because we have independent datasets for both the **curve** (pollen counts) and the **driver** (visitation networks).
+We can test this hypothesis because we have independent datasets for both the **curve** (pollen counts) and the **driver** (visitation networks).
 
 ## Step 1: Characterize the CP-HP Curve (2022-2024)
 
@@ -185,5 +161,4 @@ If we confirm that *Succisa* fits a **Type 3** curve in years with low evenness,
 
 3.  **Network Metrics:** I will extract the specific visitor diversity indices for *Succisa* from the `HanPolNet` pipeline.
 
-References:
-Arceo-Gómez, G., Abdala-Roberts, L., Jankowiak, A., Kohler, C., Meindl, G. A., Navarro-Fernández, C. M., ... & Alonso, C. (2016). Patterns of among-and within-species variation in heterospecific pollen receipt: The importance of ecological generalization. *American Journal of Botany*, 103(3), 396-407.
+References: Arceo-Gómez, G., Abdala-Roberts, L., Jankowiak, A., Kohler, C., Meindl, G. A., Navarro-Fernández, C. M., ... & Alonso, C. (2016). Patterns of among-and within-species variation in heterospecific pollen receipt: The importance of ecological generalization. *American Journal of Botany*, 103(3), 396-407.

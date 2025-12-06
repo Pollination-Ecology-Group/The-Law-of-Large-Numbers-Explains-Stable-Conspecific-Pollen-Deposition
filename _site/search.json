@@ -1,0 +1,44 @@
+[
+  {
+    "objectID": "MS_Succisa_deposition.html",
+    "href": "MS_Succisa_deposition.html",
+    "title": "Linking Network Structure to Pollen Deposition Dynamics",
+    "section": "",
+    "text": "Plant-pollinator interactions form a network of interactions within community, where often plants share multiple pollinators with another plant species.\nAs shown in my SCAPE 2025 presentation, we have a unique dataset covering both pollinator visitation networks and stigmatic pollen loads for Succisa pratensis across three years (2022–2024).\nWhile we have observed annual variations in pollinator sharing and heterospecific pollen (HP) receipt, we currently lack a mechanistic explanation linking the network structure (who visits) to the deposition outcome (what lands on the stigma).\nI propose we test a hypothesis derived from Arceo-Gómez et al. (2016): that the shape of the relationship between Conspecific Pollen (CP) and Heterospecific Pollen (HP) on individual stigmas is determined by the evenness and quality of the pollinator assemblage."
+  },
+  {
+    "objectID": "MS_Succisa_deposition.html#scenario-a-the-generalist-assemblage-type-1",
+    "href": "MS_Succisa_deposition.html#scenario-a-the-generalist-assemblage-type-1",
+    "title": "Linking Network Structure to Pollen Deposition Dynamics",
+    "section": "Scenario A: The “Generalist” Assemblage (Type 1)",
+    "text": "Scenario A: The “Generalist” Assemblage (Type 1)\nIf the pollinator assemblage is even (many generalists contributing similarly), we expect Type 1 dynamics. These visitors carry mixed loads; therefore, as they deposit more CP, they inevitably deposit more HP.\n\nPattern: Linear positive relationship.\nEcological Driver: High pollinator evenness; generalized interactions."
+  },
+  {
+    "objectID": "MS_Succisa_deposition.html#scenario-b-the-specialistuneven-assemblage-type-3",
+    "href": "MS_Succisa_deposition.html#scenario-b-the-specialistuneven-assemblage-type-3",
+    "title": "Linking Network Structure to Pollen Deposition Dynamics",
+    "section": "Scenario B: The “Specialist/Uneven” Assemblage (Type 3)",
+    "text": "Scenario B: The “Specialist/Uneven” Assemblage (Type 3)\nIf the assemblage is uneven (dominated by a few high-quality specialists and some “messy” low-quality generalists), we expect Type 3 dynamics. High-quality pollinators deposit pure CP (high CP, low HP), while incidental visitors deposit mostly HP (low CP, high HP).\n\nPattern: Exponential decrease (or “L” shape).\nEcological Driver: Low pollinator evenness; high variation in pollinator quality.\n\n\nggplot(pollen_deposition, aes(x = conspecific_pollen, y = heterospecific_pollen, color = as.factor(year))) +\n  geom_point(alpha = 0.5) +\n  geom_smooth(method = \"loess\", se = FALSE, size = 1.2) + # Smoothed trend line\n  theme_minimal() +\n  labs(x = \"Conspecific Pollen\", y = \"Heterospecific Pollen\", color = \"Year\")\n\n\n\n\nVisualizing the CP-HP relationship. Look for linear increases vs. exponential decays.\n\n\n\n\n\n# Example code for running the models on our data\n\n# Split data by year (example for 2024)\ndata_2024 &lt;- subset(pollen_deposition, year == \"2024\")\n\n# 1. Linear Model\nmodel_linear &lt;- lm(heterospecific_pollen ~ conspecific_pollen, data = data_2024)\n\n# 2. Exponential Model (Non-linear Least Squares)\n# We provide starting values for a (intercept) and b (decay rate)\nmodel_exp &lt;- nls(\n  heterospecific_pollen ~ a * exp(b * conspecific_pollen), \n  data = data_2024, \n  start = list(a = 300, b = -0.01)\n)\n\n# Compare fits\nAIC(model_linear, model_exp)\n\n\ntest_curve_shape &lt;- function(year_data, year_label) {\n  \n  # 1. Fit Linear Model (Type 1)\n  fit_linear &lt;- lm(heterospecific_pollen ~ conspecific_pollen, data = year_data)\n  \n  # 2. Fit Exponential Model (Type 3)\n  fit_exp &lt;- tryCatch({\n    nls(heterospecific_pollen ~ a * exp(b * conspecific_pollen), \n        data = year_data,\n        start = list(a = max(year_data$heterospecific_pollen), b = -0.01))\n  }, error = function(e) NULL)\n  \n  # 3. Compare AIC\n  aic_lin &lt;- AIC(fit_linear)\n  aic_exp &lt;- if(!is.null(fit_exp)) AIC(fit_exp) else NA\n  \n  return(data.frame(\n    Year = year_label,\n    Linear_AIC = round(aic_lin, 2),\n    Exp_AIC = round(aic_exp, 2),\n    Best_Fit = ifelse(!is.na(aic_exp) && aic_exp &lt; (aic_lin - 2), \"Exponential (Type 3)\", \"Linear (Type 1)\")\n  ))\n}\n\n# Run the test\nresults_2022 &lt;- test_curve_shape(subset(pollen_deposition, year == 2022), \"2022\")\nresults_2023 &lt;- test_curve_shape(subset(pollen_deposition, year == 2023), \"2023\")\nresults_2024 &lt;- test_curve_shape(subset(pollen_deposition, year == 2024), \"2024\")\n\n# Display Results\nknitr::kable(rbind(results_2022, results_2023, results_2024), caption = \"Model Comparison Results\")\n\n\nModel Comparison Results\n\n\nYear\nLinear_AIC\nExp_AIC\nBest_Fit\n\n\n\n\n2022\n765.44\n773.08\nLinear (Type 1)\n\n\n2023\n930.86\nNA\nLinear (Type 1)\n\n\n2024\n4052.84\nNA\nLinear (Type 1)"
+  },
+  {
+    "objectID": "MS_Succisa_deposition.html#step-1-characterize-the-cp-hp-curve-2022-2024",
+    "href": "MS_Succisa_deposition.html#step-1-characterize-the-cp-hp-curve-2022-2024",
+    "title": "Linking Network Structure to Pollen Deposition Dynamics",
+    "section": "Step 1: Characterize the CP-HP Curve (2022-2024)",
+    "text": "Step 1: Characterize the CP-HP Curve (2022-2024)\nFor each year of Succisa data, we will fit two models to the stigmatic pollen counts:\n\nLinear Model (HP∼CP)\nNon-linear/Exponential Model (HP∼a⋅eb⋅CP)\n\nWe will determine if the relationship changed between 2022, 2023, and 2024. For example, did 2024 (which showed lower HP in preliminary results) shift from a Type 1 to a Type 3 curve?"
+  },
+  {
+    "objectID": "MS_Succisa_deposition.html#step-2-calculate-pollinator-evenness",
+    "href": "MS_Succisa_deposition.html#step-2-calculate-pollinator-evenness",
+    "title": "Linking Network Structure to Pollen Deposition Dynamics",
+    "section": "Step 2: Calculate Pollinator Evenness",
+    "text": "Step 2: Calculate Pollinator Evenness\nUsing our “snapshot” network data (97,000+ interactions), we will calculate Simpson’s Evenness specifically for the sub-network of visitors to Succisa pratensis for the corresponding years."
+  },
+  {
+    "objectID": "MS_Succisa_deposition.html#step-3-the-link",
+    "href": "MS_Succisa_deposition.html#step-3-the-link",
+    "title": "Linking Network Structure to Pollen Deposition Dynamics",
+    "section": "Step 3: The Link",
+    "text": "Step 3: The Link\nWe will test if years (or plots) with Type 1 (Linear) pollen curves correspond to years with higher pollinator evenness in the visitation data."
+  }
+]
