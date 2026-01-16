@@ -1,6 +1,6 @@
 project:
   type: website
-output-dir: docs
+  output-dir: docs
 # The post-render script must be indented here, under 'project'
 post-render:
   - cp docs/README.md README.md

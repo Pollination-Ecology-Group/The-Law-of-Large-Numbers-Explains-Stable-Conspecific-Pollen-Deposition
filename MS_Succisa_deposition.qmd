@@ -1,10 +1,14 @@
 ---
-title: "Linking Network Structure to Pollen Deposition Dynamics"
+title: "Linking Pollen Deposition Dynamics to Plant-Pollinator Network Structure"
 subtitle: "Case study on Succisa pratensis (2022-2024)"
 author: "Jakub Štenc"
+bibliography: "tech_docs/bibliography.bib"
+link-citations: true
+csl:  "tech_docs/ajb.csl"
 format:
   html:
     toc: true
+  docx: default
   gfm:
     output-file: README.md
 ---
@@ -19,21 +23,68 @@ knitr::opts_chunk$set(echo = TRUE, message = FALSE, warning = FALSE)
 library(ggplot2)
 library(dplyr)
 library(tidyr)
+library(nlme)
+library(stringr)
+
 # Install devtools if you haven't already
 if (!require("devtools")) install.packages("devtools")
 
 library(HanPolNet)
+
+# Data
+
+
+pollen_load_guts_24 <- read.csv(file.path("data", "pollen_load_and_guts_2024_Succisa_pratensis.csv"))
+
+SVD_Suc_pra <- read.csv(file.path("data", "SVD_Succisa_pratensis.csv"))
+
+#' Calculate Simpson's Evenness
+#'
+#' @param data A vector of abundances or a data frame with species counts
+#' @return Numeric value of evenness (0 to 1)
+calculate_evenness <- function(counts) {
+  # Remove zeros
+  counts <- counts[counts > 0]
+  if (length(counts) <= 1) return(NA)
+  
+  # Total individuals
+  N <- sum(counts)
+  
+  # Simpson's Index (D) = sum(pi^2)
+  p_i <- counts / N
+  D <- sum(p_i^2)
+  
+  # Simpson's Diversity (1/D)
+  simp_div <- 1 / D
+  
+  # Species Richness (S)
+  S <- length(counts)
+  
+  # Simpson's Evenness (E_1/D) = (1/D) / S
+  E <- simp_div / S
+  
+  return(E)
+}
+
+
 ```
 
 # Introduction
 
-Plant-pollinator interactions form a network of interactions within community, where often plants share multiple pollinators with another plant species.
+ In plant-pollinator communities, plants often share pollinators with other species, leading to deposition of pollen from other species (Heterospecific Pollen) on the stigmas. This is a common phenomenon in nature with significant implications for plant reproduction and evolution and it has been studied in multiple systems [@arceo2016patterns]. Based on previous studies, it is expected that the network structure (particularly pollinator evenness) may drive the pattern of conspecific and heterospecific pollen deposition on stigmas. However, the relationship between deposited pollen, pollinator evenness and pollinator pollen transfer capability is not well understood.
 
-As shown in my SCAPE 2025 presentation, we have a unique dataset covering both **pollinator visitation networks** and **stigmatic pollen loads** for *Succisa pratensis* across three years (2022–2024).
 
-While we have observed annual variations in pollinator sharing and heterospecific pollen (HP) receipt, we currently lack a mechanistic explanation linking the *network structure* (who visits) to the *deposition outcome* (what lands on the stigma).
 
-**I propose we test a hypothesis derived from Arceo-Gómez et al. (2016)**: that the shape of the relationship between Conspecific Pollen (CP) and Heterospecific Pollen (HP) on individual stigmas is determined by the **evenness** and **quality** of the pollinator assemblage.
+This study aims to determine if the composition of pollinator spectra of *Succisa pratensis* functionally constrains the plant to high heterospecific pollen (HP) receipt, and whether specific pollinator "body loads" explain the persistence of this pattern across years. We structure our analysis around three specific objectives:
+
+**1. The Pattern (Validation)**
+Determine if the relationship between Conspecific (CP) and Heterospecific (HP) pollen deposition on *Succisa* stigmas follows a linear (generalist) or exponential (specialist-shielded) trajectory, and assess its stability across years.
+
+**2. The Mechanism (The "Guts" Link)**
+Link this stigmatic deposition pattern to the "pollen transport quality" of the dominant visitors (e.g., *Eristalis* spp.). We hypothesize that the "Linear" pattern is driven by dominant visitors being "messy vectors," carrying large conspecific loads but also significant heterospecific loads.
+
+**3. The Driver (Network Evenness)**
+Assess whether the network evenness (the diversity of partners) correlates with the intensity of heterospecific pollen deposition. Following @arceo2016patterns, we test if high evenness drives Type 1 curves, even when absolute pollen pressure varies.
 
 # The Conceptual Framework
 
@@ -55,64 +106,77 @@ If the assemblage is **uneven** (dominated by a few high-quality specialists and
 
 -   **Ecological Driver:** Low pollinator evenness; high variation in pollinator quality.
 
+## Methods
+
+### Pollen deposited on stigmas
+
+### Data analysis
+
+Full metadata, variable definitions, and summary statistics for the datasets used in this study are available in the [Data Dictionary](https://www.google.com/search?q=data_dictionary.html).
+
+## Results
+
 ```{r}
 #| fig-cap: "Visualizing the CP-HP relationship. Look for linear increases vs. exponential decays."
 #| fig-align: center
+#| code-fold: true
+
 
 ggplot(pollen_deposition, aes(x = conspecific_pollen, y = heterospecific_pollen, color = as.factor(year))) +
-  geom_point(alpha = 0.5) +
-  geom_smooth(method = "loess", se = FALSE, size = 1.2) + # Smoothed trend line
-  theme_minimal() +
-  labs(x = "Conspecific Pollen", y = "Heterospecific Pollen", color = "Year")
+    geom_point(alpha = 0.5) +
+    geom_smooth(method = "loess", se = FALSE, size = 1.2) + # Smoothed trend line
+    theme_minimal() +
+    labs(x = "Conspecific Pollen", y = "Heterospecific Pollen", color = "Year")
 ```
 
 ```{r}
 #| eval: false
-# Example code for running the models on our data
+#| code-fold: true
 
-# Split data by year (example for 2024)
-data_2024 <- subset(pollen_deposition, year == "2024")
+pollen_deposition <- pollen_deposition[!is.na(pollen_deposition$heterospecific_pollen), ] # Remove rows with NA in heterospecific_pollen
 
-# 1. Linear Model
-model_linear <- lm(heterospecific_pollen ~ conspecific_pollen, data = data_2024)
+pollen_deposition$plant_id <- str_sub(pollen_deposition$id, end = -3) # Extract plant ID from stigma ID
 
-# 2. Exponential Model (Non-linear Least Squares)
-# We provide starting values for a (intercept) and b (decay rate)
-model_exp <- nls(
-  heterospecific_pollen ~ a * exp(b * conspecific_pollen), 
-  data = data_2024, 
-  start = list(a = 300, b = -0.01)
+model_linear_mixed <- lme(
+    heterospecific_pollen ~ conspecific_pollen * year, # Fixed effect: conspecific pollen and year
+    random = ~ 1 | plant_id, # This tells R: "Group stigmas by inflorescence"
+    data = pollen_deposition
 )
 
-# Compare fits
-AIC(model_linear, model_exp)
+summary(model_linear_mixed)
+
+
 ```
 
 ```{r}
 #| echo: true
+#| code-fold: true
 
 test_curve_shape <- function(year_data, year_label) {
-  
-  # 1. Fit Linear Model (Type 1)
-  fit_linear <- lm(heterospecific_pollen ~ conspecific_pollen, data = year_data)
-  
-  # 2. Fit Exponential Model (Type 3)
-  fit_exp <- tryCatch({
-    nls(heterospecific_pollen ~ a * exp(b * conspecific_pollen), 
-        data = year_data,
-        start = list(a = max(year_data$heterospecific_pollen), b = -0.01))
-  }, error = function(e) NULL)
-  
-  # 3. Compare AIC
-  aic_lin <- AIC(fit_linear)
-  aic_exp <- if(!is.null(fit_exp)) AIC(fit_exp) else NA
-  
-  return(data.frame(
-    Year = year_label,
-    Linear_AIC = round(aic_lin, 2),
-    Exp_AIC = round(aic_exp, 2),
-    Best_Fit = ifelse(!is.na(aic_exp) && aic_exp < (aic_lin - 2), "Exponential (Type 3)", "Linear (Type 1)")
-  ))
+    # 1. Fit Linear Model (Type 1)
+    fit_linear <- lm(heterospecific_pollen ~ conspecific_pollen, data = year_data)
+
+    # 2. Fit Exponential Model (Type 3)
+    fit_exp <- tryCatch(
+        {
+            nls(heterospecific_pollen ~ a * exp(b * conspecific_pollen),
+                data = year_data,
+                start = list(a = max(year_data$heterospecific_pollen), b = -0.01)
+            )
+        },
+        error = function(e) NULL
+    )
+
+    # 3. Compare AIC
+    aic_lin <- AIC(fit_linear)
+    aic_exp <- if (!is.null(fit_exp)) AIC(fit_exp) else NA
+
+    return(data.frame(
+        Year = year_label,
+        Linear_AIC = round(aic_lin, 2),
+        Exp_AIC = round(aic_exp, 2),
+        Best_Fit = ifelse(!is.na(aic_exp) && aic_exp < (aic_lin - 2), "Exponential (Type 3)", "Linear (Type 1)")
+    ))
 }
 
 # Run the test
@@ -125,27 +189,60 @@ knitr::kable(rbind(results_2022, results_2023, results_2024), caption = "Model C
 
 ```
 
+```{r}
+suc_pra_222324 <- get_interaction_data(
+    plant_species = "Suc_pra",
+    start_time = "7:00",
+    end_time = "18:00",
+    remove_zeros = TRUE,
+    standardize = TRUE
+)
+```
+
+```{r}
+
+ggplot(pollen_load_guts_24, aes(x = suc_pra_load, y = other_pollen_load, color = as.factor(pollinator_species))) +
+    geom_point(alpha = 0.5) +
+    theme_minimal() +
+    labs(x = "Conspecific Pollen", y = "Heterospecific Pollen", color = "Pollinator species")
+```
+
+```{r}
+ggplot(pollen_load_guts_24, aes(x = suc_pra_guts, y = other_pollen_guts, color = as.factor(pollinator_species))) +
+    geom_point(alpha = 0.5) +
+    theme_minimal() +
+    labs(x = "Conspecific Pollen", y = "Heterospecific Pollen", color = "Pollinator species")
+```
+
+```{r}
+ggplot(SVD_Suc_pra, aes(x = conspecific_pollen, y = heterospecific_pollen, color = as.factor(pollinator_species))) +
+    geom_point(alpha = 0.5) +
+    theme_minimal() +
+    labs(x = "Conspecific Pollen", y = "Heterospecific Pollen", color = "Pollinator species")
+```
+
+
 # Proposed Analysis
 
-We can test this hypothesis because we have independent datasets for both the **curve** (pollen counts) and the **driver** (visitation networks).
+We test our hypothesis using independent datasets for both the **curve** (pollen counts) and the **driver** (visitation networks), following our three-step logic:
 
-## Step 1: Characterize the CP-HP Curve (2022-2024)
+## Step 1: The Pattern (Validation)
 
-For each year of *Succisa* data, we will fit two models to the stigmatic pollen counts:
+For each year of *Succisa* data (2022-2024), we fit two models to the stigmatic pollen counts to characterize the CP-HP relationship:
+1.  **Linear Model (Type 1)**: $HP \sim CP$
+2.  **Exponential Model (Type 3)**: $HP \sim a \cdot e^{b \cdot CP}$
 
-1.  Linear Model (HP∼CP)
+We assess whether the "linear" pattern (ecological exposure to HP) persists across years despite variations in pollinator abundance.
 
-2.  Non-linear/Exponential Model (HP∼a⋅eb⋅CP)
+## Step 2: The Mechanism (Body Loads)
 
-We will determine if the relationship changed between 2022, 2023, and 2024. For example, did 2024 (which showed lower HP in preliminary results) shift from a Type 1 to a Type 3 curve?
+We analyze the "pollen transport quality" of dominant visitors by examining their body loads (and potentially gut contents). We test if the dominant visitors (e.g., Syrphids) carry mixed loads (high CP and high HP), effectively acting as "messy vectors" that drive the Type 1 relationship.
 
-## Step 2: Calculate Pollinator Evenness
+## Step 3: The Driver (Network Evenness)
 
-Using our "snapshot" network data (97,000+ interactions), we will calculate **Simpson’s Evenness** specifically for the sub-network of visitors to *Succisa pratensis* for the corresponding years.
-
-## Step 3: The Link
-
-We will test if years (or plots) with **Type 1 (Linear)** pollen curves correspond to years with **higher pollinator evenness** in the visitation data.
+We calculate **Simpson’s Evenness** for the sub-network of visitors to *Succisa pratensis* for each year. We then link this network metric to the deposition pattern:
+-   **Hypothesis**: Years/Sites with **Type 1 (Linear)** curves correspond to **higher pollinator evenness**.
+-   This tests if the network structure (high variation in partners) functionally prevents the plant from escaping heterospecific pollen.
 
 # Why This Matters
 
@@ -161,4 +258,6 @@ If we confirm that *Succisa* fits a **Type 3** curve in years with low evenness,
 
 3.  **Network Metrics:** I will extract the specific visitor diversity indices for *Succisa* from the `HanPolNet` pipeline.
 
-References: Arceo-Gómez, G., Abdala-Roberts, L., Jankowiak, A., Kohler, C., Meindl, G. A., Navarro-Fernández, C. M., ... & Alonso, C. (2016). Patterns of among-and within-species variation in heterospecific pollen receipt: The importance of ecological generalization. *American Journal of Botany*, 103(3), 396-407.
+## Discussion
+
+## References

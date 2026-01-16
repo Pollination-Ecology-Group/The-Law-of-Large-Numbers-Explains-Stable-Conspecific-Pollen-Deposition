@@ -3,24 +3,33 @@ Jakub Štenc
 
 # Introduction
 
-Plant-pollinator interactions form a network of interactions within
-community, where often plants share multiple pollinators with another
-plant species.
+Pollen deposited on stigmas is the ultimate outcome of pollination
+interactions. However, the relationship between **who visits**
+(pollinator network structure) and **what lands on the stigma** (pollen
+deposition) remains poorly understood.
 
-As shown in my SCAPE 2025 presentation, we have a unique dataset
-covering both **pollinator visitation networks** and **stigmatic pollen
-loads** for *Succisa pratensis* across three years (2022–2024).
-
-While we have observed annual variations in pollinator sharing and
-heterospecific pollen (HP) receipt, we currently lack a mechanistic
+While some studies have observed annual variations in pollinator sharing
+and heterospecific pollen (HP) receipt, we currently lack a mechanistic
 explanation linking the *network structure* (who visits) to the
 *deposition outcome* (what lands on the stigma).
 
-**I propose we test a hypothesis derived from Arceo-Gómez et
-al. (2016)**: that the shape of the relationship between Conspecific
-Pollen (CP) and Heterospecific Pollen (HP) on individual stigmas is
-determined by the **evenness** and **quality** of the pollinator
-assemblage.
+Arceo-Gómez et al. ([2016](#ref-arceo2016patterns)) provided a
+conceptual framework suggesting that the shape of the relationship
+between Conspecific Pollen (CP) and Heterospecific Pollen (HP) on
+stigmas can reveal insights about the pollinator assemblage’s structure.
+In their study, Arceo-Gómez et al. ([2016](#ref-arceo2016patterns))
+argue that intraspecific variation in pollen receipt is not random. By
+plotting HP against CP for individual flowers, two distinct patterns
+typically emerge. These patterns act as a signature of the pollinator
+community structure.
+
+**I propose we test a hypothesis derived from** Arceo-Gómez et al.
+([2016](#ref-arceo2016patterns)) : that the shape of the relationship
+between Conspecific Pollen (CP) and Heterospecific Pollen (HP) on
+individual stigmas is determined by the **evenness** and **quality** of
+the pollinator assemblage. We utilize a dataset covering both
+**pollinator visitation networks** and **stigmatic pollen loads** for
+*Succisa pratensis* across three years (2022–2024).
 
 # The Conceptual Framework
 
@@ -53,63 +62,84 @@ HP), while incidental visitors deposit mostly HP (low CP, high HP).
 - **Ecological Driver:** Low pollinator evenness; high variation in
   pollinator quality.
 
+## Methods
+
+### Pollen deposited on stigmas
+
+### Data analysis
+
+Full metadata, variable definitions, and summary statistics for the
+datasets used in this study are available in the [Data
+Dictionary](https://www.google.com/search?q=data_dictionary.html).
+
+## Results
+
+<details class="code-fold">
+<summary>Code</summary>
+
 ``` r
 ggplot(pollen_deposition, aes(x = conspecific_pollen, y = heterospecific_pollen, color = as.factor(year))) +
-  geom_point(alpha = 0.5) +
-  geom_smooth(method = "loess", se = FALSE, size = 1.2) + # Smoothed trend line
-  theme_minimal() +
-  labs(x = "Conspecific Pollen", y = "Heterospecific Pollen", color = "Year")
+    geom_point(alpha = 0.5) +
+    geom_smooth(method = "loess", se = FALSE, size = 1.2) + # Smoothed trend line
+    theme_minimal() +
+    labs(x = "Conspecific Pollen", y = "Heterospecific Pollen", color = "Year")
 ```
+
+</details>
 
 <img
 src="MS_Succisa_deposition_files/figure-commonmark/unnamed-chunk-1-1.png"
 data-fig-align="center"
 alt="Visualizing the CP-HP relationship. Look for linear increases vs. exponential decays." />
 
+<details class="code-fold">
+<summary>Code</summary>
+
 ``` r
-# Example code for running the models on our data
+pollen_deposition <- pollen_deposition[!is.na(pollen_deposition$heterospecific_pollen), ] # Remove rows with NA in heterospecific_pollen
 
-# Split data by year (example for 2024)
-data_2024 <- subset(pollen_deposition, year == "2024")
+pollen_deposition$plant_id <- str_sub(pollen_deposition$id, end = -3) # Extract plant ID from stigma ID
 
-# 1. Linear Model
-model_linear <- lm(heterospecific_pollen ~ conspecific_pollen, data = data_2024)
-
-# 2. Exponential Model (Non-linear Least Squares)
-# We provide starting values for a (intercept) and b (decay rate)
-model_exp <- nls(
-  heterospecific_pollen ~ a * exp(b * conspecific_pollen), 
-  data = data_2024, 
-  start = list(a = 300, b = -0.01)
+model_linear_mixed <- lme(
+    heterospecific_pollen ~ conspecific_pollen * year, # Fixed effect: conspecific pollen and year
+    random = ~ 1 | plant_id, # This tells R: "Group stigmas by inflorescence"
+    data = pollen_deposition
 )
 
-# Compare fits
-AIC(model_linear, model_exp)
+summary(model_linear_mixed)
 ```
+
+</details>
+
+<details class="code-fold">
+<summary>Code</summary>
 
 ``` r
 test_curve_shape <- function(year_data, year_label) {
-  
-  # 1. Fit Linear Model (Type 1)
-  fit_linear <- lm(heterospecific_pollen ~ conspecific_pollen, data = year_data)
-  
-  # 2. Fit Exponential Model (Type 3)
-  fit_exp <- tryCatch({
-    nls(heterospecific_pollen ~ a * exp(b * conspecific_pollen), 
-        data = year_data,
-        start = list(a = max(year_data$heterospecific_pollen), b = -0.01))
-  }, error = function(e) NULL)
-  
-  # 3. Compare AIC
-  aic_lin <- AIC(fit_linear)
-  aic_exp <- if(!is.null(fit_exp)) AIC(fit_exp) else NA
-  
-  return(data.frame(
-    Year = year_label,
-    Linear_AIC = round(aic_lin, 2),
-    Exp_AIC = round(aic_exp, 2),
-    Best_Fit = ifelse(!is.na(aic_exp) && aic_exp < (aic_lin - 2), "Exponential (Type 3)", "Linear (Type 1)")
-  ))
+    # 1. Fit Linear Model (Type 1)
+    fit_linear <- lm(heterospecific_pollen ~ conspecific_pollen, data = year_data)
+
+    # 2. Fit Exponential Model (Type 3)
+    fit_exp <- tryCatch(
+        {
+            nls(heterospecific_pollen ~ a * exp(b * conspecific_pollen),
+                data = year_data,
+                start = list(a = max(year_data$heterospecific_pollen), b = -0.01)
+            )
+        },
+        error = function(e) NULL
+    )
+
+    # 3. Compare AIC
+    aic_lin <- AIC(fit_linear)
+    aic_exp <- if (!is.null(fit_exp)) AIC(fit_exp) else NA
+
+    return(data.frame(
+        Year = year_label,
+        Linear_AIC = round(aic_lin, 2),
+        Exp_AIC = round(aic_exp, 2),
+        Best_Fit = ifelse(!is.na(aic_exp) && aic_exp < (aic_lin - 2), "Exponential (Type 3)", "Linear (Type 1)")
+    ))
 }
 
 # Run the test
@@ -121,6 +151,8 @@ results_2024 <- test_curve_shape(subset(pollen_deposition, year == 2024), "2024"
 knitr::kable(rbind(results_2022, results_2023, results_2024), caption = "Model Comparison Results")
 ```
 
+</details>
+
 | Year | Linear_AIC | Exp_AIC | Best_Fit        |
 |:-----|-----------:|--------:|:----------------|
 | 2022 |     765.44 |  773.08 | Linear (Type 1) |
@@ -128,6 +160,43 @@ knitr::kable(rbind(results_2022, results_2023, results_2024), caption = "Model C
 | 2024 |    4052.84 |      NA | Linear (Type 1) |
 
 Model Comparison Results
+
+``` r
+suc_pra_222324 <- get_interaction_data(
+    plant_species = "Suc_pra",
+    start_time = "7:00",
+    end_time = "18:00",
+    remove_zeros = TRUE,
+    standardize = TRUE
+)
+```
+
+``` r
+ggplot(pollen_load_guts_24, aes(x = suc_pra_load, y = other_pollen_load, color = as.factor(pollinator_species))) +
+    geom_point(alpha = 0.5) +
+    theme_minimal() +
+    labs(x = "Conspecific Pollen", y = "Heterospecific Pollen", color = "Pollinator species")
+```
+
+![](MS_Succisa_deposition_files/figure-commonmark/unnamed-chunk-5-1.png)
+
+``` r
+ggplot(pollen_load_guts_24, aes(x = suc_pra_guts, y = other_pollen_guts, color = as.factor(pollinator_species))) +
+    geom_point(alpha = 0.5) +
+    theme_minimal() +
+    labs(x = "Conspecific Pollen", y = "Heterospecific Pollen", color = "Pollinator species")
+```
+
+![](MS_Succisa_deposition_files/figure-commonmark/unnamed-chunk-6-1.png)
+
+``` r
+ggplot(SVD_Suc_pra, aes(x = conspecific_pollen, y = heterospecific_pollen, color = as.factor(pollinator_species))) +
+    geom_point(alpha = 0.5) +
+    theme_minimal() +
+    labs(x = "Conspecific Pollen", y = "Heterospecific Pollen", color = "Pollinator species")
+```
+
+![](MS_Succisa_deposition_files/figure-commonmark/unnamed-chunk-7-1.png)
 
 # Proposed Analysis
 
@@ -183,8 +252,20 @@ heterospecific neighbors.
 3.  **Network Metrics:** I will extract the specific visitor diversity
     indices for *Succisa* from the `HanPolNet` pipeline.
 
-References: Arceo-Gómez, G., Abdala-Roberts, L., Jankowiak, A., Kohler,
-C., Meindl, G. A., Navarro-Fernández, C. M., … & Alonso, C. (2016).
-Patterns of among-and within-species variation in heterospecific pollen
-receipt: The importance of ecological generalization. *American Journal
-of Botany*, 103(3), 396-407.
+## Discussion
+
+## References
+
+<div id="refs" class="references csl-bib-body hanging-indent">
+
+<div id="ref-arceo2016patterns" class="csl-entry">
+
+Arceo-Gómez, G., L. Abdala-Roberts, A. Jankowiak, C. Kohler, G. A.
+Meindl, C. M. Navarro-Fernández, V. Parra-Tabla, et al. 2016. Patterns
+of among-and within-species variation in heterospecific pollen receipt:
+The importance of ecological generalization. *American Journal of
+Botany* 103: 396–407.
+
+</div>
+
+</div>
