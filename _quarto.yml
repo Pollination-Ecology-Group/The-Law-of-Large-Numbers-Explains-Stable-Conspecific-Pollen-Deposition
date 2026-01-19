@@ -1,10 +1,14 @@
 project:
   type: website
   output-dir: docs
-# The post-render script must be indented here, under 'project'
-post-render:
-  - cp docs/README.md README.md
-  
+  # The post-render script must be indented here, under 'project'
+  post-render:
+    - cp docs/README.md README.md
+  render:
+    - "!local_packages/"
+    - "!hanpolnet_temp/"
+    - MS_Succisa_deposition.qmd
+
 format:
   html:
     theme: cosmo
@@ -13,7 +17,4 @@ format:
   gfm:
     preview-mode: webtex
     output-file: "README.md"
-
-render:
-  - MS_Succisa_deposition.qmd
 

@@ -38,53 +38,19 @@ pollen_load_guts_24 <- read.csv(file.path("data", "pollen_load_and_guts_2024_Suc
 
 SVD_Suc_pra <- read.csv(file.path("data", "SVD_Succisa_pratensis.csv"))
 
-#' Calculate Simpson's Evenness
-#'
-#' @param data A vector of abundances or a data frame with species counts
-#' @return Numeric value of evenness (0 to 1)
-calculate_evenness <- function(counts) {
-  # Remove zeros
-  counts <- counts[counts > 0]
-  if (length(counts) <= 1) return(NA)
-  
-  # Total individuals
-  N <- sum(counts)
-  
-  # Simpson's Index (D) = sum(pi^2)
-  p_i <- counts / N
-  D <- sum(p_i^2)
-  
-  # Simpson's Diversity (1/D)
-  simp_div <- 1 / D
-  
-  # Species Richness (S)
-  S <- length(counts)
-  
-  # Simpson's Evenness (E_1/D) = (1/D) / S
-  E <- simp_div / S
-  
-  return(E)
-}
+# 1. Get interaction data
+interaction_data_Succisa_22_24 <- get_interaction_data(
+    years = c(22, 23, 24), # only 3 years of data
+    plant_species = "Suc_pra", # only Succisa pratensis
+    is_pollinator = TRUE, # only pollinators
+    remove_zeros = TRUE, # remove interactions with 0 pollen
+    standardize = TRUE # standardize interactions by sampling effort
+)
 
 
 ```
 
-# Introduction
 
- In plant-pollinator communities, plants often share pollinators with other species, leading to deposition of pollen from other species (Heterospecific Pollen) on the stigmas. This is a common phenomenon in nature with significant implications for plant reproduction and evolution and it has been studied in multiple systems [@arceo2016patterns]. Based on previous studies, it is expected that the network structure (particularly pollinator evenness) may drive the pattern of conspecific and heterospecific pollen deposition on stigmas. However, the relationship between deposited pollen, pollinator evenness and pollinator pollen transfer capability is not well understood.
-
-
-
-This study aims to determine if the composition of pollinator spectra of *Succisa pratensis* functionally constrains the plant to high heterospecific pollen (HP) receipt, and whether specific pollinator "body loads" explain the persistence of this pattern across years. We structure our analysis around three specific objectives:
-
-**1. The Pattern (Validation)**
-Determine if the relationship between Conspecific (CP) and Heterospecific (HP) pollen deposition on *Succisa* stigmas follows a linear (generalist) or exponential (specialist-shielded) trajectory, and assess its stability across years.
-
-**2. The Mechanism (The "Guts" Link)**
-Link this stigmatic deposition pattern to the "pollen transport quality" of the dominant visitors (e.g., *Eristalis* spp.). We hypothesize that the "Linear" pattern is driven by dominant visitors being "messy vectors," carrying large conspecific loads but also significant heterospecific loads.
-
-**3. The Driver (Network Evenness)**
-Assess whether the network evenness (the diversity of partners) correlates with the intensity of heterospecific pollen deposition. Following @arceo2016patterns, we test if high evenness drives Type 1 curves, even when absolute pollen pressure varies.
 
 # The Conceptual Framework
 
@@ -106,13 +72,46 @@ If the assemblage is **uneven** (dominated by a few high-quality specialists and
 
 -   **Ecological Driver:** Low pollinator evenness; high variation in pollinator quality.
 
+![alt](images/Fig_1_Gomez_2016.png){fig-align="center"}
+
+
+# Abstract
+
+
+
+# Introduction
+
+ In plant-pollinator communities, plants often share pollinators with other species, leading to deposition of pollen from other species (Heterospecific Pollen) on the stigmas. This is a common phenomenon in nature with significant implications for plant reproduction and evolution and it has been studied in multiple systems [@arceo2016patterns]. Based on previous studies, it is expected that the network structure (particularly pollinator evenness) may drive the pattern of conspecific and heterospecific pollen deposition on stigmas. However, the relationship between deposited pollen, pollinator evenness and pollinator pollen transfer capability is not well understood.
+
+
+*Pollen deposition dynamics*
+
+*Pollen load and pollen feeding*
+
+*The effect of the network properties to the pollen deposition dynamics*
+
+
+This study aims to determine if the composition of pollinator spectra of *Succisa pratensis* functionally constrains the plant to high heterospecific pollen (HP) receipt, and whether pollinator pollen body load and content of pollinator intestines explain the persistence of this pattern across years. We structure our analysis around three specific objectives:
+
+- Determine if the relationship between Conspecific (CP) and Heterospecific (HP) pollen deposition on *Succisa* stigmas follows a linear (generalist) or exponential (specialist-shielded) trajectory, and assess its stability across years.
+
+- Link the stigmatic deposition pattern to the "pollen transport quality" of the dominant visitors (e.g., *Eristalis* spp.). We hypothesize that the "Linear" pattern is driven by dominant visitors being "messy vectors," carrying large conspecific loads but also significant heterospecific loads.
+
+- Assess whether the network evenness (the diversity of partners) correlates with the intensity of heterospecific pollen deposition. Following @arceo2016patterns, we test if high evenness drives Type 1 curves, even when absolute pollen pressure varies.
+
+To do so, we employ data on pollen load and pollen feeding of pollinators, pollen deposition on stigmas, and network evenness, collected in 2022-2024 within a diverse plant-pollinator community with *Succisa pratensis* Moench (Caprifoliaceae) as the focal species.
+
+![A) Stigma of *Succisa pratensis* with several pollen morphotypes, B) Pollinator (*Eristalis* sp.) on flower of *Succisa pratensis*, see the pollen on pollinator body, C) Detail of anther with visible pollen grains of *Succisa pratensis*, D) Detail of stigma of *Succisa pratensis* with visible deposited pollen grains ](images/Succisa_panel.jpg){#fig-panel}
+
+
 ## Methods
+
 
 ### Pollen deposited on stigmas
 
 ### Data analysis
 
-Full metadata, variable definitions, and summary statistics for the datasets used in this study are available in the [Data Dictionary](https://www.google.com/search?q=data_dictionary.html).
+Full metadata, variable definitions, and summary statistics for the datasets used in this study are available in the Supplementary material S1.
 
 ## Results
 
@@ -214,11 +213,53 @@ ggplot(pollen_load_guts_24, aes(x = suc_pra_guts, y = other_pollen_guts, color =
     labs(x = "Conspecific Pollen", y = "Heterospecific Pollen", color = "Pollinator species")
 ```
 
+
 ```{r}
-ggplot(SVD_Suc_pra, aes(x = conspecific_pollen, y = heterospecific_pollen, color = as.factor(pollinator_species))) +
-    geom_point(alpha = 0.5) +
+#| label: calc-diversity-panel
+#| echo: true
+#| fig-height: 6
+#| fig-width: 10
+
+# 1. Calculate Evenness (Alpha Diversity)
+succisa_evenness <- calculate_pollinator_evenness(
+    data = interaction_data_Succisa_22_24,
+    group_by = c("year", "plot_id")
+)
+
+p_evenness <- ggplot(succisa_evenness, aes(x = as.factor(year), y = J, fill = as.factor(year))) +
+    geom_boxplot(alpha = 0.6, outlier.shape = NA) +
+    geom_jitter(width = 0.2, alpha = 0.5) +
+    labs(
+        title = "A. Pollinator Evenness (J')",
+        subtitle = "Per plot",
+        x = "Year",
+        y = "Pielou's Evenness (J')"
+    ) +
     theme_minimal() +
-    labs(x = "Conspecific Pollen", y = "Heterospecific Pollen", color = "Pollinator species")
+    theme(legend.position = "none")
+
+# 2. Calculate Similarity (Beta Diversity)
+# Pivot to wide format as required by calculate_similarity
+wide_interaction_data <- interaction_data_Succisa_22_24 %>%
+    dplyr::select(year, plot_id, pollinator_id, rate) %>%
+    # Aggregate rates by summing interactions across all samples within the plot (handle NAs)
+    tidyr::pivot_wider(names_from = pollinator_id, values_from = rate, values_fill = 0, values_fn = function(x) sum(x, na.rm = TRUE)) # Ensure no NAs in aggregation
+
+# Calculate full similarity matrix
+sim_results <- calculate_similarity(wide_interaction_data, group_by = c("year", "plot_id"))
+
+# Visualize using package function
+p_similarity <- plot_similarity_change(sim_results, plot_type = "within_year_heterogeneity") +
+    labs(
+        title = "B. Community Similarity",
+        subtitle = "Pairwise within year (Ruzicka)"
+    ) +
+    theme(legend.position = "none")
+
+# 3. Combine Plots
+# Ensure ggpubr or patchwork is available. Using ggpubr as it is a dependency of HanPolNet.
+if (!requireNamespace("ggpubr", quietly = TRUE)) install.packages("ggpubr")
+ggpubr::ggarrange(p_evenness, p_similarity, ncol = 2)
 ```
 
 
