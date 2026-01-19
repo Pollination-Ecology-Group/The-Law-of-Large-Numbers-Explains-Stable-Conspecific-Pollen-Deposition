@@ -227,27 +227,49 @@ ggplot(pollen_load_guts_24, aes(x = suc_pra_guts, y = other_pollen_guts, color =
 ![](MS_Succisa_deposition_files/figure-commonmark/unnamed-chunk-6-1.png)
 
 ``` r
-# Calculate evenness per Plot per Year
+# 1. Calculate Evenness (Alpha Diversity)
 succisa_evenness <- calculate_pollinator_evenness(
     data = interaction_data_Succisa_22_24,
     group_by = c("year", "plot_id")
 )
 
-# Visualize the comparison across years
-ggplot(succisa_evenness, aes(x = as.factor(year), y = J, fill = as.factor(year))) +
-    geom_boxplot(alpha = 0.6) +
+p_evenness <- ggplot(succisa_evenness, aes(x = as.factor(year), y = J, fill = as.factor(year))) +
+    geom_boxplot(alpha = 0.6, outlier.shape = NA) +
     geom_jitter(width = 0.2, alpha = 0.5) +
     labs(
-        title = "Pollinator Evenness (J') for Succisa pratensis (2022-2024)",
-        subtitle = "Calculated per plot",
+        title = "A. Pollinator Evenness (J')",
+        subtitle = "Per plot",
         x = "Year",
-        y = "Pielou's Evenness (J')",
-        fill = "Year"
+        y = "Pielou's Evenness (J')"
     ) +
-    theme_minimal()
+    theme_minimal() +
+    theme(legend.position = "none")
+
+# 2. Calculate Similarity (Beta Diversity)
+# Pivot to wide format as required by calculate_similarity
+wide_interaction_data <- interaction_data_Succisa_22_24 %>%
+    dplyr::select(year, plot_id, pollinator_id, rate) %>%
+    # Aggregate rates by summing interactions across all samples within the plot (handle NAs)
+    tidyr::pivot_wider(names_from = pollinator_id, values_from = rate, values_fill = 0, values_fn = function(x) sum(x, na.rm = TRUE)) # Ensure no NAs in aggregation
+
+# Calculate full similarity matrix
+sim_results <- calculate_similarity(wide_interaction_data, group_by = c("year", "plot_id"))
+
+# Visualize using package function
+p_similarity <- plot_similarity_change(sim_results, plot_type = "within_year_heterogeneity") +
+    labs(
+        title = "B. Community Similarity",
+        subtitle = "Pairwise within year (Ruzicka)"
+    ) +
+    theme(legend.position = "none")
+
+# 3. Combine Plots
+# Ensure ggpubr or patchwork is available. Using ggpubr as it is a dependency of HanPolNet.
+if (!requireNamespace("ggpubr", quietly = TRUE)) install.packages("ggpubr")
+ggpubr::ggarrange(p_evenness, p_similarity, ncol = 2)
 ```
 
-![](MS_Succisa_deposition_files/figure-commonmark/calc-evenness-1.png)
+![](MS_Succisa_deposition_files/figure-commonmark/calc-diversity-panel-1.png)
 
 # Proposed Analysis
 
