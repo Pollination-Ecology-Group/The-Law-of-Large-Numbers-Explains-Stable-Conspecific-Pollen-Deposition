@@ -1,0 +1,41 @@
+interaction_data           package:HanPolNet           R Documentation
+
+_P_l_a_n_t-_P_o_l_l_i_n_a_t_o_r _I_n_t_e_r_a_c_t_i_o_n _D_a_t_a
+
+_D_e_s_c_r_i_p_t_i_o_n:
+
+     A dataset containing observations of pollinator visits to plants,
+     recorded between 2011 and 2024.
+
+_U_s_a_g_e:
+
+     interaction_data
+     
+_F_o_r_m_a_t:
+
+     A data frame with one row per interaction event.
+
+     sampling_id A unique identifier for each sampling event.
+
+     year, month, day, hour, minute Date and time of the observation.
+
+     plot_id The numeric identifier for the research plot, linking to
+          `plant_abundance`.
+
+     plant_code The short code for the plant species, linking to
+          `plant_abundance`.
+
+     plant_name The full scientific name of the plant species.
+
+     pollinator_id The identifier for the pollinator species.
+
+     interaction_count The number of individuals observed in the
+          interaction.
+
+     experiment_run An identifier for the experimental run or locality.
+
+     sex The sex of the pollinator, if recorded.
+
+     shade A flag indicating if the observation was in the shade.
+
+

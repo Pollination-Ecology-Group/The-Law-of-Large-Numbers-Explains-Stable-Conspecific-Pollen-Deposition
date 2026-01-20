@@ -85,7 +85,8 @@ specific objectives:
 To do so, we employ data on pollen load and pollen feeding of
 pollinators, pollen deposition on stigmas, and network evenness,
 collected in 2022-2024 within a diverse plant-pollinator community with
-*Succisa pratensis* Moench (Caprifoliaceae) as the focal species.
+*Succisa pratensis* Moench (Caprifoliaceae) as the focal species. In our
+previous studies, we identified that *Succisa pratensis* is a
 
 <div id="fig-panel">
 
@@ -101,7 +102,118 @@ visible pollen grains of *Succisa pratensis*, D) Detail of stigma of
 
 ## Methods
 
+### Study system
+
+Our observations were conducted in a seminatural grassland community
+with a high abundance of flowering plants (especially *Succisa
+pratensis*) and diverse pollinator community, dominated by hoverflies.
+The study site “K Handrkovu” is located near the village of Vernýřov,
+Central Bohemia, Czech Republic (N 49.8466; E 15.1498). The study site
+can be classified as a mosaic of moist to mesophilic and eutrophic to
+mesotrophic grasslands with more than 50 entomogamous plant species
+flowering in late summer every year ([Janovskỳ et al.,
+2013](#ref-janovsky2013conspecific)). The fieldwork was conducted in
+2022-2024 during the peak of *Succisa pratensis* flowering activity
+(XXth-XXth August, XXh-XXth August and XXth-XXth August, respectively).
+
+*Succisa pratensis*, our focal plant species, is frequently visited by a
+wide spectrum of pollinators, especially hoverflies (see
+<a href="#fig-panel" class="quarto-xref">Figure 1</a>), feeding on both
+pollen and nectar on it. In addition, *Succisa pratensis* has a
+relatively large and stable population at our study site. Important
+traits related to pollination also include distinctive open
+inflorescences available to most pollinators, protandry preventing
+self-pollination ([Bartoš et al., 2020](#ref-bartovs2020self)) and
+pollen releasing in the morning hours ([Štenc et al.,
+2023](#ref-stenc2023pollinator)).
+
+We focused on the common hoverflies species with stable populations with
+a sufficient numbers of males and females adults occurring at the study
+site and frequently visiting *Succisa pratensis*. The most common
+visitors are hoverfly genera Eristalis (E. arbustorum, E. interruptus,
+E. intricaria, E. pertinax, E. similis and E. tenax) and Helophilus (H.
+pendulus and H. trivittatus) and meatfly genera Sarcophaga.
+
+### Pollen load and pollen feeding
+
+Foraging hoverflies visiting Succisa inflorescence were caught with
+entomological net and killed immediately after capture. We swabbed
+pollen grains from one half (randomly selecting left or right) of each
+pollinator’s body with a small block of fuchsin jelly as in Beattie
+(1971). We stored captured pollinators in the 70% ethanol. On the same
+day, we produced semi-permanent samples by melting fuchsin jelly with a
+heating pad on a microscope slide, covering and sealing with nail
+polish. Later, we counted and determined all pollen grains using a light
+microscope. We sorted pollen into conspecific Succisa pollen and
+heterospecific pollen of other plant species.
+
+To find out how much and what types of pollen grains were consumed by
+hoverflies we dissected the guts of captured and killed individuals
+stored in 70% ethanol using tweezers and sharp scissors under a
+stereomicroscope. We put separated intestines into small closable tubes
+with 5 µl of 70% ethanol. Shortly afterwards, we added 50 µl of 10% KOH
+into the samples and moved it to the warming bath at a temperature of
+70° C for 3 hours. After cooling down, we vortexed the samples for 30
+seconds to be homogenized and placed 5 µl of the solution on the
+microscope slides. We let the samples dry on a heating pad and we added
+13 µl of 8% vinegar to neutralize KOH. After further drying, we added 5
+µl of dye (safranin, water and glycerol), covered the samples with a
+coverslip and sealed with nail polish to produce semi-permanent samples.
+
+### Single visit deposition
+
+To prevent pollinators access to flowers, we bagged selected inflorences
+into a tulle bag before the plants have entered the male phase and
+opened the anthers. When the plant entered the female phase with
+receptive stigmas, we removed the bag and collected two control stigmas
+into a tube with 70% ethanol. We watched the inflorescence for thirty
+minutes and recorded every pollinator that visited it. The pollinators
+were allowed to visit only one flower within the inflorescence, the
+stigma of which we collected into a tube with 70% ethanol. If the
+pollinator visited multiple flowers, we collected only the first visited
+stigma and removed other from the plant.
+
 ### Pollen deposited on stigmas
+
+We put collected stigmas on the slide and let the ethanol evaporate on
+the heating pad. After that we added 1 µl of 10% KOH, let the samples
+dry, added 3 µl of 3% hydrogen peroxide, let the samples dry again and
+we added 13 µl of 8% vinegar to neutralize KOH. After further drying we
+added 5 µl of dye (safranin, water and glycerol), covered the samples
+with a coverslip, applied gentle, even pressure on the cover glass to
+squash the stigma and sealed with nail polish to produce semi-permanent
+samples.
+
+### Plant-pollinator interactions and plant abundace
+
+Following Janovský et al. (2013) we collected data on pollinator
+visitation activity. We used same permanent plots as in the flowering
+plant abundance to record all interactions of flower-visiting
+pollinators with flowering Succisa pratensis and other plant species in
+the surrounding of S. pratensis. All flowers within the plot were
+checked only one time to avoid pseudo-replication and all interactions
+occurring at the moment of the survey were recorded, lasting up to five
+minutes. Each plot was recorded at least twenty times during the
+activity period of pollinators (7:00 - 19:00) at the peak of flowering
+(mid-August) each year. We recorded only the pollinators touching the
+reproductive organs of the visited plant and each individual pollinator
+only once. Finally, we counted standardized interaction rates (total
+number of interactions per sampling visit) for pollinators visiting S.
+pratensis from 2022 to 2024 and compared the distribution of interaction
+rates for the specific group of pollinators visiting S. pratensis and
+the same pollinators on all other plant species.
+
+Thanks to long-term research on flowering plants and their interactions
+with pollinators, we obtained information on the abundances of
+individual plants at the study site and it’s changes over time (see
+Janovský et al., 2013). We used 4 × 4 m2 permanent plots each placed in
+the center of each grid point of a 20 × 20 m2 grid covering a total area
+of 300 × 300 m2 of the study site. To determine the floral neighborhood
+of Succisa pratensis from 2022 to 2024, we counted distribution of plant
+abundance for individual plots where S. pratensis was present. We
+counted conspecific abundance of the focal species and heterospecific
+co-flowering abundance index, which is the cumulative abundance of all
+other co-flowering plant species in the plot.
 
 ### Data analysis
 
@@ -111,23 +223,134 @@ S1.
 
 ## Results
 
-<details class="code-fold">
-<summary>Code</summary>
+### Succisa pratensis Distribution
+
+The presence of *Succisa pratensis* in the study plots across the
+surveyed years (2022-2024) is visualized below.
 
 ``` r
-ggplot(pollen_deposition, aes(x = conspecific_pollen, y = heterospecific_pollen, color = as.factor(year))) +
-    geom_point(alpha = 0.5) +
-    geom_smooth(method = "loess", se = FALSE, size = 1.2) + # Smoothed trend line
-    theme_minimal() +
-    labs(x = "Conspecific Pollen", y = "Heterospecific Pollen", color = "Year")
+library(sf)
+library(dplyr)
+library(ggplot2)
+library(ggpubr) # For arranging plots
+
+# --- PART A: MAP ---
+
+# 1. Prepare Presence Data
+succisa_presence <- plant_abundance %>%
+  filter(year %in% c(22, 23, 24)) %>%
+  select(year, plot_id, Suc_pra) %>%
+  filter(Suc_pra > 0) %>% 
+  mutate(
+    year_label = paste0("20", year),
+    plot_id_join = as.character(as.integer(plot_id)) 
+  )
+
+# 2. Prepare Spatial Data
+plots_sf <- hanpolnet_plots %>%
+  mutate(
+    plot_id_join = ifelse(grepl("^[0-9]+$", plot_id), 
+                          as.character(as.integer(plot_id)), 
+                          plot_id)
+  )
+
+# 3. Join
+map_data <- succisa_presence %>%
+  inner_join(plots_sf, by = "plot_id_join") %>%
+  st_as_sf()
+
+# 4. Create Map Plot Object
+p_map <- ggplot() +
+  geom_sf(data = plots_sf, color = "grey85", size = 1.5, shape = 1) +
+  geom_sf(data = map_data, aes(color = year_label), size = 2) +
+  facet_wrap(~year_label) +
+  scale_color_viridis_d(begin = 0.2, end = 0.8, option = "D") +
+  theme_minimal() +
+  labs(
+    title = "Succisa pratensis Presence",
+    subtitle = "Plots with recorded abundance > 0",
+    color = "Year"
+  ) +
+  theme(
+    axis.text = element_blank(),
+    axis.title = element_blank(),
+    panel.grid = element_blank(),
+    legend.position = "right"
+  )
+
+# --- PART B: ABUNDANCE ---
+
+# 1. Summarize
+abundance_summary <- plant_abundance %>%
+  filter(year %in% c(22, 23, 24)) %>%
+  group_by(year) %>%
+  summarise(total_abundance = sum(Suc_pra, na.rm = TRUE)) %>%
+  mutate(year_label = paste0("20", year))
+
+# 2. Create Barplot Object
+p_abundance <- ggplot(abundance_summary, aes(x = year_label, y = total_abundance, fill = year_label)) +
+  geom_col(alpha = 0.8, width = 0.6) +
+  labs(
+    title = "Total Succisa pratensis Abundance",
+    x = "Year",
+    y = "Total Abundance (flowering stalks)"
+  ) +
+  scale_fill_viridis_d(begin = 0.2, end = 0.8, option = "D") +
+  theme_minimal() +
+  theme(legend.position = "none") 
+
+
+# --- COMBINE ---
+ggarrange(p_map, p_abundance, 
+          ncol = 1, 
+          labels = c("A", "B"),
+          heights = c(1.5, 1)) # Give more height to the map
 ```
 
-</details>
+<div id="fig-succisa-map-abundance">
 
-<img
-src="MS_Succisa_deposition_files/figure-commonmark/unnamed-chunk-1-1.png"
-data-fig-align="center"
-alt="Visualizing the CP-HP relationship. Look for linear increases vs. exponential decays." />
+![](MS_Succisa_deposition_files/figure-commonmark/fig-succisa-map-abundance-1.png)
+
+Figure 2: Distribution and abundance of Succisa pratensis (2022-2024).
+A) Spatial distribution of plots with Succisa presence. B) Total
+abundance recorded per year.
+
+</div>
+
+### Pollinator Visitation Rates
+
+We also examined the changes in visitation intensity to *Succisa
+pratensis* across the three years.
+
+``` r
+# Sum rates per plot to get total visitation intensity per plot
+visitation_per_plot <- interaction_data_Succisa_22_24 %>%
+  group_by(year, plot_id) %>%
+  summarise(total_rate = sum(rate, na.rm = TRUE), .groups = "drop") %>%
+  mutate(year = factor(paste0("20", year)))
+
+# Plot
+ggplot(visitation_per_plot, aes(x = year, y = total_rate, fill = year)) +
+  geom_boxplot(alpha = 0.6, outlier.shape = NA) +
+  geom_jitter(width = 0.2, alpha = 0.5) +
+  labs(
+    title = "Visitation Rates per Plot",
+    x = "Year",
+    y = "Standardized Visitation Rate (interactions / visit)"
+  ) +
+  scale_fill_viridis_d(begin = 0.3, end = 0.7) +
+  theme_minimal() +
+  theme(legend.position = "none")
+```
+
+<div id="fig-visitation-diff">
+
+![](MS_Succisa_deposition_files/figure-commonmark/fig-visitation-diff-1.png)
+
+Figure 3: Differences in standardized visitation rates to Succisa
+pratensis across years (2022-2024).
+
+</div>
 
 <details class="code-fold">
 <summary>Code</summary>
@@ -152,19 +375,48 @@ summary(model_linear_mixed)
 <summary>Code</summary>
 
 ``` r
-test_curve_shape <- function(year_data, year_label) {
-    # 1. Fit Linear Model (Type 1)
-    fit_linear <- lm(heterospecific_pollen ~ conspecific_pollen, data = year_data)
+# Ensure library is loaded
+library(nlme)
+library(stringr)
 
-    # 2. Fit Exponential Model (Type 3)
+# Pre-process data to create plant_id if not already present
+# (Assuming 'id' has a format where removing the last 2 chars gives plant_id, per previous user code)
+# UPDATE: Also grouping by day to avoid pseudoreplication across days
+if(!"plant_id" %in% names(pollen_deposition)) {
+    pollen_deposition$plant_id <- paste(str_sub(pollen_deposition$id, end = -3), pollen_deposition$day, sep = "_")
+}
+
+test_curve_shape <- function(year_data, year_label) {
+    # 0. Data Aggregation (Mean per Plant)
+    # Using the 'plant_id' we created earlier
+    agg_data <- year_data %>%
+      group_by(plant_id) %>%
+      summarise(
+        mean_HP = mean(heterospecific_pollen, na.rm = TRUE),
+        mean_CP = mean(conspecific_pollen, na.rm = TRUE),
+        .groups = "drop"
+      )
+
+    # 1. Fit Linear Model (Type 1) - Simple LM on Means
+    fit_linear <- lm(mean_HP ~ mean_CP, data = agg_data)
+
+    # 2. Fit Exponential Model (Type 3) - Simple NLS on Means
     fit_exp <- tryCatch(
         {
-            nls(heterospecific_pollen ~ a * exp(b * conspecific_pollen),
-                data = year_data,
-                start = list(a = max(year_data$heterospecific_pollen), b = -0.01)
+            nls(mean_HP ~ a * exp(b * mean_CP),
+                data = agg_data,
+                start = list(a = max(agg_data$mean_HP, na.rm = TRUE), b = -0.01)
             )
         },
-        error = function(e) NULL
+        error = function(e) {
+             # Fallback start values
+             tryCatch({
+                 nls(mean_HP ~ a * exp(b * mean_CP),
+                    data = agg_data,
+                    start = list(a = mean(agg_data$mean_HP, na.rm = TRUE), b = -0.001)
+                )
+             }, error = function(e2) NULL)
+        }
     )
 
     # 3. Compare AIC
@@ -174,8 +426,12 @@ test_curve_shape <- function(year_data, year_label) {
     return(data.frame(
         Year = year_label,
         Linear_AIC = round(aic_lin, 2),
-        Exp_AIC = round(aic_exp, 2),
-        Best_Fit = ifelse(!is.na(aic_exp) && aic_exp < (aic_lin - 2), "Exponential (Type 3)", "Linear (Type 1)")
+        Exp_AIC = if(is.na(aic_exp)) NA else round(aic_exp, 2),
+        Best_Fit = case_when(
+            is.na(aic_exp) ~ "Linear (Type 1) [Exp Failed]",
+            aic_exp < (aic_lin - 2) ~ "Exponential (Type 3)",
+            TRUE ~ "Linear (Type 1)"
+        )
     ))
 }
 
@@ -192,11 +448,95 @@ knitr::kable(rbind(results_2022, results_2023, results_2024), caption = "Model C
 
 | Year | Linear_AIC | Exp_AIC | Best_Fit        |
 |:-----|-----------:|--------:|:----------------|
-| 2022 |     765.44 |  773.08 | Linear (Type 1) |
-| 2023 |     930.86 |      NA | Linear (Type 1) |
-| 2024 |    4052.84 |      NA | Linear (Type 1) |
+| 2022 |     255.68 |  258.04 | Linear (Type 1) |
+| 2023 |     306.89 |  307.97 | Linear (Type 1) |
+| 2024 |    1333.43 | 1333.80 | Linear (Type 1) |
 
 Model Comparison Results
+
+### Slope Showdown: Analysis of Aggregated Data
+
+To address potential pseudoreplication (multiple stigmas per plant) and
+compare the deposition rates across years, we aggregated the pollen
+counts to the plant level (mean per plant). We then compared the slopes
+of the Heterospecific vs. Conspecific pollen relationship between years.
+
+``` r
+library(dplyr)
+library(emmeans)
+library(ggplot2)
+
+# 1. Data Aggregation
+# Group by year and plant_id to calculate means
+aggregated_data <- pollen_deposition %>%
+  group_by(year, plant_id) %>%
+  summarise(
+    mean_HP = mean(heterospecific_pollen, na.rm = TRUE),
+    mean_CP = mean(conspecific_pollen, na.rm = TRUE),
+    .groups = "drop"
+  )
+
+# 2. Model Fitting (Standard Linear Model on Means)
+# Interaction term allows slopes to differ by year
+fit_agg <- lm(mean_HP ~ mean_CP * as.factor(year), data = aggregated_data)
+
+# 3. Slope Comparison
+# Estimate slopes (trends) for each year
+slopes <- emtrends(fit_agg, pairwise ~ year, var = "mean_CP")
+
+# Display slope estimates
+print("Slope Estimates per Year:")
+```
+
+    [1] "Slope Estimates per Year:"
+
+``` r
+print(slopes$emtrends)
+```
+
+     year mean_CP.trend    SE  df lower.CL upper.CL
+     2022        0.9643 0.263 231   0.4460    1.483
+     2023        1.4442 0.254 231   0.9437    1.945
+     2024        0.0714 0.082 231  -0.0901    0.233
+
+    Confidence level used: 0.95 
+
+``` r
+# Display pairwise comparisons of slopes
+print("Pairwise Comparison of Slopes:")
+```
+
+    [1] "Pairwise Comparison of Slopes:"
+
+``` r
+print(slopes$contrasts)
+```
+
+     contrast            estimate    SE  df t.ratio p.value
+     year2022 - year2023   -0.480 0.366 231  -1.312  0.3899
+     year2022 - year2024    0.893 0.276 231   3.241  0.0039
+     year2023 - year2024    1.373 0.267 231   5.143 <0.0001
+
+    P value adjustment: tukey method for comparing a family of 3 estimates 
+
+``` r
+# 4. Visualization
+ggplot(aggregated_data, aes(x = mean_CP, y = mean_HP, color = as.factor(year))) +
+  geom_point(alpha = 0.6, size = 2) +
+  geom_smooth(method = "lm", se = FALSE, size = 1, aes(group = year)) +
+  labs(
+    title = "Slope Showdown: CP vs HP (Plant Means)",
+    x = "Mean Conspecific Pollen (per plant)",
+    y = "Mean Heterospecific Pollen (per plant)",
+    color = "Year"
+  ) +
+  scale_color_viridis_d(begin = 0.2, end = 0.8, option = "D") +
+  theme_minimal()
+```
+
+![Relationship between Conspecific and Heterospecific pollen (Plant
+Means). Lines represent linear regression fits for each
+year.](MS_Succisa_deposition_files/figure-commonmark/slope-showdown-1.png)
 
 ``` r
 suc_pra_222324 <- get_interaction_data(
@@ -215,7 +555,7 @@ ggplot(pollen_load_guts_24, aes(x = suc_pra_load, y = other_pollen_load, color =
     labs(x = "Conspecific Pollen", y = "Heterospecific Pollen", color = "Pollinator species")
 ```
 
-![](MS_Succisa_deposition_files/figure-commonmark/unnamed-chunk-5-1.png)
+![](MS_Succisa_deposition_files/figure-commonmark/unnamed-chunk-4-1.png)
 
 ``` r
 ggplot(pollen_load_guts_24, aes(x = suc_pra_guts, y = other_pollen_guts, color = as.factor(pollinator_species))) +
@@ -224,7 +564,7 @@ ggplot(pollen_load_guts_24, aes(x = suc_pra_guts, y = other_pollen_guts, color =
     labs(x = "Conspecific Pollen", y = "Heterospecific Pollen", color = "Pollinator species")
 ```
 
-![](MS_Succisa_deposition_files/figure-commonmark/unnamed-chunk-6-1.png)
+![](MS_Succisa_deposition_files/figure-commonmark/unnamed-chunk-5-1.png)
 
 ``` r
 # 1. Calculate Evenness (Alpha Diversity)
@@ -246,20 +586,21 @@ p_evenness <- ggplot(succisa_evenness, aes(x = as.factor(year), y = J, fill = as
     theme(legend.position = "none")
 
 # 2. Calculate Similarity (Beta Diversity)
-# Pivot to wide format as required by calculate_similarity
-wide_interaction_data <- interaction_data_Succisa_22_24 %>%
-    dplyr::select(year, plot_id, pollinator_id, rate) %>%
-    # Aggregate rates by summing interactions across all samples within the plot (handle NAs)
-    tidyr::pivot_wider(names_from = pollinator_id, values_from = rate, values_fill = 0, values_fn = function(x) sum(x, na.rm = TRUE)) # Ensure no NAs in aggregation
+# We need to reshape the interaction data to a wide format (Site x Species) for the similarity calculation
+interaction_matrix <- interaction_data_Succisa_22_24 %>%
+    group_by(year, plot_id, pollinator_id) %>%
+    # Use 'rate' if using standardized data, or 'interaction_count' for raw
+    summarise(abundance = sum(rate, na.rm = TRUE), .groups = "drop") %>% 
+    pivot_wider(names_from = pollinator_id, values_from = abundance, values_fill = 0)
 
 # Calculate full similarity matrix
-sim_results <- calculate_similarity(wide_interaction_data, group_by = c("year", "plot_id"))
+sim_results <- calculate_similarity(interaction_matrix, group_by = c("year", "plot_id"))
 
 # Visualize using package function
-p_similarity <- plot_similarity_change(sim_results, plot_type = "within_year_heterogeneity") +
+p_similarity <- plot_similarity_change(sim_results, plot_type = "plot_turnover") +
     labs(
         title = "B. Community Similarity",
-        subtitle = "Pairwise within year (Ruzicka)"
+        subtitle = "Pairwise plot turnover (Ruzicka)"
     ) +
     theme(legend.position = "none")
 
@@ -329,6 +670,10 @@ heterospecific neighbors.
 
 ## Discussion
 
+Based on our results, we argue that (type xx according to )
+
+The ration of HP/CP deposited on stigmas
+
 ## References
 
 <div id="refs" class="references csl-bib-body hanging-indent">
@@ -340,6 +685,32 @@ Meindl, C. M. Navarro-Fernández, V. Parra-Tabla, et al. 2016. Patterns
 of among-and within-species variation in heterospecific pollen receipt:
 The importance of ecological generalization. *American Journal of
 Botany* 103: 396–407.
+
+</div>
+
+<div id="ref-bartovs2020self" class="csl-entry">
+
+Bartoš, M., Š. Janeček, P. Janečková, E. Padyšáková, R. Tropek, L.
+Götzenberger, Y. Klomberg, and J. Jersáková. 2020. Self-compatibility
+and autonomous selfing of plants in meadow communities. *Plant Biology*
+22: 120–128.
+
+</div>
+
+<div id="ref-janovsky2013conspecific" class="csl-entry">
+
+Janovskỳ, Z., M. Mikát, J. Hadrava, E. Horčičková, K. Kmecová, D.
+Požárová, J. Smyčka, and T. Herben. 2013. Conspecific and heterospecific
+plant densities at small-scale can drive plant-pollinator interactions.
+*PLoS One* 8: e77361.
+
+</div>
+
+<div id="ref-stenc2023pollinator" class="csl-entry">
+
+Štenc, J., L. Janošı́k, E. Matoušková, J. Hadrava, M. Mikát, and Z.
+Janovskỳ. 2023. Pollinator visitation closely tracks diurnal patterns in
+pollen release. *American Journal of Botany* 110: e16179.
 
 </div>
 
