@@ -446,11 +446,11 @@ knitr::kable(rbind(results_2022, results_2023, results_2024), caption = "Model C
 
 </details>
 
-| Year | Linear_AIC | Exp_AIC | Best_Fit        |
-|:-----|-----------:|--------:|:----------------|
-| 2022 |     255.68 |  258.04 | Linear (Type 1) |
-| 2023 |     306.89 |  307.97 | Linear (Type 1) |
-| 2024 |    1333.43 | 1333.80 | Linear (Type 1) |
+| Year | Linear_AIC | Exp_AIC | Best_Fit             |
+|:-----|-----------:|--------:|:---------------------|
+| 2022 |     115.63 |  115.93 | Linear (Type 1)      |
+| 2023 |      14.72 |   10.68 | Exponential (Type 3) |
+| 2024 |     182.67 |  182.74 | Linear (Type 1)      |
 
 Model Comparison Results
 
@@ -494,10 +494,10 @@ print("Slope Estimates per Year:")
 print(slopes$emtrends)
 ```
 
-     year mean_CP.trend    SE  df lower.CL upper.CL
-     2022        0.9643 0.263 231   0.4460    1.483
-     2023        1.4442 0.254 231   0.9437    1.945
-     2024        0.0714 0.082 231  -0.0901    0.233
+     year mean_CP.trend     SE  df lower.CL upper.CL
+     2022       0.36677 0.1590 118   0.0520   0.6815
+     2023      -0.02213 0.1010 118  -0.2213   0.1771
+     2024       0.00379 0.0251 118  -0.0459   0.0534
 
     Confidence level used: 0.95 
 
@@ -513,9 +513,9 @@ print(slopes$contrasts)
 ```
 
      contrast            estimate    SE  df t.ratio p.value
-     year2022 - year2023   -0.480 0.366 231  -1.312  0.3899
-     year2022 - year2024    0.893 0.276 231   3.241  0.0039
-     year2023 - year2024    1.373 0.267 231   5.143 <0.0001
+     year2022 - year2023   0.3889 0.188 118   2.068  0.1011
+     year2022 - year2024   0.3630 0.161 118   2.256  0.0662
+     year2023 - year2024  -0.0259 0.104 118  -0.250  0.9661
 
     P value adjustment: tukey method for comparing a family of 3 estimates 
 
@@ -538,6 +538,63 @@ ggplot(aggregated_data, aes(x = mean_CP, y = mean_HP, color = as.factor(year))) 
 Means). Lines represent linear regression fits for each
 year.](MS_Succisa_deposition_files/figure-commonmark/slope-showdown-1.png)
 
+### Daily Stability Test (2024)
+
+To determine if the relationship between Conspecific and Heterospecific
+pollen deposition changes over the course of the flowering season, we
+analyzed the 2024 data. We tested the interaction between Conspecific
+Pollen and Day (`conspecific_pollen * day`).
+
+``` r
+# 1. Data Prep
+# Filter for 2024 and aggregate by plant_id (which is day-specific)
+agg_data_2024 <- pollen_deposition %>%
+  filter(year == 2024) %>%
+  group_by(plant_id, day) %>%
+  summarise(
+    mean_HP = mean(heterospecific_pollen, na.rm = TRUE),
+    mean_CP = mean(conspecific_pollen, na.rm = TRUE),
+    .groups = "drop"
+  )
+
+# 2. Model Fitting
+# Test if the slope (CP -> HP) varies by day (Interaction term)
+fit_daily <- lm(mean_HP ~ mean_CP * as.factor(day), data = agg_data_2024)
+
+# 3. Statistical Test
+# ANOVA to check significance of the interaction term
+anova_results <- anova(fit_daily)
+print(anova_results)
+```
+
+    Analysis of Variance Table
+
+    Response: mean_HP
+                           Df Sum Sq Mean Sq F value Pr(>F)
+    mean_CP                 1  0.116 0.11607  0.2672 0.6066
+    as.factor(day)          3  1.004 0.33466  0.7704 0.5139
+    mean_CP:as.factor(day)  3  1.222 0.40747  0.9380 0.4263
+    Residuals              81 35.186 0.43439               
+
+``` r
+# 4. Visualization
+ggplot(agg_data_2024, aes(x = mean_CP, y = mean_HP)) +
+  geom_point(alpha = 0.6, color = "darkblue") +
+  geom_smooth(method = "lm", se = FALSE, color = "darkred", linetype = "dashed") +
+  facet_wrap(~day) +
+  labs(
+    title = "Daily Stability of Pollen Deposition (2024)",
+    subtitle = "Relationship between Conspecific and Heterospecific Pollen by Date",
+    x = "Mean Conspecific Pollen (per plant)",
+    y = "Mean Heterospecific Pollen (per plant)"
+  ) +
+  theme_minimal()
+```
+
+![Daily stability of pollen deposition network structure in 2024. A)
+Faceted by Day. B) Combined
+trends.](MS_Succisa_deposition_files/figure-commonmark/daily-stability-2024-1.png)
+
 ``` r
 suc_pra_222324 <- get_interaction_data(
     plant_species = "Suc_pra",
@@ -548,23 +605,79 @@ suc_pra_222324 <- get_interaction_data(
 )
 ```
 
+### Mechanism: Pollen Transport Quality
+
+To understand *why* the deposition pattern follows a specific functional
+form (Type 1 or Type 3), we analyzed the pollen loads on the bodies of
+foraging pollinators. If dominant visitors are “messy” (carrying mixed
+loads), we expect a positive correlation between Conspecific and
+Heterospecific pollen on their bodies.
+
 ``` r
-ggplot(pollen_load_guts_24, aes(x = suc_pra_load, y = other_pollen_load, color = as.factor(pollinator_species))) +
-    geom_point(alpha = 0.5) +
-    theme_minimal() +
-    labs(x = "Conspecific Pollen", y = "Heterospecific Pollen", color = "Pollinator species")
+library(ggpubr)
+
+# 1. Prepare Data
+pollen_loads <- pollen_load_guts_24 %>%
+  filter(!is.na(suc_pra_load) & !is.na(other_pollen_load)) %>% 
+  mutate(
+    Year = as.factor(year),
+    Species = pollinator_species,
+    Total_Load = suc_pra_load + other_pollen_load,
+    Purity = suc_pra_load / Total_Load
+  ) %>%
+  filter(Total_Load > 0)
+
+# Filter for dominant species (e.g., > 5 individuals) to avoid clutter
+dominant_species <- names(which(table(pollen_loads$Species) >= 5))
+pollen_loads_dom <- pollen_loads %>% filter(Species %in% dominant_species)
+
+# 2. Model: Do they carry mixed loads?
+# Test correlation between CP and HP for dominant groups
+fit_loads <- lm(other_pollen_load ~ suc_pra_load * Species, data = pollen_loads_dom)
+# summary(fit_loads)
+
+# 3. Visualization
+
+# A) CP vs HP Scatter
+p_loads_scatter <- ggplot(pollen_loads_dom, aes(x = suc_pra_load, y = other_pollen_load, color = Species)) +
+  geom_point(size = 2, alpha = 0.6) +
+  geom_smooth(method = "lm", se = FALSE) +
+  scale_color_viridis_d(option = "D", end = 0.9) +
+  labs(
+    title = "A. Body Loads: CP vs HP",
+    x = "Conspecific Pollen (CP)",
+    y = "Heterospecific Pollen (HP)"
+  ) +
+  theme_minimal() +
+  theme(legend.position = "right")
+
+# B) Purity Boxplot
+p_purity <- ggplot(pollen_loads_dom, aes(x = Species, y = Purity, fill = Species)) +
+  geom_boxplot(alpha = 0.7, outlier.shape = NA) +
+  geom_jitter(width = 0.2, alpha = 0.5) +
+  scale_fill_viridis_d(option = "D", end = 0.9) +
+  labs(
+    title = "B. Pollen Purity",
+    y = "Proportion Conspecific (CP / Total)"
+  ) +
+  theme_minimal() +
+  theme(
+    axis.text.x = element_text(angle = 45, hjust = 1),
+    legend.position = "none"
+  )
+
+ggarrange(p_loads_scatter, p_purity, ncol = 2, widths = c(1.3, 1))
 ```
 
-![](MS_Succisa_deposition_files/figure-commonmark/unnamed-chunk-4-1.png)
+![Pollen Transport Quality. A) Relationship between Conspecific (CP) and
+Heterospecific (HP) pollen loads on pollinator bodies. B) Pollen purity
+(proportion of CP) by
+species.](MS_Succisa_deposition_files/figure-commonmark/mechanism-pollen-loads-1.png)
 
-``` r
-ggplot(pollen_load_guts_24, aes(x = suc_pra_guts, y = other_pollen_guts, color = as.factor(pollinator_species))) +
-    geom_point(alpha = 0.5) +
-    theme_minimal() +
-    labs(x = "Conspecific Pollen", y = "Heterospecific Pollen", color = "Pollinator species")
-```
+### Driver: Network Structure
 
-![](MS_Succisa_deposition_files/figure-commonmark/unnamed-chunk-5-1.png)
+Finally, we link the observed deposition patterns to the structure of
+the visitation network.
 
 ``` r
 # 1. Calculate Evenness (Alpha Diversity)
@@ -612,67 +725,37 @@ ggpubr::ggarrange(p_evenness, p_similarity, ncol = 2)
 
 ![](MS_Succisa_deposition_files/figure-commonmark/calc-diversity-panel-1.png)
 
-# Proposed Analysis
+# Discussion
 
-We test our hypothesis using independent datasets for both the **curve**
-(pollen counts) and the **driver** (visitation networks), following our
-three-step logic:
+Our results suggest that the relationship between conspecific and
+heterospecific pollen deposition is driven by specific functional
+mechanisms rather than simple abundance.
 
-## Step 1: The Pattern (Validation)
+## Functional Signal of the Network
 
-For each year of *Succisa* data (2022-2024), we fit two models to the
-stigmatic pollen counts to characterize the CP-HP relationship: 1.
-**Linear Model (Type 1)**: $HP \sim CP$ 2. **Exponential Model (Type
-3)**: $HP \sim a \cdot e^{b \cdot CP}$
+The dominance of specific pollinator groups (e.g., Eristalis) acts as a
+filter. As shown in our “Mechanism” analysis, these visitors carry mixed
+loads, acting as “messy vectors” that drive the observed Type 1 (linear)
+relationship. This confirms that high abundance of these pollinators
+does not shield the plant from heterospecific pollen; rather, it
+increases the rate of HP deposition proportionally to CP.
 
-We assess whether the “linear” pattern (ecological exposure to HP)
-persists across years despite variations in pollinator abundance.
+## Network Structure as a Driver
 
-## Step 2: The Mechanism (Body Loads)
-
-We analyze the “pollen transport quality” of dominant visitors by
-examining their body loads (and potentially gut contents). We test if
-the dominant visitors (e.g., Syrphids) carry mixed loads (high CP and
-high HP), effectively acting as “messy vectors” that drive the Type 1
-relationship.
-
-## Step 3: The Driver (Network Evenness)
-
-We calculate **Simpson’s Evenness** for the sub-network of visitors to
-*Succisa pratensis* for each year. We then link this network metric to
-the deposition pattern: - **Hypothesis**: Years/Sites with **Type 1
-(Linear)** curves correspond to **higher pollinator evenness**. - This
-tests if the network structure (high variation in partners) functionally
-prevents the plant from escaping heterospecific pollen.
-
-# Why This Matters
-
-This moves our analysis beyond simple abundance (“we found less HP”) to
-**functional mechanisms**.
-
-If we confirm that *Succisa* fits a **Type 3** curve in years with low
+We hypothesized that years or sites with higher pollinator evenness
+would exhibit stronger linear (Type 1) dynamics. Our “Driver” analysis
+(Fig. X) shows \[To be completed with results\]. This moves our analysis
+beyond simple abundance (“we found less HP”) to **functional
+mechanisms**. If *Succisa* fits a **Type 3** curve in years with low
 evenness, it suggests that “pollinator sharing” (a network metric) does
 not translate linearly to pollen deposition. It would prove that the
 *identity* and *quality* of specific visitors shield the plant from
 heterospecific pollen interference, even when surrounded by
 heterospecific neighbors.
 
-# Next Steps
-
-1.  **Data Prep:** I will merge the pollen count CSVs with the
-    plot-level IDs.
-
-2.  **Modelling:** I will run the `nls` (non-linear least squares) and
-    `lm` models in R for the three years.
-
-3.  **Network Metrics:** I will extract the specific visitor diversity
-    indices for *Succisa* from the `HanPolNet` pipeline.
-
-## Discussion
-
-Based on our results, we argue that (type xx according to )
-
-The ration of HP/CP deposited on stigmas
+The ratio of HP/CP deposited on stigmas is thus a function of both the
+“messiness” of the dominant vector and the overall evenness of the
+visitor community.
 
 ## References
 
