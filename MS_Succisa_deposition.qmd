@@ -38,9 +38,20 @@ if (!require("HanPolNet")) {
 # Data
 
 
+
 pollen_load_guts_24 <- read.csv(file.path("data", "pollen_load_and_guts_2024_Succisa_pratensis.csv"))
 
 SVD_Suc_pra <- read.csv(file.path("data", "SVD_Succisa_pratensis.csv"))
+# Prepare pollen_deposition data globally
+pollen_deposition <- SVD_Suc_pra %>%
+    rename(year = rok) %>%
+    mutate(
+        date = as.POSIXct(cas_navstevy, format = "%m/%d/%Y %H:%M:%S"),
+        day = format(date, "%d-%m"),
+        # Create a unique plant_id or group if needed. 
+        # Assuming id represents the sample unit (stigma)
+        plant_id = id 
+    )
 
 # 1. Get interaction data
 interaction_data_Succisa_22_24 <- get_interaction_data(
@@ -409,47 +420,48 @@ ggplot(aggregated_data, aes(x = mean_CP, y = mean_HP, color = as.factor(year))) 
 
 ### Daily Stability Test (2024)
 
-To determine if the relationship between Conspecific and Heterospecific pollen deposition changes over the course of the flowering season, we analyzed the 2024 data. We tested the interaction between Conspecific Pollen and Day (`mean_CP * as.factor(day)`) on data aggregated by plant.
+To determine if the relationship between Conspecific and Heterospecific pollen deposition changes over the course of the flowering season, we analyzed the 2024 data. We tested the interaction between Conspecific Pollen and Day (`conspecific_pollen * day`).
 
 ```{r}
 #| label: daily-stability-2024
 #| echo: true
 #| warning: false
 #| message: false
-#| fig-cap: "Daily stability of pollen deposition network structure in 2024. Facets represent different sampling dates."
+#| fig-cap: "Daily stability of pollen deposition network structure in 2024. A) Faceted by Day. B) Combined trends."
 
 # 1. Data Prep
-# Filter for 2024 and aggregate by plant_id (which is day-specific)
-agg_data_2024 <- pollen_deposition %>%
+# Filter for 2024
+data_2024 <- pollen_deposition %>%
   filter(year == 2024) %>%
-  group_by(plant_id, day) %>%
-  summarise(
-    mean_HP = mean(heterospecific_pollen, na.rm = TRUE),
-    mean_CP = mean(conspecific_pollen, na.rm = TRUE),
-    .groups = "drop"
-  )
+  filter(!is.na(conspecific_pollen) & !is.na(heterospecific_pollen))
 
 # 2. Model Fitting
 # Test if the slope (CP -> HP) varies by day (Interaction term)
-fit_daily <- lm(mean_HP ~ mean_CP * as.factor(day), data = agg_data_2024)
+# We use 'day' as a factor to allow for day-specific slopes
+fit_daily <- lm(heterospecific_pollen ~ conspecific_pollen * as.factor(day), data = data_2024)
 
 # 3. Statistical Test
 # ANOVA to check significance of the interaction term
+print("Analysis of Covariance (ANCOVA) Results:")
 anova_results <- anova(fit_daily)
 print(anova_results)
 
 # 4. Visualization
-ggplot(agg_data_2024, aes(x = mean_CP, y = mean_HP)) +
-  geom_point(alpha = 0.6, color = "darkblue") +
-  geom_smooth(method = "lm", se = FALSE, color = "darkred", linetype = "dashed") +
+p_daily_facet <- ggplot(data_2024, aes(x = conspecific_pollen, y = heterospecific_pollen)) +
+  geom_point(alpha = 0.6, aes(color = day)) +
+  geom_smooth(method = "lm", se = FALSE, color = "black", linetype = "dashed") +
   facet_wrap(~day) +
-  labs(
-    title = "Daily Stability of Pollen Deposition (2024)",
-    subtitle = "Relationship between Conspecific and Heterospecific Pollen by Date",
-    x = "Mean Conspecific Pollen (per plant)",
-    y = "Mean Heterospecific Pollen (per plant)"
-  ) +
+  labs(title = "A. By Day", x = "CP", y = "HP") +
+  theme_minimal() +
+  theme(legend.position = "none")
+
+p_daily_combined <- ggplot(data_2024, aes(x = conspecific_pollen, y = heterospecific_pollen, color = day)) +
+  geom_point(alpha = 0.3) +
+  geom_smooth(method = "lm", se = FALSE, size = 1) +
+  labs(title = "B. Combined Trends", x = "Conspecific Pollen", y = "Heterospecific Pollen") +
   theme_minimal()
+
+ggpubr::ggarrange(p_daily_facet, p_daily_combined, ncol = 2, widths = c(1, 1.2))
 ```
 
 
