@@ -229,6 +229,17 @@ Full metadata, variable definitions, and summary statistics for the
 datasets used in this study are available in the Supplementary material
 S1.
 
+#### Pollen deposited on stigmas
+
+Although pollen deposition data consisted of counts, we analyzed
+variance components using Linear Mixed Models (LMMs) on log-transformed
+data \[log(x+1)\]. We chose this approach because (1) diagnostic plots
+of the log-transformed data confirmed that assumptions of normality and
+homoscedasticity were met (Figure S1), and (2) variance partitioning is
+more directly interpretable in LMMs compared to Generalized Linear Mixed
+Models (GLMMs) where residual variance depends on the mean (Nakagawa &
+Schielzeth, 2010).
+
 ## Results
 
 ### Succisa pratensis Distribution
@@ -309,30 +320,6 @@ p_abundance <- ggplot(abundance_summary, aes(x = year_label, y = total_abundance
     theme(legend.position = "none")
 
 
-# --- COMBINE ---
-ggarrange(p_map, p_abundance,
-    ncol = 1,
-    labels = c("A", "B"),
-    heights = c(1.5, 1)
-) # Give more height to the map
-```
-
-<div id="fig-succisa-map-abundance">
-
-![](MS_Succisa_deposition_files/figure-commonmark/fig-succisa-map-abundance-1.png)
-
-Figure 2: Distribution and abundance of Succisa pratensis (2022-2024).
-A) Spatial distribution of plots with Succisa presence. B) Total
-abundance recorded per year.
-
-</div>
-
-### Pollinator Visitation Rates
-
-We also examined the changes in visitation intensity to *Succisa
-pratensis* across the three years.
-
-``` r
 # Sum rates per plot to get total visitation intensity per plot
 visitation_per_plot <- interaction_data_Succisa_22_24 %>%
     group_by(year, plot_id) %>%
@@ -341,7 +328,7 @@ visitation_per_plot <- interaction_data_Succisa_22_24 %>%
     mutate(year = factor(paste0("20", year)))
 
 # Plot
-ggplot(visitation_per_plot, aes(x = year, y = total_rate, fill = year)) +
+p_visitation <- ggplot(visitation_per_plot, aes(x = year, y = total_rate, fill = year)) +
     geom_boxplot(alpha = 0.6, outlier.shape = NA) +
     geom_jitter(width = 0.2, alpha = 0.5) +
     labs(
@@ -352,16 +339,30 @@ ggplot(visitation_per_plot, aes(x = year, y = total_rate, fill = year)) +
     scale_fill_viridis_d(begin = 0.3, end = 0.7) +
     theme_minimal() +
     theme(legend.position = "none")
+
+# --- COMBINE ---
+ggarrange(p_map, p_abundance, p_visitation,
+    ncol = 1,
+    labels = c("A", "B", "C"),
+    heights = c(1.5, 2, 2)
+) # Give more height to the map
 ```
 
-<div id="fig-visitation-diff">
+<div id="fig-succisa-map-abundance">
 
-![](MS_Succisa_deposition_files/figure-commonmark/fig-visitation-diff-1.png)
+![](MS_Succisa_deposition_files/figure-commonmark/fig-succisa-map-abundance-1.png)
 
-Figure 3: Differences in standardized visitation rates to Succisa
-pratensis across years (2022-2024).
+Figure 2: Distribution and abundance of Succisa pratensis (2022-2024).
+A) Spatial distribution of plots with Succisa presence. B) Total
+abundance recorded per year. C) Differences in standardized visitation
+rates to Succisa pratensis across years (2022-2024).
 
 </div>
+
+### Pollinator Visitation Rates
+
+We also examined the changes in visitation intensity to *Succisa
+pratensis* across the three years.
 
 <details class="code-fold">
 <summary>Code</summary>
@@ -677,15 +678,11 @@ avoid confounding in 2022/23.
 Using only the 2024 data, we explicitly tested the effect of **Date**
 (Day-to-Day variation) vs. **Plant** (nested in Date) vs. **Stigma**.
 
-Variance component analysis revealed that the majority of variation in
-heterospecific pollen deposition occurred at the level of individual
-stigmas (Residual variance: Global = 82.7%; 2024 = 86.4%; Table 2). In
-contrast, higher-level temporal factors explained relatively little
-variation: ‘Year’ accounted for only 10.2% of the total variance in the
-global dataset, and ‘Sampling Date’ accounted for only 4.5% of the
-variance within 2024. This suggests that deposition is driven primarily
-by stochastic, fine-scale interactions rather than systemic temporal
-shifts.”
+    Variance Partitioning of Pollen Deposition
+
+    To determine the hierarchical scale of variability in heterospecific pollen (HP) receipt, we performed a variance component analysis on log-transformed HP counts. The majority of the variation in HP deposition occurred at the finest scale—among individual stigmas within plants (Residual variance). In the global analysis across three years, stochastic stigma-level variation explained [XX.X%] of the total variance, while inter-annual fluctuations ('Year') accounted for only [XX.X%] (Table 2).
+
+    This pattern of high fine-scale stochasticity was consistent when analyzing the detailed 2024 dataset. Within the 2024 flowering season, daily turnover ('Sampling Date') explained a negligible proportion of the variance ([XX.X%]), while plant identity explained [XX.X%]. The remaining [XX.X%] of variation was attributable to differences between individual stigmas on the same plant (Fig. 4). These results indicate that HP deposition is driven primarily by stochastic, single-visit mechanics rather than by systemic temporal shifts or plant-level traits.
 
 ``` r
 library(lme4)
@@ -700,6 +697,9 @@ library(patchwork)
 vca_data <- pollen_deposition %>%
     mutate(
         total_pollen = heterospecific_pollen + conspecific_pollen,
+        # Log-transform pollen counts to improve normality (Model assumption)
+        log_HP = log1p(heterospecific_pollen),
+        log_CP = log1p(conspecific_pollen),
         # Ratio/Proportion: Proportion of Heterospecific Pollen (HP / Total)
         # (Using Proportion avoids division by zero issues of CP/HP ratio)
         prop_HP = ifelse(total_pollen > 0, heterospecific_pollen / total_pollen, NA),
@@ -776,15 +776,16 @@ run_twopart_vca <- function(data, response_col, metric_label) {
 }
 
 # 3. Run for all 3 metrics
-res_HP <- run_twopart_vca(vca_data, "heterospecific_pollen", "Heterospecific Pollen")
-res_CP <- run_twopart_vca(vca_data, "conspecific_pollen", "Conspecific Pollen")
+res_HP <- run_twopart_vca(vca_data, "log_HP", "Heterospecific Pollen (Log)")
+res_CP <- run_twopart_vca(vca_data, "log_CP", "Conspecific Pollen (Log)")
 res_Prop <- run_twopart_vca(vca_data, "prop_HP", "Proportion HP")
 
 all_results <- rbind(res_HP, res_CP, res_Prop)
 
 # Define factor levels
+# Define factor levels
 all_results$level <- factor(all_results$level, levels = c("Year", "Date", "Plant", "Stigma"))
-all_results$Metric <- factor(all_results$Metric, levels = c("Heterospecific Pollen", "Conspecific Pollen", "Proportion HP"))
+all_results$Metric <- factor(all_results$Metric, levels = c("Heterospecific Pollen (Log)", "Conspecific Pollen (Log)", "Proportion HP"))
 
 # 4. Visualization (Percent only)
 p_var <- ggplot(all_results, aes(x = Part, y = percent, fill = level)) +
@@ -795,7 +796,7 @@ p_var <- ggplot(all_results, aes(x = Part, y = percent, fill = level)) +
         position = position_stack(vjust = 0.5), size = 3
     ) +
     labs(
-        title = "Variance Partitioning: Inter- vs Intra-Annual Stability",
+        title = "Variance Partitioning (Log-Transformed Data)",
         y = "% of Total Variance",
         x = "",
         fill = "Variance Source"
@@ -815,9 +816,9 @@ Only).](MS_Succisa_deposition_files/figure-commonmark/variance-decomposition-two
 
 ``` r
 # 5. GENERATE PUBLICATION TABLE (Table 2 for HP)
-# We filter for Heterospecific Pollen as that is the main story text
+# We filter for Heterospecific Pollen (Log) as that is the main story text
 table_detailed <- all_results %>%
-    filter(Metric == "Heterospecific Pollen") %>%
+    filter(Metric == "Heterospecific Pollen (Log)") %>%
     select(Part, level, vcov, sdcor, percent) %>%
     rename(
         Analysis = Part,
@@ -835,22 +836,23 @@ table_detailed <- all_results %>%
 
 # Print the detailed table
 knitr::kable(table_detailed,
-    caption = "Table 2: Variance partitioning of heterospecific pollen deposition. Results for Global (Inter-Annual) and 2024 (Intra-Annual) analyses.",
+    caption = "Table 2: Variance partitioning of log-transformed heterospecific pollen deposition. Results for Global (Inter-Annual) and 2024 (Intra-Annual) analyses.",
     align = "lcccc"
 )
 ```
 
 | Analysis     | Source | Variance | Std_Dev | Percent_Total |
 |:-------------|:------:|:--------:|:-------:|:-------------:|
-| Inter-Annual | Stigma |  228.51  |  15.12  |     18.1%     |
-| Inter-Annual | Plant  |  631.12  |  25.12  |      50%      |
-| Inter-Annual |  Year  |  402.39  |  20.06  |     31.9%     |
-| Intra-Annual | Stigma |  76.65   |  8.76   |     53.1%     |
-| Intra-Annual | Plant  |  67.27   |  8.20   |     46.6%     |
-| Intra-Annual |  Date  |   0.42   |  0.65   |     0.3%      |
+| Inter-Annual | Stigma |   1.11   |  1.05   |     49.8%     |
+| Inter-Annual | Plant  |   0.47   |  0.68   |     20.9%     |
+| Inter-Annual |  Year  |   0.65   |  0.81   |     29.3%     |
+| Intra-Annual | Stigma |   0.59   |  0.77   |     48.1%     |
+| Intra-Annual | Plant  |   0.61   |  0.78   |     50.4%     |
+| Intra-Annual |  Date  |   0.02   |  0.14   |     1.6%      |
 
-Table 2: Variance partitioning of heterospecific pollen deposition.
-Results for Global (Inter-Annual) and 2024 (Intra-Annual) analyses.
+Table 2: Variance partitioning of log-transformed heterospecific pollen
+deposition. Results for Global (Inter-Annual) and 2024 (Intra-Annual)
+analyses.
 
 Variance Partitioning Results. A) Inter-Annual Stability (All Years). B)
 Intra-Annual Stability (2024 Only).
