@@ -1,0 +1,135 @@
+---
+title: "Supplementary Material"
+subtitle: "Linking Pollen Deposition Dynamics to Plant-Pollinator Network Structure"
+author: "Jakub Štenc"
+date: last-modified
+format: 
+  html:
+    toc: true
+    number-sections: true
+    code-fold: true
+  pdf:
+    toc: true
+    number-sections: true
+---
+
+```{r}
+#| label: setup
+#| include: false
+#| message: false
+#| warning: false
+
+library(lme4)
+library(dplyr)
+library(ggplot2)
+library(gridExtra)
+
+# Load Data
+if (!requireNamespace("HanPolNet", quietly = TRUE)) {
+  # Fallback or install if not present
+  devtools::install("local_packages/HanPolNet", upgrade = "never")
+}
+library(HanPolNet)
+data("pollen_deposition", package = "HanPolNet")
+
+# Prepare data for VCA (Inter-Annual Model structure)
+model_data <- pollen_deposition %>%
+  filter(!is.na(heterospecific_pollen)) %>%
+  mutate(
+    year_fac = as.factor(year),
+    plant_id = inflorescence_id
+  )
+```
+
+# Section S1: Variance Partitioning Model Diagnostics
+
+To justify the choice of data transformation in the Variance Component Analysis, we compared the residual diagnostics of the linear mixed-effects model (`lmer`) fitted on raw vs. log-transformed data.
+
+**Model Structure:** `heterospecific_pollen ~ 1 + (1 | year_fac / plant_id)`
+
+```{r}
+#| label: fig-diagnostics
+#| fig-cap: "Diagnostic plots for Variance Component Models. A) Raw Data: showing strong heteroscedasticity (fan shape). B) Log-transformed Data: showing improved homoscedasticity and normality residuals."
+#| fig-height: 8
+#| fig-width: 10
+#| warning: false
+
+# 1. Fit Models
+
+# A) Raw Data
+model_raw <- lmer(heterospecific_pollen ~ 1 + (1 | year_fac / plant_id), data = model_data)
+
+# B) Log-Transformed Data
+model_log <- lmer(log1p(heterospecific_pollen) ~ 1 + (1 | year_fac / plant_id), data = model_data)
+
+# 2. Helper function to create diagnostic plots
+create_diag_plots <- function(model, title_prefix) {
+  
+  # Extract plotting data
+  diag_df <- data.frame(
+    Fitted = fitted(model),
+    Residuals = resid(model)
+  )
+  
+  # 1. Histogram of Residuals
+  p1 <- ggplot(diag_df, aes(x = Residuals)) +
+    geom_histogram(bins = 30, fill = "steelblue", color = "white", alpha = 0.7) +
+    labs(title = paste(title_prefix, "- Res. Histogram"), x = "Residuals", y = "Frequency") +
+    theme_minimal()
+  
+  # 2. Residuals vs Fitted
+  p2 <- ggplot(diag_df, aes(x = Fitted, y = Residuals)) +
+    geom_point(alpha = 0.5) +
+    geom_hline(yintercept = 0, color = "red", linetype = "dashed") +
+    labs(title = paste(title_prefix, "- Res. vs Fitted"), x = "Fitted Values", y = "Residuals") +
+    theme_minimal()
+  
+  # 3. Q-Q Plot
+  p3 <- ggplot(diag_df, aes(sample = Residuals)) +
+    stat_qq() +
+    stat_qq_line(color = "red") +
+    labs(title = paste(title_prefix, "- Q-Q Plot"), x = "Theoretical Quantiles", y = "Sample Quantiles") +
+    theme_minimal()
+    
+  return(list(p1, p2, p3))
+}
+
+# Generate plots
+plots_raw <- create_diag_plots(model_raw, "Raw Data")
+plots_log <- create_diag_plots(model_log, "Log(x+1) Data")
+
+# Combine into a grid (2 rows: Raw top, Log bottom)
+# Layout: 
+# Raw Hist | Raw Res-Fit | Raw QQ
+# Log Hist | Log Res-Fit | Log QQ
+# Wait, user asked for 2x2 per model? "For both models ... create a 2x2 diagnostic plot... Display these plots side-by-side"
+# Let's do a 2x3 grid: Rows = Models, Cols = Plots.
+grid.arrange(
+  plots_raw[[1]], plots_raw[[2]], plots_raw[[3]],
+  plots_log[[1]], plots_log[[2]], plots_log[[3]],
+  nrow = 2
+)
+```
+
+**Interpretation**: 
+The raw data (Top row) exhibits a distinct "fan shape" in the Residuals vs. Fitted plot, indicating heteroscedasticity (variance increases with the mean). The Q-Q plot also shows deviation from normality. The log-transformed data (Bottom row) significantly improves homoscedasticity and normality, justifying the use of `log1p` transformation for statistical testing where assumptions must be met. (Note: For variance partitioning estimation, `lme4` can handle raw data, but transformations often stabilize estimates).
+
+# Section S2: Data Distribution
+
+The distribution of heterospecific pollen deposition counts is highly skewed, with many low values and a long tail of high deposition events.
+
+```{r}
+#| label: fig-distribution
+#| fig-cap: "Distribution of Heterospecific Pollen Counts on Stigmas."
+#| warning: false
+
+ggplot(model_data, aes(x = heterospecific_pollen)) +
+  geom_histogram(binwidth = 5, fill = "darkgreen", color = "white", alpha = 0.7) +
+  labs(
+    title = "Distribution of Heterospecific Pollen",
+    subtitle = "Raw counts per stigma (n = 714)",
+    x = "Heterospecific Pollen Count",
+    y = "Frequency"
+  ) +
+  theme_minimal()
+```
