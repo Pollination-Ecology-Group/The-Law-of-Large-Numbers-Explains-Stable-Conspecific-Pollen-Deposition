@@ -1,6 +1,6 @@
 ---
-title: "Linking Pollen Deposition Dynamics to Plant-Pollinator Network Structure"
-subtitle: "Case study on Succisa pratensis (2022-2024)"
+title: "Linking Pollen Deposition Dynamics to Plant-Pollinator Network Structure:"
+subtitle: "Case study on Succisa pratensis"
 author: "Jakub Štenc"
 bibliography: "tech_docs/bibliography.bib"
 link-citations: true
@@ -90,23 +90,34 @@ If the assemblage is **uneven** (dominated by a few high-quality specialists and
 
 ## Abstract
 
+
+
+
 ## Introduction
 
-In plant-pollinator communities, plants often share pollinators with other species, leading to deposition of pollen from other species (Heterospecific Pollen) on the stigmas. This is a common phenomenon in nature with significant implications for plant reproduction and evolution. Based on previous studies [@arceo2016patterns], it is expected that the network structure (particularly pollinator evenness) may drive the pattern of conspecific and heterospecific pollen deposition on stigmas. However, the relationship between deposited pollen, pollinator transfer capability and network structure is not well understood.
+In plant-pollinator communities, plants often share pollinators with other species [@Lazaro2009], leading to deposition of pollen from other species (Heterospecific Pollen) on the stigmas [@morales2008interspecific]. This is a common phenomenon in nature with significant implications for plant reproduction and evolution. Based on previous studies [@arceo2016patterns], it is expected that the network structure (particularly pollinator evenness) may drive the pattern of conspecific and heterospecific pollen deposition on stigmas. However, the relationship between deposited pollen, pollinator transfer capability and network structure is not well understood.
 
 *Pollen deposition dynamics*
 
+
 *Pollen load and pollen feeding*
 Motivation of pollinators to carry pollen from plant to plant is often driven by the need to feed on plants, using nectar and pollen as a food source. Pollen feeding than .
+
+
+"Pollinator quality, in particular, is likely a complex trait that results from not only inconstancy but also pollinator grooming (Thomson, 1986; Holmquist et al., 2012), pollen carryover (Thomson and Plowright, 1980), and pollen loss during transport (Wilcock and Neiland, 2002). Thus, pollinator quality may be difficult to capture with only information on the visitor functional groups defined herein." [@arceo2016patterns]
+
 
 *The effect of the network structure to the pollen deposition dynamics*
 
 
 
+In their study @arceo2016patterns found that the network structure (pollinator evenness) may drive the pattern of conspecific and heterospecific pollen deposition on stigmas.
 
-This study aims to determine if the composition of pollinator spectra of *Succisa pratensis* functionally constrains the plant to high heterospecific pollen (HP) receipt, and whether pollinator pollen body load and content of pollinator intestines explain the persistence of this pattern across years. We structure our analysis around three specific objectives:
 
--   Determine if the relationship between Conspecific (CP) and Heterospecific (HP) pollen deposition on *Succisa* stigmas follows a linear (generalist) or exponential (specialist-shielded) trajectory, and assess  variability across years, days and plant individuals.
+
+This study aims to investigate interannual variation in pollen deposition patterns on *Succisa pratensis* stigmas, determine if the composition of pollinator spectra of *Succisa pratensis* functionally constrains the plant to high heterospecific pollen (HP) receipt, and whether pollinator pollen body load and content of pollinator intestines explain the persistence of this pattern across years. We structure our analysis around three specific objectives:
+
+-   Determine if the relationship between Conspecific (CP) and Heterospecific (HP) pollen deposition on *Succisa* stigmas follows a linear (generalist) or exponential (specialist-shielded) trajectory, and assess variability across years, days and plant individuals.
 
 -   Link the stigmatic deposition pattern to the "pollen transport quality" of the dominant visitors (e.g., *Eristalis* spp.). We hypothesize that the "Linear" pattern is driven by dominant visitors being "messy vectors," carrying large conspecific loads but also significant heterospecific loads.
 
@@ -114,7 +125,44 @@ This study aims to determine if the composition of pollinator spectra of *Succis
 
 To do so, we employ data on pollen load and pollen feeding of pollinators, pollen deposition on stigmas, and network evenness, collected in 2022-2024 within a diverse plant-pollinator community with *Succisa pratensis* Moench (Caprifoliaceae) as the focal species. In our previous studies, we identified that *Succisa pratensis* is visited by a diverse community of pollinators, dominated by hoverflies of genus *Eristalis*, which may be considered as generalistic pollinators carrying both conspecific and heterospecific pollen[@vstenc2025pollen]. Based on our previous studies, we expect high variation in pollen load and visitation rate of pollinators [@freudenfeld2025interannual], leading to high variation in pollen deposition on stigmas. 
 
-![A) Stigma of *Succisa pratensis* with several pollen morphotypes, B) Pollinator (*Eristalis* sp.) on flower of *Succisa pratensis*, see the pollen on pollinator body, C) Detail of anther with visible pollen grains of *Succisa pratensis*, D) Detail of stigma of *Succisa pratensis* with visible deposited pollen grains](images/Succisa_panel.jpg){#fig-panel}
+```{r}
+#| label: fig-panel
+#| fig-cap: "A) Stigma of *Succisa pratensis* with several pollen morphotypes, B) Pollinator (*Eristalis* sp.) on flower of *Succisa pratensis*, see the pollen on pollinator body, C) Detail of anther with visible pollen grains of *Succisa pratensis*, D) Detail of stigma of *Succisa pratensis* with visible deposited pollen grains"
+#| echo: false
+#| warning: false
+#| message: false
+#| fig-width: 10
+#| fig-height: 8
+
+library(cowplot)
+library(magick)
+
+# Read and process images
+# image_trim() removes the surrounding whitespace
+img_A <- image_read("images/Blizna_Suc_pra_2.jpg") %>% image_trim()
+img_B <- image_read("images/IMG_2335_small.jpg") %>% image_trim()
+img_C <- image_read("images/P8197736.jpg") %>% image_trim() # Anther
+img_D <- image_read("images/P8197678.jpg") %>% image_trim() # Stigma Detail
+
+# Create plot objects with better scaling
+# fitting the image into the draw area
+p_A <- ggdraw() + draw_image(img_A, scale = 1)
+p_B <- ggdraw() + draw_image(img_B, scale = 1)
+p_C <- ggdraw() + draw_image(img_C, scale = 1)
+p_D <- ggdraw() + draw_image(img_D, scale = 1)
+
+# Arrange in a grid
+# Using labels="AUTO" creates A, B, C, D automatically
+# Adjusted label size and placement
+plot_grid(p_A, p_B, p_C, p_D,
+    labels = "AUTO",
+    label_size = 18,
+    label_fontface = "bold",
+    ncol = 2,
+    align = "hv",
+    axis = "tb"
+)
+```
 
 ## Methods
 
@@ -156,6 +204,12 @@ Full metadata, variable definitions, and summary statistics for the datasets use
 
 Although pollen deposition data consisted of counts, we analyzed variance components using Linear Mixed Models (LMMs) on log-transformed data [log(x+1)]. We chose this approach because (1) diagnostic plots of the log-transformed data confirmed that assumptions of normality and homoscedasticity were met (Figure S1), and (2) variance partitioning is more directly interpretable in LMMs compared to Generalized Linear Mixed Models (GLMMs) where residual variance depends on the mean (Nakagawa & Schielzeth, 2010).
 
+We performed a variance component analysis (VCA) to quantify the relative importance of different temporal and biological scales in driving pollen deposition. We specified two distinct hierarchical models using the `lme4` package:
+
+1.  **Inter-annual stability**: Using the full dataset (2022-2024), we partitioned variance into *Year*, *Plant identity* (nested within Year), and *Stigma* (residual variance). This model assesses the extent to which deposition patterns are consistent across years versus driven by plant-level traits or fine-scale stochasticity.
+
+2.  **Intra-annual stability**: Using the high-resolution 2024 dataset, we partitioned variance into *Sampling Date* (Day), *Plant identity* (nested within Day), and *Stigma*. This model specifically tests whether daily turnover in pollinator activity or weather conditions (Day effect) outweighs individual plant variation.
+
 
 
 ## Results
@@ -163,7 +217,7 @@ Although pollen deposition data consisted of counts, we analyzed variance compon
 ### Succisa pratensis Distribution
 
 The presence of *Succisa pratensis* in the study plots across the surveyed years (2022-2024) is visualized below.
-s
+
 ```{r}
 #| label: fig-succisa-map-abundance
 #| fig-cap: "Distribution and abundance of Succisa pratensis (2022-2024). A) Spatial distribution of plots with Succisa presence. B) Total abundance recorded per year. C) Differences in standardized visitation rates to Succisa pratensis across years (2022-2024)."
@@ -237,7 +291,7 @@ p_abundance <- ggplot(abundance_summary, aes(x = year_label, y = total_abundance
     labs(
         title = "Total Succisa pratensis Abundance",
         x = "Year",
-        y = "Total Abundance (flowering stalks)"
+        y = "Total Abundance\n (flowering stalks)"
     ) +
     scale_fill_viridis_d(begin = 0.2, end = 0.8, option = "D") +
     theme_minimal() +
@@ -258,7 +312,7 @@ p_visitation <- ggplot(visitation_per_plot, aes(x = year, y = total_rate, fill =
     labs(
         title = "Visitation Rates per Plot",
         x = "Year",
-        y = "Standardized Visitation Rate (interactions / visit)"
+        y = "Standardized Visitation Rate\n (interactions / visit)"
     ) +
     scale_fill_viridis_d(begin = 0.3, end = 0.7) +
     theme_minimal() +
@@ -603,7 +657,6 @@ run_twopart_vca <- function(data, response_col, metric_label) {
             TRUE ~ "Other"
         )
 
-        # GARRY UPDATE: Returning vcov and sdcor now too!
         return(df[, c("Part", "level", "vcov", "sdcor", "percent")])
     }
 
@@ -648,7 +701,6 @@ res_Prop <- run_twopart_vca(vca_data, "prop_HP", "Proportion HP")
 
 all_results <- rbind(res_HP, res_CP, res_Prop)
 
-# Define factor levels
 # Define factor levels
 all_results$level <- factor(all_results$level, levels = c("Year", "Date", "Plant", "Stigma"))
 all_results$Metric <- factor(all_results$Metric, levels = c("Heterospecific Pollen (Log)", "Conspecific Pollen (Log)", "Proportion HP"))

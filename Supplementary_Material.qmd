@@ -26,19 +26,19 @@ library(gridExtra)
 
 # Load Data
 if (!requireNamespace("HanPolNet", quietly = TRUE)) {
-  # Fallback or install if not present
-  devtools::install("local_packages/HanPolNet", upgrade = "never")
+    # Fallback or install if not present
+    devtools::install("local_packages/HanPolNet", upgrade = "never")
 }
 library(HanPolNet)
 data("pollen_deposition", package = "HanPolNet")
 
 # Prepare data for VCA (Inter-Annual Model structure)
 model_data <- pollen_deposition %>%
-  filter(!is.na(heterospecific_pollen)) %>%
-  mutate(
-    year_fac = as.factor(year),
-    plant_id = inflorescence_id
-  )
+    filter(!is.na(heterospecific_pollen)) %>%
+    mutate(
+        year_fac = as.factor(year),
+        plant_id = inflorescence_id
+    )
 ```
 
 # Section S1: Variance Partitioning Model Diagnostics
@@ -64,34 +64,33 @@ model_log <- lmer(log1p(heterospecific_pollen) ~ 1 + (1 | year_fac / plant_id), 
 
 # 2. Helper function to create diagnostic plots
 create_diag_plots <- function(model, title_prefix) {
-  
-  # Extract plotting data
-  diag_df <- data.frame(
-    Fitted = fitted(model),
-    Residuals = resid(model)
-  )
-  
-  # 1. Histogram of Residuals
-  p1 <- ggplot(diag_df, aes(x = Residuals)) +
-    geom_histogram(bins = 30, fill = "steelblue", color = "white", alpha = 0.7) +
-    labs(title = paste(title_prefix, "- Res. Histogram"), x = "Residuals", y = "Frequency") +
-    theme_minimal()
-  
-  # 2. Residuals vs Fitted
-  p2 <- ggplot(diag_df, aes(x = Fitted, y = Residuals)) +
-    geom_point(alpha = 0.5) +
-    geom_hline(yintercept = 0, color = "red", linetype = "dashed") +
-    labs(title = paste(title_prefix, "- Res. vs Fitted"), x = "Fitted Values", y = "Residuals") +
-    theme_minimal()
-  
-  # 3. Q-Q Plot
-  p3 <- ggplot(diag_df, aes(sample = Residuals)) +
-    stat_qq() +
-    stat_qq_line(color = "red") +
-    labs(title = paste(title_prefix, "- Q-Q Plot"), x = "Theoretical Quantiles", y = "Sample Quantiles") +
-    theme_minimal()
-    
-  return(list(p1, p2, p3))
+    # Extract plotting data
+    diag_df <- data.frame(
+        Fitted = fitted(model),
+        Residuals = resid(model)
+    )
+
+    # 1. Histogram of Residuals
+    p1 <- ggplot(diag_df, aes(x = Residuals)) +
+        geom_histogram(bins = 30, fill = "steelblue", color = "white", alpha = 0.7) +
+        labs(title = paste(title_prefix, "- Res. Histogram"), x = "Residuals", y = "Frequency") +
+        theme_minimal()
+
+    # 2. Residuals vs Fitted
+    p2 <- ggplot(diag_df, aes(x = Fitted, y = Residuals)) +
+        geom_point(alpha = 0.5) +
+        geom_hline(yintercept = 0, color = "red", linetype = "dashed") +
+        labs(title = paste(title_prefix, "- Res. vs Fitted"), x = "Fitted Values", y = "Residuals") +
+        theme_minimal()
+
+    # 3. Q-Q Plot
+    p3 <- ggplot(diag_df, aes(sample = Residuals)) +
+        stat_qq() +
+        stat_qq_line(color = "red") +
+        labs(title = paste(title_prefix, "- Q-Q Plot"), x = "Theoretical Quantiles", y = "Sample Quantiles") +
+        theme_minimal()
+
+    return(list(p1, p2, p3))
 }
 
 # Generate plots
@@ -99,15 +98,15 @@ plots_raw <- create_diag_plots(model_raw, "Raw Data")
 plots_log <- create_diag_plots(model_log, "Log(x+1) Data")
 
 # Combine into a grid (2 rows: Raw top, Log bottom)
-# Layout: 
+# Layout:
 # Raw Hist | Raw Res-Fit | Raw QQ
 # Log Hist | Log Res-Fit | Log QQ
 # Wait, user asked for 2x2 per model? "For both models ... create a 2x2 diagnostic plot... Display these plots side-by-side"
 # Let's do a 2x3 grid: Rows = Models, Cols = Plots.
 grid.arrange(
-  plots_raw[[1]], plots_raw[[2]], plots_raw[[3]],
-  plots_log[[1]], plots_log[[2]], plots_log[[3]],
-  nrow = 2
+    plots_raw[[1]], plots_raw[[2]], plots_raw[[3]],
+    plots_log[[1]], plots_log[[2]], plots_log[[3]],
+    nrow = 2
 )
 ```
 
@@ -124,12 +123,119 @@ The distribution of heterospecific pollen deposition counts is highly skewed, wi
 #| warning: false
 
 ggplot(model_data, aes(x = heterospecific_pollen)) +
-  geom_histogram(binwidth = 5, fill = "darkgreen", color = "white", alpha = 0.7) +
-  labs(
-    title = "Distribution of Heterospecific Pollen",
-    subtitle = "Raw counts per stigma (n = 714)",
-    x = "Heterospecific Pollen Count",
-    y = "Frequency"
-  ) +
-  theme_minimal()
+    geom_histogram(binwidth = 5, fill = "darkgreen", color = "white", alpha = 0.7) +
+    labs(
+        title = "Distribution of Heterospecific Pollen",
+        subtitle = "Raw counts per stigma (n = 714)",
+        x = "Heterospecific Pollen Count",
+        y = "Frequency"
+    ) +
+    theme_minimal()
+```
+
+# Section S3: Model Selection for CP-HP Relationship
+
+To determine the functional form of the relationship between Conspecific (CP) and Heterospecific (HP) pollen deposition, we compared Linear (Type 1) and Exponential (Type 3) models using Akaike Information Criterion (AIC).
+
+**Data Aggregation**: We aggregated pollen counts to the plant level (mean per plant) to account for multiple stigmas sampled from the same individual.
+
+**Model Selection Criteria**: If the Exponential model provided a significantly better fit ($\Delta > 2) compared to the Linear model, it was selected. Otherwise, the simpler Linear model was preferred.
+
+```{r}
+#| label: model-diagnostics-selection
+#| fig-cap: "Diagnostic plots for the selected models (Linear or Exponential) for each year. Comparisons based on AIC."
+#| echo: true
+#| warning: false
+#| message: false
+#| fig-height: 12
+#| fig-width: 10
+
+library(gridExtra)
+
+# 1. Prepare Aggregated Data (Same as MS)
+model_selection_data <- pollen_deposition %>%
+    mutate(plant_id = paste(year, inflorescence_id, day, sep = "_")) %>%
+    group_by(year, plant_id) %>%
+    summarise(
+        mean_HP = mean(heterospecific_pollen, na.rm = TRUE),
+        mean_CP = mean(conspecific_pollen, na.rm = TRUE),
+        .groups = "drop"
+    ) %>%
+    filter(is.finite(mean_HP) & is.finite(mean_CP))
+
+# Helper function to get diagnostics for the BEST model of a year
+get_year_diagnostics <- function(yr) {
+    dat <- subset(model_selection_data, year == yr)
+
+    # Fit Linear
+    m_lin <- lm(mean_HP ~ mean_CP, data = dat)
+    aic_lin <- AIC(m_lin)
+
+    # Fit Exponential
+    m_exp <- tryCatch(
+        nls(mean_HP ~ a * exp(b * mean_CP),
+            data = dat,
+            start = list(a = max(dat), b = -0.01)
+        ),
+        error = function(e) NULL
+    )
+    if (is.null(m_exp)) {
+        # Fallback start
+        m_exp <- tryCatch(
+            nls(mean_HP ~ a * exp(b * mean_CP),
+                data = dat,
+                start = list(a = mean(dat), b = -0.001)
+            ),
+            error = function(e) NULL
+        )
+    }
+
+    aic_exp <- if (!is.null(m_exp)) AIC(m_exp) else Inf
+
+    # Select Best
+    if (aic_exp < (aic_lin - 2)) {
+        best_model <- m_exp
+        type <- "Exponential (Type 3)"
+        delta_aic <- aic_lin - aic_exp
+        resids <- resid(best_model)
+        fitted_vals <- fitted(best_model)
+    } else {
+        best_model <- m_lin
+        type <- "Linear (Type 1)"
+        delta_aic <- 0
+        resids <- resid(best_model)
+        fitted_vals <- fitted(best_model)
+    }
+
+    # Diagnostic Plots
+    title_res <- paste0(yr, ": ", type, "\nResid vs Fitted")
+    title_qq <- paste0(yr, ": Q-Q Plot")
+
+    p_res <- ggplot(data.frame(F = fitted_vals, R = resids), aes(x = F, y = R)) +
+        geom_point(alpha = 0.6) +
+        geom_hline(yintercept = 0, color = "red", linetype = "dashed") +
+        labs(title = title_res, x = "Fitted", y = "Residuals") +
+        theme_minimal()
+
+    p_qq <- ggplot(data.frame(R = resids), aes(sample = R)) +
+        stat_qq() +
+        stat_qq_line(color = "red") +
+        labs(title = title_qq, x = "Theoretical", y = "Sample") +
+        theme_minimal()
+
+    return(list(p_res, p_qq))
+}
+
+# Generate plots for all 3 years
+plots_22 <- get_year_diagnostics(2022)
+plots_23 <- get_year_diagnostics(2023)
+plots_24 <- get_year_diagnostics(2024)
+
+# Arrange
+grid.arrange(
+    plots_22[[1]], plots_22[[2]],
+    plots_23[[1]], plots_23[[2]],
+    plots_24[[1]], plots_24[[2]],
+    ncol = 2
+)
 ```
