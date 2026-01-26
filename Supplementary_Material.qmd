@@ -32,86 +32,133 @@ if (!requireNamespace("HanPolNet", quietly = TRUE)) {
 library(HanPolNet)
 data("pollen_deposition", package = "HanPolNet")
 
+# Load Interaction Data for Table S3
+interaction_data_Succisa_22_24 <- get_interaction_data(
+    years = c(22, 23, 24),
+    plant_species = "Suc_pra",
+    is_pollinator = TRUE,
+    remove_zeros = TRUE,
+    standardize = FALSE
+)
+
 # Prepare data for VCA (Inter-Annual Model structure)
 model_data <- pollen_deposition %>%
     filter(!is.na(heterospecific_pollen)) %>%
     mutate(
         year_fac = as.factor(year),
-        plant_id = inflorescence_id
+        plant_id = inflorescence_id,
+        # Calculate Prop HP (avoiding division by zero)
+        total_pollen = heterospecific_pollen + conspecific_pollen,
+        prop_HP = ifelse(total_pollen > 0, heterospecific_pollen / total_pollen, 0)
     )
 ```
 
 # Section S1: Variance Partitioning Model Diagnostics
 
-To justify the choice of data transformation in the Variance Component Analysis, we compared the residual diagnostics of the linear mixed-effects model (`lmer`) fitted on raw vs. log-transformed data.
+To transform the data for the Variance Component Analysis, we compared three approaches: Raw Counts, Log transformation (`log1p`), and Square-Root transformation (`sqrt`).
 
-**Model Structure:** `heterospecific_pollen ~ 1 + (1 | year_fac / plant_id)`
+Model Structure: `variable ~ 1 + (1 | year_fac / plant_id)`
 
 ```{r}
-#| label: fig-diagnostics
-#| fig-cap: "Diagnostic plots for Variance Component Models. A) Raw Data: showing strong heteroscedasticity (fan shape). B) Log-transformed Data: showing improved homoscedasticity and normality residuals."
-#| fig-height: 8
-#| fig-width: 10
+#| label: diagnostics-helper
+#| echo: true
 #| warning: false
+#| message: false
 
-# 1. Fit Models
-
-# A) Raw Data
-model_raw <- lmer(heterospecific_pollen ~ 1 + (1 | year_fac / plant_id), data = model_data)
-
-# B) Log-Transformed Data
-model_log <- lmer(log1p(heterospecific_pollen) ~ 1 + (1 | year_fac / plant_id), data = model_data)
-
-# 2. Helper function to create diagnostic plots
-create_diag_plots <- function(model, title_prefix) {
-    # Extract plotting data
-    diag_df <- data.frame(
-        Fitted = fitted(model),
-        Residuals = resid(model)
+# Helper function to fit 3 models and plot diagnostics
+run_transformation_diagnostics <- function(data, variable_name, title_prefix) {
+    # Extract variable
+    y <- data[[variable_name]]
+    # Handle zeros for Log
+    y_log <- log1p(y)
+    # Handle distribution for Sqrt
+    y_sqrt <- sqrt(y)
+    
+    # 1. Fit Models
+    # A) Raw
+    m_raw <- lmer(y ~ 1 + (1 | year_fac / plant_id), data = data)
+    # B) Log
+    m_log <- lmer(y_log ~ 1 + (1 | year_fac / plant_id), data = data)
+    # C) Sqrt
+    m_sqrt <- lmer(y_sqrt ~ 1 + (1 | year_fac / plant_id), data = data)
+    
+    # 2. Plotting Helper
+    make_plots <- function(model, suffix) {
+        df <- data.frame(Fitted = fitted(model), Residuals = resid(model))
+        
+        p_hist <- ggplot(df, aes(x = Residuals)) +
+            geom_histogram(bins = 30, fill = "steelblue", color = "white", alpha = 0.7) +
+            labs(title = paste("Hist:", suffix), x = "", y = "Freq") +
+            theme_minimal()
+            
+        p_res <- ggplot(df, aes(x = Fitted, y = Residuals)) +
+            geom_point(alpha = 0.3) +
+            geom_hline(yintercept = 0, color = "red", linetype = "dashed") +
+            labs(title = paste("Res vs Fit:", suffix), x = "Fitted", y = "Res") +
+            theme_minimal()
+        return(list(p_hist, p_res))
+    }
+    
+    pl_raw <- make_plots(m_raw, "Raw")
+    pl_log <- make_plots(m_log, "Log")
+    pl_sqrt <- make_plots(m_sqrt, "Sqrt")
+    
+    # Combine
+    grid.arrange(
+        pl_raw[[1]], pl_log[[1]], pl_sqrt[[1]],
+        pl_raw[[2]], pl_log[[2]], pl_sqrt[[2]],
+        nrow = 2, ncol = 3,
+        top = title_prefix
     )
-
-    # 1. Histogram of Residuals
-    p1 <- ggplot(diag_df, aes(x = Residuals)) +
-        geom_histogram(bins = 30, fill = "steelblue", color = "white", alpha = 0.7) +
-        labs(title = paste(title_prefix, "- Res. Histogram"), x = "Residuals", y = "Frequency") +
-        theme_minimal()
-
-    # 2. Residuals vs Fitted
-    p2 <- ggplot(diag_df, aes(x = Fitted, y = Residuals)) +
-        geom_point(alpha = 0.5) +
-        geom_hline(yintercept = 0, color = "red", linetype = "dashed") +
-        labs(title = paste(title_prefix, "- Res. vs Fitted"), x = "Fitted Values", y = "Residuals") +
-        theme_minimal()
-
-    # 3. Q-Q Plot
-    p3 <- ggplot(diag_df, aes(sample = Residuals)) +
-        stat_qq() +
-        stat_qq_line(color = "red") +
-        labs(title = paste(title_prefix, "- Q-Q Plot"), x = "Theoretical Quantiles", y = "Sample Quantiles") +
-        theme_minimal()
-
-    return(list(p1, p2, p3))
 }
-
-# Generate plots
-plots_raw <- create_diag_plots(model_raw, "Raw Data")
-plots_log <- create_diag_plots(model_log, "Log(x+1) Data")
-
-# Combine into a grid (2 rows: Raw top, Log bottom)
-# Layout:
-# Raw Hist | Raw Res-Fit | Raw QQ
-# Log Hist | Log Res-Fit | Log QQ
-# Wait, user asked for 2x2 per model? "For both models ... create a 2x2 diagnostic plot... Display these plots side-by-side"
-# Let's do a 2x3 grid: Rows = Models, Cols = Plots.
-grid.arrange(
-    plots_raw[[1]], plots_raw[[2]], plots_raw[[3]],
-    plots_log[[1]], plots_log[[2]], plots_log[[3]],
-    nrow = 2
-)
 ```
 
-**Interpretation**: 
-The raw data (Top row) exhibits a distinct "fan shape" in the Residuals vs. Fitted plot, indicating heteroscedasticity (variance increases with the mean). The Q-Q plot also shows deviation from normality. The log-transformed data (Bottom row) significantly improves homoscedasticity and normality, justifying the use of `log1p` transformation for statistical testing where assumptions must be met. (Note: For variance partitioning estimation, `lme4` can handle raw data, but transformations often stabilize estimates).
+## S1.1 Heterospecific Pollen (HP)
+
+```{r}
+#| label: diag-hp
+#| fig-cap: "Diagnostics for Heterospecific Pollen (HP)."
+#| fig-height: 8
+#| fig-width: 12
+#| warning: false
+#| message: false
+
+run_transformation_diagnostics(model_data, "heterospecific_pollen", "Heterospecific Pollen")
+```
+
+**Selection**: The raw data (Left) shows severe heteroscedasticity. Both comparisons suggest stabilization, but Square-Root was chosen for alignment with standard count data practices.
+
+## S1.2 Conspecific Pollen (CP)
+
+```{r}
+#| label: diag-cp
+#| fig-cap: "Diagnostics for Conspecific Pollen (CP)."
+#| fig-height: 8
+#| fig-width: 12
+#| warning: false
+#| message: false
+
+run_transformation_diagnostics(model_data, "conspecific_pollen", "Conspecific Pollen")
+```
+
+**Selection**: CP loads are generally higher than HP but also exhibit skew. Transformations improve normality. The same Square-Root transformation is applied for consistency.
+
+## S1.3 Proportion HP (HP / Total)
+
+```{r}
+#| label: diag-prop
+#| fig-cap: "Diagnostics for Proportion HP (HP / (CP+HP))."
+#| fig-height: 8
+#| fig-width: 12
+#| warning: false
+#| message: false
+
+run_transformation_diagnostics(model_data, "prop_HP", "Proportion HP")
+```
+
+**Selection**: Proportions are bounded [0,1]. While Binomial/Beta models are theoretically superior, for the purpose of VCA (partitioning variance), the Square-Root transformation provides a reasonable approximation of normality for the residuals.
+
+
 
 # Section S2: Data Distribution
 
@@ -239,3 +286,110 @@ grid.arrange(
     ncol = 2
 )
 ```
+
+# Section S4: Diagnostic Plots for Slope Comparison Model
+
+To validate the use of the square-root transformation for the "Slope Showdown" analysis (aggregated plant-level data), we examined the residual diagnostics of the linear model.
+
+**Model**: `lm(sqrt(mean_HP) ~ mean_CP * as.factor(year), data = aggregated_data)`
+
+```{r}
+#| label: fig-sqrt-diagnostics
+#| fig-cap: "Diagnostic plots for the Square-Root Transformed Model. A) Residuals vs Fitted showing no obvious patterns (homoscedasticity). B) Q-Q Plot showing reasonable normality."
+#| warning: false
+#| message: false
+#| fig-height: 5
+#| fig-width: 10
+
+# Re-create the aggregated data locally for the supplemental plot
+model_data_agg <- pollen_deposition %>%
+    mutate(plant_id = paste(year, inflorescence_id, day, sep = "_")) %>%
+    group_by(year, plant_id) %>%
+    summarise(
+        mean_HP = mean(heterospecific_pollen, na.rm = TRUE),
+        mean_CP = mean(conspecific_pollen, na.rm = TRUE),
+        .groups = "drop"
+    ) %>%
+    filter(is.finite(mean_HP) & is.finite(mean_CP)) %>%
+    filter(!is.na(year)) %>%
+    mutate(Year = as.factor(year))
+
+# Fit the model used in the main text
+fit_sqrt_supp <- lm(sqrt(mean_HP) ~ mean_CP * Year, data = model_data_agg)
+
+# Diagnostic Plots
+par(mfrow = c(1, 2))
+plot(fit_sqrt_supp, which = 1, main = "A. Residuals vs Fitted")
+plot(fit_sqrt_supp, which = 2, main = "B. Normal Q-Q")
+par(mfrow = c(1, 1))
+
+```
+
+# Section S5: Pollinator Community Composition
+
+Table S3 presents the abundance and relative abundance of all pollinator taxa recorded across the three study years.
+**Note on Abundance**: "Abundance" (Count) represents the raw number of recorded interaction events (unstandardized). Relative abundance (%) is calculated as the species' count divided by the total number of visits for that year.
+
+```{r}
+#| label: table-s3-abundance
+#| echo: false
+#| message: false
+#| warning: false
+
+library(tidyr)
+library(knitr)
+library(dplyr)
+
+# Calculate Counts and Relative (%) Abundance per Year
+rel_abund <- interaction_data_Succisa_22_24 %>%
+    # Filter out NA or unknown species
+    filter(!is.na(pollinator_id) & pollinator_id != "NA") %>%
+    group_by(year, pollinator_id) %>%
+    summarise(count = sum(interaction_count, na.rm = TRUE), .groups = "drop") %>%
+    group_by(year) %>%
+    mutate(
+        yearly_total = sum(count),
+        pct = (count / yearly_total) * 100
+    )
+
+# Calculate Grand Total for Sorting
+grand_totals <- rel_abund %>%
+    group_by(pollinator_id) %>%
+    summarise(grand_total = sum(count)) %>%
+    arrange(desc(grand_total))
+
+# Reshape for Display
+table_s3 <- rel_abund %>%
+    # Round for display
+    mutate(
+        count = as.integer(count),
+        pct = round(pct, 2)
+    ) %>%
+    pivot_wider(
+        id_cols = pollinator_id,
+        names_from = year,
+        values_from = c(count, pct),
+        values_fill = 0
+    ) %>%
+    # Join grand total to sort
+    left_join(grand_totals, by = "pollinator_id") %>%
+    arrange(desc(grand_total)) %>%
+    select(-grand_total) %>%
+    # Reorder columns to be Year-grouped: Count_22, Pct_22, Count_23, Pct_23...
+    select(
+        Species = pollinator_id,
+        `2022 (Count)` = count_22,
+        `2022 (%)` = pct_22,
+        `2023 (Count)` = count_23,
+        `2023 (%)` = pct_23,
+        `2024 (Count)` = count_24,
+        `2024 (%)` = pct_24
+    )
+
+# Print Table
+# Using vertical bars in align string to separate years if supported by output format
+kable(table_s3, 
+      caption = "Table S3: Raw abundance (Count) and relative abundance (%) of all pollinator taxa across study years, sorted by total abundance.", 
+      align = "lcccccc")
+```
+

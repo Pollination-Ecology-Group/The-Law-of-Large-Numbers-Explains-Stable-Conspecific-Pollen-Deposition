@@ -110,9 +110,9 @@ high variation in pollen load and visitation rate of pollinators
 ([Freudenfeld et al., 2025](#ref-freudenfeld2025interannual)), leading
 to high variation in pollen deposition on stigmas.
 
-<div id="fig-panel">
+<div id="fig-plant-pollinator-panel">
 
-![](MS_Succisa_deposition_files/figure-commonmark/fig-panel-1.png)
+![](MS_Succisa_deposition_files/figure-commonmark/fig-plant-pollinator-panel-1.png)
 
 Figure 1: A) Stigma of *Succisa pratensis* with several pollen
 morphotypes, B) Pollinator (*Eristalis* sp.) on flower of *Succisa
@@ -140,11 +140,11 @@ flowering in late summer every year ([Janovskỳ et al.,
 
 *Succisa pratensis*, our focal plant species, is frequently visited by a
 wide spectrum of pollinators, especially hoverflies (see
-<a href="#fig-panel" class="quarto-xref">Figure 1</a>), feeding on both
-pollen and nectar on it. In addition, *Succisa pratensis* has a
-relatively large and stable population at our study site. Important
-traits related to pollination also include distinctive open
-inflorescences available to most pollinators, protandry preventing
+<a href="#fig-plant-pollinator-panel" class="quarto-xref">Figure 1</a>),
+feeding on both pollen and nectar on it. In addition, *Succisa
+pratensis* has a relatively large and stable population at our study
+site. Important traits related to pollination also include distinctive
+open inflorescences available to most pollinators, protandry preventing
 self-pollination ([Bartoš et al., 2020](#ref-bartovs2020self)) and
 pollen releasing in the morning hours ([Štenc et al.,
 2023](#ref-stenc2023pollinator)).
@@ -246,12 +246,14 @@ S1.
 #### Pollen deposited on stigmas
 
 Although pollen deposition data consisted of counts, we analyzed
-variance components using Linear Mixed Models (LMMs) on log-transformed
-data \[log(x+1)\]. We chose this approach because (1) diagnostic plots
-of the log-transformed data confirmed that assumptions of normality and
-homoscedasticity were met (Figure S1), and (2) variance partitioning is
-more directly interpretable in LMMs compared to Generalized Linear Mixed
-Models (GLMMs) where residual variance depends on the mean (Nakagawa &
+variance components using Linear Mixed Models (LMMs) on **square-root
+transformed** data \[`sqrt(x)`\]. Prior to analysis, pollen count data
+(HP and CP) were square-root transformed to satisfy assumptions of
+normality and homoscedasticity (see Figs S1–S2). We chose this approach
+because (1) diagnostic plots confirmed that the square-root
+transformation effectively stabilized variance and improved normality
+compared to raw counts (Figure S1), and (2) variance partitioning is
+more directly interpretable in LMMs compared to GLMMs (Nakagawa &
 Schielzeth, 2010).
 
 We performed a variance component analysis (VCA) to quantify the
@@ -279,11 +281,6 @@ The presence of *Succisa pratensis* in the study plots across the
 surveyed years (2022-2024) is visualized below.
 
 ``` r
-library(sf)
-library(dplyr)
-library(ggplot2)
-library(ggpubr) # For arranging plots
-
 # --- PART A: MAP ---
 
 # 1. Prepare Presence Data
@@ -379,9 +376,9 @@ ggarrange(p_map, p_abundance, p_visitation,
 ) # Give more height to the map
 ```
 
-<div id="fig-succisa-map-abundance">
+<div id="fig-spatial-temporal-abundance">
 
-![](MS_Succisa_deposition_files/figure-commonmark/fig-succisa-map-abundance-1.png)
+![](MS_Succisa_deposition_files/figure-commonmark/fig-spatial-temporal-abundance-1.png)
 
 Figure 2: Distribution and abundance of Succisa pratensis (2022-2024).
 A) Spatial distribution of plots with Succisa presence. B) Total
@@ -389,6 +386,98 @@ abundance recorded per year. C) Differences in standardized visitation
 rates to Succisa pratensis across years (2022-2024).
 
 </div>
+
+### Pollinator Spectra Comparison (2022-2024)
+
+Comparisons of the proportional representation of different pollinator
+species visiting *Succisa pratensis* across the three years reveal the
+stability of the pollinator community composition.
+
+``` r
+# 1. Aggregation
+# Calculate total visitation rate per species per year
+species_composition <- interaction_data_Succisa_22_24 %>%
+    filter(!is.na(year)) %>% # Remove NA years
+    group_by(year, pollinator_id) %>%
+    summarise(total_rate = sum(rate, na.rm = TRUE), .groups = "drop") %>%
+    group_by(year) %>%
+    mutate(
+        yearly_total = sum(total_rate),
+        proportion = total_rate / yearly_total,
+        year_label = paste0("20", year)
+    )
+
+# 2. Lump Rare Species
+# Select top N most abundant species across all years to show individually
+top_n_species <- 9
+top_species_list <- species_composition %>%
+    group_by(pollinator_id) %>%
+    summarise(grand_total = sum(total_rate)) %>%
+    arrange(desc(grand_total)) %>%
+    slice_head(n = top_n_species) %>%
+    pull(pollinator_id)
+
+# Lump others
+species_composition_grouped <- species_composition %>%
+    mutate(
+        species_label = ifelse(pollinator_id %in% top_species_list,
+            pollinator_id,
+            "Other"
+        )
+    ) %>%
+    group_by(year_label, species_label) %>%
+    summarise(proportion = sum(proportion), .groups = "drop")
+
+# Reorder species for plotting (Other at bottom or top, others by abundance)
+# We make "Other" the first level so it appears at one end of the stack
+species_composition_grouped$species_label <- factor(
+    species_composition_grouped$species_label,
+    levels = c("Other", rev(top_species_list)) # Stack order
+)
+
+# Define Consistent Colors
+pollinator_colors <- c(
+    "Eristalis_tenax" = "#30123B", # Dark Purple
+    "Eristalis_pertinax" = "#4675ED", # Blue
+    "Eristalis_interrupta" = "#39568C", # Dark Blue
+    "Eristalis_arbustorum" = "#42F4EB", # Cyan-ish
+    "Eristalis_intricaria" = "#1E9C89", # Teal
+    "Eristalis_similis" = "#248641", # Green
+    "Eristalis_sp" = "#248641", # Green (fallback)
+    "Helophilus_pendulus" = "#A2FC3C", # Light Green
+    "Helophilus_trivittatus" = "#D9F121", # Yellow-Green
+    "Helophilus_hybridus" = "#D9F121", # Yellow-Green
+    "Myathropa_florea" = "#F9B614", # Yellow/Orange
+    "Apis_mellifera" = "#F9B614", # Orange
+    "Bombus_lapidarius" = "#EB520E", # Red-Orange
+    "Sarcophaga_sp" = "#A42C17", # Dark Red
+    "Zygena_sp" = "#D2204C", # Red/Pink
+    "Sericomyia" = "#D2204C", # Red/Pink
+    "Tachinidae" = "grey50",
+    "Other" = "grey80"
+)
+
+# 3. Visualization
+ggplot(species_composition_grouped, aes(x = year_label, y = proportion, fill = species_label)) +
+    geom_col(width = 0.6, color = "white", size = 0.2) +
+    scale_fill_manual(values = pollinator_colors, name = "Species") +
+    labs(
+        title = "Pollinator Spectra Composition",
+        subtitle = "Proportion of Visitation Rates",
+        x = "Year",
+        y = "Proportion"
+    ) +
+    theme_minimal() +
+    theme(
+        legend.position = "right",
+        legend.text = element_text(face = "italic")
+    )
+```
+
+![Pollinator spectra composition on Succisa pratensis (2022-2024).
+Stacked bars show the proportion of standardized visitation rates for
+the most abundant
+species.](MS_Succisa_deposition_files/figure-commonmark/analysis-pollinator-composition-1.png)
 
 ### Pollinator Visitation Rates
 
@@ -399,11 +488,6 @@ pratensis* across the three years.
 <summary>Code</summary>
 
 ``` r
-# Ensure library is loaded
-library(nlme)
-library(stringr)
-
-
 test_curve_shape <- function(year_data, year_label) {
     # 0. Data Aggregation (Mean per Plant)
     # Using the 'plant_id' we created earlier
@@ -478,17 +562,16 @@ Model Comparison Results
 ### Slope Showdown: Analysis of Aggregated Data
 
 To address potential pseudoreplication (multiple stigmas per plant) and
-compare the deposition rates across years, we aggregated the pollen
-counts to the plant level (mean per plant). We then compared the slopes
-of the Heterospecific vs. Conspecific pollen relationship between years.
+heteroscedasticity (variance increasing with mean), we aggregated pollen
+counts to the plant level and modeled the **square root** of
+Heterospecific Pollen (HP). We then compared the slopes of the HP vs. CP
+relationship between years. While statistical inference was performed on
+square-root transformed data to satisfy model assumptions, figures
+presented below show back-transformed estimates (curves) or raw data
+points for biological interpretability.
 
 ``` r
-library(dplyr)
-library(emmeans)
-library(ggplot2)
-
 # 1. Data Aggregation
-# Group by year and plant_id to calculate means
 aggregated_data <- pollen_deposition %>%
     group_by(year, plant_id) %>%
     summarise(
@@ -496,133 +579,116 @@ aggregated_data <- pollen_deposition %>%
         mean_CP = mean(conspecific_pollen, na.rm = TRUE),
         .groups = "drop"
     ) %>%
-    filter(!is.na(mean_HP) & !is.na(mean_CP)) %>%
     filter(is.finite(mean_HP) & is.finite(mean_CP)) %>%
-    filter(!is.na(year))
+    filter(!is.na(year)) %>%
+    mutate(Year = as.factor(year))
 
-# 2. Model Fitting (Standard Linear Model on Means)
-# Interaction term allows slopes to differ by year
-fit_agg <- lm(mean_HP ~ mean_CP * as.factor(year), data = aggregated_data)
+# 2. Model Fitting (Square Root Transformation)
+# sqrt(mean_HP) ~ mean_CP * Year
+fit_sqrt <- lm(sqrt(mean_HP) ~ mean_CP * Year, data = aggregated_data)
 
-# 3. Slope Comparison
-# Estimate slopes (trends) for each year
-slopes <- emtrends(fit_agg, pairwise ~ year, var = "mean_CP")
-
-# Display slope estimates
-print("Slope Estimates per Year:")
+# 3. Model Results
+# Type III ANOVA (if using car::Anova) or standard anova
+anova_res <- anova(fit_sqrt)
+print(knitr::kable(anova_res, caption = "Analysis of Variance: sqrt(HP) ~ CP * Year", digits = 3))
 ```
 
-    [1] "Slope Estimates per Year:"
+
+
+    Table: Analysis of Variance: sqrt(HP) ~ CP * Year
+
+    |             |  Df|  Sum Sq| Mean Sq| F value| Pr(>F)|
+    |:------------|---:|-------:|-------:|-------:|------:|
+    |mean_CP      |   1|   9.785|   9.785|   3.501|  0.063|
+    |Year         |   2| 534.335| 267.167|  95.589|  0.000|
+    |mean_CP:Year |   2|  74.770|  37.385|  13.376|  0.000|
+    |Residuals    | 231| 645.636|   2.795|      NA|     NA|
 
 ``` r
-print(slopes$emtrends)
+# 4. Slope Comparisons (on Sqrt Scale)
+slopes_sqrt <- emtrends(fit_sqrt, pairwise ~ Year, var = "mean_CP")
+
+# Format Slope Estimates
+slope_est <- as.data.frame(slopes_sqrt$emtrends) %>%
+    select(Year, Slope = mean_CP.trend, SE, df, lower.CL, upper.CL)
+print(knitr::kable(slope_est, caption = "Slope Estimates (Sqrt Scale)", digits = 4))
 ```
 
-     year mean_CP.trend    SE  df lower.CL upper.CL
-     2022        0.9643 0.263 231   0.4460    1.483
-     2023        1.4442 0.254 231   0.9437    1.945
-     2024        0.0714 0.082 231  -0.0901    0.233
 
-    Confidence level used: 0.95 
+
+    Table: Slope Estimates (Sqrt Scale)
+
+    |Year |  Slope|     SE|  df| lower.CL| upper.CL|
+    |:----|------:|------:|---:|--------:|--------:|
+    |2022 | 0.0994| 0.0258| 231|   0.0486|   0.1502|
+    |2023 | 0.1331| 0.0249| 231|   0.0841|   0.1822|
+    |2024 | 0.0171| 0.0080| 231|   0.0012|   0.0329|
 
 ``` r
-# Display pairwise comparisons of slopes
-print("Pairwise Comparison of Slopes:")
+# Format Pairwise Comparisons
+slope_contrasts <- as.data.frame(slopes_sqrt$contrasts) %>%
+    select(contrast, estimate, SE, df, t.ratio, p.value)
+print(knitr::kable(slope_contrasts, caption = "Pairwise Slope Comparisons", digits = 4))
 ```
 
-    [1] "Pairwise Comparison of Slopes:"
+
+
+    Table: Pairwise Slope Comparisons
+
+    |contrast            | estimate|     SE|  df| t.ratio| p.value|
+    |:-------------------|--------:|------:|---:|-------:|-------:|
+    |Year2022 - Year2023 |  -0.0337| 0.0358| 231| -0.9409|  0.6150|
+    |Year2022 - Year2024 |   0.0824| 0.0270| 231|  3.0502|  0.0072|
+    |Year2023 - Year2024 |   0.1161| 0.0262| 231|  4.4383|  0.0000|
 
 ``` r
-print(slopes$contrasts)
-```
+# 5. Visualization (Back-Transformed)
 
-     contrast            estimate    SE  df t.ratio p.value
-     year2022 - year2023   -0.480 0.366 231  -1.312  0.3899
-     year2022 - year2024    0.893 0.276 231   3.241  0.0039
-     year2023 - year2024    1.373 0.267 231   5.143 <0.0001
+# Create prediction grid
+# Range of CP for each year
+pred_grid <- aggregated_data %>%
+    group_by(Year) %>%
+    do({
+        seq_cp <- seq(min(.$mean_CP), max(.$mean_CP), length.out = 100)
+        data.frame(mean_CP = seq_cp)
+    }) %>%
+    ungroup()
 
-    P value adjustment: tukey method for comparing a family of 3 estimates 
+# Predict on Sqrt Scale with Confidence Intervals
+preds <- predict(fit_sqrt, newdata = pred_grid, interval = "confidence")
 
-``` r
-# 4. Visualization (Best Fit Models)
+# Bind and Back-Transform (Square)
+pred_data <- cbind(pred_grid, preds) %>%
+    mutate(
+        mean_HP = fit^2, # Back-transform fit
+        lwr_raw = lwr^2, # Back-transform lower CI
+        upr_raw = upr^2 # Back-transform upper CI
+    )
 
-# Function to get predictions from best model
-get_best_fit_preds <- function(df) {
-    years <- unique(df$year)
-    preds_list <- list()
-
-    for (yr in years) {
-        dat <- subset(df, year == yr)
-
-        # Linear
-        m_lin <- lm(mean_HP ~ mean_CP, data = dat)
-        aic_lin <- AIC(m_lin)
-
-        # Exponential (Type 3)
-        # Try-catch to handle potential convergence failures
-        m_exp <- tryCatch(
-            nls(mean_HP ~ a * exp(b * mean_CP),
-                data = dat,
-                start = list(a = max(dat$mean_HP), b = -0.01)
-            ),
-            error = function(e) NULL
-        )
-        # Fallback start values if first attempt fails
-        if (is.null(m_exp)) {
-            m_exp <- tryCatch(
-                nls(mean_HP ~ a * exp(b * mean_CP),
-                    data = dat,
-                    start = list(a = mean(dat$mean_HP), b = -0.001)
-                ),
-                error = function(e) NULL
-            )
-        }
-
-        aic_exp <- if (!is.null(m_exp)) AIC(m_exp) else Inf
-
-        # Selection Logic: Exponential if AIC is lower by > 2
-        if (aic_exp < (aic_lin - 2)) {
-            best_model <- m_exp
-            type <- "Exponential"
-        } else {
-            best_model <- m_lin
-            type <- "Linear"
-        }
-
-        # Predict
-        x_seq <- seq(min(dat$mean_CP), max(dat$mean_CP), length.out = 100)
-        y_pred <- predict(best_model, newdata = list(mean_CP = x_seq))
-
-        preds_list[[as.character(yr)]] <- data.frame(
-            mean_CP = x_seq,
-            mean_HP = y_pred,
-            year = as.factor(yr),
-            fit_type = type
-        )
-    }
-    return(do.call(rbind, preds_list))
-}
-
-prediction_data <- get_best_fit_preds(aggregated_data)
-
-ggplot(aggregated_data, aes(x = mean_CP, y = mean_HP, color = as.factor(year))) +
-    geom_point(alpha = 0.6, size = 2) +
-    # Plot the best-fit curves
-    geom_line(data = prediction_data, size = 1, aes(y = mean_HP)) +
+# Plot
+ggplot(aggregated_data, aes(x = mean_CP, y = mean_HP, color = Year, fill = Year)) +
+    # Observed Points
+    geom_point(alpha = 0.5, size = 2) +
+    # Confidence Ribbons (Back-transformed)
+    geom_ribbon(data = pred_data, aes(ymin = lwr_raw, ymax = upr_raw), alpha = 0.2, color = NA) +
+    # Fitted Lines (Back-transformed curves)
+    geom_line(data = pred_data, size = 1) +
     labs(
-        title = "CP vs HP: Best Fit Models",
-        subtitle = "Curves represent best model (Linear or Exponential) selected by AIC",
+        title = "Slope Showdown: CP vs HP",
+        subtitle = "Model: sqrt(HP) ~ CP * Year (Back-transformed)",
         x = "Mean Conspecific Pollen (per plant)",
         y = "Mean Heterospecific Pollen (per plant)",
-        color = "Year"
+        color = "Year",
+        fill = "Year"
     ) +
     scale_color_viridis_d(begin = 0.2, end = 0.8, option = "D") +
+    scale_fill_viridis_d(begin = 0.2, end = 0.8, option = "D") +
     theme_minimal()
 ```
 
 ![Relationship between Conspecific and Heterospecific pollen (Plant
-Means). Lines represent linear regression fits for each
-year.](MS_Succisa_deposition_files/figure-commonmark/slope-showdown-1.png)
+Means). Curves represent back-transformed fits from the sqrt-scale
+model.](MS_Succisa_deposition_files/figure-commonmark/analysis-slope-comparison-1.png)
 
 ### Daily Stability Test (2024)
 
@@ -679,17 +745,7 @@ ggplot(agg_data_2024, aes(x = mean_CP, y = mean_HP)) +
 
 ![Daily stability of pollen deposition network structure in 2024. A)
 Faceted by Day. B) Combined
-trends.](MS_Succisa_deposition_files/figure-commonmark/daily-stability-2024-1.png)
-
-``` r
-suc_pra_222324 <- get_interaction_data(
-    plant_species = "Suc_pra",
-    start_time = "7:00",
-    end_time = "18:00",
-    remove_zeros = TRUE,
-    standardize = TRUE
-)
-```
+trends.](MS_Succisa_deposition_files/figure-commonmark/analysis-daily-stability-1.png)
 
 ### Variance Partitioning: Stability Validation
 
@@ -711,93 +767,70 @@ Using only the 2024 data, we explicitly tested the effect of **Date**
 
     Variance Partitioning of Pollen Deposition
 
-    To determine the hierarchical scale of variability in heterospecific pollen (HP) receipt, we performed a variance component analysis on log-transformed HP counts. The majority of the variation in HP deposition occurred at the finest scale—among individual stigmas within plants (Residual variance). In the global analysis across three years, stochastic stigma-level variation explained [XX.X%] of the total variance, while inter-annual fluctuations ('Year') accounted for only [XX.X%] (Table 2).
+    To determine the hierarchical scale of variability in heterospecific pollen (HP) receipt, we performed a variance component analysis on square-root transformed HP counts. The majority of the variation in HP deposition occurred at the finest scale—among individual stigmas within plants (Residual variance). In the global analysis across three years, stochastic stigma-level variation explained [XX.X%] of the total variance, while inter-annual fluctuations ('Year') accounted for only [XX.X%] (Table 2).
 
     This pattern of high fine-scale stochasticity was consistent when analyzing the detailed 2024 dataset. Within the 2024 flowering season, daily turnover ('Sampling Date') explained a negligible proportion of the variance ([XX.X%]), while plant identity explained [XX.X%]. The remaining [XX.X%] of variation was attributable to differences between individual stigmas on the same plant (Fig. 4). These results indicate that HP deposition is driven primarily by stochastic, single-visit mechanics rather than by systemic temporal shifts or plant-level traits.
 
 ``` r
-library(lme4)
-library(dplyr)
-library(ggplot2)
-library(tidyr)
-# Ensure patchwork is available for combining (or use gridExtra/ggpubr)
-if (!requireNamespace("patchwork", quietly = TRUE)) install.packages("patchwork")
-library(patchwork)
-
 # 1. Data Prep
+# 1. Data Preparation
 vca_data <- pollen_deposition %>%
+    filter(!is.na(heterospecific_pollen) & !is.na(conspecific_pollen)) %>%
     mutate(
-        total_pollen = heterospecific_pollen + conspecific_pollen,
-        # Log-transform pollen counts to improve normality (Model assumption)
-        log_HP = log1p(heterospecific_pollen),
-        log_CP = log1p(conspecific_pollen),
-        # Ratio/Proportion: Proportion of Heterospecific Pollen (HP / Total)
-        # (Using Proportion avoids division by zero issues of CP/HP ratio)
-        prop_HP = ifelse(total_pollen > 0, heterospecific_pollen / total_pollen, NA),
+        # Response Variables
+        sqrt_HP = sqrt(heterospecific_pollen),
+        sqrt_CP = sqrt(conspecific_pollen),
+
+        # Calculate Proportion HP (approximate normality with sqrt)
+        total = heterospecific_pollen + conspecific_pollen,
+        prop = ifelse(total > 0, heterospecific_pollen / total, 0),
+        sqrt_Prop = sqrt(prop),
+
+        # Factors
         year_fac = as.factor(year),
-        date_fac = as.factor(day), # Assuming 'day' is your date column
-        # Ensure we use the raw inflorescence ID for nesting
-        plant_id_raw = inflorescence_id
-    ) %>%
-    # Filter valid rows
-    filter(!is.na(heterospecific_pollen))
+        date_fac = as.factor(paste(year, day, sep = "_")),
+        plant_id = inflorescence_id # unique within year
+    )
 
 # 2. General Function for Two-Part VCA
-run_twopart_vca <- function(data, response_col, metric_label) {
-    # Custom extraction for lme4
+run_twopart_vca <- function(data, variable_col, metric_label) {
+    # Internal helper to extract variance
     extract_lmer_var <- function(model, name) {
         vc <- VarCorr(model)
         df <- as.data.frame(vc)
 
-        # Ensure Residual is included in df for plotting
+        # Ensure Residual is included
         if (!("Residual" %in% df$grp)) {
             sigma_sq <- attr(vc, "sc")^2
-            # Add residual row if missing (rare for lmer but possible in some formats)
             df <- rbind(df, data.frame(grp = "Residual", var1 = NA, var2 = NA, vcov = sigma_sq, sdcor = attr(vc, "sc")))
         }
 
-        # Validate total variance sums to 100%
+        # Calculate Percent
         total_var <- sum(df$vcov)
-
         df$percent <- (df$vcov / total_var) * 100
         df$Part <- name
-        df$level <- case_when(
-            grepl("inflorescence", df$grp) ~ "Plant", # Catches inflorescence_id
+        df$level <- dplyr::case_when(
+            grepl("inflorescence", df$grp) ~ "Plant",
+            grepl("plant_id", df$grp) ~ "Plant",
             df$grp == "year_fac" ~ "Year",
             df$grp == "date_fac" ~ "Date",
             df$grp == "Residual" ~ "Stigma",
             TRUE ~ "Other"
         )
-
         return(df[, c("Part", "level", "vcov", "sdcor", "percent")])
     }
 
-    # Remove NAs for this specific response
-    curr_data <- data[!is.na(data[[response_col]]), ]
+    # Part 1: Inter-Annual (Global)
+    f_inter <- as.formula(paste(variable_col, "~ 1 + (1 | year_fac / plant_id)"))
+    m_inter <- lmer(f_inter, data = data)
+    res_inter <- extract_lmer_var(m_inter, "Inter-Annual")
 
-    # --- Part 1: Inter-Annual (All Years) ---
-    f_inter <- as.formula(paste(response_col, "~ 1 + (1 | year_fac / inflorescence_id)"))
-    # Use tryCatch for robustness
-    m_inter <- tryCatch(lmer(f_inter, data = curr_data), error = function(e) NULL)
-
-    if (is.null(m_inter)) {
-        res_inter <- data.frame(Part = "Inter-Annual", level = "Error", vcov = 0, sdcor = 0, percent = 0)
-    } else {
-        res_inter <- extract_lmer_var(m_inter, "Inter-Annual")
-    }
-
-    # --- Part 2: Intra-Annual (2024 Only) ---
-    data_24 <- subset(curr_data, year == 2024)
-    data_24$date_fac <- droplevels(data_24$date_fac)
-
-    f_intra <- as.formula(paste(response_col, "~ 1 + (1 | date_fac / inflorescence_id)"))
-    m_intra <- tryCatch(lmer(f_intra, data = data_24), error = function(e) NULL)
-
-    if (is.null(m_intra)) {
-        res_intra <- data.frame(Part = "Intra-Annual", level = "Error", vcov = 0, sdcor = 0, percent = 0)
-    } else {
-        res_intra <- extract_lmer_var(m_intra, "Intra-Annual")
-    }
+    # Part 2: Intra-Annual (2024 Only)
+    data_24 <- filter(data, year == 2024)
+    # Check if we have date variation in 2024
+    f_intra <- as.formula(paste(variable_col, "~ 1 + (1 | date_fac / plant_id)"))
+    m_intra <- lmer(f_intra, data = data_24)
+    res_intra <- extract_lmer_var(m_intra, "Intra-Annual")
 
     # Combine
     combined <- rbind(res_inter, res_intra)
@@ -805,35 +838,39 @@ run_twopart_vca <- function(data, response_col, metric_label) {
     return(combined)
 }
 
-# 3. Run for all 3 metrics
-res_HP <- run_twopart_vca(vca_data, "log_HP", "Heterospecific Pollen (Log)")
-res_CP <- run_twopart_vca(vca_data, "log_CP", "Conspecific Pollen (Log)")
-res_Prop <- run_twopart_vca(vca_data, "prop_HP", "Proportion HP")
+# 3. Run for all 3 metrics (using Sqrt as validated in Supplement)
+res_HP <- run_twopart_vca(vca_data, "sqrt_HP", "Heterospecific Pollen (Sq)")
+res_CP <- run_twopart_vca(vca_data, "sqrt_CP", "Conspecific Pollen (Sq)")
+res_Prop <- run_twopart_vca(vca_data, "sqrt_Prop", "Proportion HP (Sq)")
 
 all_results <- rbind(res_HP, res_CP, res_Prop)
 
 # Define factor levels
 all_results$level <- factor(all_results$level, levels = c("Year", "Date", "Plant", "Stigma"))
-all_results$Metric <- factor(all_results$Metric, levels = c("Heterospecific Pollen (Log)", "Conspecific Pollen (Log)", "Proportion HP"))
+all_results$Metric <- factor(all_results$Metric, levels = c("Heterospecific Pollen (Sq)", "Conspecific Pollen (Sq)", "Proportion HP (Sq)"))
 
 # 4. Visualization (Percent only)
 p_var <- ggplot(all_results, aes(x = Part, y = percent, fill = level)) +
     geom_bar(stat = "identity", width = 0.6) +
     facet_wrap(~Metric) +
     scale_fill_brewer(palette = "Set2") +
-    geom_text(aes(label = ifelse(percent > 2, paste0(round(percent, 0), "%"), "")),
-        position = position_stack(vjust = 0.5), size = 3
+    geom_text(aes(label = ifelse(percent > 1.5, paste0(round(percent, 0), "%"), "")),
+        position = position_stack(vjust = 0.5),
+        size = 4,
+        fontface = "bold",
+        color = "black" # Black usually readable on Set2, or check individual colors
     ) +
     labs(
-        title = "Variance Partitioning (Log-Transformed Data)",
+        title = "Variance Partitioning (Transformed Data)",
         y = "% of Total Variance",
         x = "",
         fill = "Variance Source"
     ) +
     theme_minimal() +
     theme(
-        axis.text.x = element_text(face = "bold", angle = 0, hjust = 0.5),
-        strip.text = element_text(size = 11, face = "bold")
+        axis.text.x = element_text(face = "bold", angle = 0, hjust = 0.5, size = 11),
+        strip.text = element_text(size = 12, face = "bold"),
+        legend.position = "bottom"
     )
 
 print(p_var)
@@ -841,13 +878,13 @@ print(p_var)
 
 ![Variance Partitioning Results. A) Inter-Annual Stability (All Years).
 B) Intra-Annual Stability (2024
-Only).](MS_Succisa_deposition_files/figure-commonmark/variance-decomposition-twopart-1.png)
+Only).](MS_Succisa_deposition_files/figure-commonmark/analysis-variance-partitioning-1.png)
 
 ``` r
 # 5. GENERATE PUBLICATION TABLE (Table 2 for HP)
-# We filter for Heterospecific Pollen (Log) as that is the main story text
+# We filter for Heterospecific Pollen (Sqrt) as that is the main story text
 table_detailed <- all_results %>%
-    filter(Metric == "Heterospecific Pollen (Log)") %>%
+    filter(Metric == "Heterospecific Pollen (Sq)") %>%
     select(Part, level, vcov, sdcor, percent) %>%
     rename(
         Analysis = Part,
@@ -865,23 +902,23 @@ table_detailed <- all_results %>%
 
 # Print the detailed table
 knitr::kable(table_detailed,
-    caption = "Table 2: Variance partitioning of log-transformed heterospecific pollen deposition. Results for Global (Inter-Annual) and 2024 (Intra-Annual) analyses.",
+    caption = "Table 2: Variance partitioning of square-root transformed heterospecific pollen deposition. Results for Global (Inter-Annual) and 2024 (Intra-Annual) analyses.",
     align = "lcccc"
 )
 ```
 
 | Analysis     | Source | Variance | Std_Dev | Percent_Total |
 |:-------------|:------:|:--------:|:-------:|:-------------:|
-| Inter-Annual | Stigma |   1.11   |  1.05   |     49.8%     |
-| Inter-Annual | Plant  |   0.47   |  0.68   |     20.9%     |
-| Inter-Annual |  Year  |   0.65   |  0.81   |     29.3%     |
-| Intra-Annual | Stigma |   0.59   |  0.77   |     48.1%     |
-| Intra-Annual | Plant  |   0.61   |  0.78   |     50.4%     |
-| Intra-Annual |  Date  |   0.02   |  0.14   |     1.6%      |
+| Inter-Annual | Stigma |   3.22   |  1.80   |     31.3%     |
+| Inter-Annual | Plant  |   3.56   |  1.89   |     34.6%     |
+| Inter-Annual |  Year  |   3.51   |  1.87   |     34.1%     |
+| Intra-Annual | Stigma |   1.50   |  1.23   |     47.2%     |
+| Intra-Annual | Plant  |   1.66   |  1.29   |     52.1%     |
+| Intra-Annual |  Date  |   0.02   |  0.15   |     0.7%      |
 
-Table 2: Variance partitioning of log-transformed heterospecific pollen
-deposition. Results for Global (Inter-Annual) and 2024 (Intra-Annual)
-analyses.
+Table 2: Variance partitioning of square-root transformed heterospecific
+pollen deposition. Results for Global (Inter-Annual) and 2024
+(Intra-Annual) analyses.
 
 Variance Partitioning Results. A) Inter-Annual Stability (All Years). B)
 Intra-Annual Stability (2024 Only).
@@ -895,8 +932,6 @@ loads), we expect a positive correlation between Conspecific and
 Heterospecific pollen on their bodies.
 
 ``` r
-library(ggpubr)
-
 # 1. Prepare Data
 pollen_loads <- pollen_load_guts_24 %>%
     filter(!is.na(suc_pra_load) & !is.na(other_pollen_load)) %>%
@@ -923,7 +958,7 @@ fit_loads <- lm(other_pollen_load ~ suc_pra_load * Species, data = pollen_loads_
 p_loads_scatter <- ggplot(pollen_loads_dom, aes(x = suc_pra_load, y = other_pollen_load, color = Species)) +
     geom_point(size = 2, alpha = 0.6) +
     geom_smooth(method = "lm", se = FALSE) +
-    scale_color_viridis_d(option = "D", end = 0.9) +
+    scale_color_manual(values = pollinator_colors) +
     labs(
         title = "A. Body Loads: CP vs HP",
         x = "Conspecific Pollen (CP)",
@@ -936,7 +971,7 @@ p_loads_scatter <- ggplot(pollen_loads_dom, aes(x = suc_pra_load, y = other_poll
 p_purity <- ggplot(pollen_loads_dom, aes(x = Species, y = Purity, fill = Species)) +
     geom_boxplot(alpha = 0.7, outlier.shape = NA) +
     geom_jitter(width = 0.2, alpha = 0.5) +
-    scale_fill_viridis_d(option = "D", end = 0.9) +
+    scale_fill_manual(values = pollinator_colors) +
     labs(
         title = "B. Pollen Purity",
         y = "Proportion Conspecific (CP / Total)"
@@ -953,7 +988,7 @@ ggarrange(p_loads_scatter, p_purity, ncol = 1, heights = c(1.2, 1))
 ![Pollen Transport Quality. A) Relationship between Conspecific (CP) and
 Heterospecific (HP) pollen loads on pollinator bodies. B) Pollen purity
 (proportion of CP) by
-species.](MS_Succisa_deposition_files/figure-commonmark/mechanism-pollen-loads-1.png)
+species.](MS_Succisa_deposition_files/figure-commonmark/analysis-pollen-transport-quality-1.png)
 
 ### Gut Content Analysis
 
@@ -982,7 +1017,7 @@ pollen_guts_dom <- pollen_guts %>% filter(Species %in% dominant_species_guts)
 p_guts_scatter <- ggplot(pollen_guts_dom, aes(x = suc_pra_guts, y = other_pollen_guts, color = Species)) +
     geom_point(size = 2, alpha = 0.6) +
     geom_smooth(method = "lm", se = FALSE) +
-    scale_color_viridis_d(option = "D", end = 0.9) +
+    scale_color_manual(values = pollinator_colors) +
     labs(
         title = "C. Gut Content: CP vs HP",
         x = "Conspecific Pollen (CP)",
@@ -995,7 +1030,7 @@ p_guts_scatter <- ggplot(pollen_guts_dom, aes(x = suc_pra_guts, y = other_pollen
 p_guts_purity <- ggplot(pollen_guts_dom, aes(x = Species, y = Purity, fill = Species)) +
     geom_boxplot(alpha = 0.7, outlier.shape = NA) +
     geom_jitter(width = 0.2, alpha = 0.5) +
-    scale_fill_viridis_d(option = "D", end = 0.9) +
+    scale_fill_manual(values = pollinator_colors) +
     labs(
         title = "D. Gut Pollen Purity",
         y = "Proportion Conspecific (CP / Total)"
@@ -1012,12 +1047,214 @@ ggarrange(p_guts_scatter, p_guts_purity, ncol = 1, heights = c(1.2, 1))
 ![Pollen Feeding. C) Relationship between Conspecific (CP) and
 Heterospecific (HP) pollen in guts. D) Gut pollen purity (proportion of
 CP) by
-species.](MS_Succisa_deposition_files/figure-commonmark/mechanism-pollen-guts-1.png)
+species.](MS_Succisa_deposition_files/figure-commonmark/analysis-pollen-diet-1.png)
 
-### Driver: Network Structure
+### Gap 3: Mechanism & Body Loads
 
-Finally, we link the observed deposition patterns to the structure of
-the visitation network.
+To test the biological mechanism behind the observed deposition
+patterns, we compared the proportion of Heterospecific Pollen (HP)
+across three compartments: Stigma (the deposition target), Pollinator
+Body (the transport network), and Pollinator Guts (the diet).
+
+If the “Generalist Recipient” strategy (high HP on stigmas) is driven by
+“Messy Vectors,” we expect the high proportion of HP on pollinator
+bodies to match that found on stigmas.
+
+``` r
+# 1. Data Preparation
+
+# A) Stigma Data (Using 2024 to match loaded pollinator data)
+stigma_comp <- pollen_deposition %>%
+    filter(year == 24) %>%
+    filter(!is.na(heterospecific_pollen) & !is.na(conspecific_pollen)) %>%
+    mutate(
+        HP = heterospecific_pollen,
+        Total = heterospecific_pollen + conspecific_pollen,
+        Prop_HP = ifelse(Total > 0, HP / Total, NA),
+        Compartment = "Stigma",
+        Species = "Plant" # Dummy species for plotting context
+    ) %>%
+    filter(!is.na(Prop_HP)) %>%
+    select(Compartment, Species, Prop_HP)
+
+# B) Pollinator Body Data
+body_comp <- pollen_load_guts_24 %>%
+    filter(!is.na(other_pollen_load) & !is.na(suc_pra_load)) %>%
+    mutate(
+        HP = other_pollen_load,
+        Total = other_pollen_load + suc_pra_load,
+        Prop_HP = ifelse(Total > 0, HP / Total, NA),
+        Compartment = "Body",
+        Species = pollinator_species
+    ) %>%
+    filter(!is.na(Prop_HP)) %>%
+    select(Compartment, Species, Prop_HP)
+
+# C) Pollinator Gut Data
+gut_comp <- pollen_load_guts_24 %>%
+    filter(!is.na(other_pollen_guts) & !is.na(suc_pra_guts)) %>%
+    mutate(
+        HP = other_pollen_guts,
+        Total = other_pollen_guts + suc_pra_guts,
+        Prop_HP = ifelse(Total > 0, HP / Total, NA),
+        Compartment = "Gut",
+        Species = pollinator_species
+    ) %>%
+    filter(!is.na(Prop_HP)) %>%
+    select(Compartment, Species, Prop_HP)
+
+# Combine
+compartment_data <- rbind(stigma_comp, body_comp, gut_comp)
+
+# Set Factor Levels for Plotting Order
+compartment_data$Compartment <- factor(compartment_data$Compartment, levels = c("Stigma", "Body", "Gut"))
+
+# 2. Analysis A: Compartment Comparison (Kruskal-Wallis)
+kruskal_res <- kruskal.test(Prop_HP ~ Compartment, data = compartment_data)
+print("Kruskal-Wallis Test (Compartment Comparison):")
+```
+
+    [1] "Kruskal-Wallis Test (Compartment Comparison):"
+
+``` r
+print(kruskal_res)
+```
+
+
+        Kruskal-Wallis rank sum test
+
+    data:  Prop_HP by Compartment
+    Kruskal-Wallis chi-squared = 1.2456, df = 1, p-value = 0.2644
+
+``` r
+# Plot A
+p_comp <- ggplot(compartment_data, aes(x = Compartment, y = Prop_HP, fill = Compartment)) +
+    geom_boxplot(alpha = 0.7, outlier.shape = NA) +
+    geom_jitter(width = 0.2, alpha = 0.4, size = 1) +
+    labs(
+        title = "A. HP Proportion by Compartment",
+        subtitle = paste("Kr-Wallis p =", format.pval(kruskal_res$p.value, digits = 3)),
+        y = "Proportion Heterospecific Pollen"
+    ) +
+    scale_fill_brewer(palette = "Pastel1") +
+    theme_minimal() +
+    theme(legend.position = "none")
+
+
+# 3. Analysis B: Vector Efficiency (Species Check)
+# Subset to Pollinators only
+vector_data <- compartment_data %>%
+    filter(Compartment %in% c("Body", "Gut")) %>%
+    filter(Species %in% names(pollinator_colors)) # Filter to main species in our color palette
+
+# Test Differences among species (Body only)
+body_only <- vector_data %>% filter(Compartment == "Body")
+kruskal_species <- kruskal.test(Prop_HP ~ Species, data = body_only)
+print("Kruskal-Wallis Test (Species Comparison - Body):")
+```
+
+    [1] "Kruskal-Wallis Test (Species Comparison - Body):"
+
+``` r
+print(kruskal_species)
+```
+
+
+        Kruskal-Wallis rank sum test
+
+    data:  Prop_HP by Species
+    Kruskal-Wallis chi-squared = 46.253, df = 14, p-value = 2.549e-05
+
+``` r
+# Plot B
+p_vector <- ggplot(vector_data, aes(x = Species, y = Prop_HP, fill = Species)) +
+    geom_boxplot(alpha = 0.7, outlier.shape = NA) +
+    geom_jitter(width = 0.2, alpha = 0.4, size = 1) +
+    facet_wrap(~Compartment) +
+    labs(
+        title = "B. Vector 'Messiness' by Species",
+        y = "Proportion Heterospecific Pollen"
+    ) +
+    scale_fill_manual(values = pollinator_colors) +
+    theme_minimal() +
+    theme(
+        axis.text.x = element_text(angle = 45, hjust = 1, face = "italic"),
+        legend.position = "none"
+    )
+
+# Combine Plots
+ggarrange(p_comp, p_vector, ncol = 1, heights = c(1, 1.5))
+```
+
+![Mechanism Analysis. A) Comparison of Heterospecific Pollen (HP)
+proportion across Stigma, Body, and Gut compartments. B) Vector
+Efficiency: HP proportion on bodies and in guts for dominant pollinator
+species.](MS_Succisa_deposition_files/figure-commonmark/analysis-diet-transport-correlation-1.png)
+
+### Gap 2: Community Stability & Composition
+
+To assess the temporal stability of the pollinator community, we
+compared species composition across years using the **Morisita-Horn
+similarity index** (Horn, 1966). This metric was selected for its
+robustness to differences in sample size and species richness compared
+to incidence-based metrics (Jost et al., 2011). Pairwise similarities
+were calculated on abundance data (standardized by sampling effort)
+using the `vegan` package.
+
+The core structure of the pollinator community remained highly stable
+across the three years. The Morisita-Horn index indicated high
+compositional overlap (Similarity \> 0.9 for all pairwise comparisons),
+driven by the consistent dominance of key generalist taxa such as
+*Eristalis* spp. and *Syrphus* spp. (see Table S3 in Supplementary
+Material).
+
+``` r
+# 1. Aggregation for Stability Analysis
+# Sum standardized rates per species per year, excluding NA years
+community_matrix <- interaction_data_Succisa_22_24 %>%
+    filter(!is.na(year)) %>%
+    group_by(year, pollinator_id) %>%
+    summarise(abundance = sum(rate, na.rm = TRUE), .groups = "drop") %>%
+    pivot_wider(names_from = pollinator_id, values_from = abundance, values_fill = 0)
+
+# Extract Matrix (Species columns only)
+comm_mat <- as.matrix(community_matrix[, -1])
+# Label clearly as 2022, 2023, 2024
+rownames(comm_mat) <- paste0("20", community_matrix$year)
+
+# 2. Calculate Morisita-Horn Dissimilarity
+# vegdist returns dissimilarity (0 = identical, 1 = different)
+mh_dist <- vegdist(comm_mat, method = "horn")
+
+# Convert to Similarity (1 - Dissimilarity)
+mh_sim <- 1 - as.matrix(mh_dist)
+
+# 3. Visualization: Correlogram
+# Reshape for ggplot
+mh_long <- as.data.frame(mh_sim) %>%
+    mutate(Year1 = rownames(.)) %>%
+    pivot_longer(cols = -Year1, names_to = "Year2", values_to = "Similarity")
+
+ggplot(mh_long, aes(x = Year1, y = Year2, fill = Similarity)) +
+    geom_tile(color = "white") +
+    geom_text(aes(label = sprintf("%.2f", Similarity)), color = "black", size = 5) +
+    scale_fill_gradient(low = "white", high = "#4675ED", limits = c(0, 1), name = "Similarity") +
+    labs(
+        title = "Community Similarity",
+        subtitle = "Morisita-Horn Index",
+        x = "",
+        y = ""
+    ) +
+    theme_minimal() +
+    theme(
+        axis.text = element_text(size = 12, face = "bold"),
+        panel.grid = element_blank()
+    )
+```
+
+![Temporal Stability of Pollinator Community. Pairwise Morisita-Horn
+similarity values (1 = Identical, 0 = Different) between study
+years.](MS_Succisa_deposition_files/figure-commonmark/analysis-community-stability-1.png)
 
 ``` r
 # 1. Calculate Evenness (Alpha Diversity)
@@ -1063,7 +1300,7 @@ if (!requireNamespace("ggpubr", quietly = TRUE)) install.packages("ggpubr")
 ggpubr::ggarrange(p_evenness, p_similarity, ncol = 2)
 ```
 
-![](MS_Succisa_deposition_files/figure-commonmark/calc-diversity-panel-1.png)
+![](MS_Succisa_deposition_files/figure-commonmark/analysis-network-evenness-1.png)
 
 ## Discussion
 
