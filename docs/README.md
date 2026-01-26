@@ -112,7 +112,7 @@ to high variation in pollen deposition on stigmas.
 
 <div id="fig-plant-pollinator-panel">
 
-![](MS_Succisa_deposition_files/figure-commonmark/fig-plant-pollinator-panel-1.png)
+![](docs/images/fig-plant-pollinator-panel-1.png)
 
 Figure 1: A) Stigma of *Succisa pratensis* with several pollen
 morphotypes, B) Pollinator (*Eristalis* sp.) on flower of *Succisa
@@ -378,7 +378,7 @@ ggarrange(p_map, p_abundance, p_visitation,
 
 <div id="fig-spatial-temporal-abundance">
 
-![](MS_Succisa_deposition_files/figure-commonmark/fig-spatial-temporal-abundance-1.png)
+![](docs/images/fig-spatial-temporal-abundance-1.png)
 
 Figure 2: Distribution and abundance of Succisa pratensis (2022-2024).
 A) Spatial distribution of plots with Succisa presence. B) Total
@@ -477,7 +477,7 @@ ggplot(species_composition_grouped, aes(x = year_label, y = proportion, fill = s
 ![Pollinator spectra composition on Succisa pratensis (2022-2024).
 Stacked bars show the proportion of standardized visitation rates for
 the most abundant
-species.](MS_Succisa_deposition_files/figure-commonmark/analysis-pollinator-composition-1.png)
+species.](docs/images/analysis-pollinator-composition-1.png)
 
 ### Pollinator Visitation Rates
 
@@ -688,7 +688,7 @@ ggplot(aggregated_data, aes(x = mean_CP, y = mean_HP, color = Year, fill = Year)
 
 ![Relationship between Conspecific and Heterospecific pollen (Plant
 Means). Curves represent back-transformed fits from the sqrt-scale
-model.](MS_Succisa_deposition_files/figure-commonmark/analysis-slope-comparison-1.png)
+model.](docs/images/analysis-slope-comparison-1.png)
 
 ### Daily Stability Test (2024)
 
@@ -745,7 +745,7 @@ ggplot(agg_data_2024, aes(x = mean_CP, y = mean_HP)) +
 
 ![Daily stability of pollen deposition network structure in 2024. A)
 Faceted by Day. B) Combined
-trends.](MS_Succisa_deposition_files/figure-commonmark/analysis-daily-stability-1.png)
+trends.](docs/images/analysis-daily-stability-1.png)
 
 ### Variance Partitioning: Stability Validation
 
@@ -878,7 +878,7 @@ print(p_var)
 
 ![Variance Partitioning Results. A) Inter-Annual Stability (All Years).
 B) Intra-Annual Stability (2024
-Only).](MS_Succisa_deposition_files/figure-commonmark/analysis-variance-partitioning-1.png)
+Only).](docs/images/analysis-variance-partitioning-1.png)
 
 ``` r
 # 5. GENERATE PUBLICATION TABLE (Table 2 for HP)
@@ -988,7 +988,7 @@ ggarrange(p_loads_scatter, p_purity, ncol = 1, heights = c(1.2, 1))
 ![Pollen Transport Quality. A) Relationship between Conspecific (CP) and
 Heterospecific (HP) pollen loads on pollinator bodies. B) Pollen purity
 (proportion of CP) by
-species.](MS_Succisa_deposition_files/figure-commonmark/analysis-pollen-transport-quality-1.png)
+species.](docs/images/analysis-pollen-transport-quality-1.png)
 
 ### Gut Content Analysis
 
@@ -1046,8 +1046,7 @@ ggarrange(p_guts_scatter, p_guts_purity, ncol = 1, heights = c(1.2, 1))
 
 ![Pollen Feeding. C) Relationship between Conspecific (CP) and
 Heterospecific (HP) pollen in guts. D) Gut pollen purity (proportion of
-CP) by
-species.](MS_Succisa_deposition_files/figure-commonmark/analysis-pollen-diet-1.png)
+CP) by species.](docs/images/analysis-pollen-diet-1.png)
 
 ### Gap 3: Mechanism & Body Loads
 
@@ -1189,7 +1188,7 @@ ggarrange(p_comp, p_vector, ncol = 1, heights = c(1, 1.5))
 ![Mechanism Analysis. A) Comparison of Heterospecific Pollen (HP)
 proportion across Stigma, Body, and Gut compartments. B) Vector
 Efficiency: HP proportion on bodies and in guts for dominant pollinator
-species.](MS_Succisa_deposition_files/figure-commonmark/analysis-diet-transport-correlation-1.png)
+species.](docs/images/analysis-diet-transport-correlation-1.png)
 
 ### Gap 2: Community Stability & Composition
 
@@ -1254,7 +1253,7 @@ ggplot(mh_long, aes(x = Year1, y = Year2, fill = Similarity)) +
 
 ![Temporal Stability of Pollinator Community. Pairwise Morisita-Horn
 similarity values (1 = Identical, 0 = Different) between study
-years.](MS_Succisa_deposition_files/figure-commonmark/analysis-community-stability-1.png)
+years.](docs/images/analysis-community-stability-1.png)
 
 ``` r
 # 1. Calculate Evenness (Alpha Diversity)
@@ -1300,7 +1299,7 @@ if (!requireNamespace("ggpubr", quietly = TRUE)) install.packages("ggpubr")
 ggpubr::ggarrange(p_evenness, p_similarity, ncol = 2)
 ```
 
-![](MS_Succisa_deposition_files/figure-commonmark/analysis-network-evenness-1.png)
+![](docs/images/analysis-network-evenness-1.png)
 
 ## Discussion
 

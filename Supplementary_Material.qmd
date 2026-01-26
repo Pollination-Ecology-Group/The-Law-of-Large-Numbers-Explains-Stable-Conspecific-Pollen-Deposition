@@ -19,6 +19,7 @@ format:
 #| message: false
 #| warning: false
 
+knitr::opts_chunk$set(fig.path = "docs/images/")
 library(lme4)
 library(dplyr)
 library(ggplot2)
