@@ -53,10 +53,10 @@ if (!require("HanPolNet")) {
 
 # 5. Load and Prepare Data
 
-# Pollen Load Data
+# Pollen Load Data (Succisa pratensis)
 pollen_load_guts_24 <- read.csv(file.path("data", "pollen_load_and_guts_2024_Succisa_pratensis.csv"))
 
-# Pollen Deposition Data
+# Pollen Deposition Data (Succisa pratensis)
 data("pollen_deposition", package = "HanPolNet")
 
 pollen_deposition <- pollen_deposition %>%
@@ -66,7 +66,7 @@ pollen_deposition <- pollen_deposition %>%
         plant_id = paste(year, inflorescence_id, day, sep = "_")
     )
 
-# Interaction Data
+# Interaction Data (Succisa pratensis)
 interaction_data_Succisa_22_24 <- get_interaction_data(
     years = c(22, 23, 24), # only 3 years of data
     plant_species = "Suc_pra", # only Succisa pratensis
@@ -83,13 +83,18 @@ interaction_data_all_22_24 <- get_interaction_data(
     standardize = TRUE # standardize interactions by sampling effort
 )
 
-# Plant abundance data
+# Plant abundance data (standardized)
 plant_abundance_22_24 <- get_plant_data(
     years = c(22, 23, 24), # only 3 years of data
     output = "standardized" # standardize plant abundances:
     # Sublot Counts are converted to a proportion by dividing by 64. A score of 64 becomes 1.0 (maximum frequency).
     # Stalk Counts are scaled relative to the maximum abundance observed for that specific species across the entire dataset. Each value is divided by that species’ global maximum, resulting in a scale where the highest observed count for that species is 1.0.
 )
+
+
+# SVD data - data on Single visit deposition (SVD)
+SVD <- read.csv("data/SVD_Succisa_pratensis.csv")
+
 
 ```
 
@@ -224,21 +229,25 @@ Following Janovský et al. (2013) we collected data on pollinator visitation act
 
 Thanks to long-term research on flowering plants and their interactions with pollinators, we obtained information on the abundances of individual plants at the study site and it’s changes over time (see Janovský et al., 2013). We used 4 × 4 m2 permanent plots each placed in the center of each grid point of a 20 × 20 m2 grid covering a total area of 300 × 300 m2 of the study site. To determine the floral neighborhood of Succisa pratensis from 2022 to 2024, we counted distribution of plant abundance for individual plots where S. pratensis was present. We counted conspecific abundance of the focal species and heterospecific co-flowering abundance index, which is the cumulative abundance of all other co-flowering plant species in the plot.
 
-### Data analysis
+### Statistical Analysis
 
-Full metadata, variable definitions, and summary statistics for the datasets used in this study are available in the Supplementary material S1.
+All statistical analyses were performed in R (v4.x). Count data for heterospecific (HP) and conspecific (CP) pollen were **square-root transformed** prior to parametric modeling. Diagnostic plots (Supplementary Material Figs S1–S2) confirmed that this transformation stabilized variance and satisfied homoscedasticity assumptions more effectively than raw or log-transformed data.
 
+#### Variance Component Analysis
+To quantify the hierarchical scale of stochasticity in pollen deposition, we fitted Linear Mixed Models (LMMs) using the `lme4` package. We partitioned the total variance of sqrt-transformed pollen counts into **Year** (random effect), **Plant** (nested within Year), and **Stigma** (Residual variation). For the high-resolution 2024 dataset, we further partitioned variance into **Sampling Date**, **Plant** (nested within Date), and **Stigma**. While statistical inference focused on transformed counts, we also visualized the proportion of heterospecific pollen (`HP / (HP + CP)`) to assess deposition purity.
 
-#### Pollen deposited on stigmas
+#### Pollen Accumulation Dynamics
+To test if the rate of heterospecific pollen accumulation differed between years, we fitted a Linear Model (`lm`) of the form: `sqrt(HP) ~ CP * Year`. We used the `emtrends` function (from the `emmeans` package) to estimate and compare the slopes ($\beta$) of the HP-CP relationship for each year, interpreted as the "pollution efficiency" of the community.
 
+#### Network Stability
+We assessed the temporal stability of the pollinator community composition using the **Morisita-Horn similarity index**, calculated with the `vegan` package. This metric was selected for its robustness to differences in sample size and species richness.
 
-Although pollen deposition data consisted of counts, we analyzed variance components using Linear Mixed Models (LMMs) on **square-root transformed** data [`sqrt(x)`]. Prior to analysis, pollen count data (HP and CP) were square-root transformed to satisfy assumptions of normality and homoscedasticity (see Figs S1–S2). We chose this approach because (1) diagnostic plots confirmed that the square-root transformation effectively stabilized variance and improved normality compared to raw counts (Figure S1), and (2) variance partitioning is more directly interpretable in LMMs compared to GLMMs (Nakagawa & Schielzeth, 2010).
+> **Single Visit Deposition**
+>
+> [Status: Section under development. Analysis of single-visit efficiency and pollen purity will be added here.]
 
-We performed a variance component analysis (VCA) to quantify the relative importance of different temporal and biological scales in driving pollen deposition. We specified two distinct hierarchical models using the `lme4` package:
-
-1.  **Inter-annual stability**: Using the full dataset (2022-2024), we partitioned variance into *Year*, *Plant identity* (nested within Year), and *Stigma* (residual variance). This model assesses the extent to which deposition patterns are consistent across years versus driven by plant-level traits or fine-scale stochasticity.
-
-2.  **Intra-annual stability**: Using the high-resolution 2024 dataset, we partitioned variance into *Sampling Date* (Day), *Plant identity* (nested within Day), and *Stigma*. This model specifically tests whether daily turnover in pollinator activity or weather conditions (Day effect) outweighs individual plant variation.
+#### Macro-Ecological Context
+To contextualize the deposition results, we calculated annual network specialization ($H_2'$) using the `bipartite` package and estimated community floral resource abundance by summing plant counts in the permanent plots.
 
 
 
@@ -1306,20 +1315,26 @@ hp_means <- pollen_deposition %>%
 # --- 3. Plant Context ---
 
 # Calculate Abundance metrics
-# Assuming columns: year, species, abundance
-# Adjust column names if necessary
-plant_summary <- plant_abundance_22_24 %>%
+# Data seems to be in wide format (Species as columns), so we pivot longer first
+# Identifying ID columns based on usage elsewhere (year, plot_id)
+# We exclude year and plot_id from the pivot to get all species columns
+plant_long <- plant_abundance_22_24 %>%
+    select(year, plot_id, everything()) %>% # Ensure these exist
+    pivot_longer(
+        cols = -c(year, plot_id),
+        names_to = "Species",
+        values_to = "Abundance",
+        values_drop_na = TRUE
+    )
+
+plant_summary <- plant_long %>%
     group_by(year) %>%
     summarise(
-        # Check exact string for Succisa pratensis in your data (e.g., "Succisa pratensis", "Suc_pra")
-        # Using 'mean' as requested for Succisa Abundance/Density
-        Succisa_Abundance = mean(abundance[species == "Succisa pratensis" | species == "Suc_pra"], na.rm = TRUE),
+        # Mean abundance of Succisa per plot
+        Succisa_Abundance = mean(Abundance[Species == "Suc_pra" | Species == "Succisa pratensis"], na.rm = TRUE),
 
-        # Total Abundance (Community Floral Density)
-        # Calculates sum of all abundance entries for the year.
-        # IF data is per-plot, this sums across all plots and species (which might not be desired if N plots varies).
-        # IF data is already aggregated (Year, Species, Mean_Abundance), this gives Community Floral Density correctly.
-        Total_Abundance = sum(abundance, na.rm = TRUE),
+        # Total Abundance (Community Floral Density) - Sum of all species abundances
+        Total_Abundance = sum(Abundance, na.rm = TRUE),
         .groups = "drop"
     ) %>%
     mutate(Year = as.numeric(as.character(year)))
@@ -1342,7 +1357,9 @@ final_table_formatted <- final_table %>%
         Mean_HP = round(Mean_HP, 2),
         Succisa_Abundance = round(Succisa_Abundance, 2),
         Total_Abundance = round(Total_Abundance, 2)
-    )
+    ) %>%
+    # Select only the columns intended for the table to avoid join duplication
+    select(Year, H2, Evenness, Slope, Mean_HP, Succisa_Abundance, Total_Abundance)
 
 # Generate Table
 kable(final_table_formatted,
