@@ -52,11 +52,15 @@ the pattern of conspecific and heterospecific pollen deposition on
 stigmas. However, the relationship between deposited pollen, pollinator
 transfer capability and network structure is not well understood.
 
-*Pollen deposition dynamics*
+*Pollen deposition dynamics* Pollinators visit flower to feed on nectar
+and pollen. Pollen is then deposited on the stigma of the same flower or
+another flower of the same plant (conspecific pollen) or another plant
+(heterospecific pollen). Pollen load is the amount of pollen a
+pollinator carries on its body.
 
-*Pollen load and pollen feeding* Motivation of pollinators to carry
-pollen from plant to plant is often driven by the need to feed on
-plants, using nectar and pollen as a food source. Pollen feeding than .
+- 
+
+*Pollen load and pollen feeding*
 
 “Pollinator quality, in particular, is likely a complex trait that
 results from not only inconstancy but also pollinator grooming (Thomson,
@@ -67,6 +71,9 @@ information on the visitor functional groups defined herein.”
 ([Arceo-Gómez et al., 2016](#ref-arceo2016patterns))
 
 *The effect of the network structure to the pollen deposition dynamics*
+
+- how may the pollen deposition dynamics be affected by the network
+  structure
 
 In their study Arceo-Gómez et al. ([2016](#ref-arceo2016patterns)) found
 that the network structure (pollinator evenness) may drive the pattern
@@ -546,18 +553,447 @@ results_2023 <- test_curve_shape(subset(pollen_deposition, year == 2023), "2023"
 results_2024 <- test_curve_shape(subset(pollen_deposition, year == 2024), "2024")
 
 # Display Results
-knitr::kable(rbind(results_2022, results_2023, results_2024), caption = "Model Comparison Results")
+# Display Results
+rbind(results_2022, results_2023, results_2024) %>%
+    gt() %>%
+    tab_header(title = "Model Comparison Results") %>%
+    fmt_number(columns = c(Linear_AIC, Exp_AIC), decimals = 2) %>%
+    cols_label(
+        Year = "Year",
+        Linear_AIC = "Linear AIC",
+        Exp_AIC = "Exponential AIC",
+        Best_Fit = "Best Fit Model"
+    ) %>%
+    tab_style(
+        style = cell_text(weight = "bold"),
+        locations = cells_column_labels()
+    ) %>%
+    tab_options(
+        column_labels.background.color = "#F0F0F0",
+        column_labels.font.weight = "bold",
+        table.border.top.color = "black",
+        table.border.top.width = px(2),
+        table.border.bottom.color = "black",
+        table.border.bottom.width = px(2),
+        table_body.hlines.color = "#E5E5E5",
+        data_row.padding = px(6)
+    ) %>%
+    tab_style(
+        style = list(
+            cell_text(color = "black", weight = "bold")
+        ),
+        locations = cells_column_labels()
+    ) %>%
+    opt_align_table_header(align = "left")
 ```
 
 </details>
 
-| Year | Linear_AIC | Exp_AIC | Best_Fit        |
-|:-----|-----------:|--------:|:----------------|
-| 2022 |     255.68 |  258.04 | Linear (Type 1) |
-| 2023 |     306.89 |  307.97 | Linear (Type 1) |
-| 2024 |    1333.43 | 1333.80 | Linear (Type 1) |
+<div id="mmppirfddg" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#mmppirfddg table {
+  font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+&#10;#mmppirfddg thead, #mmppirfddg tbody, #mmppirfddg tfoot, #mmppirfddg tr, #mmppirfddg td, #mmppirfddg th {
+  border-style: none;
+}
+&#10;#mmppirfddg p {
+  margin: 0;
+  padding: 0;
+}
+&#10;#mmppirfddg .gt_table {
+  display: table;
+  border-collapse: collapse;
+  line-height: normal;
+  margin-left: auto;
+  margin-right: auto;
+  color: #333333;
+  font-size: 16px;
+  font-weight: normal;
+  font-style: normal;
+  background-color: #FFFFFF;
+  width: auto;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #000000;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #000000;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+}
+&#10;#mmppirfddg .gt_caption {
+  padding-top: 4px;
+  padding-bottom: 4px;
+}
+&#10;#mmppirfddg .gt_title {
+  color: #333333;
+  font-size: 125%;
+  font-weight: initial;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-color: #FFFFFF;
+  border-bottom-width: 0;
+}
+&#10;#mmppirfddg .gt_subtitle {
+  color: #333333;
+  font-size: 85%;
+  font-weight: initial;
+  padding-top: 3px;
+  padding-bottom: 5px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-color: #FFFFFF;
+  border-top-width: 0;
+}
+&#10;#mmppirfddg .gt_heading {
+  background-color: #FFFFFF;
+  text-align: left;
+  border-bottom-color: #FFFFFF;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+&#10;#mmppirfddg .gt_bottom_border {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+&#10;#mmppirfddg .gt_col_headings {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+&#10;#mmppirfddg .gt_col_heading {
+  color: #333333;
+  background-color: #F0F0F0;
+  font-size: 100%;
+  font-weight: bold;
+  text-transform: inherit;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 6px;
+  padding-left: 5px;
+  padding-right: 5px;
+  overflow-x: hidden;
+}
+&#10;#mmppirfddg .gt_column_spanner_outer {
+  color: #333333;
+  background-color: #F0F0F0;
+  font-size: 100%;
+  font-weight: bold;
+  text-transform: inherit;
+  padding-top: 0;
+  padding-bottom: 0;
+  padding-left: 4px;
+  padding-right: 4px;
+}
+&#10;#mmppirfddg .gt_column_spanner_outer:first-child {
+  padding-left: 0;
+}
+&#10;#mmppirfddg .gt_column_spanner_outer:last-child {
+  padding-right: 0;
+}
+&#10;#mmppirfddg .gt_column_spanner {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  overflow-x: hidden;
+  display: inline-block;
+  width: 100%;
+}
+&#10;#mmppirfddg .gt_spanner_row {
+  border-bottom-style: hidden;
+}
+&#10;#mmppirfddg .gt_group_heading {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  text-align: left;
+}
+&#10;#mmppirfddg .gt_empty_group_heading {
+  padding: 0.5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: middle;
+}
+&#10;#mmppirfddg .gt_from_md > :first-child {
+  margin-top: 0;
+}
+&#10;#mmppirfddg .gt_from_md > :last-child {
+  margin-bottom: 0;
+}
+&#10;#mmppirfddg .gt_row {
+  padding-top: 6px;
+  padding-bottom: 6px;
+  padding-left: 5px;
+  padding-right: 5px;
+  margin: 10px;
+  border-top-style: solid;
+  border-top-width: 1px;
+  border-top-color: #E5E5E5;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  overflow-x: hidden;
+}
+&#10;#mmppirfddg .gt_stub {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+&#10;#mmppirfddg .gt_stub_row_group {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+  vertical-align: top;
+}
+&#10;#mmppirfddg .gt_row_group_first td {
+  border-top-width: 2px;
+}
+&#10;#mmppirfddg .gt_row_group_first th {
+  border-top-width: 2px;
+}
+&#10;#mmppirfddg .gt_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+&#10;#mmppirfddg .gt_first_summary_row {
+  border-top-style: solid;
+  border-top-color: #D3D3D3;
+}
+&#10;#mmppirfddg .gt_first_summary_row.thick {
+  border-top-width: 2px;
+}
+&#10;#mmppirfddg .gt_last_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+&#10;#mmppirfddg .gt_grand_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+&#10;#mmppirfddg .gt_first_grand_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-style: double;
+  border-top-width: 6px;
+  border-top-color: #D3D3D3;
+}
+&#10;#mmppirfddg .gt_last_grand_summary_row_top {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: double;
+  border-bottom-width: 6px;
+  border-bottom-color: #D3D3D3;
+}
+&#10;#mmppirfddg .gt_striped {
+  background-color: rgba(128, 128, 128, 0.05);
+}
+&#10;#mmppirfddg .gt_table_body {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+&#10;#mmppirfddg .gt_footnotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+&#10;#mmppirfddg .gt_footnote {
+  margin: 0px;
+  font-size: 90%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+&#10;#mmppirfddg .gt_sourcenotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+&#10;#mmppirfddg .gt_sourcenote {
+  font-size: 90%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+&#10;#mmppirfddg .gt_left {
+  text-align: left;
+}
+&#10;#mmppirfddg .gt_center {
+  text-align: center;
+}
+&#10;#mmppirfddg .gt_right {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+&#10;#mmppirfddg .gt_font_normal {
+  font-weight: normal;
+}
+&#10;#mmppirfddg .gt_font_bold {
+  font-weight: bold;
+}
+&#10;#mmppirfddg .gt_font_italic {
+  font-style: italic;
+}
+&#10;#mmppirfddg .gt_super {
+  font-size: 65%;
+}
+&#10;#mmppirfddg .gt_footnote_marks {
+  font-size: 75%;
+  vertical-align: 0.4em;
+  position: initial;
+}
+&#10;#mmppirfddg .gt_asterisk {
+  font-size: 100%;
+  vertical-align: 0;
+}
+&#10;#mmppirfddg .gt_indent_1 {
+  text-indent: 5px;
+}
+&#10;#mmppirfddg .gt_indent_2 {
+  text-indent: 10px;
+}
+&#10;#mmppirfddg .gt_indent_3 {
+  text-indent: 15px;
+}
+&#10;#mmppirfddg .gt_indent_4 {
+  text-indent: 20px;
+}
+&#10;#mmppirfddg .gt_indent_5 {
+  text-indent: 25px;
+}
+&#10;#mmppirfddg .katex-display {
+  display: inline-flex !important;
+  margin-bottom: 0.75em !important;
+}
+&#10;#mmppirfddg div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
+  height: 0px !important;
+}
+</style>
 
-Model Comparison Results
+| Model Comparison Results |            |                 |                 |
+|--------------------------|------------|-----------------|-----------------|
+| Year                     | Linear AIC | Exponential AIC | Best Fit Model  |
+| 2022                     | 255.68     | 258.04          | Linear (Type 1) |
+| 2023                     | 306.89     | 307.97          | Linear (Type 1) |
+| 2024                     | 1,333.43   | 1,333.80        | Linear (Type 1) |
+
+</div>
 
 ### Slope Showdown: Analysis of Aggregated Data
 
@@ -589,57 +1025,1439 @@ fit_sqrt <- lm(sqrt(mean_HP) ~ mean_CP * Year, data = aggregated_data)
 
 # 3. Model Results
 # Type III ANOVA (if using car::Anova) or standard anova
+# Type III ANOVA (if using car::Anova) or standard anova
 anova_res <- anova(fit_sqrt)
-print(knitr::kable(anova_res, caption = "Analysis of Variance: sqrt(HP) ~ CP * Year", digits = 3))
+anova_res %>%
+    as.data.frame() %>%
+    tibble::rownames_to_column(var = "Term") %>%
+    gt() %>%
+    tab_header(title = "Analysis of Variance: sqrt(HP) ~ CP * Year") %>%
+    fmt_number(columns = c("Sum Sq", "Mean Sq", "F value", "Pr(>F)"), decimals = 3) %>%
+    sub_small_vals(columns = "Pr(>F)", threshold = 0.001) %>%
+    fmt_missing(columns = everything(), missing_text = "") %>%
+    cols_label(Term = "Source") %>%
+    tab_style(
+        style = cell_text(weight = "bold"),
+        locations = cells_body(
+            rows = `Pr(>F)` < 0.05
+        )
+    ) %>%
+    tab_style(
+        style = cell_text(weight = "bold"),
+        locations = cells_column_labels()
+    ) %>%
+    tab_options(
+        column_labels.background.color = "#F0F0F0",
+        column_labels.font.weight = "bold",
+        table.border.top.color = "black",
+        table.border.top.width = px(2),
+        table.border.bottom.color = "black",
+        table.border.bottom.width = px(2),
+        table_body.hlines.color = "#E5E5E5",
+        data_row.padding = px(6)
+    ) %>%
+    tab_style(
+        style = list(
+            cell_text(color = "black", weight = "bold")
+        ),
+        locations = cells_column_labels()
+    ) %>%
+    opt_align_table_header(align = "left")
 ```
 
+<div id="vyzygdxkwj" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#vyzygdxkwj table {
+  font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+&#10;#vyzygdxkwj thead, #vyzygdxkwj tbody, #vyzygdxkwj tfoot, #vyzygdxkwj tr, #vyzygdxkwj td, #vyzygdxkwj th {
+  border-style: none;
+}
+&#10;#vyzygdxkwj p {
+  margin: 0;
+  padding: 0;
+}
+&#10;#vyzygdxkwj .gt_table {
+  display: table;
+  border-collapse: collapse;
+  line-height: normal;
+  margin-left: auto;
+  margin-right: auto;
+  color: #333333;
+  font-size: 16px;
+  font-weight: normal;
+  font-style: normal;
+  background-color: #FFFFFF;
+  width: auto;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #000000;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #000000;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+}
+&#10;#vyzygdxkwj .gt_caption {
+  padding-top: 4px;
+  padding-bottom: 4px;
+}
+&#10;#vyzygdxkwj .gt_title {
+  color: #333333;
+  font-size: 125%;
+  font-weight: initial;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-color: #FFFFFF;
+  border-bottom-width: 0;
+}
+&#10;#vyzygdxkwj .gt_subtitle {
+  color: #333333;
+  font-size: 85%;
+  font-weight: initial;
+  padding-top: 3px;
+  padding-bottom: 5px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-color: #FFFFFF;
+  border-top-width: 0;
+}
+&#10;#vyzygdxkwj .gt_heading {
+  background-color: #FFFFFF;
+  text-align: left;
+  border-bottom-color: #FFFFFF;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+&#10;#vyzygdxkwj .gt_bottom_border {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+&#10;#vyzygdxkwj .gt_col_headings {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+&#10;#vyzygdxkwj .gt_col_heading {
+  color: #333333;
+  background-color: #F0F0F0;
+  font-size: 100%;
+  font-weight: bold;
+  text-transform: inherit;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 6px;
+  padding-left: 5px;
+  padding-right: 5px;
+  overflow-x: hidden;
+}
+&#10;#vyzygdxkwj .gt_column_spanner_outer {
+  color: #333333;
+  background-color: #F0F0F0;
+  font-size: 100%;
+  font-weight: bold;
+  text-transform: inherit;
+  padding-top: 0;
+  padding-bottom: 0;
+  padding-left: 4px;
+  padding-right: 4px;
+}
+&#10;#vyzygdxkwj .gt_column_spanner_outer:first-child {
+  padding-left: 0;
+}
+&#10;#vyzygdxkwj .gt_column_spanner_outer:last-child {
+  padding-right: 0;
+}
+&#10;#vyzygdxkwj .gt_column_spanner {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  overflow-x: hidden;
+  display: inline-block;
+  width: 100%;
+}
+&#10;#vyzygdxkwj .gt_spanner_row {
+  border-bottom-style: hidden;
+}
+&#10;#vyzygdxkwj .gt_group_heading {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  text-align: left;
+}
+&#10;#vyzygdxkwj .gt_empty_group_heading {
+  padding: 0.5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: middle;
+}
+&#10;#vyzygdxkwj .gt_from_md > :first-child {
+  margin-top: 0;
+}
+&#10;#vyzygdxkwj .gt_from_md > :last-child {
+  margin-bottom: 0;
+}
+&#10;#vyzygdxkwj .gt_row {
+  padding-top: 6px;
+  padding-bottom: 6px;
+  padding-left: 5px;
+  padding-right: 5px;
+  margin: 10px;
+  border-top-style: solid;
+  border-top-width: 1px;
+  border-top-color: #E5E5E5;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  overflow-x: hidden;
+}
+&#10;#vyzygdxkwj .gt_stub {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+&#10;#vyzygdxkwj .gt_stub_row_group {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+  vertical-align: top;
+}
+&#10;#vyzygdxkwj .gt_row_group_first td {
+  border-top-width: 2px;
+}
+&#10;#vyzygdxkwj .gt_row_group_first th {
+  border-top-width: 2px;
+}
+&#10;#vyzygdxkwj .gt_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+&#10;#vyzygdxkwj .gt_first_summary_row {
+  border-top-style: solid;
+  border-top-color: #D3D3D3;
+}
+&#10;#vyzygdxkwj .gt_first_summary_row.thick {
+  border-top-width: 2px;
+}
+&#10;#vyzygdxkwj .gt_last_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+&#10;#vyzygdxkwj .gt_grand_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+&#10;#vyzygdxkwj .gt_first_grand_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-style: double;
+  border-top-width: 6px;
+  border-top-color: #D3D3D3;
+}
+&#10;#vyzygdxkwj .gt_last_grand_summary_row_top {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: double;
+  border-bottom-width: 6px;
+  border-bottom-color: #D3D3D3;
+}
+&#10;#vyzygdxkwj .gt_striped {
+  background-color: rgba(128, 128, 128, 0.05);
+}
+&#10;#vyzygdxkwj .gt_table_body {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+&#10;#vyzygdxkwj .gt_footnotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+&#10;#vyzygdxkwj .gt_footnote {
+  margin: 0px;
+  font-size: 90%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+&#10;#vyzygdxkwj .gt_sourcenotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+&#10;#vyzygdxkwj .gt_sourcenote {
+  font-size: 90%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+&#10;#vyzygdxkwj .gt_left {
+  text-align: left;
+}
+&#10;#vyzygdxkwj .gt_center {
+  text-align: center;
+}
+&#10;#vyzygdxkwj .gt_right {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+&#10;#vyzygdxkwj .gt_font_normal {
+  font-weight: normal;
+}
+&#10;#vyzygdxkwj .gt_font_bold {
+  font-weight: bold;
+}
+&#10;#vyzygdxkwj .gt_font_italic {
+  font-style: italic;
+}
+&#10;#vyzygdxkwj .gt_super {
+  font-size: 65%;
+}
+&#10;#vyzygdxkwj .gt_footnote_marks {
+  font-size: 75%;
+  vertical-align: 0.4em;
+  position: initial;
+}
+&#10;#vyzygdxkwj .gt_asterisk {
+  font-size: 100%;
+  vertical-align: 0;
+}
+&#10;#vyzygdxkwj .gt_indent_1 {
+  text-indent: 5px;
+}
+&#10;#vyzygdxkwj .gt_indent_2 {
+  text-indent: 10px;
+}
+&#10;#vyzygdxkwj .gt_indent_3 {
+  text-indent: 15px;
+}
+&#10;#vyzygdxkwj .gt_indent_4 {
+  text-indent: 20px;
+}
+&#10;#vyzygdxkwj .gt_indent_5 {
+  text-indent: 25px;
+}
+&#10;#vyzygdxkwj .katex-display {
+  display: inline-flex !important;
+  margin-bottom: 0.75em !important;
+}
+&#10;#vyzygdxkwj div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
+  height: 0px !important;
+}
+</style>
 
+<table class="gt_table" style="width:100%;"
+data-quarto-postprocess="true" data-quarto-disable-processing="false"
+data-quarto-bootstrap="false">
+<colgroup>
+<col style="width: 16%" />
+<col style="width: 16%" />
+<col style="width: 16%" />
+<col style="width: 16%" />
+<col style="width: 16%" />
+<col style="width: 16%" />
+</colgroup>
+<thead>
+<tr class="gt_heading">
+<th colspan="6"
+class="gt_heading gt_title gt_font_normal gt_bottom_border">Analysis of
+Variance: sqrt(HP) ~ CP * Year</th>
+</tr>
+<tr class="gt_col_headings">
+<th id="Term" class="gt_col_heading gt_columns_bottom_border gt_left"
+data-quarto-table-cell-role="th"
+style="font-weight: bold; color: #000000" scope="col">Source</th>
+<th id="Df" class="gt_col_heading gt_columns_bottom_border gt_right"
+data-quarto-table-cell-role="th"
+style="font-weight: bold; color: #000000" scope="col">Df</th>
+<th id="Sum-Sq" class="gt_col_heading gt_columns_bottom_border gt_right"
+data-quarto-table-cell-role="th"
+style="font-weight: bold; color: #000000" scope="col">Sum Sq</th>
+<th id="Mean-Sq"
+class="gt_col_heading gt_columns_bottom_border gt_right"
+data-quarto-table-cell-role="th"
+style="font-weight: bold; color: #000000" scope="col">Mean Sq</th>
+<th id="F-value"
+class="gt_col_heading gt_columns_bottom_border gt_right"
+data-quarto-table-cell-role="th"
+style="font-weight: bold; color: #000000" scope="col">F value</th>
+<th id="Pr(&gt;F)"
+class="gt_col_heading gt_columns_bottom_border gt_right"
+data-quarto-table-cell-role="th"
+style="font-weight: bold; color: #000000" scope="col">Pr(&gt;F)</th>
+</tr>
+</thead>
+<tbody class="gt_table_body">
+<tr>
+<td class="gt_row gt_left" headers="Term">mean_CP</td>
+<td class="gt_row gt_right" headers="Df">1</td>
+<td class="gt_row gt_right" headers="Sum Sq">9.785</td>
+<td class="gt_row gt_right" headers="Mean Sq">9.785</td>
+<td class="gt_row gt_right" headers="F value">3.501</td>
+<td class="gt_row gt_right" headers="Pr(&gt;F)">0.063</td>
+</tr>
+<tr>
+<td class="gt_row gt_left" headers="Term"
+style="font-weight: bold">Year</td>
+<td class="gt_row gt_right" headers="Df"
+style="font-weight: bold">2</td>
+<td class="gt_row gt_right" headers="Sum Sq"
+style="font-weight: bold">534.335</td>
+<td class="gt_row gt_right" headers="Mean Sq"
+style="font-weight: bold">267.167</td>
+<td class="gt_row gt_right" headers="F value"
+style="font-weight: bold">95.589</td>
+<td class="gt_row gt_right" headers="Pr(&gt;F)"
+style="font-weight: bold">&lt;0.001</td>
+</tr>
+<tr>
+<td class="gt_row gt_left" headers="Term"
+style="font-weight: bold">mean_CP:Year</td>
+<td class="gt_row gt_right" headers="Df"
+style="font-weight: bold">2</td>
+<td class="gt_row gt_right" headers="Sum Sq"
+style="font-weight: bold">74.770</td>
+<td class="gt_row gt_right" headers="Mean Sq"
+style="font-weight: bold">37.385</td>
+<td class="gt_row gt_right" headers="F value"
+style="font-weight: bold">13.376</td>
+<td class="gt_row gt_right" headers="Pr(&gt;F)"
+style="font-weight: bold">&lt;0.001</td>
+</tr>
+<tr>
+<td class="gt_row gt_left" headers="Term">Residuals</td>
+<td class="gt_row gt_right" headers="Df">231</td>
+<td class="gt_row gt_right" headers="Sum Sq">645.636</td>
+<td class="gt_row gt_right" headers="Mean Sq">2.795</td>
+<td class="gt_row gt_right" headers="F value"><br />
+</td>
+<td class="gt_row gt_right" headers="Pr(&gt;F)"><br />
+</td>
+</tr>
+</tbody>
+</table>
 
-    Table: Analysis of Variance: sqrt(HP) ~ CP * Year
+</div>
 
-    |             |  Df|  Sum Sq| Mean Sq| F value| Pr(>F)|
-    |:------------|---:|-------:|-------:|-------:|------:|
-    |mean_CP      |   1|   9.785|   9.785|   3.501|  0.063|
-    |Year         |   2| 534.335| 267.167|  95.589|  0.000|
-    |mean_CP:Year |   2|  74.770|  37.385|  13.376|  0.000|
-    |Residuals    | 231| 645.636|   2.795|      NA|     NA|
+Relationship between Conspecific and Heterospecific pollen (Plant
+Means). Curves represent back-transformed fits from the sqrt-scale
+model.
 
 ``` r
 # 4. Slope Comparisons (on Sqrt Scale)
 slopes_sqrt <- emtrends(fit_sqrt, pairwise ~ Year, var = "mean_CP")
 
 # Format Slope Estimates
+# Format Slope Estimates
 slope_est <- as.data.frame(slopes_sqrt$emtrends) %>%
     select(Year, Slope = mean_CP.trend, SE, df, lower.CL, upper.CL)
-print(knitr::kable(slope_est, caption = "Slope Estimates (Sqrt Scale)", digits = 4))
+
+slope_est %>%
+    gt() %>%
+    tab_header(title = "Slope Estimates (Sqrt Scale)") %>%
+    fmt_number(columns = c(Slope, SE, lower.CL, upper.CL), decimals = 4) %>%
+    cols_label(
+        lower.CL = "Lower CI",
+        upper.CL = "Upper CI"
+    ) %>%
+    tab_style(
+        style = cell_text(weight = "bold"),
+        locations = cells_column_labels()
+    ) %>%
+    tab_options(
+        column_labels.background.color = "#F0F0F0",
+        column_labels.font.weight = "bold",
+        table.border.top.color = "black",
+        table.border.top.width = px(2),
+        table.border.bottom.color = "black",
+        table.border.bottom.width = px(2),
+        table_body.hlines.color = "#E5E5E5",
+        data_row.padding = px(6)
+    ) %>%
+    tab_style(
+        style = list(
+            cell_text(color = "black", weight = "bold")
+        ),
+        locations = cells_column_labels()
+    ) %>%
+    opt_align_table_header(align = "left")
 ```
 
+<div id="eerjiaugty" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#eerjiaugty table {
+  font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+&#10;#eerjiaugty thead, #eerjiaugty tbody, #eerjiaugty tfoot, #eerjiaugty tr, #eerjiaugty td, #eerjiaugty th {
+  border-style: none;
+}
+&#10;#eerjiaugty p {
+  margin: 0;
+  padding: 0;
+}
+&#10;#eerjiaugty .gt_table {
+  display: table;
+  border-collapse: collapse;
+  line-height: normal;
+  margin-left: auto;
+  margin-right: auto;
+  color: #333333;
+  font-size: 16px;
+  font-weight: normal;
+  font-style: normal;
+  background-color: #FFFFFF;
+  width: auto;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #000000;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #000000;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+}
+&#10;#eerjiaugty .gt_caption {
+  padding-top: 4px;
+  padding-bottom: 4px;
+}
+&#10;#eerjiaugty .gt_title {
+  color: #333333;
+  font-size: 125%;
+  font-weight: initial;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-color: #FFFFFF;
+  border-bottom-width: 0;
+}
+&#10;#eerjiaugty .gt_subtitle {
+  color: #333333;
+  font-size: 85%;
+  font-weight: initial;
+  padding-top: 3px;
+  padding-bottom: 5px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-color: #FFFFFF;
+  border-top-width: 0;
+}
+&#10;#eerjiaugty .gt_heading {
+  background-color: #FFFFFF;
+  text-align: left;
+  border-bottom-color: #FFFFFF;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+&#10;#eerjiaugty .gt_bottom_border {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+&#10;#eerjiaugty .gt_col_headings {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+&#10;#eerjiaugty .gt_col_heading {
+  color: #333333;
+  background-color: #F0F0F0;
+  font-size: 100%;
+  font-weight: bold;
+  text-transform: inherit;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 6px;
+  padding-left: 5px;
+  padding-right: 5px;
+  overflow-x: hidden;
+}
+&#10;#eerjiaugty .gt_column_spanner_outer {
+  color: #333333;
+  background-color: #F0F0F0;
+  font-size: 100%;
+  font-weight: bold;
+  text-transform: inherit;
+  padding-top: 0;
+  padding-bottom: 0;
+  padding-left: 4px;
+  padding-right: 4px;
+}
+&#10;#eerjiaugty .gt_column_spanner_outer:first-child {
+  padding-left: 0;
+}
+&#10;#eerjiaugty .gt_column_spanner_outer:last-child {
+  padding-right: 0;
+}
+&#10;#eerjiaugty .gt_column_spanner {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  overflow-x: hidden;
+  display: inline-block;
+  width: 100%;
+}
+&#10;#eerjiaugty .gt_spanner_row {
+  border-bottom-style: hidden;
+}
+&#10;#eerjiaugty .gt_group_heading {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  text-align: left;
+}
+&#10;#eerjiaugty .gt_empty_group_heading {
+  padding: 0.5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: middle;
+}
+&#10;#eerjiaugty .gt_from_md > :first-child {
+  margin-top: 0;
+}
+&#10;#eerjiaugty .gt_from_md > :last-child {
+  margin-bottom: 0;
+}
+&#10;#eerjiaugty .gt_row {
+  padding-top: 6px;
+  padding-bottom: 6px;
+  padding-left: 5px;
+  padding-right: 5px;
+  margin: 10px;
+  border-top-style: solid;
+  border-top-width: 1px;
+  border-top-color: #E5E5E5;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  overflow-x: hidden;
+}
+&#10;#eerjiaugty .gt_stub {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+&#10;#eerjiaugty .gt_stub_row_group {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+  vertical-align: top;
+}
+&#10;#eerjiaugty .gt_row_group_first td {
+  border-top-width: 2px;
+}
+&#10;#eerjiaugty .gt_row_group_first th {
+  border-top-width: 2px;
+}
+&#10;#eerjiaugty .gt_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+&#10;#eerjiaugty .gt_first_summary_row {
+  border-top-style: solid;
+  border-top-color: #D3D3D3;
+}
+&#10;#eerjiaugty .gt_first_summary_row.thick {
+  border-top-width: 2px;
+}
+&#10;#eerjiaugty .gt_last_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+&#10;#eerjiaugty .gt_grand_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+&#10;#eerjiaugty .gt_first_grand_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-style: double;
+  border-top-width: 6px;
+  border-top-color: #D3D3D3;
+}
+&#10;#eerjiaugty .gt_last_grand_summary_row_top {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: double;
+  border-bottom-width: 6px;
+  border-bottom-color: #D3D3D3;
+}
+&#10;#eerjiaugty .gt_striped {
+  background-color: rgba(128, 128, 128, 0.05);
+}
+&#10;#eerjiaugty .gt_table_body {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+&#10;#eerjiaugty .gt_footnotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+&#10;#eerjiaugty .gt_footnote {
+  margin: 0px;
+  font-size: 90%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+&#10;#eerjiaugty .gt_sourcenotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+&#10;#eerjiaugty .gt_sourcenote {
+  font-size: 90%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+&#10;#eerjiaugty .gt_left {
+  text-align: left;
+}
+&#10;#eerjiaugty .gt_center {
+  text-align: center;
+}
+&#10;#eerjiaugty .gt_right {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+&#10;#eerjiaugty .gt_font_normal {
+  font-weight: normal;
+}
+&#10;#eerjiaugty .gt_font_bold {
+  font-weight: bold;
+}
+&#10;#eerjiaugty .gt_font_italic {
+  font-style: italic;
+}
+&#10;#eerjiaugty .gt_super {
+  font-size: 65%;
+}
+&#10;#eerjiaugty .gt_footnote_marks {
+  font-size: 75%;
+  vertical-align: 0.4em;
+  position: initial;
+}
+&#10;#eerjiaugty .gt_asterisk {
+  font-size: 100%;
+  vertical-align: 0;
+}
+&#10;#eerjiaugty .gt_indent_1 {
+  text-indent: 5px;
+}
+&#10;#eerjiaugty .gt_indent_2 {
+  text-indent: 10px;
+}
+&#10;#eerjiaugty .gt_indent_3 {
+  text-indent: 15px;
+}
+&#10;#eerjiaugty .gt_indent_4 {
+  text-indent: 20px;
+}
+&#10;#eerjiaugty .gt_indent_5 {
+  text-indent: 25px;
+}
+&#10;#eerjiaugty .katex-display {
+  display: inline-flex !important;
+  margin-bottom: 0.75em !important;
+}
+&#10;#eerjiaugty div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
+  height: 0px !important;
+}
+</style>
 
+| Slope Estimates (Sqrt Scale) |        |        |     |          |          |
+|------------------------------|--------|--------|-----|----------|----------|
+| Year                         | Slope  | SE     | df  | Lower CI | Upper CI |
+| 2022                         | 0.0994 | 0.0258 | 231 | 0.0486   | 0.1502   |
+| 2023                         | 0.1331 | 0.0249 | 231 | 0.0841   | 0.1822   |
+| 2024                         | 0.0171 | 0.0080 | 231 | 0.0012   | 0.0329   |
 
-    Table: Slope Estimates (Sqrt Scale)
+</div>
 
-    |Year |  Slope|     SE|  df| lower.CL| upper.CL|
-    |:----|------:|------:|---:|--------:|--------:|
-    |2022 | 0.0994| 0.0258| 231|   0.0486|   0.1502|
-    |2023 | 0.1331| 0.0249| 231|   0.0841|   0.1822|
-    |2024 | 0.0171| 0.0080| 231|   0.0012|   0.0329|
+Relationship between Conspecific and Heterospecific pollen (Plant
+Means). Curves represent back-transformed fits from the sqrt-scale
+model.
 
 ``` r
 # Format Pairwise Comparisons
+# Format Pairwise Comparisons
 slope_contrasts <- as.data.frame(slopes_sqrt$contrasts) %>%
     select(contrast, estimate, SE, df, t.ratio, p.value)
-print(knitr::kable(slope_contrasts, caption = "Pairwise Slope Comparisons", digits = 4))
+
+slope_contrasts %>%
+    gt() %>%
+    tab_header(title = "Pairwise Slope Comparisons") %>%
+    fmt_number(columns = c(estimate, SE, t.ratio, p.value), decimals = 4) %>%
+    sub_small_vals(columns = p.value, threshold = 0.001) %>%
+    tab_style(
+        style = cell_text(weight = "bold"),
+        locations = cells_body(
+            rows = p.value < 0.05
+        )
+    ) %>%
+    tab_style(
+        style = cell_text(weight = "bold"),
+        locations = cells_column_labels()
+    ) %>%
+    tab_options(
+        column_labels.background.color = "#F0F0F0",
+        column_labels.font.weight = "bold",
+        table.border.top.color = "black",
+        table.border.top.width = px(2),
+        table.border.bottom.color = "black",
+        table.border.bottom.width = px(2),
+        table_body.hlines.color = "#E5E5E5",
+        data_row.padding = px(6)
+    ) %>%
+    tab_style(
+        style = list(
+            cell_text(color = "black", weight = "bold")
+        ),
+        locations = cells_column_labels()
+    ) %>%
+    opt_align_table_header(align = "left")
 ```
 
+<div id="cwqxwutoel" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#cwqxwutoel table {
+  font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+&#10;#cwqxwutoel thead, #cwqxwutoel tbody, #cwqxwutoel tfoot, #cwqxwutoel tr, #cwqxwutoel td, #cwqxwutoel th {
+  border-style: none;
+}
+&#10;#cwqxwutoel p {
+  margin: 0;
+  padding: 0;
+}
+&#10;#cwqxwutoel .gt_table {
+  display: table;
+  border-collapse: collapse;
+  line-height: normal;
+  margin-left: auto;
+  margin-right: auto;
+  color: #333333;
+  font-size: 16px;
+  font-weight: normal;
+  font-style: normal;
+  background-color: #FFFFFF;
+  width: auto;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #000000;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #000000;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+}
+&#10;#cwqxwutoel .gt_caption {
+  padding-top: 4px;
+  padding-bottom: 4px;
+}
+&#10;#cwqxwutoel .gt_title {
+  color: #333333;
+  font-size: 125%;
+  font-weight: initial;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-color: #FFFFFF;
+  border-bottom-width: 0;
+}
+&#10;#cwqxwutoel .gt_subtitle {
+  color: #333333;
+  font-size: 85%;
+  font-weight: initial;
+  padding-top: 3px;
+  padding-bottom: 5px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-color: #FFFFFF;
+  border-top-width: 0;
+}
+&#10;#cwqxwutoel .gt_heading {
+  background-color: #FFFFFF;
+  text-align: left;
+  border-bottom-color: #FFFFFF;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+&#10;#cwqxwutoel .gt_bottom_border {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+&#10;#cwqxwutoel .gt_col_headings {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+&#10;#cwqxwutoel .gt_col_heading {
+  color: #333333;
+  background-color: #F0F0F0;
+  font-size: 100%;
+  font-weight: bold;
+  text-transform: inherit;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 6px;
+  padding-left: 5px;
+  padding-right: 5px;
+  overflow-x: hidden;
+}
+&#10;#cwqxwutoel .gt_column_spanner_outer {
+  color: #333333;
+  background-color: #F0F0F0;
+  font-size: 100%;
+  font-weight: bold;
+  text-transform: inherit;
+  padding-top: 0;
+  padding-bottom: 0;
+  padding-left: 4px;
+  padding-right: 4px;
+}
+&#10;#cwqxwutoel .gt_column_spanner_outer:first-child {
+  padding-left: 0;
+}
+&#10;#cwqxwutoel .gt_column_spanner_outer:last-child {
+  padding-right: 0;
+}
+&#10;#cwqxwutoel .gt_column_spanner {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  overflow-x: hidden;
+  display: inline-block;
+  width: 100%;
+}
+&#10;#cwqxwutoel .gt_spanner_row {
+  border-bottom-style: hidden;
+}
+&#10;#cwqxwutoel .gt_group_heading {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  text-align: left;
+}
+&#10;#cwqxwutoel .gt_empty_group_heading {
+  padding: 0.5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: middle;
+}
+&#10;#cwqxwutoel .gt_from_md > :first-child {
+  margin-top: 0;
+}
+&#10;#cwqxwutoel .gt_from_md > :last-child {
+  margin-bottom: 0;
+}
+&#10;#cwqxwutoel .gt_row {
+  padding-top: 6px;
+  padding-bottom: 6px;
+  padding-left: 5px;
+  padding-right: 5px;
+  margin: 10px;
+  border-top-style: solid;
+  border-top-width: 1px;
+  border-top-color: #E5E5E5;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  overflow-x: hidden;
+}
+&#10;#cwqxwutoel .gt_stub {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+&#10;#cwqxwutoel .gt_stub_row_group {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+  vertical-align: top;
+}
+&#10;#cwqxwutoel .gt_row_group_first td {
+  border-top-width: 2px;
+}
+&#10;#cwqxwutoel .gt_row_group_first th {
+  border-top-width: 2px;
+}
+&#10;#cwqxwutoel .gt_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+&#10;#cwqxwutoel .gt_first_summary_row {
+  border-top-style: solid;
+  border-top-color: #D3D3D3;
+}
+&#10;#cwqxwutoel .gt_first_summary_row.thick {
+  border-top-width: 2px;
+}
+&#10;#cwqxwutoel .gt_last_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+&#10;#cwqxwutoel .gt_grand_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+&#10;#cwqxwutoel .gt_first_grand_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-style: double;
+  border-top-width: 6px;
+  border-top-color: #D3D3D3;
+}
+&#10;#cwqxwutoel .gt_last_grand_summary_row_top {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: double;
+  border-bottom-width: 6px;
+  border-bottom-color: #D3D3D3;
+}
+&#10;#cwqxwutoel .gt_striped {
+  background-color: rgba(128, 128, 128, 0.05);
+}
+&#10;#cwqxwutoel .gt_table_body {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+&#10;#cwqxwutoel .gt_footnotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+&#10;#cwqxwutoel .gt_footnote {
+  margin: 0px;
+  font-size: 90%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+&#10;#cwqxwutoel .gt_sourcenotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+&#10;#cwqxwutoel .gt_sourcenote {
+  font-size: 90%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+&#10;#cwqxwutoel .gt_left {
+  text-align: left;
+}
+&#10;#cwqxwutoel .gt_center {
+  text-align: center;
+}
+&#10;#cwqxwutoel .gt_right {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+&#10;#cwqxwutoel .gt_font_normal {
+  font-weight: normal;
+}
+&#10;#cwqxwutoel .gt_font_bold {
+  font-weight: bold;
+}
+&#10;#cwqxwutoel .gt_font_italic {
+  font-style: italic;
+}
+&#10;#cwqxwutoel .gt_super {
+  font-size: 65%;
+}
+&#10;#cwqxwutoel .gt_footnote_marks {
+  font-size: 75%;
+  vertical-align: 0.4em;
+  position: initial;
+}
+&#10;#cwqxwutoel .gt_asterisk {
+  font-size: 100%;
+  vertical-align: 0;
+}
+&#10;#cwqxwutoel .gt_indent_1 {
+  text-indent: 5px;
+}
+&#10;#cwqxwutoel .gt_indent_2 {
+  text-indent: 10px;
+}
+&#10;#cwqxwutoel .gt_indent_3 {
+  text-indent: 15px;
+}
+&#10;#cwqxwutoel .gt_indent_4 {
+  text-indent: 20px;
+}
+&#10;#cwqxwutoel .gt_indent_5 {
+  text-indent: 25px;
+}
+&#10;#cwqxwutoel .katex-display {
+  display: inline-flex !important;
+  margin-bottom: 0.75em !important;
+}
+&#10;#cwqxwutoel div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
+  height: 0px !important;
+}
+</style>
 
+| Pairwise Slope Comparisons |          |        |     |         |         |
+|----------------------------|----------|--------|-----|---------|---------|
+| contrast                   | estimate | SE     | df  | t.ratio | p.value |
+| Year2022 - Year2023        | −0.0337  | 0.0358 | 231 | −0.9409 | 0.6150  |
+| Year2022 - Year2024        | 0.0824   | 0.0270 | 231 | 3.0502  | 0.0072  |
+| Year2023 - Year2024        | 0.1161   | 0.0262 | 231 | 4.4383  | \<0.001 |
 
-    Table: Pairwise Slope Comparisons
+</div>
 
-    |contrast            | estimate|     SE|  df| t.ratio| p.value|
-    |:-------------------|--------:|------:|---:|-------:|-------:|
-    |Year2022 - Year2023 |  -0.0337| 0.0358| 231| -0.9409|  0.6150|
-    |Year2022 - Year2024 |   0.0824| 0.0270| 231|  3.0502|  0.0072|
-    |Year2023 - Year2024 |   0.1161| 0.0262| 231|  4.4383|  0.0000|
+Relationship between Conspecific and Heterospecific pollen (Plant
+Means). Curves represent back-transformed fits from the sqrt-scale
+model.
 
 ``` r
 # 5. Visualization (Back-Transformed)
@@ -772,7 +2590,6 @@ Using only the 2024 data, we explicitly tested the effect of **Date**
     This pattern of high fine-scale stochasticity was consistent when analyzing the detailed 2024 dataset. Within the 2024 flowering season, daily turnover ('Sampling Date') explained a negligible proportion of the variance ([XX.X%]), while plant identity explained [XX.X%]. The remaining [XX.X%] of variation was attributable to differences between individual stigmas on the same plant (Fig. 4). These results indicate that HP deposition is driven primarily by stochastic, single-visit mechanics rather than by systemic temporal shifts or plant-level traits.
 
 ``` r
-# 1. Data Prep
 # 1. Data Preparation
 vca_data <- pollen_deposition %>%
     filter(!is.na(heterospecific_pollen) & !is.na(conspecific_pollen)) %>%
@@ -858,7 +2675,7 @@ p_var <- ggplot(all_results, aes(x = Part, y = percent, fill = level)) +
         position = position_stack(vjust = 0.5),
         size = 4,
         fontface = "bold",
-        color = "black" # Black usually readable on Set2, or check individual colors
+        color = "black"
     ) +
     labs(
         title = "Variance Partitioning (Transformed Data)",
@@ -882,7 +2699,6 @@ Only).](docs/images/analysis-variance-partitioning-1.png)
 
 ``` r
 # 5. GENERATE PUBLICATION TABLE (Table 2 for HP)
-# We filter for Heterospecific Pollen (Sqrt) as that is the main story text
 table_detailed <- all_results %>%
     filter(Metric == "Heterospecific Pollen (Sq)") %>%
     select(Part, level, vcov, sdcor, percent) %>%
@@ -900,39 +2716,474 @@ table_detailed <- all_results %>%
     ) %>%
     arrange(Analysis, desc(Source))
 
-# Print the detailed table
-knitr::kable(table_detailed,
-    caption = "Table 2: Variance partitioning of square-root transformed heterospecific pollen deposition. Results for Global (Inter-Annual) and 2024 (Intra-Annual) analyses.",
-    align = "lcccc"
-)
+# Identify the last row of Inter-Annual analysis for styling
+last_inter_row <- max(which(table_detailed$Analysis == "Inter-Annual"))
+
+# Print the table with GT
+table_detailed %>%
+    gt() %>%
+    tab_header(
+        title = md("**Table 2**: Variance partitioning of square-root transformed heterospecific pollen deposition"),
+        subtitle = "Results for Global (Inter-Annual) and 2024 (Intra-Annual) analyses."
+    ) %>%
+    cols_label(
+        Analysis = "Analysis Scope",
+        Source = "Variance Source",
+        Variance = "Variance Component",
+        Std_Dev = "SD",
+        Percent_Total = "% Total"
+    ) %>%
+    tab_style(
+        style = cell_text(weight = "bold"),
+        locations = cells_column_labels()
+    ) %>%
+    tab_options(
+        column_labels.background.color = "#F0F0F0",
+        table.border.top.color = "black",
+        table.border.top.width = px(2),
+        table.border.bottom.color = "black",
+        table.border.bottom.width = px(2),
+        data_row.padding = px(6)
+    ) %>%
+    # Add dashed line separating the two analyses
+    tab_style(
+        style = cell_borders(
+            sides = "bottom",
+            color = "gray",
+            weight = px(1.5),
+            style = "dashed"
+        ),
+        locations = cells_body(
+            rows = last_inter_row
+        )
+    ) %>%
+    opt_align_table_header(align = "left")
 ```
 
-| Analysis     | Source | Variance | Std_Dev | Percent_Total |
-|:-------------|:------:|:--------:|:-------:|:-------------:|
-| Inter-Annual | Stigma |   3.22   |  1.80   |     31.3%     |
-| Inter-Annual | Plant  |   3.56   |  1.89   |     34.6%     |
-| Inter-Annual |  Year  |   3.51   |  1.87   |     34.1%     |
-| Intra-Annual | Stigma |   1.50   |  1.23   |     47.2%     |
-| Intra-Annual | Plant  |   1.66   |  1.29   |     52.1%     |
-| Intra-Annual |  Date  |   0.02   |  0.15   |     0.7%      |
+<div id="kcjbugqoca" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#kcjbugqoca table {
+  font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+&#10;#kcjbugqoca thead, #kcjbugqoca tbody, #kcjbugqoca tfoot, #kcjbugqoca tr, #kcjbugqoca td, #kcjbugqoca th {
+  border-style: none;
+}
+&#10;#kcjbugqoca p {
+  margin: 0;
+  padding: 0;
+}
+&#10;#kcjbugqoca .gt_table {
+  display: table;
+  border-collapse: collapse;
+  line-height: normal;
+  margin-left: auto;
+  margin-right: auto;
+  color: #333333;
+  font-size: 16px;
+  font-weight: normal;
+  font-style: normal;
+  background-color: #FFFFFF;
+  width: auto;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #000000;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #000000;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+}
+&#10;#kcjbugqoca .gt_caption {
+  padding-top: 4px;
+  padding-bottom: 4px;
+}
+&#10;#kcjbugqoca .gt_title {
+  color: #333333;
+  font-size: 125%;
+  font-weight: initial;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-color: #FFFFFF;
+  border-bottom-width: 0;
+}
+&#10;#kcjbugqoca .gt_subtitle {
+  color: #333333;
+  font-size: 85%;
+  font-weight: initial;
+  padding-top: 3px;
+  padding-bottom: 5px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-color: #FFFFFF;
+  border-top-width: 0;
+}
+&#10;#kcjbugqoca .gt_heading {
+  background-color: #FFFFFF;
+  text-align: left;
+  border-bottom-color: #FFFFFF;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+&#10;#kcjbugqoca .gt_bottom_border {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+&#10;#kcjbugqoca .gt_col_headings {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+&#10;#kcjbugqoca .gt_col_heading {
+  color: #333333;
+  background-color: #F0F0F0;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 6px;
+  padding-left: 5px;
+  padding-right: 5px;
+  overflow-x: hidden;
+}
+&#10;#kcjbugqoca .gt_column_spanner_outer {
+  color: #333333;
+  background-color: #F0F0F0;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  padding-top: 0;
+  padding-bottom: 0;
+  padding-left: 4px;
+  padding-right: 4px;
+}
+&#10;#kcjbugqoca .gt_column_spanner_outer:first-child {
+  padding-left: 0;
+}
+&#10;#kcjbugqoca .gt_column_spanner_outer:last-child {
+  padding-right: 0;
+}
+&#10;#kcjbugqoca .gt_column_spanner {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  overflow-x: hidden;
+  display: inline-block;
+  width: 100%;
+}
+&#10;#kcjbugqoca .gt_spanner_row {
+  border-bottom-style: hidden;
+}
+&#10;#kcjbugqoca .gt_group_heading {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  text-align: left;
+}
+&#10;#kcjbugqoca .gt_empty_group_heading {
+  padding: 0.5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: middle;
+}
+&#10;#kcjbugqoca .gt_from_md > :first-child {
+  margin-top: 0;
+}
+&#10;#kcjbugqoca .gt_from_md > :last-child {
+  margin-bottom: 0;
+}
+&#10;#kcjbugqoca .gt_row {
+  padding-top: 6px;
+  padding-bottom: 6px;
+  padding-left: 5px;
+  padding-right: 5px;
+  margin: 10px;
+  border-top-style: solid;
+  border-top-width: 1px;
+  border-top-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  overflow-x: hidden;
+}
+&#10;#kcjbugqoca .gt_stub {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+&#10;#kcjbugqoca .gt_stub_row_group {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+  vertical-align: top;
+}
+&#10;#kcjbugqoca .gt_row_group_first td {
+  border-top-width: 2px;
+}
+&#10;#kcjbugqoca .gt_row_group_first th {
+  border-top-width: 2px;
+}
+&#10;#kcjbugqoca .gt_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+&#10;#kcjbugqoca .gt_first_summary_row {
+  border-top-style: solid;
+  border-top-color: #D3D3D3;
+}
+&#10;#kcjbugqoca .gt_first_summary_row.thick {
+  border-top-width: 2px;
+}
+&#10;#kcjbugqoca .gt_last_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+&#10;#kcjbugqoca .gt_grand_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+&#10;#kcjbugqoca .gt_first_grand_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-style: double;
+  border-top-width: 6px;
+  border-top-color: #D3D3D3;
+}
+&#10;#kcjbugqoca .gt_last_grand_summary_row_top {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: double;
+  border-bottom-width: 6px;
+  border-bottom-color: #D3D3D3;
+}
+&#10;#kcjbugqoca .gt_striped {
+  background-color: rgba(128, 128, 128, 0.05);
+}
+&#10;#kcjbugqoca .gt_table_body {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+&#10;#kcjbugqoca .gt_footnotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+&#10;#kcjbugqoca .gt_footnote {
+  margin: 0px;
+  font-size: 90%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+&#10;#kcjbugqoca .gt_sourcenotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+&#10;#kcjbugqoca .gt_sourcenote {
+  font-size: 90%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+&#10;#kcjbugqoca .gt_left {
+  text-align: left;
+}
+&#10;#kcjbugqoca .gt_center {
+  text-align: center;
+}
+&#10;#kcjbugqoca .gt_right {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+&#10;#kcjbugqoca .gt_font_normal {
+  font-weight: normal;
+}
+&#10;#kcjbugqoca .gt_font_bold {
+  font-weight: bold;
+}
+&#10;#kcjbugqoca .gt_font_italic {
+  font-style: italic;
+}
+&#10;#kcjbugqoca .gt_super {
+  font-size: 65%;
+}
+&#10;#kcjbugqoca .gt_footnote_marks {
+  font-size: 75%;
+  vertical-align: 0.4em;
+  position: initial;
+}
+&#10;#kcjbugqoca .gt_asterisk {
+  font-size: 100%;
+  vertical-align: 0;
+}
+&#10;#kcjbugqoca .gt_indent_1 {
+  text-indent: 5px;
+}
+&#10;#kcjbugqoca .gt_indent_2 {
+  text-indent: 10px;
+}
+&#10;#kcjbugqoca .gt_indent_3 {
+  text-indent: 15px;
+}
+&#10;#kcjbugqoca .gt_indent_4 {
+  text-indent: 20px;
+}
+&#10;#kcjbugqoca .gt_indent_5 {
+  text-indent: 25px;
+}
+&#10;#kcjbugqoca .katex-display {
+  display: inline-flex !important;
+  margin-bottom: 0.75em !important;
+}
+&#10;#kcjbugqoca div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
+  height: 0px !important;
+}
+</style>
 
-Table 2: Variance partitioning of square-root transformed heterospecific
-pollen deposition. Results for Global (Inter-Annual) and 2024
-(Intra-Annual) analyses.
+| **Table 2**: Variance partitioning of square-root transformed heterospecific pollen deposition |  |  |  |  |
+|----|----|----|----|----|
+| Results for Global (Inter-Annual) and 2024 (Intra-Annual) analyses. |  |  |  |  |
+| Analysis Scope | Variance Source | Variance Component | SD | % Total |
+| Inter-Annual | Stigma | 3.22 | 1.80 | 31.3% |
+| Inter-Annual | Plant | 3.56 | 1.89 | 34.6% |
+| Inter-Annual | Year | 3.51 | 1.87 | 34.1% |
+| Intra-Annual | Stigma | 1.50 | 1.23 | 47.2% |
+| Intra-Annual | Plant | 1.66 | 1.29 | 52.1% |
+| Intra-Annual | Date | 0.02 | 0.15 | 0.7% |
+
+</div>
 
 Variance Partitioning Results. A) Inter-Annual Stability (All Years). B)
 Intra-Annual Stability (2024 Only).
 
-### Mechanism: Pollen Transport Quality
+### Mechanism: Pollen Purity (Body vs. Gut)
 
 To understand *why* the deposition pattern follows a specific functional
-form (Type 1 or Type 3), we analyzed the pollen loads on the bodies of
-foraging pollinators. If dominant visitors are “messy” (carrying mixed
-loads), we expect a positive correlation between Conspecific and
-Heterospecific pollen on their bodies.
+form (Type 1 or Type 3), we analyzed the purity of pollen loads on the
+**bodies** (transport) and in the **guts** (diet) of foraging
+pollinators. High purity on bodies suggests effective transport of
+conspecific pollen, while high purity in guts would indicate
+specialization in consumption.
 
 ``` r
-# 1. Prepare Data
+# 1. Prepare Data (Body Loads)
 pollen_loads <- pollen_load_guts_24 %>%
     filter(!is.na(suc_pra_load) & !is.na(other_pollen_load)) %>%
     mutate(
@@ -943,60 +3194,10 @@ pollen_loads <- pollen_load_guts_24 %>%
     ) %>%
     filter(Total_Load > 0)
 
-# Filter for dominant species (e.g., > 5 individuals) to avoid clutter
 dominant_species <- names(which(table(pollen_loads$Species) >= 5))
 pollen_loads_dom <- pollen_loads %>% filter(Species %in% dominant_species)
 
-# 2. Model: Do they carry mixed loads?
-# Test correlation between CP and HP for dominant groups
-fit_loads <- lm(other_pollen_load ~ suc_pra_load * Species, data = pollen_loads_dom)
-# summary(fit_loads)
-
-# 3. Visualization
-
-# A) CP vs HP Scatter
-p_loads_scatter <- ggplot(pollen_loads_dom, aes(x = suc_pra_load, y = other_pollen_load, color = Species)) +
-    geom_point(size = 2, alpha = 0.6) +
-    geom_smooth(method = "lm", se = FALSE) +
-    scale_color_manual(values = pollinator_colors) +
-    labs(
-        title = "A. Body Loads: CP vs HP",
-        x = "Conspecific Pollen (CP)",
-        y = "Heterospecific Pollen (HP)"
-    ) +
-    theme_minimal() +
-    theme(legend.position = "right")
-
-# B) Purity Boxplot
-p_purity <- ggplot(pollen_loads_dom, aes(x = Species, y = Purity, fill = Species)) +
-    geom_boxplot(alpha = 0.7, outlier.shape = NA) +
-    geom_jitter(width = 0.2, alpha = 0.5) +
-    scale_fill_manual(values = pollinator_colors) +
-    labs(
-        title = "B. Pollen Purity",
-        y = "Proportion Conspecific (CP / Total)"
-    ) +
-    theme_minimal() +
-    theme(
-        axis.text.x = element_text(angle = 45, hjust = 1),
-        legend.position = "none"
-    )
-
-ggarrange(p_loads_scatter, p_purity, ncol = 1, heights = c(1.2, 1))
-```
-
-![Pollen Transport Quality. A) Relationship between Conspecific (CP) and
-Heterospecific (HP) pollen loads on pollinator bodies. B) Pollen purity
-(proportion of CP) by
-species.](docs/images/analysis-pollen-transport-quality-1.png)
-
-### Gut Content Analysis
-
-We also analyzed the pollen composition found in the intestines of the
-pollinators to understand their feeding preferences.
-
-``` r
-# 1. Prepare Data
+# 2. Prepare Data (Gut Content)
 pollen_guts <- pollen_load_guts_24 %>%
     filter(!is.na(suc_pra_guts) & !is.na(other_pollen_guts)) %>%
     mutate(
@@ -1007,188 +3208,120 @@ pollen_guts <- pollen_load_guts_24 %>%
     ) %>%
     filter(Total_Guts > 0)
 
-# Filter for dominant species
-dominant_species_guts <- names(which(table(pollen_guts$Species) >= 5))
-pollen_guts_dom <- pollen_guts %>% filter(Species %in% dominant_species_guts)
+# Filter for same dominant species for comparison (or their own dominant)
+# Using same list ensures alignment if they define the community
+pollen_guts_dom <- pollen_guts %>% filter(Species %in% dominant_species)
 
-# 2. Visualization
+# 3. Visualization
 
-# C) CP vs HP Scatter (Guts)
-p_guts_scatter <- ggplot(pollen_guts_dom, aes(x = suc_pra_guts, y = other_pollen_guts, color = Species)) +
-    geom_point(size = 2, alpha = 0.6) +
-    geom_smooth(method = "lm", se = FALSE) +
-    scale_color_manual(values = pollinator_colors) +
-    labs(
-        title = "C. Gut Content: CP vs HP",
-        x = "Conspecific Pollen (CP)",
-        y = "Heterospecific Pollen (HP)"
-    ) +
-    theme_minimal() +
-    theme(legend.position = "right")
-
-# D) Purity Boxplot (Guts)
-p_guts_purity <- ggplot(pollen_guts_dom, aes(x = Species, y = Purity, fill = Species)) +
+# A) Body Purity Boxplot
+p_body_purity <- ggplot(pollen_loads_dom, aes(x = Species, y = Purity, fill = Species)) +
     geom_boxplot(alpha = 0.7, outlier.shape = NA) +
     geom_jitter(width = 0.2, alpha = 0.5) +
     scale_fill_manual(values = pollinator_colors) +
     labs(
-        title = "D. Gut Pollen Purity",
-        y = "Proportion Conspecific (CP / Total)"
+        title = "A. Body Pollen Purity",
+        y = "Proportion Conspecific (Body)"
     ) +
     theme_minimal() +
     theme(
-        axis.text.x = element_text(angle = 45, hjust = 1),
+        axis.text.x = element_blank(), # Hide x labels for top plot
+        axis.title.x = element_blank(),
         legend.position = "none"
     )
 
-ggarrange(p_guts_scatter, p_guts_purity, ncol = 1, heights = c(1.2, 1))
-```
-
-![Pollen Feeding. C) Relationship between Conspecific (CP) and
-Heterospecific (HP) pollen in guts. D) Gut pollen purity (proportion of
-CP) by species.](docs/images/analysis-pollen-diet-1.png)
-
-### Gap 3: Mechanism & Body Loads
-
-To test the biological mechanism behind the observed deposition
-patterns, we compared the proportion of Heterospecific Pollen (HP)
-across three compartments: Stigma (the deposition target), Pollinator
-Body (the transport network), and Pollinator Guts (the diet).
-
-If the “Generalist Recipient” strategy (high HP on stigmas) is driven by
-“Messy Vectors,” we expect the high proportion of HP on pollinator
-bodies to match that found on stigmas.
-
-``` r
-# 1. Data Preparation
-
-# A) Stigma Data (Using 2024 to match loaded pollinator data)
-stigma_comp <- pollen_deposition %>%
-    filter(year == 24) %>%
-    filter(!is.na(heterospecific_pollen) & !is.na(conspecific_pollen)) %>%
-    mutate(
-        HP = heterospecific_pollen,
-        Total = heterospecific_pollen + conspecific_pollen,
-        Prop_HP = ifelse(Total > 0, HP / Total, NA),
-        Compartment = "Stigma",
-        Species = "Plant" # Dummy species for plotting context
-    ) %>%
-    filter(!is.na(Prop_HP)) %>%
-    select(Compartment, Species, Prop_HP)
-
-# B) Pollinator Body Data
-body_comp <- pollen_load_guts_24 %>%
-    filter(!is.na(other_pollen_load) & !is.na(suc_pra_load)) %>%
-    mutate(
-        HP = other_pollen_load,
-        Total = other_pollen_load + suc_pra_load,
-        Prop_HP = ifelse(Total > 0, HP / Total, NA),
-        Compartment = "Body",
-        Species = pollinator_species
-    ) %>%
-    filter(!is.na(Prop_HP)) %>%
-    select(Compartment, Species, Prop_HP)
-
-# C) Pollinator Gut Data
-gut_comp <- pollen_load_guts_24 %>%
-    filter(!is.na(other_pollen_guts) & !is.na(suc_pra_guts)) %>%
-    mutate(
-        HP = other_pollen_guts,
-        Total = other_pollen_guts + suc_pra_guts,
-        Prop_HP = ifelse(Total > 0, HP / Total, NA),
-        Compartment = "Gut",
-        Species = pollinator_species
-    ) %>%
-    filter(!is.na(Prop_HP)) %>%
-    select(Compartment, Species, Prop_HP)
-
-# Combine
-compartment_data <- rbind(stigma_comp, body_comp, gut_comp)
-
-# Set Factor Levels for Plotting Order
-compartment_data$Compartment <- factor(compartment_data$Compartment, levels = c("Stigma", "Body", "Gut"))
-
-# 2. Analysis A: Compartment Comparison (Kruskal-Wallis)
-kruskal_res <- kruskal.test(Prop_HP ~ Compartment, data = compartment_data)
-print("Kruskal-Wallis Test (Compartment Comparison):")
-```
-
-    [1] "Kruskal-Wallis Test (Compartment Comparison):"
-
-``` r
-print(kruskal_res)
-```
-
-
-        Kruskal-Wallis rank sum test
-
-    data:  Prop_HP by Compartment
-    Kruskal-Wallis chi-squared = 1.2456, df = 1, p-value = 0.2644
-
-``` r
-# Plot A
-p_comp <- ggplot(compartment_data, aes(x = Compartment, y = Prop_HP, fill = Compartment)) +
+# B) Gut Purity Boxplot
+p_gut_purity <- ggplot(pollen_guts_dom, aes(x = Species, y = Purity, fill = Species)) +
     geom_boxplot(alpha = 0.7, outlier.shape = NA) +
-    geom_jitter(width = 0.2, alpha = 0.4, size = 1) +
-    labs(
-        title = "A. HP Proportion by Compartment",
-        subtitle = paste("Kr-Wallis p =", format.pval(kruskal_res$p.value, digits = 3)),
-        y = "Proportion Heterospecific Pollen"
-    ) +
-    scale_fill_brewer(palette = "Pastel1") +
-    theme_minimal() +
-    theme(legend.position = "none")
-
-
-# 3. Analysis B: Vector Efficiency (Species Check)
-# Subset to Pollinators only
-vector_data <- compartment_data %>%
-    filter(Compartment %in% c("Body", "Gut")) %>%
-    filter(Species %in% names(pollinator_colors)) # Filter to main species in our color palette
-
-# Test Differences among species (Body only)
-body_only <- vector_data %>% filter(Compartment == "Body")
-kruskal_species <- kruskal.test(Prop_HP ~ Species, data = body_only)
-print("Kruskal-Wallis Test (Species Comparison - Body):")
-```
-
-    [1] "Kruskal-Wallis Test (Species Comparison - Body):"
-
-``` r
-print(kruskal_species)
-```
-
-
-        Kruskal-Wallis rank sum test
-
-    data:  Prop_HP by Species
-    Kruskal-Wallis chi-squared = 46.253, df = 14, p-value = 2.549e-05
-
-``` r
-# Plot B
-p_vector <- ggplot(vector_data, aes(x = Species, y = Prop_HP, fill = Species)) +
-    geom_boxplot(alpha = 0.7, outlier.shape = NA) +
-    geom_jitter(width = 0.2, alpha = 0.4, size = 1) +
-    facet_wrap(~Compartment) +
-    labs(
-        title = "B. Vector 'Messiness' by Species",
-        y = "Proportion Heterospecific Pollen"
-    ) +
+    geom_jitter(width = 0.2, alpha = 0.5) +
     scale_fill_manual(values = pollinator_colors) +
+    labs(
+        title = "B. Gut Pollen Purity",
+        y = "Proportion Conspecific (Gut)"
+    ) +
     theme_minimal() +
     theme(
         axis.text.x = element_text(angle = 45, hjust = 1, face = "italic"),
         legend.position = "none"
     )
 
-# Combine Plots
-ggarrange(p_comp, p_vector, ncol = 1, heights = c(1, 1.5))
+# Combine
+ggarrange(p_body_purity, p_gut_purity, ncol = 1, heights = c(1, 1.2), align = "v")
 ```
 
-![Mechanism Analysis. A) Comparison of Heterospecific Pollen (HP)
-proportion across Stigma, Body, and Gut compartments. B) Vector
-Efficiency: HP proportion on bodies and in guts for dominant pollinator
-species.](docs/images/analysis-diet-transport-correlation-1.png)
+![Pollen Purity by Species. A) Proportion of Conspecific Pollen (CP) on
+pollinator bodies. B) Proportion of CP in pollinator
+guts.](docs/images/analysis-pollen-purity-combined-1.png)
+
+### Variability Analysis: Coefficient of Variation
+
+To assess the relative variability of pollen counts across the transport
+network, we calculated the Coefficient of Variation (CV %) for
+Conspecific (CP) and Heterospecific (HP) pollen loads on Stigmas,
+Bodies, and in Guts.
+
+``` r
+# 1. Stigma CV
+cv_stigma <- pollen_deposition %>%
+    summarise(
+        CP = sd(conspecific_pollen, na.rm = TRUE) / mean(conspecific_pollen, na.rm = TRUE) * 100,
+        HP = sd(heterospecific_pollen, na.rm = TRUE) / mean(heterospecific_pollen, na.rm = TRUE) * 100
+    ) %>%
+    mutate(Compartment = "Stigma")
+
+# 2. Body CV
+# Ensure pollen_load_guts_24 is available (loaded in previous chunks or package)
+if (!exists("pollen_load_guts_24")) {
+    # Fallback to loading if not in env
+    data("pollen_load_guts_24", package = "HanPolNet")
+}
+
+cv_body <- pollen_load_guts_24 %>%
+    summarise(
+        CP = sd(suc_pra_load, na.rm = TRUE) / mean(suc_pra_load, na.rm = TRUE) * 100,
+        HP = sd(other_pollen_load, na.rm = TRUE) / mean(other_pollen_load, na.rm = TRUE) * 100
+    ) %>%
+    mutate(Compartment = "Body")
+
+# 3. Gut CV
+cv_gut <- pollen_load_guts_24 %>%
+    summarise(
+        CP = sd(suc_pra_guts, na.rm = TRUE) / mean(suc_pra_guts, na.rm = TRUE) * 100,
+        HP = sd(other_pollen_guts, na.rm = TRUE) / mean(other_pollen_guts, na.rm = TRUE) * 100
+    ) %>%
+    mutate(Compartment = "Gut")
+
+# Combine and Reshape
+cv_data <- bind_rows(cv_stigma, cv_body, cv_gut) %>%
+    pivot_longer(cols = c(CP, HP), names_to = "Pollen_Type", values_to = "CV")
+
+# Set Factor Levels
+cv_data$Compartment <- factor(cv_data$Compartment, levels = c("Body", "Gut", "Stigma"))
+
+# Plot
+ggplot(cv_data, aes(x = Compartment, y = CV, fill = Pollen_Type)) +
+    geom_bar(stat = "identity", position = position_dodge(width = 0.9), color = "black", width = 0.8) +
+    geom_text(aes(label = round(CV, 1)), position = position_dodge(width = 0.9), vjust = -0.5, size = 4) +
+    scale_fill_manual(
+        values = c("CP" = "#1ABC9C", "HP" = "#F1948A"),
+        labels = c("CP" = "Conspecific", "HP" = "Heterospecific")
+    ) +
+    labs(
+        title = "Variability of Pollen Counts",
+        y = "CV (%)",
+        fill = "Pollen Type"
+    ) +
+    theme_minimal() +
+    theme(
+        axis.text.x = element_text(size = 12, face = "bold"),
+        axis.text.y = element_text(size = 12),
+        legend.position = "top"
+    )
+```
+
+![Coefficient of Variation (CV) of Conspecific (CP) and Heterospecific
+(HP) pollen counts across
+compartments.](docs/images/analysis-cv-comparison-1.png)
 
 ### Gap 2: Community Stability & Composition
 
@@ -1208,6 +3341,8 @@ driven by the consistent dominance of key generalist taxa such as
 Material).
 
 ``` r
+# --- Part 1: Community Similarity (Heatmap) ---
+
 # 1. Aggregation for Stability Analysis
 # Sum standardized rates per species per year, excluding NA years
 community_matrix <- interaction_data_Succisa_22_24 %>%
@@ -1228,45 +3363,52 @@ mh_dist <- vegdist(comm_mat, method = "horn")
 # Convert to Similarity (1 - Dissimilarity)
 mh_sim <- 1 - as.matrix(mh_dist)
 
-# 3. Visualization: Correlogram
+# 3. Visualization: Correlogram (Styled Heatmap)
+# Mask upper triangle to create a lower-triangular plot
+mh_sim[upper.tri(mh_sim)] <- NA
+
 # Reshape for ggplot
 mh_long <- as.data.frame(mh_sim) %>%
     mutate(Year1 = rownames(.)) %>%
-    pivot_longer(cols = -Year1, names_to = "Year2", values_to = "Similarity")
+    pivot_longer(cols = -Year1, names_to = "Year2", values_to = "Similarity") %>%
+    filter(!is.na(Similarity))
 
-ggplot(mh_long, aes(x = Year1, y = Year2, fill = Similarity)) +
+p_similarity <- ggplot(mh_long, aes(x = Year2, y = Year1, fill = Similarity)) +
     geom_tile(color = "white") +
     geom_text(aes(label = sprintf("%.2f", Similarity)), color = "black", size = 5) +
-    scale_fill_gradient(low = "white", high = "#4675ED", limits = c(0, 1), name = "Similarity") +
+    # Red-Blue gradient (0 = Red, 1 = Blue)
+    scale_fill_gradient2(
+        low = "#D73027", mid = "#FFFFBF", high = "#4575B4",
+        midpoint = 0.5, limit = c(0, 1), name = "Similarity"
+    ) +
+    # Reverse Y axis to put first year on top (Matrix layout)
+    scale_y_discrete(limits = rev) +
     labs(
-        title = "Community Similarity",
-        subtitle = "Morisita-Horn Index",
+        title = "A. Community Similarity",
+        subtitle = "Morisita-Horn Similarity Index",
         x = "",
         y = ""
     ) +
     theme_minimal() +
     theme(
         axis.text = element_text(size = 12, face = "bold"),
-        panel.grid = element_blank()
+        panel.grid = element_blank(),
+        legend.position = "right"
     )
-```
 
-![Temporal Stability of Pollinator Community. Pairwise Morisita-Horn
-similarity values (1 = Identical, 0 = Different) between study
-years.](docs/images/analysis-community-stability-1.png)
+# --- Part 2: Pollinator Evenness (Boxplot) ---
 
-``` r
 # 1. Calculate Evenness (Alpha Diversity)
 succisa_evenness <- calculate_pollinator_evenness(
     data = interaction_data_Succisa_22_24,
     group_by = c("year", "plot_id")
-)
+) %>% filter(!is.na(year))
 
 p_evenness <- ggplot(succisa_evenness, aes(x = as.factor(year), y = J, fill = as.factor(year))) +
     geom_boxplot(alpha = 0.6, outlier.shape = NA) +
     geom_jitter(width = 0.2, alpha = 0.5) +
     labs(
-        title = "A. Pollinator Evenness (J')",
+        title = "B. Pollinator Evenness (J')",
         subtitle = "Per plot",
         x = "Year",
         y = "Pielou's Evenness (J')"
@@ -1274,32 +3416,15 @@ p_evenness <- ggplot(succisa_evenness, aes(x = as.factor(year), y = J, fill = as
     theme_minimal() +
     theme(legend.position = "none")
 
-# 2. Calculate Similarity (Beta Diversity)
-# We need to reshape the interaction data to a wide format (Site x Species) for the similarity calculation
-interaction_matrix <- interaction_data_Succisa_22_24 %>%
-    group_by(year, plot_id, pollinator_id) %>%
-    # Use 'rate' if using standardized data, or 'interaction_count' for raw
-    summarise(abundance = sum(rate, na.rm = TRUE), .groups = "drop") %>%
-    pivot_wider(names_from = pollinator_id, values_from = abundance, values_fill = 0)
 
-# Calculate full similarity matrix
-sim_results <- calculate_similarity(interaction_matrix, group_by = c("year", "plot_id"))
-
-# Visualize using package function
-p_similarity <- plot_similarity_change(sim_results, plot_type = "plot_turnover") +
-    labs(
-        title = "B. Community Similarity",
-        subtitle = "Pairwise plot turnover (Ruzicka)"
-    ) +
-    theme(legend.position = "none")
-
-# 3. Combine Plots
-# Ensure ggpubr or patchwork is available. Using ggpubr as it is a dependency of HanPolNet.
+# --- Part 3: Combine ---
 if (!requireNamespace("ggpubr", quietly = TRUE)) install.packages("ggpubr")
-ggpubr::ggarrange(p_evenness, p_similarity, ncol = 2)
+ggpubr::ggarrange(p_similarity, p_evenness, ncol = 1, heights = c(1, 0.8))
 ```
 
-![](docs/images/analysis-network-evenness-1.png)
+![Community Stability and Structure. A) Temporal Stability
+(Morisita-Horn Similarity). B) Pollinator Evenness (J’) per plot across
+years.](docs/images/analysis-community-stability-evenness-1.png)
 
 ## Discussion
 

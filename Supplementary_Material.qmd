@@ -31,6 +31,7 @@ if (!requireNamespace("HanPolNet", quietly = TRUE)) {
     devtools::install("local_packages/HanPolNet", upgrade = "never")
 }
 library(HanPolNet)
+library(gt)
 data("pollen_deposition", package = "HanPolNet")
 
 # Load Interaction Data for Table S3
@@ -388,9 +389,37 @@ table_s3 <- rel_abund %>%
     )
 
 # Print Table
-# Using vertical bars in align string to separate years if supported by output format
-kable(table_s3, 
-      caption = "Table S3: Raw abundance (Count) and relative abundance (%) of all pollinator taxa across study years, sorted by total abundance.", 
-      align = "lcccccc")
+# Print Table
+table_s3 %>%
+    gt() %>%
+    tab_header(
+        title = md("**Table S3**: Raw abundance (Count) and relative abundance (%) of all pollinator taxa across study years")
+    ) %>%
+    cols_label(
+        Species = "Species",
+        `2022 (Count)` = "Count 2022",
+        `2022 (%)` = "% 2022",
+        `2023 (Count)` = "Count 2023",
+        `2023 (%)` = "% 2023",
+        `2024 (Count)` = "Count 2024",
+        `2024 (%)` = "% 2024"
+    ) %>%
+    tab_options(
+        column_labels.background.color = "#F0F0F0",
+        column_labels.font.weight = "bold",
+        table.border.top.color = "black",
+        table.border.top.width = px(2),
+        table.border.bottom.color = "black",
+        table.border.bottom.width = px(2),
+        table_body.hlines.color = "#E5E5E5",
+        data_row.padding = px(6)
+    ) %>%
+    tab_style(
+        style = list(
+            cell_text(color = "black", weight = "bold")
+        ),
+        locations = cells_column_labels()
+    ) %>%
+    opt_align_table_header(align = "left")
 ```
 
