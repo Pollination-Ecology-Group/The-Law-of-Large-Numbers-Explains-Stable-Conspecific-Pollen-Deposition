@@ -19,7 +19,7 @@ format:
 #| include: false
 
 # 1. Global Knitr Options
-knitr::opts_chunk$set(echo = FALSE, warning = FALSE, message = FALSE, fig.path = "docs/images/")
+knitr::opts_chunk$set(echo = FALSE, warning = FALSE, message = FALSE, fig.path = "docs/images/", dev = c("png", "pdf"))
 
 # 2. Load Libraries
 library(ggplot2)
@@ -37,7 +37,7 @@ library(patchwork)
 library(knitr)
 library(vegan)
 library(gt)
-
+library(dunn.test)
 # 3. Global Settings
 theme_set(theme_bw())
 
@@ -93,7 +93,7 @@ plant_abundance_22_24 <- get_plant_data(
 
 
 # SVD data - data on Single visit deposition (SVD)
-SVD <- read.csv("data/SVD_Succisa_pratensis.csv")
+SVD_Succisa_22_24 <- read.csv("data/SVD_Succisa_pratensis.csv")
 
 
 ```
@@ -242,9 +242,8 @@ To test if the rate of heterospecific pollen accumulation differed between years
 #### Network Stability
 We assessed the temporal stability of the pollinator community composition using the **Morisita-Horn similarity index**, calculated with the `vegan` package. This metric was selected for its robustness to differences in sample size and species richness.
 
-> **Single Visit Deposition**
->
-> [Status: Section under development. Analysis of single-visit efficiency and pollen purity will be added here.]
+#### Single Visit Deposition
+To assess the efficiency and 'messiness' of major pollinator groups, we conducted a Single Visit Deposition (SVD) experiment. We presented unvisited (bagged) *Succisa* stigmas to foraging insects, allowed a single visit, and subsequently counted conspecific (CP) and heterospecific (HP) pollen loads. We classified visitors into broad morphogroups (e.g., *Eristalis* spp., *Bombus* spp.) and compared their CP and HP deposition using a Kruskal-Wallis test, followed by Dunn’s post-hoc test (Benjamini-Hochberg correction), as pollen counts were zero-inflated and non-normal.
 
 #### Macro-Ecological Context
 To contextualize the deposition results, we calculated annual network specialization ($H_2'$) using the `bipartite` package and estimated community floral resource abundance by summing plant counts in the permanent plots.
@@ -969,9 +968,9 @@ table_detailed %>%
     tab_style(
         style = cell_borders(
             sides = "bottom",
-            color = "gray",
-            weight = px(1.5),
-            style = "dashed"
+            color = "black",
+            weight = px(1), # Standard solid line
+            style = "solid"
         ),
         locations = cells_body(
             rows = last_inter_row
@@ -982,7 +981,94 @@ table_detailed %>%
 
 
 
-### Mechanism: Pollen Purity (Body vs. Gut)
+### Single Visit Efficiency (SVD)
+
+
+```{r}
+#| label: analysis-svd
+#| echo: true
+#| warning: false
+#| message: false
+#| fig-cap: "Single Visit Deposition (SVD). A) Conspecific Pollen (Efficiency). B) Heterospecific Pollen (Messiness)."
+# 2. Data Cleaning & Grouping
+SVD_clean <- SVD_Succisa_22_24 %>%
+    rename(
+        duration_sec = delka_navstevy,
+        year = rok,
+        species = pollinator_species
+    ) %>%
+    mutate(
+        # Create Morphogroups
+        morphogroup = case_when(
+            grepl("Eristalis", species) ~ "Eristalis spp.",
+            grepl("Bombus", species) ~ "Bombus spp.",
+            species == "Apis mellifera" ~ "Apis mellifera",
+            grepl("Syrphus", species) ~ "Syrphus spp.",
+            grepl("Helophilus", species) ~ "Helophilus spp.",
+            TRUE ~ "Other"
+        )
+    )
+
+# Filter for groups with sufficient sample size (N > 5) for visualization
+group_counts <- SVD_clean %>%
+    count(morphogroup) %>%
+    filter(n >= 5)
+SVD_final <- SVD_clean %>%
+    filter(morphogroup %in% group_counts$morphogroup)
+
+# 3. Visualization
+
+# Panel A: Efficiency (CP)
+p_eff <- ggplot(SVD_final, aes(x = morphogroup, y = conspecific_pollen, fill = morphogroup)) +
+    geom_boxplot(alpha = 0.6, outlier.shape = NA) +
+    geom_jitter(width = 0.2, alpha = 0.5, size = 1.5) +
+    labs(
+        title = "A. Efficiency (CP)",
+        y = "Conspecific Pollen",
+        x = ""
+    ) +
+    theme_bw() +
+    theme(
+        axis.text.x = element_text(angle = 45, hjust = 1, face = "italic"),
+        legend.position = "none"
+    )
+
+# Panel B: Messiness (HP)
+p_mess <- ggplot(SVD_final, aes(x = morphogroup, y = heterospecific_pollen, fill = morphogroup)) +
+    geom_boxplot(alpha = 0.6, outlier.shape = NA) +
+    geom_jitter(width = 0.2, alpha = 0.5, size = 1.5) +
+    labs(
+        title = "B. Messiness (HP)",
+        y = "Heterospecific Pollen",
+        x = "Pollinator Group"
+    ) +
+    theme_bw() +
+    theme(
+        axis.text.x = element_text(angle = 45, hjust = 1, face = "italic"),
+        legend.position = "none"
+    )
+
+# Combine
+p_combined <- p_eff + p_mess + plot_layout(ncol = 2)
+print(p_combined)
+
+# 4. Statistical Analysis
+cat("\n--- Kruskal-Wallis Test: Conspecific Pollen (CP) ---\n")
+kw_cp <- kruskal.test(conspecific_pollen ~ morphogroup, data = SVD_final)
+print(kw_cp)
+
+cat("\n--- Kruskal-Wallis Test: Heterospecific Pollen (HP) ---\n")
+kw_hp <- kruskal.test(heterospecific_pollen ~ morphogroup, data = SVD_final)
+print(kw_hp)
+
+# Post-hoc Dunn Test if significant
+if (kw_cp$p.value < 0.05) {
+    cat("\nPost-hoc Dunn Test (CP):\n")
+    dunn.test::dunn.test(SVD_final$conspecific_pollen, SVD_final$morphogroup, method = "bh")
+}
+```
+
+### Pollen Purity (Body vs. Gut)
 
 To understand *why* the deposition pattern follows a specific functional form (Type 1 or Type 3), we analyzed the purity of pollen loads on the **bodies** (transport) and in the **guts** (diet) of foraging pollinators. High purity on bodies suggests effective transport of conspecific pollen, while high purity in guts would indicate specialization in consumption.
 
@@ -1101,12 +1187,20 @@ cv_gut <- pollen_load_guts_24 %>%
     ) %>%
     mutate(Compartment = "Gut")
 
+cv_SVD <- SVD_Succisa_22_24 %>%
+    summarise(
+        CP = sd(conspecific_pollen, na.rm = TRUE) / mean(conspecific_pollen, na.rm = TRUE) * 100,
+        HP = sd(heterospecific_pollen, na.rm = TRUE) / mean(heterospecific_pollen, na.rm = TRUE) * 100
+    ) %>%
+    mutate(Compartment = "SVD")
+
+
 # Combine and Reshape
-cv_data <- bind_rows(cv_stigma, cv_body, cv_gut) %>%
+cv_data <- bind_rows(cv_stigma, cv_body, cv_gut, cv_SVD) %>%
     pivot_longer(cols = c(CP, HP), names_to = "Pollen_Type", values_to = "CV")
 
 # Set Factor Levels
-cv_data$Compartment <- factor(cv_data$Compartment, levels = c("Body", "Gut", "Stigma"))
+cv_data$Compartment <- factor(cv_data$Compartment, levels = c("Body", "Gut", "SVD", "Stigma"))
 
 # Plot
 ggplot(cv_data, aes(x = Compartment, y = CV, fill = Pollen_Type)) +
@@ -1202,7 +1296,66 @@ p_similarity <- ggplot(mh_long, aes(x = Year2, y = Year1, fill = Similarity)) +
         legend.position = "right"
     )
 
-# --- Part 2: Pollinator Evenness (Boxplot) ---
+# --- Part 2: Floral Community Similarity (Heatmap) ---
+
+# 1. Aggregation for Stability Analysis
+# Ensure proper year format
+plant_matrix_prep <- plant_abundance_22_24 %>%
+    mutate(year = as.numeric(as.character(year))) %>%
+    mutate(year = if_else(year < 100, year + 2000, year)) %>%
+    # Sum abundance per species per year (across plots)
+    # The abundance data is already standardized per species/plot, so summing gives a community-level profile
+    pivot_longer(cols = -c(year, plot_id), names_to = "Species", values_to = "Abundance") %>%
+    group_by(year, Species) %>%
+    summarise(total_abundance = sum(Abundance, na.rm = TRUE), .groups = "drop") %>%
+    pivot_wider(names_from = Species, values_from = total_abundance, values_fill = 0)
+
+# Extract Matrix
+if(nrow(plant_matrix_prep) > 0) {
+    comm_mat_plant <- as.matrix(plant_matrix_prep[, -1])
+    rownames(comm_mat_plant) <- as.character(plant_matrix_prep$year)
+
+    # 2. Calculate Morisita-Horn
+    mh_dist_plant <- vegdist(comm_mat_plant, method = "horn")
+    mh_sim_plant <- 1 - as.matrix(mh_dist_plant)
+
+    # 3. Visualization
+    mh_sim_plant[upper.tri(mh_sim_plant)] <- NA
+
+    mh_long_plant <- as.data.frame(mh_sim_plant) %>%
+        mutate(Year1 = rownames(.)) %>%
+        pivot_longer(cols = -Year1, names_to = "Year2", values_to = "Similarity") %>%
+        filter(!is.na(Similarity))
+
+    p_plant_similarity <- ggplot(mh_long_plant, aes(x = Year2, y = Year1, fill = Similarity)) +
+        geom_tile(color = "white") +
+        geom_text(aes(label = sprintf("%.2f", Similarity)), color = "black", size = 5) +
+        # Conifer Green to Brown Gradient
+        # High (1.0) = #2E8651 (Conifer Green)
+        # Mid (0.5) = #FFF8DC (Cornsilk/Beige)
+        # Low (0.0) = #8B4513 (SaddleBrown)
+        scale_fill_gradient2(
+            low = "#8B4513", mid = "#FFF8DC", high = "#2E8651",
+            midpoint = 0.5, limit = c(0, 1), name = "Similarity"
+        ) +
+        scale_y_discrete(limits = rev) +
+        labs(
+            title = "B. Floral Community Similarity",
+            subtitle = "Morisita-Horn Similarity Index",
+            x = "",
+            y = ""
+        ) +
+        theme_minimal() +
+        theme(
+            axis.text = element_text(size = 12, face = "bold"),
+            panel.grid = element_blank(),
+            legend.position = "right"
+        )
+} else {
+    p_plant_similarity <- ggplot() + labs(title = "No Plant Data Available")
+}
+
+# --- Part 3: Pollinator Evenness (Boxplot) ---
 
 # 1. Calculate Evenness (Alpha Diversity)
 succisa_evenness <- calculate_pollinator_evenness(
@@ -1214,7 +1367,7 @@ p_evenness <- ggplot(succisa_evenness, aes(x = as.factor(year), y = J, fill = as
     geom_boxplot(alpha = 0.6, outlier.shape = NA) +
     geom_jitter(width = 0.2, alpha = 0.5) +
     labs(
-        title = "B. Pollinator Evenness (J')",
+        title = "C. Pollinator Evenness (J')",
         subtitle = "Per plot",
         x = "Year",
         y = "Pielou's Evenness (J')"
@@ -1223,9 +1376,56 @@ p_evenness <- ggplot(succisa_evenness, aes(x = as.factor(year), y = J, fill = as
     theme(legend.position = "none")
 
 
-# --- Part 3: Combine ---
+# --- Part 4: Morphogroup Evenness (Boxplot) ---
+
+# 1. Create Morphogroup data
+interaction_groups <- interaction_data_Succisa_22_24 %>%
+    mutate(
+        morphogroup = case_when(
+            grepl("Eristalis", pollinator_id) ~ "Eristalis spp.",
+            grepl("Bombus", pollinator_id) ~ "Bombus spp.",
+            pollinator_id == "Apis mellifera" ~ "Apis mellifera",
+            grepl("Syrphus", pollinator_id) ~ "Syrphus spp.",
+            grepl("Helophilus", pollinator_id) ~ "Helophilus spp.",
+            TRUE ~ "Other"
+        )
+    )
+
+# 2. Calculate Evenness on Morphogroups
+morph_evenness <- interaction_groups %>%
+    group_by(year, plot_id, morphogroup) %>%
+    summarise(abundance = sum(interaction_count, na.rm = TRUE), .groups = "drop") %>%
+    pivot_wider(names_from = morphogroup, values_from = abundance, values_fill = 0) %>%
+    mutate(
+        J = vegan::diversity(across(where(is.numeric) & !any_of(c("year", "plot_id"))), index = "shannon") / 
+            log(vegan::specnumber(across(where(is.numeric) & !any_of(c("year", "plot_id")))))
+    ) %>%
+    filter(is.finite(J)) %>% # Remove 0/0 (no diversity)
+    filter(!is.na(year))
+
+p_evenness_morph <- ggplot(morph_evenness, aes(x = as.factor(year), y = J, fill = as.factor(year))) +
+    geom_boxplot(alpha = 0.6, outlier.shape = NA) +
+    geom_jitter(width = 0.2, alpha = 0.5) +
+    labs(
+        title = "D. Morphogroup Evenness (J')",
+        subtitle = "Per plot",
+        x = "Year",
+        y = "Pielou's Evenness (J')"
+    ) +
+    theme_minimal() +
+    theme(legend.position = "none")
+
+
+# --- Part 5: Combine ---
 if (!requireNamespace("ggpubr", quietly = TRUE)) install.packages("ggpubr")
-ggpubr::ggarrange(p_similarity, p_evenness, ncol = 1, heights = c(1, 0.8))
+
+# Combine in 2x2 Layout
+# Row 1: A (Pollinator Sim) | B (Floral Sim)
+row1 <- ggpubr::ggarrange(p_similarity, p_plant_similarity, ncol = 2, labels = NULL)
+# Row 2: C (Species Evenness) | D (Morphogroup Evenness)
+row2 <- ggpubr::ggarrange(p_evenness, p_evenness_morph, ncol = 2, labels = NULL)
+
+ggpubr::ggarrange(row1, row2, nrow = 2, heights = c(1, 1))
 
 
 ```
@@ -1250,39 +1450,73 @@ library(knitr)
 # Helper function to calculate network metrics for a specific year
 calc_net_metrics <- function(year_val, data) {
     # Filter data for the year
-    yr_data <- data %>% filter(year == year_val)
+    # Handle potential 2-digit year in data vs 4-digit year_val
+    target_year <- if(year_val > 2000) year_val - 2000 else year_val
+    
+    yr_data <- data %>% filter(year == target_year | year == year_val)
 
     # Check if data exists
     if (nrow(yr_data) == 0) {
-        return(data.frame(Year = year_val, H2 = NA, Evenness = NA))
+        return(data.frame(Year = year_val, H2 = NA, Succisa_d = NA, Succisa_H = NA))
     }
 
-    # Prepare matrix for bipartite (Plants x Pollinators)
-    # Assuming columns: plant_species, pollinator_id (or pollinator_species), rate (or interaction)
-    # Adjust column names if necessary based on your actual data structure
+    # Detect cols (robust)
+    pol_cols_possible <- c("pollinator_id", "pollinator_species", "pollinator")
+    pol_col <- pol_cols_possible[pol_cols_possible %in% names(yr_data)][1]
+    
+    plant_cols_possible <- c("plant_code", "plant_species", "plant_id", "plant")
+    plant_col <- plant_cols_possible[plant_cols_possible %in% names(yr_data)][1]
+    
+    int_cols_possible <- c("rate", "interaction_count", "interaction", "count")
+    int_col <- int_cols_possible[int_cols_possible %in% names(yr_data)][1]
 
-    # Detect pollinator column
-    pol_col <- if ("pollinator_species" %in% names(yr_data)) "pollinator_species" else "pollinator_id"
-    # Detect plant column
-    plant_col <- if ("plant_species" %in% names(yr_data)) "plant_species" else "plant_id"
-    # Detect interaction column
-    int_col <- if ("rate" %in% names(yr_data)) "rate" else "interaction"
+    if(is.na(pol_col) | is.na(plant_col) | is.na(int_col)) {
+        return(data.frame(Year = year_val, H2 = NA, Succisa_d = NA, Succisa_H = NA))
+    }
 
-    web_matrix <- yr_data %>%
-        select(all_of(plant_col), all_of(pol_col), all_of(int_col)) %>%
-        pivot_wider(names_from = all_of(pol_col), values_from = all_of(int_col), values_fill = 0) %>%
-        tibble::column_to_rownames(plant_col) %>%
-        as.matrix()
+    # Bipartite Matrix (Plants x Pollinators)
+    # Refactoring to handle potential list-columns or type mismatches
+    web_matrix <- tryCatch({
+        mat <- yr_data %>%
+            select(Plant = all_of(plant_col), Pollinator = all_of(pol_col), Interaction = all_of(int_col)) %>%
+            # Force numeric, unlisting if necessary
+            mutate(Interaction = as.numeric(unlist(Interaction))) %>%
+            pivot_wider(names_from = Pollinator, values_from = Interaction, values_fill = 0) %>%
+            tibble::column_to_rownames("Plant") %>%
+            as.matrix()
+        mat
+    }, error = function(e) {
+        warning(paste("Error creating matrix for year", year_val, ":", e$message))
+        return(NULL)
+    })
+    
+    if(is.null(web_matrix)) return(data.frame(Year = year_val, H2 = NA, Succisa_d = NA, Succisa_H = NA))
 
-    # Calculate indices
-    # H2' (Specialization)
-    h2 <- bipartite::H2fun(web_matrix)[1] # H2fun returns a vector, first element is H2'
+    # --- Metric A: Network H2' ---
+    h2 <- bipartite::H2fun(web_matrix)[1]
 
-    # Interaction Evenness
-    # Note: networklevel returns a named vector
-    evenness <- bipartite::networklevel(web_matrix, index = "interaction evenness")[1]
+    # --- Metric B: Succisa d' (Specialization) ---
+    # Calculate d' for all plants
+    d_vals <- bipartite::specieslevel(web_matrix, index = "d", level = "lower")
+    
+    # Extract Succisa
+    # Try different name variations
+    suc_names <- c("Suc_pra", "Succisa pratensis", "Succisa_pratensis")
+    suc_row <- rownames(d_vals)[rownames(d_vals) %in% suc_names][1]
+    
+    if(!is.na(suc_row)) {
+        succisa_d <- d_vals[suc_row, "d"]
+        
+        # --- Metric C: Succisa Partner Diversity (H) ---
+        # Get interaction row for Succisa from web matrix
+        suc_int <- web_matrix[suc_row, ]
+        succisa_H <- vegan::diversity(suc_int, index = "shannon")
+    } else {
+        succisa_d <- NA
+        succisa_H <- NA
+    }
 
-    return(data.frame(Year = year_val, H2 = h2, Evenness = evenness))
+    return(data.frame(Year = year_val, H2 = h2, Succisa_d = succisa_d, Succisa_H = succisa_H))
 }
 
 # Calculate for each year
@@ -1316,8 +1550,6 @@ hp_means <- pollen_deposition %>%
 
 # Calculate Abundance metrics
 # Data seems to be in wide format (Species as columns), so we pivot longer first
-# Identifying ID columns based on usage elsewhere (year, plot_id)
-# We exclude year and plot_id from the pivot to get all species columns
 plant_long <- plant_abundance_22_24 %>%
     select(year, plot_id, everything()) %>% # Ensure these exist
     pivot_longer(
@@ -1337,7 +1569,8 @@ plant_summary <- plant_long %>%
         Total_Abundance = sum(Abundance, na.rm = TRUE),
         .groups = "drop"
     ) %>%
-    mutate(Year = as.numeric(as.character(year)))
+    mutate(Year = as.numeric(as.character(year))) %>%
+    mutate(Year = if_else(Year < 100, Year + 2000, Year)) # Fix 2-digit years
 
 
 # --- 4. Combine and Output ---
@@ -1352,19 +1585,19 @@ final_table <- network_summary %>%
 final_table_formatted <- final_table %>%
     mutate(
         H2 = round(H2, 2),
-        Evenness = round(Evenness, 2),
+        Succisa_d = round(Succisa_d, 2),
+        Succisa_H = round(Succisa_H, 2),
         Slope = round(Slope, 2),
         Mean_HP = round(Mean_HP, 2),
         Succisa_Abundance = round(Succisa_Abundance, 2),
         Total_Abundance = round(Total_Abundance, 2)
     ) %>%
-    # Select only the columns intended for the table to avoid join duplication
-    select(Year, H2, Evenness, Slope, Mean_HP, Succisa_Abundance, Total_Abundance)
+    select(Year, H2, Succisa_d, Succisa_H, Slope, Mean_HP, Succisa_Abundance, Total_Abundance)
 
 # Generate Table
 kable(final_table_formatted,
-    col.names = c("Year", "H2'", "Evenness", "Slope (β)", "Mean HP", "Succisa Abundance", "Total Abundance"),
-    caption = "Table 4: Annual summary of plant-pollinator network topology, pollen deposition dynamics, and floral resource availability.",
+    col.names = c("Year", "Network H2'", "Succisa d'", "Succisa Diversity (H)", "Slope (β)", "Mean HP", "Succisa Abundance", "Total Abundance"),
+    caption = "Table 4: Annual summary of network context, Succisa-specific specialization, and pollen deposition dynamics.",
     align = "c"
 )
 ```
@@ -1392,4 +1625,83 @@ This moves our analysis beyond simple abundance ("we found less HP") to **functi
 The ratio of HP/CP deposited on stigmas is thus a function of both the "messiness" of the dominant vector and the overall evenness of the visitor community.
 
 
+## Data Availability
+
+The datasets used in this study are available in the supplementary material and have been exported for archiving.
+
+```{r}
+#| label: export-publication-data
+#| echo: true
+#| eval: true
+#| message: false
+#| warning: false
+
+# --- 1. Define Metadata (Data Dictionary) ---
+
+data_dictionary <- data.frame(
+  Dataset = character(),
+  Variable = character(),
+  Description = character(),
+  Unit = character(),
+  stringsAsFactors = FALSE
+)
+
+# Helper to append rows
+add_meta <- function(df, dataset, var, desc, unit) {
+  rbind(df, data.frame(Dataset = dataset, Variable = var, Description = desc, Unit = unit))
+}
+
+# Pollen Deposition Metadata
+data_dictionary <- data_dictionary %>%
+  add_meta("pollen_deposition", "year", "Year of sampling", "Year (2022-2024)") %>%
+  add_meta("pollen_deposition", "plot_id", "Unique identifier for the study plot", "Categorical") %>%
+  add_meta("pollen_deposition", "inflorescence_id", "Unique identifier for the sampled inflorescence", "Categorical") %>%
+  add_meta("pollen_deposition", "conspecific_pollen", "Count of conspecific (Succisa) pollen grains on stigma", "Count") %>%
+  add_meta("pollen_deposition", "heterospecific_pollen", "Count of heterospecific (non-Succisa) pollen grains on stigma", "Count") %>%
+  add_meta("pollen_deposition", "total_pollen", "Sum of conspecific and heterospecific pollen", "Count")
+
+# SVD Metadata
+data_dictionary <- data_dictionary %>%
+  add_meta("SVD", "year", "Year of observation", "Year") %>%
+  add_meta("SVD", "morphogroup", "Functional group of the visitor (e.g., Eristalis, Bombus)", "Categorical") %>%
+  add_meta("SVD", "duration_sec", "Duration of the single visit", "Seconds") %>%
+  add_meta("SVD", "conspecific_pollen", "Conspecific pollen deposited during single visit", "Count") %>%
+  add_meta("SVD", "heterospecific_pollen", "Heterospecific pollen deposited during single visit", "Count")
+
+# Network Metrics Metadata
+data_dictionary <- data_dictionary %>%
+  add_meta("network_metrics", "Year", "Year of sampling", "Year") %>%
+  add_meta("network_metrics", "H2", "Network Specialization index (H2')", "Index [0-1]") %>%
+  add_meta("network_metrics", "Evenness", "Interaction Evenness (Shannon's)", "Index [0-1]") %>%
+  add_meta("network_metrics", "Slope", "Slope (Beta) of the CP-HP relationship (Type 1 dynamics)", "Coefficient") %>%
+  add_meta("network_metrics", "Mean_HP", "Mean Heterospecific Pollen per stigma", "Count") %>%
+  add_meta("network_metrics", "Succisa_Abundance", "Mean abundance of Succisa pratensis per plot", "Count / Patch") %>%
+  add_meta("network_metrics", "Total_Abundance", "Total floral abundance in the community", "Count")
+
+
+# --- 2. Export Data ---
+
+# Create output directory if it doesn't exist
+output_dir <- file.path("output", "publication_data")
+if (!dir.exists(output_dir)) {
+  dir.create(output_dir, recursive = TRUE)
+}
+
+# Export Dataframes
+# Note using the dataframes available in the global environment from previous chunks
+
+write.csv(pollen_deposition, file.path(output_dir, "pollen_deposition.csv"), row.names = FALSE)
+# Use SVD_Succisa_22_24 which fits the description of SVD data
+if (exists("SVD_Succisa_22_24")) {
+    write.csv(SVD_Succisa_22_24, file.path(output_dir, "SVD.csv"), row.names = FALSE)
+}
+# Use final_table (unformatted) for metrics
+if (exists("final_table")) {
+    write.csv(final_table, file.path(output_dir, "network_metrics.csv"), row.names = FALSE)
+}
+
+# Export Metadata
+write.csv(data_dictionary, file.path(output_dir, "data_dictionary.csv"), row.names = FALSE)
+
+```
 ## References

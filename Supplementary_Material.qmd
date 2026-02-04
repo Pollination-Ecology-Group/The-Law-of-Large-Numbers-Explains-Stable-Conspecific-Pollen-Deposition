@@ -423,3 +423,49 @@ table_s3 %>%
     opt_align_table_header(align = "left")
 ```
 
+
+# Section S6: Data Descriptions
+
+The following table describes the variables contained in the archived datasets (`pollen_deposition.csv`, `SVD.csv`, `network_metrics.csv`).
+
+```{r}
+#| label: table-s6-metadata
+#| echo: false
+#| message: false
+#| warning: false
+
+# Read Metadata
+# Assuming output/publication_data is relative to the project root
+# If rendering from this file, path should be valid if working dir is project root
+dict_path <- file.path("output", "publication_data", "data_dictionary.csv")
+
+if (file.exists(dict_path)) {
+    data_dict <- read.csv(dict_path, stringsAsFactors = FALSE)
+
+    data_dict %>%
+        group_by(Dataset) %>%
+        gt() %>%
+        tab_header(
+            title = md("**Table S6**: Description of variables in the published datasets")
+        ) %>%
+        cols_label(
+            Variable = "Variable Name",
+            Description = "Description",
+            Unit = "Unit/Type"
+        ) %>%
+        tab_options(
+            row_group.background.color = "#E0E0E0",
+            row_group.font.weight = "bold",
+            column_labels.font.weight = "bold",
+            table.width = pct(100)
+        ) %>%
+        tab_style(
+            style = list(
+                cell_text(color = "black", weight = "bold")
+            ),
+            locations = cells_column_labels()
+        )
+} else {
+    print("Data dictionary not found. Please render the main manuscript to generate it.")
+}
+```

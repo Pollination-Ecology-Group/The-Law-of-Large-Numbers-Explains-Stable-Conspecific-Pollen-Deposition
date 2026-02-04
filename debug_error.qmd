@@ -1,0 +1,46 @@
+---
+title: "Debug Error"
+format: html
+---
+
+```{r}
+#| error: true
+
+if (!require("devtools")) install.packages("devtools", repos="http://cran.us.r-project.org")
+if (!require("HanPolNet")) {
+    devtools::install("local_packages/HanPolNet", upgrade = "never")
+    library(HanPolNet)
+}
+
+interaction_data_all_22_24 <- get_interaction_data(
+    years = c(22, 23, 24),
+    is_pollinator = TRUE,
+    remove_zeros = TRUE,
+    standardize = TRUE
+)
+
+# Construct info string
+info <- paste(
+    "ROWS:", nrow(interaction_data_all_22_24),
+    "COLS:", paste(names(interaction_data_all_22_24), collapse="|"),
+    "YEARS:", paste(unique(interaction_data_all_22_24$year), collapse="|")
+)
+
+# Check for plant column
+found_plant <- intersect(c("plant_species", "plant_id", "plant"), names(interaction_data_all_22_24))
+if(length(found_plant) > 0) {
+    pcol <- found_plant[1]
+    plants <- unique(interaction_data_all_22_24[[pcol]])
+    info <- paste(info, "PL.SAMPLE:", paste(head(plants, 5), collapse="|"))
+    
+    # Check for Succisa
+    targets <- c("Succisa pratensis", "Suc_pra", "Succisa_pratensis")
+    matches <- targets[targets %in% plants]
+    info <- paste(info, "SUCCISA_MATCH:", paste(matches, collapse="|"))
+} else {
+    info <- paste(info, "NO_PLANT_COL")
+}
+
+# CRASH WITH INFO
+stop(paste("DEBUG_EXIT_START >>>", info, "<<< DEBUG_EXIT_END"))
+```

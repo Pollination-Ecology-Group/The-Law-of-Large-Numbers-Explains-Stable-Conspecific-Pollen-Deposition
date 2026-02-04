@@ -244,41 +244,62 @@ counted conspecific abundance of the focal species and heterospecific
 co-flowering abundance index, which is the cumulative abundance of all
 other co-flowering plant species in the plot.
 
-### Data analysis
+### Statistical Analysis
 
-Full metadata, variable definitions, and summary statistics for the
-datasets used in this study are available in the Supplementary material
-S1.
+All statistical analyses were performed in R (v4.x). Count data for
+heterospecific (HP) and conspecific (CP) pollen were **square-root
+transformed** prior to parametric modeling. Diagnostic plots
+(Supplementary Material Figs S1–S2) confirmed that this transformation
+stabilized variance and satisfied homoscedasticity assumptions more
+effectively than raw or log-transformed data.
 
-#### Pollen deposited on stigmas
+#### Variance Component Analysis
 
-Although pollen deposition data consisted of counts, we analyzed
-variance components using Linear Mixed Models (LMMs) on **square-root
-transformed** data \[`sqrt(x)`\]. Prior to analysis, pollen count data
-(HP and CP) were square-root transformed to satisfy assumptions of
-normality and homoscedasticity (see Figs S1–S2). We chose this approach
-because (1) diagnostic plots confirmed that the square-root
-transformation effectively stabilized variance and improved normality
-compared to raw counts (Figure S1), and (2) variance partitioning is
-more directly interpretable in LMMs compared to GLMMs (Nakagawa &
-Schielzeth, 2010).
+To quantify the hierarchical scale of stochasticity in pollen
+deposition, we fitted Linear Mixed Models (LMMs) using the `lme4`
+package. We partitioned the total variance of sqrt-transformed pollen
+counts into **Year** (random effect), **Plant** (nested within Year),
+and **Stigma** (Residual variation). For the high-resolution 2024
+dataset, we further partitioned variance into **Sampling Date**,
+**Plant** (nested within Date), and **Stigma**. While statistical
+inference focused on transformed counts, we also visualized the
+proportion of heterospecific pollen (`HP / (HP + CP)`) to assess
+deposition purity.
 
-We performed a variance component analysis (VCA) to quantify the
-relative importance of different temporal and biological scales in
-driving pollen deposition. We specified two distinct hierarchical models
-using the `lme4` package:
+#### Pollen Accumulation Dynamics
 
-1.  **Inter-annual stability**: Using the full dataset (2022-2024), we
-    partitioned variance into *Year*, *Plant identity* (nested within
-    Year), and *Stigma* (residual variance). This model assesses the
-    extent to which deposition patterns are consistent across years
-    versus driven by plant-level traits or fine-scale stochasticity.
+To test if the rate of heterospecific pollen accumulation differed
+between years, we fitted a Linear Model (`lm`) of the form:
+`sqrt(HP) ~ CP * Year`. We used the `emtrends` function (from the
+`emmeans` package) to estimate and compare the slopes ($\beta$) of the
+HP-CP relationship for each year, interpreted as the “pollution
+efficiency” of the community.
 
-2.  **Intra-annual stability**: Using the high-resolution 2024 dataset,
-    we partitioned variance into *Sampling Date* (Day), *Plant identity*
-    (nested within Day), and *Stigma*. This model specifically tests
-    whether daily turnover in pollinator activity or weather conditions
-    (Day effect) outweighs individual plant variation.
+#### Network Stability
+
+We assessed the temporal stability of the pollinator community
+composition using the **Morisita-Horn similarity index**, calculated
+with the `vegan` package. This metric was selected for its robustness to
+differences in sample size and species richness.
+
+#### Single Visit Deposition
+
+To assess the efficiency and ‘messiness’ of major pollinator groups, we
+conducted a Single Visit Deposition (SVD) experiment. We presented
+unvisited (bagged) *Succisa* stigmas to foraging insects, allowed a
+single visit, and subsequently counted conspecific (CP) and
+heterospecific (HP) pollen loads. We classified visitors into broad
+morphogroups (e.g., *Eristalis* spp., *Bombus* spp.) and compared their
+CP and HP deposition using a Kruskal-Wallis test, followed by Dunn’s
+post-hoc test (Benjamini-Hochberg correction), as pollen counts were
+zero-inflated and non-normal.
+
+#### Macro-Ecological Context
+
+To contextualize the deposition results, we calculated annual network
+specialization ($H_2'$) using the `bipartite` package and estimated
+community floral resource abundance by summing plant counts in the
+permanent plots.
 
 ## Results
 
@@ -589,20 +610,20 @@ rbind(results_2022, results_2023, results_2024) %>%
 
 </details>
 
-<div id="mmppirfddg" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
-<style>#mmppirfddg table {
+<div id="nxqrddgskq" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#nxqrddgskq table {
   font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
-&#10;#mmppirfddg thead, #mmppirfddg tbody, #mmppirfddg tfoot, #mmppirfddg tr, #mmppirfddg td, #mmppirfddg th {
+&#10;#nxqrddgskq thead, #nxqrddgskq tbody, #nxqrddgskq tfoot, #nxqrddgskq tr, #nxqrddgskq td, #nxqrddgskq th {
   border-style: none;
 }
-&#10;#mmppirfddg p {
+&#10;#nxqrddgskq p {
   margin: 0;
   padding: 0;
 }
-&#10;#mmppirfddg .gt_table {
+&#10;#nxqrddgskq .gt_table {
   display: table;
   border-collapse: collapse;
   line-height: normal;
@@ -627,11 +648,11 @@ rbind(results_2022, results_2023, results_2024) %>%
   border-left-width: 2px;
   border-left-color: #D3D3D3;
 }
-&#10;#mmppirfddg .gt_caption {
+&#10;#nxqrddgskq .gt_caption {
   padding-top: 4px;
   padding-bottom: 4px;
 }
-&#10;#mmppirfddg .gt_title {
+&#10;#nxqrddgskq .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -642,7 +663,7 @@ rbind(results_2022, results_2023, results_2024) %>%
   border-bottom-color: #FFFFFF;
   border-bottom-width: 0;
 }
-&#10;#mmppirfddg .gt_subtitle {
+&#10;#nxqrddgskq .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -653,7 +674,7 @@ rbind(results_2022, results_2023, results_2024) %>%
   border-top-color: #FFFFFF;
   border-top-width: 0;
 }
-&#10;#mmppirfddg .gt_heading {
+&#10;#nxqrddgskq .gt_heading {
   background-color: #FFFFFF;
   text-align: left;
   border-bottom-color: #FFFFFF;
@@ -664,12 +685,12 @@ rbind(results_2022, results_2023, results_2024) %>%
   border-right-width: 1px;
   border-right-color: #D3D3D3;
 }
-&#10;#mmppirfddg .gt_bottom_border {
+&#10;#nxqrddgskq .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
-&#10;#mmppirfddg .gt_col_headings {
+&#10;#nxqrddgskq .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -683,7 +704,7 @@ rbind(results_2022, results_2023, results_2024) %>%
   border-right-width: 1px;
   border-right-color: #D3D3D3;
 }
-&#10;#mmppirfddg .gt_col_heading {
+&#10;#nxqrddgskq .gt_col_heading {
   color: #333333;
   background-color: #F0F0F0;
   font-size: 100%;
@@ -702,7 +723,7 @@ rbind(results_2022, results_2023, results_2024) %>%
   padding-right: 5px;
   overflow-x: hidden;
 }
-&#10;#mmppirfddg .gt_column_spanner_outer {
+&#10;#nxqrddgskq .gt_column_spanner_outer {
   color: #333333;
   background-color: #F0F0F0;
   font-size: 100%;
@@ -713,13 +734,13 @@ rbind(results_2022, results_2023, results_2024) %>%
   padding-left: 4px;
   padding-right: 4px;
 }
-&#10;#mmppirfddg .gt_column_spanner_outer:first-child {
+&#10;#nxqrddgskq .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
-&#10;#mmppirfddg .gt_column_spanner_outer:last-child {
+&#10;#nxqrddgskq .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
-&#10;#mmppirfddg .gt_column_spanner {
+&#10;#nxqrddgskq .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -730,10 +751,10 @@ rbind(results_2022, results_2023, results_2024) %>%
   display: inline-block;
   width: 100%;
 }
-&#10;#mmppirfddg .gt_spanner_row {
+&#10;#nxqrddgskq .gt_spanner_row {
   border-bottom-style: hidden;
 }
-&#10;#mmppirfddg .gt_group_heading {
+&#10;#nxqrddgskq .gt_group_heading {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -758,7 +779,7 @@ rbind(results_2022, results_2023, results_2024) %>%
   vertical-align: middle;
   text-align: left;
 }
-&#10;#mmppirfddg .gt_empty_group_heading {
+&#10;#nxqrddgskq .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -772,13 +793,13 @@ rbind(results_2022, results_2023, results_2024) %>%
   border-bottom-color: #D3D3D3;
   vertical-align: middle;
 }
-&#10;#mmppirfddg .gt_from_md > :first-child {
+&#10;#nxqrddgskq .gt_from_md > :first-child {
   margin-top: 0;
 }
-&#10;#mmppirfddg .gt_from_md > :last-child {
+&#10;#nxqrddgskq .gt_from_md > :last-child {
   margin-bottom: 0;
 }
-&#10;#mmppirfddg .gt_row {
+&#10;#nxqrddgskq .gt_row {
   padding-top: 6px;
   padding-bottom: 6px;
   padding-left: 5px;
@@ -796,7 +817,7 @@ rbind(results_2022, results_2023, results_2024) %>%
   vertical-align: middle;
   overflow-x: hidden;
 }
-&#10;#mmppirfddg .gt_stub {
+&#10;#nxqrddgskq .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -808,7 +829,7 @@ rbind(results_2022, results_2023, results_2024) %>%
   padding-left: 5px;
   padding-right: 5px;
 }
-&#10;#mmppirfddg .gt_stub_row_group {
+&#10;#nxqrddgskq .gt_stub_row_group {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -821,13 +842,13 @@ rbind(results_2022, results_2023, results_2024) %>%
   padding-right: 5px;
   vertical-align: top;
 }
-&#10;#mmppirfddg .gt_row_group_first td {
+&#10;#nxqrddgskq .gt_row_group_first td {
   border-top-width: 2px;
 }
-&#10;#mmppirfddg .gt_row_group_first th {
+&#10;#nxqrddgskq .gt_row_group_first th {
   border-top-width: 2px;
 }
-&#10;#mmppirfddg .gt_summary_row {
+&#10;#nxqrddgskq .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -836,14 +857,14 @@ rbind(results_2022, results_2023, results_2024) %>%
   padding-left: 5px;
   padding-right: 5px;
 }
-&#10;#mmppirfddg .gt_first_summary_row {
+&#10;#nxqrddgskq .gt_first_summary_row {
   border-top-style: solid;
   border-top-color: #D3D3D3;
 }
-&#10;#mmppirfddg .gt_first_summary_row.thick {
+&#10;#nxqrddgskq .gt_first_summary_row.thick {
   border-top-width: 2px;
 }
-&#10;#mmppirfddg .gt_last_summary_row {
+&#10;#nxqrddgskq .gt_last_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -852,7 +873,7 @@ rbind(results_2022, results_2023, results_2024) %>%
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
-&#10;#mmppirfddg .gt_grand_summary_row {
+&#10;#nxqrddgskq .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -861,7 +882,7 @@ rbind(results_2022, results_2023, results_2024) %>%
   padding-left: 5px;
   padding-right: 5px;
 }
-&#10;#mmppirfddg .gt_first_grand_summary_row {
+&#10;#nxqrddgskq .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -870,7 +891,7 @@ rbind(results_2022, results_2023, results_2024) %>%
   border-top-width: 6px;
   border-top-color: #D3D3D3;
 }
-&#10;#mmppirfddg .gt_last_grand_summary_row_top {
+&#10;#nxqrddgskq .gt_last_grand_summary_row_top {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -879,10 +900,10 @@ rbind(results_2022, results_2023, results_2024) %>%
   border-bottom-width: 6px;
   border-bottom-color: #D3D3D3;
 }
-&#10;#mmppirfddg .gt_striped {
+&#10;#nxqrddgskq .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
-&#10;#mmppirfddg .gt_table_body {
+&#10;#nxqrddgskq .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -890,7 +911,7 @@ rbind(results_2022, results_2023, results_2024) %>%
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
-&#10;#mmppirfddg .gt_footnotes {
+&#10;#nxqrddgskq .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -903,7 +924,7 @@ rbind(results_2022, results_2023, results_2024) %>%
   border-right-width: 2px;
   border-right-color: #D3D3D3;
 }
-&#10;#mmppirfddg .gt_footnote {
+&#10;#nxqrddgskq .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding-top: 4px;
@@ -911,7 +932,7 @@ rbind(results_2022, results_2023, results_2024) %>%
   padding-left: 5px;
   padding-right: 5px;
 }
-&#10;#mmppirfddg .gt_sourcenotes {
+&#10;#nxqrddgskq .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -924,64 +945,64 @@ rbind(results_2022, results_2023, results_2024) %>%
   border-right-width: 2px;
   border-right-color: #D3D3D3;
 }
-&#10;#mmppirfddg .gt_sourcenote {
+&#10;#nxqrddgskq .gt_sourcenote {
   font-size: 90%;
   padding-top: 4px;
   padding-bottom: 4px;
   padding-left: 5px;
   padding-right: 5px;
 }
-&#10;#mmppirfddg .gt_left {
+&#10;#nxqrddgskq .gt_left {
   text-align: left;
 }
-&#10;#mmppirfddg .gt_center {
+&#10;#nxqrddgskq .gt_center {
   text-align: center;
 }
-&#10;#mmppirfddg .gt_right {
+&#10;#nxqrddgskq .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
-&#10;#mmppirfddg .gt_font_normal {
+&#10;#nxqrddgskq .gt_font_normal {
   font-weight: normal;
 }
-&#10;#mmppirfddg .gt_font_bold {
+&#10;#nxqrddgskq .gt_font_bold {
   font-weight: bold;
 }
-&#10;#mmppirfddg .gt_font_italic {
+&#10;#nxqrddgskq .gt_font_italic {
   font-style: italic;
 }
-&#10;#mmppirfddg .gt_super {
+&#10;#nxqrddgskq .gt_super {
   font-size: 65%;
 }
-&#10;#mmppirfddg .gt_footnote_marks {
+&#10;#nxqrddgskq .gt_footnote_marks {
   font-size: 75%;
   vertical-align: 0.4em;
   position: initial;
 }
-&#10;#mmppirfddg .gt_asterisk {
+&#10;#nxqrddgskq .gt_asterisk {
   font-size: 100%;
   vertical-align: 0;
 }
-&#10;#mmppirfddg .gt_indent_1 {
+&#10;#nxqrddgskq .gt_indent_1 {
   text-indent: 5px;
 }
-&#10;#mmppirfddg .gt_indent_2 {
+&#10;#nxqrddgskq .gt_indent_2 {
   text-indent: 10px;
 }
-&#10;#mmppirfddg .gt_indent_3 {
+&#10;#nxqrddgskq .gt_indent_3 {
   text-indent: 15px;
 }
-&#10;#mmppirfddg .gt_indent_4 {
+&#10;#nxqrddgskq .gt_indent_4 {
   text-indent: 20px;
 }
-&#10;#mmppirfddg .gt_indent_5 {
+&#10;#nxqrddgskq .gt_indent_5 {
   text-indent: 25px;
 }
-&#10;#mmppirfddg .katex-display {
+&#10;#nxqrddgskq .katex-display {
   display: inline-flex !important;
   margin-bottom: 0.75em !important;
 }
-&#10;#mmppirfddg div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
+&#10;#nxqrddgskq div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
   height: 0px !important;
 }
 </style>
@@ -1065,20 +1086,20 @@ anova_res %>%
     opt_align_table_header(align = "left")
 ```
 
-<div id="vyzygdxkwj" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
-<style>#vyzygdxkwj table {
+<div id="girtfjjtnk" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#girtfjjtnk table {
   font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
-&#10;#vyzygdxkwj thead, #vyzygdxkwj tbody, #vyzygdxkwj tfoot, #vyzygdxkwj tr, #vyzygdxkwj td, #vyzygdxkwj th {
+&#10;#girtfjjtnk thead, #girtfjjtnk tbody, #girtfjjtnk tfoot, #girtfjjtnk tr, #girtfjjtnk td, #girtfjjtnk th {
   border-style: none;
 }
-&#10;#vyzygdxkwj p {
+&#10;#girtfjjtnk p {
   margin: 0;
   padding: 0;
 }
-&#10;#vyzygdxkwj .gt_table {
+&#10;#girtfjjtnk .gt_table {
   display: table;
   border-collapse: collapse;
   line-height: normal;
@@ -1103,11 +1124,11 @@ anova_res %>%
   border-left-width: 2px;
   border-left-color: #D3D3D3;
 }
-&#10;#vyzygdxkwj .gt_caption {
+&#10;#girtfjjtnk .gt_caption {
   padding-top: 4px;
   padding-bottom: 4px;
 }
-&#10;#vyzygdxkwj .gt_title {
+&#10;#girtfjjtnk .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -1118,7 +1139,7 @@ anova_res %>%
   border-bottom-color: #FFFFFF;
   border-bottom-width: 0;
 }
-&#10;#vyzygdxkwj .gt_subtitle {
+&#10;#girtfjjtnk .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -1129,7 +1150,7 @@ anova_res %>%
   border-top-color: #FFFFFF;
   border-top-width: 0;
 }
-&#10;#vyzygdxkwj .gt_heading {
+&#10;#girtfjjtnk .gt_heading {
   background-color: #FFFFFF;
   text-align: left;
   border-bottom-color: #FFFFFF;
@@ -1140,12 +1161,12 @@ anova_res %>%
   border-right-width: 1px;
   border-right-color: #D3D3D3;
 }
-&#10;#vyzygdxkwj .gt_bottom_border {
+&#10;#girtfjjtnk .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
-&#10;#vyzygdxkwj .gt_col_headings {
+&#10;#girtfjjtnk .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -1159,7 +1180,7 @@ anova_res %>%
   border-right-width: 1px;
   border-right-color: #D3D3D3;
 }
-&#10;#vyzygdxkwj .gt_col_heading {
+&#10;#girtfjjtnk .gt_col_heading {
   color: #333333;
   background-color: #F0F0F0;
   font-size: 100%;
@@ -1178,7 +1199,7 @@ anova_res %>%
   padding-right: 5px;
   overflow-x: hidden;
 }
-&#10;#vyzygdxkwj .gt_column_spanner_outer {
+&#10;#girtfjjtnk .gt_column_spanner_outer {
   color: #333333;
   background-color: #F0F0F0;
   font-size: 100%;
@@ -1189,13 +1210,13 @@ anova_res %>%
   padding-left: 4px;
   padding-right: 4px;
 }
-&#10;#vyzygdxkwj .gt_column_spanner_outer:first-child {
+&#10;#girtfjjtnk .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
-&#10;#vyzygdxkwj .gt_column_spanner_outer:last-child {
+&#10;#girtfjjtnk .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
-&#10;#vyzygdxkwj .gt_column_spanner {
+&#10;#girtfjjtnk .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -1206,10 +1227,10 @@ anova_res %>%
   display: inline-block;
   width: 100%;
 }
-&#10;#vyzygdxkwj .gt_spanner_row {
+&#10;#girtfjjtnk .gt_spanner_row {
   border-bottom-style: hidden;
 }
-&#10;#vyzygdxkwj .gt_group_heading {
+&#10;#girtfjjtnk .gt_group_heading {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1234,7 +1255,7 @@ anova_res %>%
   vertical-align: middle;
   text-align: left;
 }
-&#10;#vyzygdxkwj .gt_empty_group_heading {
+&#10;#girtfjjtnk .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -1248,13 +1269,13 @@ anova_res %>%
   border-bottom-color: #D3D3D3;
   vertical-align: middle;
 }
-&#10;#vyzygdxkwj .gt_from_md > :first-child {
+&#10;#girtfjjtnk .gt_from_md > :first-child {
   margin-top: 0;
 }
-&#10;#vyzygdxkwj .gt_from_md > :last-child {
+&#10;#girtfjjtnk .gt_from_md > :last-child {
   margin-bottom: 0;
 }
-&#10;#vyzygdxkwj .gt_row {
+&#10;#girtfjjtnk .gt_row {
   padding-top: 6px;
   padding-bottom: 6px;
   padding-left: 5px;
@@ -1272,7 +1293,7 @@ anova_res %>%
   vertical-align: middle;
   overflow-x: hidden;
 }
-&#10;#vyzygdxkwj .gt_stub {
+&#10;#girtfjjtnk .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1284,7 +1305,7 @@ anova_res %>%
   padding-left: 5px;
   padding-right: 5px;
 }
-&#10;#vyzygdxkwj .gt_stub_row_group {
+&#10;#girtfjjtnk .gt_stub_row_group {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1297,13 +1318,13 @@ anova_res %>%
   padding-right: 5px;
   vertical-align: top;
 }
-&#10;#vyzygdxkwj .gt_row_group_first td {
+&#10;#girtfjjtnk .gt_row_group_first td {
   border-top-width: 2px;
 }
-&#10;#vyzygdxkwj .gt_row_group_first th {
+&#10;#girtfjjtnk .gt_row_group_first th {
   border-top-width: 2px;
 }
-&#10;#vyzygdxkwj .gt_summary_row {
+&#10;#girtfjjtnk .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -1312,14 +1333,14 @@ anova_res %>%
   padding-left: 5px;
   padding-right: 5px;
 }
-&#10;#vyzygdxkwj .gt_first_summary_row {
+&#10;#girtfjjtnk .gt_first_summary_row {
   border-top-style: solid;
   border-top-color: #D3D3D3;
 }
-&#10;#vyzygdxkwj .gt_first_summary_row.thick {
+&#10;#girtfjjtnk .gt_first_summary_row.thick {
   border-top-width: 2px;
 }
-&#10;#vyzygdxkwj .gt_last_summary_row {
+&#10;#girtfjjtnk .gt_last_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1328,7 +1349,7 @@ anova_res %>%
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
-&#10;#vyzygdxkwj .gt_grand_summary_row {
+&#10;#girtfjjtnk .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -1337,7 +1358,7 @@ anova_res %>%
   padding-left: 5px;
   padding-right: 5px;
 }
-&#10;#vyzygdxkwj .gt_first_grand_summary_row {
+&#10;#girtfjjtnk .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1346,7 +1367,7 @@ anova_res %>%
   border-top-width: 6px;
   border-top-color: #D3D3D3;
 }
-&#10;#vyzygdxkwj .gt_last_grand_summary_row_top {
+&#10;#girtfjjtnk .gt_last_grand_summary_row_top {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1355,10 +1376,10 @@ anova_res %>%
   border-bottom-width: 6px;
   border-bottom-color: #D3D3D3;
 }
-&#10;#vyzygdxkwj .gt_striped {
+&#10;#girtfjjtnk .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
-&#10;#vyzygdxkwj .gt_table_body {
+&#10;#girtfjjtnk .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -1366,7 +1387,7 @@ anova_res %>%
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
-&#10;#vyzygdxkwj .gt_footnotes {
+&#10;#girtfjjtnk .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -1379,7 +1400,7 @@ anova_res %>%
   border-right-width: 2px;
   border-right-color: #D3D3D3;
 }
-&#10;#vyzygdxkwj .gt_footnote {
+&#10;#girtfjjtnk .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding-top: 4px;
@@ -1387,7 +1408,7 @@ anova_res %>%
   padding-left: 5px;
   padding-right: 5px;
 }
-&#10;#vyzygdxkwj .gt_sourcenotes {
+&#10;#girtfjjtnk .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -1400,64 +1421,64 @@ anova_res %>%
   border-right-width: 2px;
   border-right-color: #D3D3D3;
 }
-&#10;#vyzygdxkwj .gt_sourcenote {
+&#10;#girtfjjtnk .gt_sourcenote {
   font-size: 90%;
   padding-top: 4px;
   padding-bottom: 4px;
   padding-left: 5px;
   padding-right: 5px;
 }
-&#10;#vyzygdxkwj .gt_left {
+&#10;#girtfjjtnk .gt_left {
   text-align: left;
 }
-&#10;#vyzygdxkwj .gt_center {
+&#10;#girtfjjtnk .gt_center {
   text-align: center;
 }
-&#10;#vyzygdxkwj .gt_right {
+&#10;#girtfjjtnk .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
-&#10;#vyzygdxkwj .gt_font_normal {
+&#10;#girtfjjtnk .gt_font_normal {
   font-weight: normal;
 }
-&#10;#vyzygdxkwj .gt_font_bold {
+&#10;#girtfjjtnk .gt_font_bold {
   font-weight: bold;
 }
-&#10;#vyzygdxkwj .gt_font_italic {
+&#10;#girtfjjtnk .gt_font_italic {
   font-style: italic;
 }
-&#10;#vyzygdxkwj .gt_super {
+&#10;#girtfjjtnk .gt_super {
   font-size: 65%;
 }
-&#10;#vyzygdxkwj .gt_footnote_marks {
+&#10;#girtfjjtnk .gt_footnote_marks {
   font-size: 75%;
   vertical-align: 0.4em;
   position: initial;
 }
-&#10;#vyzygdxkwj .gt_asterisk {
+&#10;#girtfjjtnk .gt_asterisk {
   font-size: 100%;
   vertical-align: 0;
 }
-&#10;#vyzygdxkwj .gt_indent_1 {
+&#10;#girtfjjtnk .gt_indent_1 {
   text-indent: 5px;
 }
-&#10;#vyzygdxkwj .gt_indent_2 {
+&#10;#girtfjjtnk .gt_indent_2 {
   text-indent: 10px;
 }
-&#10;#vyzygdxkwj .gt_indent_3 {
+&#10;#girtfjjtnk .gt_indent_3 {
   text-indent: 15px;
 }
-&#10;#vyzygdxkwj .gt_indent_4 {
+&#10;#girtfjjtnk .gt_indent_4 {
   text-indent: 20px;
 }
-&#10;#vyzygdxkwj .gt_indent_5 {
+&#10;#girtfjjtnk .gt_indent_5 {
   text-indent: 25px;
 }
-&#10;#vyzygdxkwj .katex-display {
+&#10;#girtfjjtnk .katex-display {
   display: inline-flex !important;
   margin-bottom: 0.75em !important;
 }
-&#10;#vyzygdxkwj div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
+&#10;#girtfjjtnk div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
   height: 0px !important;
 }
 </style>
@@ -1599,20 +1620,20 @@ slope_est %>%
     opt_align_table_header(align = "left")
 ```
 
-<div id="eerjiaugty" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
-<style>#eerjiaugty table {
+<div id="vqjfguebay" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#vqjfguebay table {
   font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
-&#10;#eerjiaugty thead, #eerjiaugty tbody, #eerjiaugty tfoot, #eerjiaugty tr, #eerjiaugty td, #eerjiaugty th {
+&#10;#vqjfguebay thead, #vqjfguebay tbody, #vqjfguebay tfoot, #vqjfguebay tr, #vqjfguebay td, #vqjfguebay th {
   border-style: none;
 }
-&#10;#eerjiaugty p {
+&#10;#vqjfguebay p {
   margin: 0;
   padding: 0;
 }
-&#10;#eerjiaugty .gt_table {
+&#10;#vqjfguebay .gt_table {
   display: table;
   border-collapse: collapse;
   line-height: normal;
@@ -1637,11 +1658,11 @@ slope_est %>%
   border-left-width: 2px;
   border-left-color: #D3D3D3;
 }
-&#10;#eerjiaugty .gt_caption {
+&#10;#vqjfguebay .gt_caption {
   padding-top: 4px;
   padding-bottom: 4px;
 }
-&#10;#eerjiaugty .gt_title {
+&#10;#vqjfguebay .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -1652,7 +1673,7 @@ slope_est %>%
   border-bottom-color: #FFFFFF;
   border-bottom-width: 0;
 }
-&#10;#eerjiaugty .gt_subtitle {
+&#10;#vqjfguebay .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -1663,7 +1684,7 @@ slope_est %>%
   border-top-color: #FFFFFF;
   border-top-width: 0;
 }
-&#10;#eerjiaugty .gt_heading {
+&#10;#vqjfguebay .gt_heading {
   background-color: #FFFFFF;
   text-align: left;
   border-bottom-color: #FFFFFF;
@@ -1674,12 +1695,12 @@ slope_est %>%
   border-right-width: 1px;
   border-right-color: #D3D3D3;
 }
-&#10;#eerjiaugty .gt_bottom_border {
+&#10;#vqjfguebay .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
-&#10;#eerjiaugty .gt_col_headings {
+&#10;#vqjfguebay .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -1693,7 +1714,7 @@ slope_est %>%
   border-right-width: 1px;
   border-right-color: #D3D3D3;
 }
-&#10;#eerjiaugty .gt_col_heading {
+&#10;#vqjfguebay .gt_col_heading {
   color: #333333;
   background-color: #F0F0F0;
   font-size: 100%;
@@ -1712,7 +1733,7 @@ slope_est %>%
   padding-right: 5px;
   overflow-x: hidden;
 }
-&#10;#eerjiaugty .gt_column_spanner_outer {
+&#10;#vqjfguebay .gt_column_spanner_outer {
   color: #333333;
   background-color: #F0F0F0;
   font-size: 100%;
@@ -1723,13 +1744,13 @@ slope_est %>%
   padding-left: 4px;
   padding-right: 4px;
 }
-&#10;#eerjiaugty .gt_column_spanner_outer:first-child {
+&#10;#vqjfguebay .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
-&#10;#eerjiaugty .gt_column_spanner_outer:last-child {
+&#10;#vqjfguebay .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
-&#10;#eerjiaugty .gt_column_spanner {
+&#10;#vqjfguebay .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -1740,10 +1761,10 @@ slope_est %>%
   display: inline-block;
   width: 100%;
 }
-&#10;#eerjiaugty .gt_spanner_row {
+&#10;#vqjfguebay .gt_spanner_row {
   border-bottom-style: hidden;
 }
-&#10;#eerjiaugty .gt_group_heading {
+&#10;#vqjfguebay .gt_group_heading {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1768,7 +1789,7 @@ slope_est %>%
   vertical-align: middle;
   text-align: left;
 }
-&#10;#eerjiaugty .gt_empty_group_heading {
+&#10;#vqjfguebay .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -1782,13 +1803,13 @@ slope_est %>%
   border-bottom-color: #D3D3D3;
   vertical-align: middle;
 }
-&#10;#eerjiaugty .gt_from_md > :first-child {
+&#10;#vqjfguebay .gt_from_md > :first-child {
   margin-top: 0;
 }
-&#10;#eerjiaugty .gt_from_md > :last-child {
+&#10;#vqjfguebay .gt_from_md > :last-child {
   margin-bottom: 0;
 }
-&#10;#eerjiaugty .gt_row {
+&#10;#vqjfguebay .gt_row {
   padding-top: 6px;
   padding-bottom: 6px;
   padding-left: 5px;
@@ -1806,7 +1827,7 @@ slope_est %>%
   vertical-align: middle;
   overflow-x: hidden;
 }
-&#10;#eerjiaugty .gt_stub {
+&#10;#vqjfguebay .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1818,7 +1839,7 @@ slope_est %>%
   padding-left: 5px;
   padding-right: 5px;
 }
-&#10;#eerjiaugty .gt_stub_row_group {
+&#10;#vqjfguebay .gt_stub_row_group {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1831,13 +1852,13 @@ slope_est %>%
   padding-right: 5px;
   vertical-align: top;
 }
-&#10;#eerjiaugty .gt_row_group_first td {
+&#10;#vqjfguebay .gt_row_group_first td {
   border-top-width: 2px;
 }
-&#10;#eerjiaugty .gt_row_group_first th {
+&#10;#vqjfguebay .gt_row_group_first th {
   border-top-width: 2px;
 }
-&#10;#eerjiaugty .gt_summary_row {
+&#10;#vqjfguebay .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -1846,14 +1867,14 @@ slope_est %>%
   padding-left: 5px;
   padding-right: 5px;
 }
-&#10;#eerjiaugty .gt_first_summary_row {
+&#10;#vqjfguebay .gt_first_summary_row {
   border-top-style: solid;
   border-top-color: #D3D3D3;
 }
-&#10;#eerjiaugty .gt_first_summary_row.thick {
+&#10;#vqjfguebay .gt_first_summary_row.thick {
   border-top-width: 2px;
 }
-&#10;#eerjiaugty .gt_last_summary_row {
+&#10;#vqjfguebay .gt_last_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1862,7 +1883,7 @@ slope_est %>%
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
-&#10;#eerjiaugty .gt_grand_summary_row {
+&#10;#vqjfguebay .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -1871,7 +1892,7 @@ slope_est %>%
   padding-left: 5px;
   padding-right: 5px;
 }
-&#10;#eerjiaugty .gt_first_grand_summary_row {
+&#10;#vqjfguebay .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1880,7 +1901,7 @@ slope_est %>%
   border-top-width: 6px;
   border-top-color: #D3D3D3;
 }
-&#10;#eerjiaugty .gt_last_grand_summary_row_top {
+&#10;#vqjfguebay .gt_last_grand_summary_row_top {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1889,10 +1910,10 @@ slope_est %>%
   border-bottom-width: 6px;
   border-bottom-color: #D3D3D3;
 }
-&#10;#eerjiaugty .gt_striped {
+&#10;#vqjfguebay .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
-&#10;#eerjiaugty .gt_table_body {
+&#10;#vqjfguebay .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -1900,7 +1921,7 @@ slope_est %>%
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
-&#10;#eerjiaugty .gt_footnotes {
+&#10;#vqjfguebay .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -1913,7 +1934,7 @@ slope_est %>%
   border-right-width: 2px;
   border-right-color: #D3D3D3;
 }
-&#10;#eerjiaugty .gt_footnote {
+&#10;#vqjfguebay .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding-top: 4px;
@@ -1921,7 +1942,7 @@ slope_est %>%
   padding-left: 5px;
   padding-right: 5px;
 }
-&#10;#eerjiaugty .gt_sourcenotes {
+&#10;#vqjfguebay .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -1934,64 +1955,64 @@ slope_est %>%
   border-right-width: 2px;
   border-right-color: #D3D3D3;
 }
-&#10;#eerjiaugty .gt_sourcenote {
+&#10;#vqjfguebay .gt_sourcenote {
   font-size: 90%;
   padding-top: 4px;
   padding-bottom: 4px;
   padding-left: 5px;
   padding-right: 5px;
 }
-&#10;#eerjiaugty .gt_left {
+&#10;#vqjfguebay .gt_left {
   text-align: left;
 }
-&#10;#eerjiaugty .gt_center {
+&#10;#vqjfguebay .gt_center {
   text-align: center;
 }
-&#10;#eerjiaugty .gt_right {
+&#10;#vqjfguebay .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
-&#10;#eerjiaugty .gt_font_normal {
+&#10;#vqjfguebay .gt_font_normal {
   font-weight: normal;
 }
-&#10;#eerjiaugty .gt_font_bold {
+&#10;#vqjfguebay .gt_font_bold {
   font-weight: bold;
 }
-&#10;#eerjiaugty .gt_font_italic {
+&#10;#vqjfguebay .gt_font_italic {
   font-style: italic;
 }
-&#10;#eerjiaugty .gt_super {
+&#10;#vqjfguebay .gt_super {
   font-size: 65%;
 }
-&#10;#eerjiaugty .gt_footnote_marks {
+&#10;#vqjfguebay .gt_footnote_marks {
   font-size: 75%;
   vertical-align: 0.4em;
   position: initial;
 }
-&#10;#eerjiaugty .gt_asterisk {
+&#10;#vqjfguebay .gt_asterisk {
   font-size: 100%;
   vertical-align: 0;
 }
-&#10;#eerjiaugty .gt_indent_1 {
+&#10;#vqjfguebay .gt_indent_1 {
   text-indent: 5px;
 }
-&#10;#eerjiaugty .gt_indent_2 {
+&#10;#vqjfguebay .gt_indent_2 {
   text-indent: 10px;
 }
-&#10;#eerjiaugty .gt_indent_3 {
+&#10;#vqjfguebay .gt_indent_3 {
   text-indent: 15px;
 }
-&#10;#eerjiaugty .gt_indent_4 {
+&#10;#vqjfguebay .gt_indent_4 {
   text-indent: 20px;
 }
-&#10;#eerjiaugty .gt_indent_5 {
+&#10;#vqjfguebay .gt_indent_5 {
   text-indent: 25px;
 }
-&#10;#eerjiaugty .katex-display {
+&#10;#vqjfguebay .katex-display {
   display: inline-flex !important;
   margin-bottom: 0.75em !important;
 }
-&#10;#eerjiaugty div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
+&#10;#vqjfguebay div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
   height: 0px !important;
 }
 </style>
@@ -2049,20 +2070,20 @@ slope_contrasts %>%
     opt_align_table_header(align = "left")
 ```
 
-<div id="cwqxwutoel" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
-<style>#cwqxwutoel table {
+<div id="qqonrbfkgt" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#qqonrbfkgt table {
   font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
-&#10;#cwqxwutoel thead, #cwqxwutoel tbody, #cwqxwutoel tfoot, #cwqxwutoel tr, #cwqxwutoel td, #cwqxwutoel th {
+&#10;#qqonrbfkgt thead, #qqonrbfkgt tbody, #qqonrbfkgt tfoot, #qqonrbfkgt tr, #qqonrbfkgt td, #qqonrbfkgt th {
   border-style: none;
 }
-&#10;#cwqxwutoel p {
+&#10;#qqonrbfkgt p {
   margin: 0;
   padding: 0;
 }
-&#10;#cwqxwutoel .gt_table {
+&#10;#qqonrbfkgt .gt_table {
   display: table;
   border-collapse: collapse;
   line-height: normal;
@@ -2087,11 +2108,11 @@ slope_contrasts %>%
   border-left-width: 2px;
   border-left-color: #D3D3D3;
 }
-&#10;#cwqxwutoel .gt_caption {
+&#10;#qqonrbfkgt .gt_caption {
   padding-top: 4px;
   padding-bottom: 4px;
 }
-&#10;#cwqxwutoel .gt_title {
+&#10;#qqonrbfkgt .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -2102,7 +2123,7 @@ slope_contrasts %>%
   border-bottom-color: #FFFFFF;
   border-bottom-width: 0;
 }
-&#10;#cwqxwutoel .gt_subtitle {
+&#10;#qqonrbfkgt .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -2113,7 +2134,7 @@ slope_contrasts %>%
   border-top-color: #FFFFFF;
   border-top-width: 0;
 }
-&#10;#cwqxwutoel .gt_heading {
+&#10;#qqonrbfkgt .gt_heading {
   background-color: #FFFFFF;
   text-align: left;
   border-bottom-color: #FFFFFF;
@@ -2124,12 +2145,12 @@ slope_contrasts %>%
   border-right-width: 1px;
   border-right-color: #D3D3D3;
 }
-&#10;#cwqxwutoel .gt_bottom_border {
+&#10;#qqonrbfkgt .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
-&#10;#cwqxwutoel .gt_col_headings {
+&#10;#qqonrbfkgt .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -2143,7 +2164,7 @@ slope_contrasts %>%
   border-right-width: 1px;
   border-right-color: #D3D3D3;
 }
-&#10;#cwqxwutoel .gt_col_heading {
+&#10;#qqonrbfkgt .gt_col_heading {
   color: #333333;
   background-color: #F0F0F0;
   font-size: 100%;
@@ -2162,7 +2183,7 @@ slope_contrasts %>%
   padding-right: 5px;
   overflow-x: hidden;
 }
-&#10;#cwqxwutoel .gt_column_spanner_outer {
+&#10;#qqonrbfkgt .gt_column_spanner_outer {
   color: #333333;
   background-color: #F0F0F0;
   font-size: 100%;
@@ -2173,13 +2194,13 @@ slope_contrasts %>%
   padding-left: 4px;
   padding-right: 4px;
 }
-&#10;#cwqxwutoel .gt_column_spanner_outer:first-child {
+&#10;#qqonrbfkgt .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
-&#10;#cwqxwutoel .gt_column_spanner_outer:last-child {
+&#10;#qqonrbfkgt .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
-&#10;#cwqxwutoel .gt_column_spanner {
+&#10;#qqonrbfkgt .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -2190,10 +2211,10 @@ slope_contrasts %>%
   display: inline-block;
   width: 100%;
 }
-&#10;#cwqxwutoel .gt_spanner_row {
+&#10;#qqonrbfkgt .gt_spanner_row {
   border-bottom-style: hidden;
 }
-&#10;#cwqxwutoel .gt_group_heading {
+&#10;#qqonrbfkgt .gt_group_heading {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -2218,7 +2239,7 @@ slope_contrasts %>%
   vertical-align: middle;
   text-align: left;
 }
-&#10;#cwqxwutoel .gt_empty_group_heading {
+&#10;#qqonrbfkgt .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -2232,13 +2253,13 @@ slope_contrasts %>%
   border-bottom-color: #D3D3D3;
   vertical-align: middle;
 }
-&#10;#cwqxwutoel .gt_from_md > :first-child {
+&#10;#qqonrbfkgt .gt_from_md > :first-child {
   margin-top: 0;
 }
-&#10;#cwqxwutoel .gt_from_md > :last-child {
+&#10;#qqonrbfkgt .gt_from_md > :last-child {
   margin-bottom: 0;
 }
-&#10;#cwqxwutoel .gt_row {
+&#10;#qqonrbfkgt .gt_row {
   padding-top: 6px;
   padding-bottom: 6px;
   padding-left: 5px;
@@ -2256,7 +2277,7 @@ slope_contrasts %>%
   vertical-align: middle;
   overflow-x: hidden;
 }
-&#10;#cwqxwutoel .gt_stub {
+&#10;#qqonrbfkgt .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -2268,7 +2289,7 @@ slope_contrasts %>%
   padding-left: 5px;
   padding-right: 5px;
 }
-&#10;#cwqxwutoel .gt_stub_row_group {
+&#10;#qqonrbfkgt .gt_stub_row_group {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -2281,13 +2302,13 @@ slope_contrasts %>%
   padding-right: 5px;
   vertical-align: top;
 }
-&#10;#cwqxwutoel .gt_row_group_first td {
+&#10;#qqonrbfkgt .gt_row_group_first td {
   border-top-width: 2px;
 }
-&#10;#cwqxwutoel .gt_row_group_first th {
+&#10;#qqonrbfkgt .gt_row_group_first th {
   border-top-width: 2px;
 }
-&#10;#cwqxwutoel .gt_summary_row {
+&#10;#qqonrbfkgt .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -2296,14 +2317,14 @@ slope_contrasts %>%
   padding-left: 5px;
   padding-right: 5px;
 }
-&#10;#cwqxwutoel .gt_first_summary_row {
+&#10;#qqonrbfkgt .gt_first_summary_row {
   border-top-style: solid;
   border-top-color: #D3D3D3;
 }
-&#10;#cwqxwutoel .gt_first_summary_row.thick {
+&#10;#qqonrbfkgt .gt_first_summary_row.thick {
   border-top-width: 2px;
 }
-&#10;#cwqxwutoel .gt_last_summary_row {
+&#10;#qqonrbfkgt .gt_last_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -2312,7 +2333,7 @@ slope_contrasts %>%
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
-&#10;#cwqxwutoel .gt_grand_summary_row {
+&#10;#qqonrbfkgt .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -2321,7 +2342,7 @@ slope_contrasts %>%
   padding-left: 5px;
   padding-right: 5px;
 }
-&#10;#cwqxwutoel .gt_first_grand_summary_row {
+&#10;#qqonrbfkgt .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -2330,7 +2351,7 @@ slope_contrasts %>%
   border-top-width: 6px;
   border-top-color: #D3D3D3;
 }
-&#10;#cwqxwutoel .gt_last_grand_summary_row_top {
+&#10;#qqonrbfkgt .gt_last_grand_summary_row_top {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -2339,10 +2360,10 @@ slope_contrasts %>%
   border-bottom-width: 6px;
   border-bottom-color: #D3D3D3;
 }
-&#10;#cwqxwutoel .gt_striped {
+&#10;#qqonrbfkgt .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
-&#10;#cwqxwutoel .gt_table_body {
+&#10;#qqonrbfkgt .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -2350,7 +2371,7 @@ slope_contrasts %>%
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
-&#10;#cwqxwutoel .gt_footnotes {
+&#10;#qqonrbfkgt .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -2363,7 +2384,7 @@ slope_contrasts %>%
   border-right-width: 2px;
   border-right-color: #D3D3D3;
 }
-&#10;#cwqxwutoel .gt_footnote {
+&#10;#qqonrbfkgt .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding-top: 4px;
@@ -2371,7 +2392,7 @@ slope_contrasts %>%
   padding-left: 5px;
   padding-right: 5px;
 }
-&#10;#cwqxwutoel .gt_sourcenotes {
+&#10;#qqonrbfkgt .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -2384,64 +2405,64 @@ slope_contrasts %>%
   border-right-width: 2px;
   border-right-color: #D3D3D3;
 }
-&#10;#cwqxwutoel .gt_sourcenote {
+&#10;#qqonrbfkgt .gt_sourcenote {
   font-size: 90%;
   padding-top: 4px;
   padding-bottom: 4px;
   padding-left: 5px;
   padding-right: 5px;
 }
-&#10;#cwqxwutoel .gt_left {
+&#10;#qqonrbfkgt .gt_left {
   text-align: left;
 }
-&#10;#cwqxwutoel .gt_center {
+&#10;#qqonrbfkgt .gt_center {
   text-align: center;
 }
-&#10;#cwqxwutoel .gt_right {
+&#10;#qqonrbfkgt .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
-&#10;#cwqxwutoel .gt_font_normal {
+&#10;#qqonrbfkgt .gt_font_normal {
   font-weight: normal;
 }
-&#10;#cwqxwutoel .gt_font_bold {
+&#10;#qqonrbfkgt .gt_font_bold {
   font-weight: bold;
 }
-&#10;#cwqxwutoel .gt_font_italic {
+&#10;#qqonrbfkgt .gt_font_italic {
   font-style: italic;
 }
-&#10;#cwqxwutoel .gt_super {
+&#10;#qqonrbfkgt .gt_super {
   font-size: 65%;
 }
-&#10;#cwqxwutoel .gt_footnote_marks {
+&#10;#qqonrbfkgt .gt_footnote_marks {
   font-size: 75%;
   vertical-align: 0.4em;
   position: initial;
 }
-&#10;#cwqxwutoel .gt_asterisk {
+&#10;#qqonrbfkgt .gt_asterisk {
   font-size: 100%;
   vertical-align: 0;
 }
-&#10;#cwqxwutoel .gt_indent_1 {
+&#10;#qqonrbfkgt .gt_indent_1 {
   text-indent: 5px;
 }
-&#10;#cwqxwutoel .gt_indent_2 {
+&#10;#qqonrbfkgt .gt_indent_2 {
   text-indent: 10px;
 }
-&#10;#cwqxwutoel .gt_indent_3 {
+&#10;#qqonrbfkgt .gt_indent_3 {
   text-indent: 15px;
 }
-&#10;#cwqxwutoel .gt_indent_4 {
+&#10;#qqonrbfkgt .gt_indent_4 {
   text-indent: 20px;
 }
-&#10;#cwqxwutoel .gt_indent_5 {
+&#10;#qqonrbfkgt .gt_indent_5 {
   text-indent: 25px;
 }
-&#10;#cwqxwutoel .katex-display {
+&#10;#qqonrbfkgt .katex-display {
   display: inline-flex !important;
   margin-bottom: 0.75em !important;
 }
-&#10;#cwqxwutoel div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
+&#10;#qqonrbfkgt div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
   height: 0px !important;
 }
 </style>
@@ -2749,9 +2770,9 @@ table_detailed %>%
     tab_style(
         style = cell_borders(
             sides = "bottom",
-            color = "gray",
-            weight = px(1.5),
-            style = "dashed"
+            color = "black",
+            weight = px(1), # Standard solid line
+            style = "solid"
         ),
         locations = cells_body(
             rows = last_inter_row
@@ -2760,20 +2781,20 @@ table_detailed %>%
     opt_align_table_header(align = "left")
 ```
 
-<div id="kcjbugqoca" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
-<style>#kcjbugqoca table {
+<div id="dsuokdeclg" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#dsuokdeclg table {
   font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
-&#10;#kcjbugqoca thead, #kcjbugqoca tbody, #kcjbugqoca tfoot, #kcjbugqoca tr, #kcjbugqoca td, #kcjbugqoca th {
+&#10;#dsuokdeclg thead, #dsuokdeclg tbody, #dsuokdeclg tfoot, #dsuokdeclg tr, #dsuokdeclg td, #dsuokdeclg th {
   border-style: none;
 }
-&#10;#kcjbugqoca p {
+&#10;#dsuokdeclg p {
   margin: 0;
   padding: 0;
 }
-&#10;#kcjbugqoca .gt_table {
+&#10;#dsuokdeclg .gt_table {
   display: table;
   border-collapse: collapse;
   line-height: normal;
@@ -2798,11 +2819,11 @@ table_detailed %>%
   border-left-width: 2px;
   border-left-color: #D3D3D3;
 }
-&#10;#kcjbugqoca .gt_caption {
+&#10;#dsuokdeclg .gt_caption {
   padding-top: 4px;
   padding-bottom: 4px;
 }
-&#10;#kcjbugqoca .gt_title {
+&#10;#dsuokdeclg .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -2813,7 +2834,7 @@ table_detailed %>%
   border-bottom-color: #FFFFFF;
   border-bottom-width: 0;
 }
-&#10;#kcjbugqoca .gt_subtitle {
+&#10;#dsuokdeclg .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -2824,7 +2845,7 @@ table_detailed %>%
   border-top-color: #FFFFFF;
   border-top-width: 0;
 }
-&#10;#kcjbugqoca .gt_heading {
+&#10;#dsuokdeclg .gt_heading {
   background-color: #FFFFFF;
   text-align: left;
   border-bottom-color: #FFFFFF;
@@ -2835,12 +2856,12 @@ table_detailed %>%
   border-right-width: 1px;
   border-right-color: #D3D3D3;
 }
-&#10;#kcjbugqoca .gt_bottom_border {
+&#10;#dsuokdeclg .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
-&#10;#kcjbugqoca .gt_col_headings {
+&#10;#dsuokdeclg .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -2854,7 +2875,7 @@ table_detailed %>%
   border-right-width: 1px;
   border-right-color: #D3D3D3;
 }
-&#10;#kcjbugqoca .gt_col_heading {
+&#10;#dsuokdeclg .gt_col_heading {
   color: #333333;
   background-color: #F0F0F0;
   font-size: 100%;
@@ -2873,7 +2894,7 @@ table_detailed %>%
   padding-right: 5px;
   overflow-x: hidden;
 }
-&#10;#kcjbugqoca .gt_column_spanner_outer {
+&#10;#dsuokdeclg .gt_column_spanner_outer {
   color: #333333;
   background-color: #F0F0F0;
   font-size: 100%;
@@ -2884,13 +2905,13 @@ table_detailed %>%
   padding-left: 4px;
   padding-right: 4px;
 }
-&#10;#kcjbugqoca .gt_column_spanner_outer:first-child {
+&#10;#dsuokdeclg .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
-&#10;#kcjbugqoca .gt_column_spanner_outer:last-child {
+&#10;#dsuokdeclg .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
-&#10;#kcjbugqoca .gt_column_spanner {
+&#10;#dsuokdeclg .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -2901,10 +2922,10 @@ table_detailed %>%
   display: inline-block;
   width: 100%;
 }
-&#10;#kcjbugqoca .gt_spanner_row {
+&#10;#dsuokdeclg .gt_spanner_row {
   border-bottom-style: hidden;
 }
-&#10;#kcjbugqoca .gt_group_heading {
+&#10;#dsuokdeclg .gt_group_heading {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -2929,7 +2950,7 @@ table_detailed %>%
   vertical-align: middle;
   text-align: left;
 }
-&#10;#kcjbugqoca .gt_empty_group_heading {
+&#10;#dsuokdeclg .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -2943,13 +2964,13 @@ table_detailed %>%
   border-bottom-color: #D3D3D3;
   vertical-align: middle;
 }
-&#10;#kcjbugqoca .gt_from_md > :first-child {
+&#10;#dsuokdeclg .gt_from_md > :first-child {
   margin-top: 0;
 }
-&#10;#kcjbugqoca .gt_from_md > :last-child {
+&#10;#dsuokdeclg .gt_from_md > :last-child {
   margin-bottom: 0;
 }
-&#10;#kcjbugqoca .gt_row {
+&#10;#dsuokdeclg .gt_row {
   padding-top: 6px;
   padding-bottom: 6px;
   padding-left: 5px;
@@ -2967,7 +2988,7 @@ table_detailed %>%
   vertical-align: middle;
   overflow-x: hidden;
 }
-&#10;#kcjbugqoca .gt_stub {
+&#10;#dsuokdeclg .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -2979,7 +3000,7 @@ table_detailed %>%
   padding-left: 5px;
   padding-right: 5px;
 }
-&#10;#kcjbugqoca .gt_stub_row_group {
+&#10;#dsuokdeclg .gt_stub_row_group {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -2992,13 +3013,13 @@ table_detailed %>%
   padding-right: 5px;
   vertical-align: top;
 }
-&#10;#kcjbugqoca .gt_row_group_first td {
+&#10;#dsuokdeclg .gt_row_group_first td {
   border-top-width: 2px;
 }
-&#10;#kcjbugqoca .gt_row_group_first th {
+&#10;#dsuokdeclg .gt_row_group_first th {
   border-top-width: 2px;
 }
-&#10;#kcjbugqoca .gt_summary_row {
+&#10;#dsuokdeclg .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -3007,14 +3028,14 @@ table_detailed %>%
   padding-left: 5px;
   padding-right: 5px;
 }
-&#10;#kcjbugqoca .gt_first_summary_row {
+&#10;#dsuokdeclg .gt_first_summary_row {
   border-top-style: solid;
   border-top-color: #D3D3D3;
 }
-&#10;#kcjbugqoca .gt_first_summary_row.thick {
+&#10;#dsuokdeclg .gt_first_summary_row.thick {
   border-top-width: 2px;
 }
-&#10;#kcjbugqoca .gt_last_summary_row {
+&#10;#dsuokdeclg .gt_last_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -3023,7 +3044,7 @@ table_detailed %>%
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
-&#10;#kcjbugqoca .gt_grand_summary_row {
+&#10;#dsuokdeclg .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -3032,7 +3053,7 @@ table_detailed %>%
   padding-left: 5px;
   padding-right: 5px;
 }
-&#10;#kcjbugqoca .gt_first_grand_summary_row {
+&#10;#dsuokdeclg .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -3041,7 +3062,7 @@ table_detailed %>%
   border-top-width: 6px;
   border-top-color: #D3D3D3;
 }
-&#10;#kcjbugqoca .gt_last_grand_summary_row_top {
+&#10;#dsuokdeclg .gt_last_grand_summary_row_top {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -3050,10 +3071,10 @@ table_detailed %>%
   border-bottom-width: 6px;
   border-bottom-color: #D3D3D3;
 }
-&#10;#kcjbugqoca .gt_striped {
+&#10;#dsuokdeclg .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
-&#10;#kcjbugqoca .gt_table_body {
+&#10;#dsuokdeclg .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -3061,7 +3082,7 @@ table_detailed %>%
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
-&#10;#kcjbugqoca .gt_footnotes {
+&#10;#dsuokdeclg .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -3074,7 +3095,7 @@ table_detailed %>%
   border-right-width: 2px;
   border-right-color: #D3D3D3;
 }
-&#10;#kcjbugqoca .gt_footnote {
+&#10;#dsuokdeclg .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding-top: 4px;
@@ -3082,7 +3103,7 @@ table_detailed %>%
   padding-left: 5px;
   padding-right: 5px;
 }
-&#10;#kcjbugqoca .gt_sourcenotes {
+&#10;#dsuokdeclg .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -3095,64 +3116,64 @@ table_detailed %>%
   border-right-width: 2px;
   border-right-color: #D3D3D3;
 }
-&#10;#kcjbugqoca .gt_sourcenote {
+&#10;#dsuokdeclg .gt_sourcenote {
   font-size: 90%;
   padding-top: 4px;
   padding-bottom: 4px;
   padding-left: 5px;
   padding-right: 5px;
 }
-&#10;#kcjbugqoca .gt_left {
+&#10;#dsuokdeclg .gt_left {
   text-align: left;
 }
-&#10;#kcjbugqoca .gt_center {
+&#10;#dsuokdeclg .gt_center {
   text-align: center;
 }
-&#10;#kcjbugqoca .gt_right {
+&#10;#dsuokdeclg .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
-&#10;#kcjbugqoca .gt_font_normal {
+&#10;#dsuokdeclg .gt_font_normal {
   font-weight: normal;
 }
-&#10;#kcjbugqoca .gt_font_bold {
+&#10;#dsuokdeclg .gt_font_bold {
   font-weight: bold;
 }
-&#10;#kcjbugqoca .gt_font_italic {
+&#10;#dsuokdeclg .gt_font_italic {
   font-style: italic;
 }
-&#10;#kcjbugqoca .gt_super {
+&#10;#dsuokdeclg .gt_super {
   font-size: 65%;
 }
-&#10;#kcjbugqoca .gt_footnote_marks {
+&#10;#dsuokdeclg .gt_footnote_marks {
   font-size: 75%;
   vertical-align: 0.4em;
   position: initial;
 }
-&#10;#kcjbugqoca .gt_asterisk {
+&#10;#dsuokdeclg .gt_asterisk {
   font-size: 100%;
   vertical-align: 0;
 }
-&#10;#kcjbugqoca .gt_indent_1 {
+&#10;#dsuokdeclg .gt_indent_1 {
   text-indent: 5px;
 }
-&#10;#kcjbugqoca .gt_indent_2 {
+&#10;#dsuokdeclg .gt_indent_2 {
   text-indent: 10px;
 }
-&#10;#kcjbugqoca .gt_indent_3 {
+&#10;#dsuokdeclg .gt_indent_3 {
   text-indent: 15px;
 }
-&#10;#kcjbugqoca .gt_indent_4 {
+&#10;#dsuokdeclg .gt_indent_4 {
   text-indent: 20px;
 }
-&#10;#kcjbugqoca .gt_indent_5 {
+&#10;#dsuokdeclg .gt_indent_5 {
   text-indent: 25px;
 }
-&#10;#kcjbugqoca .katex-display {
+&#10;#dsuokdeclg .katex-display {
   display: inline-flex !important;
   margin-bottom: 0.75em !important;
 }
-&#10;#kcjbugqoca div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
+&#10;#dsuokdeclg div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
   height: 0px !important;
 }
 </style>
@@ -3173,7 +3194,121 @@ table_detailed %>%
 Variance Partitioning Results. A) Inter-Annual Stability (All Years). B)
 Intra-Annual Stability (2024 Only).
 
-### Mechanism: Pollen Purity (Body vs. Gut)
+### Single Visit Efficiency (SVD)
+
+``` r
+# 2. Data Cleaning & Grouping
+SVD_clean <- SVD_Succisa_22_24 %>%
+    rename(
+        duration_sec = delka_navstevy,
+        year = rok,
+        species = pollinator_species
+    ) %>%
+    mutate(
+        # Create Morphogroups
+        morphogroup = case_when(
+            grepl("Eristalis", species) ~ "Eristalis spp.",
+            grepl("Bombus", species) ~ "Bombus spp.",
+            species == "Apis mellifera" ~ "Apis mellifera",
+            grepl("Syrphus", species) ~ "Syrphus spp.",
+            grepl("Helophilus", species) ~ "Helophilus spp.",
+            TRUE ~ "Other"
+        )
+    )
+
+# Filter for groups with sufficient sample size (N > 5) for visualization
+group_counts <- SVD_clean %>%
+    count(morphogroup) %>%
+    filter(n >= 5)
+SVD_final <- SVD_clean %>%
+    filter(morphogroup %in% group_counts$morphogroup)
+
+# 3. Visualization
+
+# Panel A: Efficiency (CP)
+p_eff <- ggplot(SVD_final, aes(x = morphogroup, y = conspecific_pollen, fill = morphogroup)) +
+    geom_boxplot(alpha = 0.6, outlier.shape = NA) +
+    geom_jitter(width = 0.2, alpha = 0.5, size = 1.5) +
+    labs(
+        title = "A. Efficiency (CP)",
+        y = "Conspecific Pollen",
+        x = ""
+    ) +
+    theme_bw() +
+    theme(
+        axis.text.x = element_text(angle = 45, hjust = 1, face = "italic"),
+        legend.position = "none"
+    )
+
+# Panel B: Messiness (HP)
+p_mess <- ggplot(SVD_final, aes(x = morphogroup, y = heterospecific_pollen, fill = morphogroup)) +
+    geom_boxplot(alpha = 0.6, outlier.shape = NA) +
+    geom_jitter(width = 0.2, alpha = 0.5, size = 1.5) +
+    labs(
+        title = "B. Messiness (HP)",
+        y = "Heterospecific Pollen",
+        x = "Pollinator Group"
+    ) +
+    theme_bw() +
+    theme(
+        axis.text.x = element_text(angle = 45, hjust = 1, face = "italic"),
+        legend.position = "none"
+    )
+
+# Combine
+p_combined <- p_eff + p_mess + plot_layout(ncol = 2)
+print(p_combined)
+```
+
+![Single Visit Deposition (SVD). A) Conspecific Pollen (Efficiency). B)
+Heterospecific Pollen (Messiness).](docs/images/analysis-svd-1.png)
+
+``` r
+# 4. Statistical Analysis
+cat("\n--- Kruskal-Wallis Test: Conspecific Pollen (CP) ---\n")
+```
+
+
+    --- Kruskal-Wallis Test: Conspecific Pollen (CP) ---
+
+``` r
+kw_cp <- kruskal.test(conspecific_pollen ~ morphogroup, data = SVD_final)
+print(kw_cp)
+```
+
+
+        Kruskal-Wallis rank sum test
+
+    data:  conspecific_pollen by morphogroup
+    Kruskal-Wallis chi-squared = 1.5917, df = 3, p-value = 0.6613
+
+``` r
+cat("\n--- Kruskal-Wallis Test: Heterospecific Pollen (HP) ---\n")
+```
+
+
+    --- Kruskal-Wallis Test: Heterospecific Pollen (HP) ---
+
+``` r
+kw_hp <- kruskal.test(heterospecific_pollen ~ morphogroup, data = SVD_final)
+print(kw_hp)
+```
+
+
+        Kruskal-Wallis rank sum test
+
+    data:  heterospecific_pollen by morphogroup
+    Kruskal-Wallis chi-squared = 5.2009, df = 3, p-value = 0.1577
+
+``` r
+# Post-hoc Dunn Test if significant
+if (kw_cp$p.value < 0.05) {
+    cat("\nPost-hoc Dunn Test (CP):\n")
+    dunn.test::dunn.test(SVD_final$conspecific_pollen, SVD_final$morphogroup, method = "bh")
+}
+```
+
+### Pollen Purity (Body vs. Gut)
 
 To understand *why* the deposition pattern follows a specific functional
 form (Type 1 or Type 3), we analyzed the purity of pollen loads on the
@@ -3291,12 +3426,20 @@ cv_gut <- pollen_load_guts_24 %>%
     ) %>%
     mutate(Compartment = "Gut")
 
+cv_SVD <- SVD_Succisa_22_24 %>%
+    summarise(
+        CP = sd(conspecific_pollen, na.rm = TRUE) / mean(conspecific_pollen, na.rm = TRUE) * 100,
+        HP = sd(heterospecific_pollen, na.rm = TRUE) / mean(heterospecific_pollen, na.rm = TRUE) * 100
+    ) %>%
+    mutate(Compartment = "SVD")
+
+
 # Combine and Reshape
-cv_data <- bind_rows(cv_stigma, cv_body, cv_gut) %>%
+cv_data <- bind_rows(cv_stigma, cv_body, cv_gut, cv_SVD) %>%
     pivot_longer(cols = c(CP, HP), names_to = "Pollen_Type", values_to = "CV")
 
 # Set Factor Levels
-cv_data$Compartment <- factor(cv_data$Compartment, levels = c("Body", "Gut", "Stigma"))
+cv_data$Compartment <- factor(cv_data$Compartment, levels = c("Body", "Gut", "SVD", "Stigma"))
 
 # Plot
 ggplot(cv_data, aes(x = Compartment, y = CV, fill = Pollen_Type)) +
@@ -3396,7 +3539,66 @@ p_similarity <- ggplot(mh_long, aes(x = Year2, y = Year1, fill = Similarity)) +
         legend.position = "right"
     )
 
-# --- Part 2: Pollinator Evenness (Boxplot) ---
+# --- Part 2: Floral Community Similarity (Heatmap) ---
+
+# 1. Aggregation for Stability Analysis
+# Ensure proper year format
+plant_matrix_prep <- plant_abundance_22_24 %>%
+    mutate(year = as.numeric(as.character(year))) %>%
+    mutate(year = if_else(year < 100, year + 2000, year)) %>%
+    # Sum abundance per species per year (across plots)
+    # The abundance data is already standardized per species/plot, so summing gives a community-level profile
+    pivot_longer(cols = -c(year, plot_id), names_to = "Species", values_to = "Abundance") %>%
+    group_by(year, Species) %>%
+    summarise(total_abundance = sum(Abundance, na.rm = TRUE), .groups = "drop") %>%
+    pivot_wider(names_from = Species, values_from = total_abundance, values_fill = 0)
+
+# Extract Matrix
+if(nrow(plant_matrix_prep) > 0) {
+    comm_mat_plant <- as.matrix(plant_matrix_prep[, -1])
+    rownames(comm_mat_plant) <- as.character(plant_matrix_prep$year)
+
+    # 2. Calculate Morisita-Horn
+    mh_dist_plant <- vegdist(comm_mat_plant, method = "horn")
+    mh_sim_plant <- 1 - as.matrix(mh_dist_plant)
+
+    # 3. Visualization
+    mh_sim_plant[upper.tri(mh_sim_plant)] <- NA
+
+    mh_long_plant <- as.data.frame(mh_sim_plant) %>%
+        mutate(Year1 = rownames(.)) %>%
+        pivot_longer(cols = -Year1, names_to = "Year2", values_to = "Similarity") %>%
+        filter(!is.na(Similarity))
+
+    p_plant_similarity <- ggplot(mh_long_plant, aes(x = Year2, y = Year1, fill = Similarity)) +
+        geom_tile(color = "white") +
+        geom_text(aes(label = sprintf("%.2f", Similarity)), color = "black", size = 5) +
+        # Conifer Green to Brown Gradient
+        # High (1.0) = #2E8651 (Conifer Green)
+        # Mid (0.5) = #FFF8DC (Cornsilk/Beige)
+        # Low (0.0) = #8B4513 (SaddleBrown)
+        scale_fill_gradient2(
+            low = "#8B4513", mid = "#FFF8DC", high = "#2E8651",
+            midpoint = 0.5, limit = c(0, 1), name = "Similarity"
+        ) +
+        scale_y_discrete(limits = rev) +
+        labs(
+            title = "B. Floral Community Similarity",
+            subtitle = "Morisita-Horn Similarity Index",
+            x = "",
+            y = ""
+        ) +
+        theme_minimal() +
+        theme(
+            axis.text = element_text(size = 12, face = "bold"),
+            panel.grid = element_blank(),
+            legend.position = "right"
+        )
+} else {
+    p_plant_similarity <- ggplot() + labs(title = "No Plant Data Available")
+}
+
+# --- Part 3: Pollinator Evenness (Boxplot) ---
 
 # 1. Calculate Evenness (Alpha Diversity)
 succisa_evenness <- calculate_pollinator_evenness(
@@ -3408,7 +3610,7 @@ p_evenness <- ggplot(succisa_evenness, aes(x = as.factor(year), y = J, fill = as
     geom_boxplot(alpha = 0.6, outlier.shape = NA) +
     geom_jitter(width = 0.2, alpha = 0.5) +
     labs(
-        title = "B. Pollinator Evenness (J')",
+        title = "C. Pollinator Evenness (J')",
         subtitle = "Per plot",
         x = "Year",
         y = "Pielou's Evenness (J')"
@@ -3417,16 +3619,75 @@ p_evenness <- ggplot(succisa_evenness, aes(x = as.factor(year), y = J, fill = as
     theme(legend.position = "none")
 
 
-# --- Part 3: Combine ---
+# --- Part 4: Morphogroup Evenness (Boxplot) ---
+
+# 1. Create Morphogroup data
+interaction_groups <- interaction_data_Succisa_22_24 %>%
+    mutate(
+        morphogroup = case_when(
+            grepl("Eristalis", pollinator_id) ~ "Eristalis spp.",
+            grepl("Bombus", pollinator_id) ~ "Bombus spp.",
+            pollinator_id == "Apis mellifera" ~ "Apis mellifera",
+            grepl("Syrphus", pollinator_id) ~ "Syrphus spp.",
+            grepl("Helophilus", pollinator_id) ~ "Helophilus spp.",
+            TRUE ~ "Other"
+        )
+    )
+
+# 2. Calculate Evenness on Morphogroups
+morph_evenness <- interaction_groups %>%
+    group_by(year, plot_id, morphogroup) %>%
+    summarise(abundance = sum(interaction_count, na.rm = TRUE), .groups = "drop") %>%
+    pivot_wider(names_from = morphogroup, values_from = abundance, values_fill = 0) %>%
+    mutate(
+        J = vegan::diversity(across(where(is.numeric) & !any_of(c("year", "plot_id"))), index = "shannon") / 
+            log(vegan::specnumber(across(where(is.numeric) & !any_of(c("year", "plot_id")))))
+    ) %>%
+    filter(is.finite(J)) %>% # Remove 0/0 (no diversity)
+    filter(!is.na(year))
+
+p_evenness_morph <- ggplot(morph_evenness, aes(x = as.factor(year), y = J, fill = as.factor(year))) +
+    geom_boxplot(alpha = 0.6, outlier.shape = NA) +
+    geom_jitter(width = 0.2, alpha = 0.5) +
+    labs(
+        title = "D. Morphogroup Evenness (J')",
+        subtitle = "Per plot",
+        x = "Year",
+        y = "Pielou's Evenness (J')"
+    ) +
+    theme_minimal() +
+    theme(legend.position = "none")
+
+
+# --- Part 5: Combine ---
 if (!requireNamespace("ggpubr", quietly = TRUE)) install.packages("ggpubr")
-ggpubr::ggarrange(p_similarity, p_evenness, ncol = 1, heights = c(1, 0.8))
+
+# Combine in 2x2 Layout
+# Row 1: A (Pollinator Sim) | B (Floral Sim)
+row1 <- ggpubr::ggarrange(p_similarity, p_plant_similarity, ncol = 2, labels = NULL)
+# Row 2: C (Species Evenness) | D (Morphogroup Evenness)
+row2 <- ggpubr::ggarrange(p_evenness, p_evenness_morph, ncol = 2, labels = NULL)
+
+ggpubr::ggarrange(row1, row2, nrow = 2, heights = c(1, 1))
 ```
 
 ![Community Stability and Structure. A) Temporal Stability
 (Morisita-Horn Similarity). B) Pollinator Evenness (J’) per plot across
 years.](docs/images/analysis-community-stability-evenness-1.png)
 
+| Year | Network H2’ | Succisa d’ | Succisa Diversity (H) | Slope (β) | Mean HP | Succisa Abundance | Total Abundance |
+|:--:|:--:|:--:|:--:|:--:|:--:|:--:|:--:|
+| 2022 | NA | NA | NA | 0.12 | 35.25 | 0.02 | 157.64 |
+| 2023 | NA | NA | NA | 0.11 | 50.45 | 0.02 | 90.91 |
+| 2024 | NA | NA | NA | 0.02 | 9.55 | 0.04 | 70.64 |
+
+Table 4: Annual summary of network context, Succisa-specific
+specialization, and pollen deposition dynamics.
+
 ## Discussion
+
+keypoints: - CP is quite constant - HP is variable - Variability is
+highest in the SVD
 
 Our results suggest that the relationship between conspecific and
 heterospecific pollen deposition is driven by specific functional
@@ -3457,6 +3718,80 @@ heterospecific neighbors.
 The ratio of HP/CP deposited on stigmas is thus a function of both the
 “messiness” of the dominant vector and the overall evenness of the
 visitor community.
+
+## Data Availability
+
+The datasets used in this study are available in the supplementary
+material and have been exported for archiving.
+
+``` r
+# --- 1. Define Metadata (Data Dictionary) ---
+
+data_dictionary <- data.frame(
+  Dataset = character(),
+  Variable = character(),
+  Description = character(),
+  Unit = character(),
+  stringsAsFactors = FALSE
+)
+
+# Helper to append rows
+add_meta <- function(df, dataset, var, desc, unit) {
+  rbind(df, data.frame(Dataset = dataset, Variable = var, Description = desc, Unit = unit))
+}
+
+# Pollen Deposition Metadata
+data_dictionary <- data_dictionary %>%
+  add_meta("pollen_deposition", "year", "Year of sampling", "Year (2022-2024)") %>%
+  add_meta("pollen_deposition", "plot_id", "Unique identifier for the study plot", "Categorical") %>%
+  add_meta("pollen_deposition", "inflorescence_id", "Unique identifier for the sampled inflorescence", "Categorical") %>%
+  add_meta("pollen_deposition", "conspecific_pollen", "Count of conspecific (Succisa) pollen grains on stigma", "Count") %>%
+  add_meta("pollen_deposition", "heterospecific_pollen", "Count of heterospecific (non-Succisa) pollen grains on stigma", "Count") %>%
+  add_meta("pollen_deposition", "total_pollen", "Sum of conspecific and heterospecific pollen", "Count")
+
+# SVD Metadata
+data_dictionary <- data_dictionary %>%
+  add_meta("SVD", "year", "Year of observation", "Year") %>%
+  add_meta("SVD", "morphogroup", "Functional group of the visitor (e.g., Eristalis, Bombus)", "Categorical") %>%
+  add_meta("SVD", "duration_sec", "Duration of the single visit", "Seconds") %>%
+  add_meta("SVD", "conspecific_pollen", "Conspecific pollen deposited during single visit", "Count") %>%
+  add_meta("SVD", "heterospecific_pollen", "Heterospecific pollen deposited during single visit", "Count")
+
+# Network Metrics Metadata
+data_dictionary <- data_dictionary %>%
+  add_meta("network_metrics", "Year", "Year of sampling", "Year") %>%
+  add_meta("network_metrics", "H2", "Network Specialization index (H2')", "Index [0-1]") %>%
+  add_meta("network_metrics", "Evenness", "Interaction Evenness (Shannon's)", "Index [0-1]") %>%
+  add_meta("network_metrics", "Slope", "Slope (Beta) of the CP-HP relationship (Type 1 dynamics)", "Coefficient") %>%
+  add_meta("network_metrics", "Mean_HP", "Mean Heterospecific Pollen per stigma", "Count") %>%
+  add_meta("network_metrics", "Succisa_Abundance", "Mean abundance of Succisa pratensis per plot", "Count / Patch") %>%
+  add_meta("network_metrics", "Total_Abundance", "Total floral abundance in the community", "Count")
+
+
+# --- 2. Export Data ---
+
+# Create output directory if it doesn't exist
+output_dir <- file.path("output", "publication_data")
+if (!dir.exists(output_dir)) {
+  dir.create(output_dir, recursive = TRUE)
+}
+
+# Export Dataframes
+# Note using the dataframes available in the global environment from previous chunks
+
+write.csv(pollen_deposition, file.path(output_dir, "pollen_deposition.csv"), row.names = FALSE)
+# Use SVD_Succisa_22_24 which fits the description of SVD data
+if (exists("SVD_Succisa_22_24")) {
+    write.csv(SVD_Succisa_22_24, file.path(output_dir, "SVD.csv"), row.names = FALSE)
+}
+# Use final_table (unformatted) for metrics
+if (exists("final_table")) {
+    write.csv(final_table, file.path(output_dir, "network_metrics.csv"), row.names = FALSE)
+}
+
+# Export Metadata
+write.csv(data_dictionary, file.path(output_dir, "data_dictionary.csv"), row.names = FALSE)
+```
 
 ## References
 

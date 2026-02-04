@@ -1,0 +1,54 @@
+---
+title: "Debug Metrics"
+format: html
+---
+
+```{r}
+#| echo: false
+#| message: true
+#| warning: true
+
+library(dplyr)
+library(tidyr)
+library(vegan)
+library(bipartite)
+
+# Load Data directly
+# Assuming functions are available or we verify data loading
+# Try sourcing the function script if needed, or just loading the package
+
+if (!require("HanPolNet")) {
+    devtools::install("local_packages/HanPolNet", upgrade = "never")
+    library(HanPolNet)
+}
+
+# Load main data
+interaction_data_all_22_24 <- get_interaction_data(
+    years = c(22, 23, 24),
+    is_pollinator = TRUE,
+    remove_zeros = TRUE,
+    standardize = TRUE
+)
+
+cat("DATA_DEBUG_START\n")
+cat("Rows:", nrow(interaction_data_all_22_24), "\n")
+cat("Columns:", paste(names(interaction_data_all_22_24), collapse=", "), "\n")
+
+cat("Years present:\n")
+print(table(interaction_data_all_22_24$year))
+
+cat("Sample Rows:\n")
+print(head(interaction_data_all_22_24))
+
+cat("Checking Plant Names:\n")
+# Guess column
+plant_cols <- c("plant_species", "plant_id", "plant")
+found_plant <- intersect(plant_cols, names(interaction_data_all_22_24))
+if(length(found_plant) > 0) {
+    print(unique(interaction_data_all_22_24[[found_plant[1]]]))
+} else {
+    cat("NO PLANT COL\n")
+}
+cat("DATA_DEBUG_END\n")
+
+```
