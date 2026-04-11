@@ -1,0 +1,471 @@
+---
+title: "Supplementary Material"
+subtitle: "Linking Pollen Deposition Dynamics to Plant-Pollinator Network Structure"
+author: "Jakub Štenc"
+date: last-modified
+format: 
+  html:
+    toc: true
+    number-sections: true
+    code-fold: true
+  pdf:
+    toc: true
+    number-sections: true
+---
+
+```{r}
+#| label: setup
+#| include: false
+#| message: false
+#| warning: false
+
+knitr::opts_chunk$set(fig.path = "docs/images/")
+library(lme4)
+library(dplyr)
+library(ggplot2)
+library(gridExtra)
+
+# Load Data
+if (!requireNamespace("HanPolNet", quietly = TRUE)) {
+    # Fallback or install if not present
+    devtools::install("local_packages/HanPolNet", upgrade = "never")
+}
+library(HanPolNet)
+library(gt)
+data("pollen_deposition", package = "HanPolNet")
+
+# Load Interaction Data for Table S3
+interaction_data_Succisa_22_24 <- get_interaction_data(
+    years = c(22, 23, 24),
+    plant_species = "Suc_pra",
+    is_pollinator = TRUE,
+    remove_zeros = TRUE,
+    standardize = FALSE
+)
+
+# Prepare data for VCA (Inter-Annual Model structure)
+model_data <- pollen_deposition %>%
+    filter(!is.na(heterospecific_pollen)) %>%
+    mutate(
+        year_fac = as.factor(year),
+        plant_id = inflorescence_id,
+        # Calculate Prop HP (avoiding division by zero)
+        total_pollen = heterospecific_pollen + conspecific_pollen,
+        prop_HP = ifelse(total_pollen > 0, heterospecific_pollen / total_pollen, 0)
+    )
+```
+
+# Section S1: Variance Partitioning Model Diagnostics
+
+To transform the data for the Variance Component Analysis, we compared three approaches: Raw Counts, Log transformation (`log1p`), and Square-Root transformation (`sqrt`).
+
+Model Structure: `variable ~ 1 + (1 | year_fac / plant_id)`
+
+```{r}
+#| label: diagnostics-helper
+#| echo: true
+#| warning: false
+#| message: false
+
+# Helper function to fit 3 models and plot diagnostics
+run_transformation_diagnostics <- function(data, variable_name, title_prefix) {
+    # Extract variable
+    y <- data[[variable_name]]
+    # Handle zeros for Log
+    y_log <- log1p(y)
+    # Handle distribution for Sqrt
+    y_sqrt <- sqrt(y)
+    
+    # 1. Fit Models
+    # A) Raw
+    m_raw <- lmer(y ~ 1 + (1 | year_fac / plant_id), data = data)
+    # B) Log
+    m_log <- lmer(y_log ~ 1 + (1 | year_fac / plant_id), data = data)
+    # C) Sqrt
+    m_sqrt <- lmer(y_sqrt ~ 1 + (1 | year_fac / plant_id), data = data)
+    
+    # 2. Plotting Helper
+    make_plots <- function(model, suffix) {
+        df <- data.frame(Fitted = fitted(model), Residuals = resid(model))
+        
+        p_hist <- ggplot(df, aes(x = Residuals)) +
+            geom_histogram(bins = 30, fill = "steelblue", color = "white", alpha = 0.7) +
+            labs(title = paste("Hist:", suffix), x = "", y = "Freq") +
+            theme_minimal()
+            
+        p_res <- ggplot(df, aes(x = Fitted, y = Residuals)) +
+            geom_point(alpha = 0.3) +
+            geom_hline(yintercept = 0, color = "red", linetype = "dashed") +
+            labs(title = paste("Res vs Fit:", suffix), x = "Fitted", y = "Res") +
+            theme_minimal()
+        return(list(p_hist, p_res))
+    }
+    
+    pl_raw <- make_plots(m_raw, "Raw")
+    pl_log <- make_plots(m_log, "Log")
+    pl_sqrt <- make_plots(m_sqrt, "Sqrt")
+    
+    # Combine
+    grid.arrange(
+        pl_raw[[1]], pl_log[[1]], pl_sqrt[[1]],
+        pl_raw[[2]], pl_log[[2]], pl_sqrt[[2]],
+        nrow = 2, ncol = 3,
+        top = title_prefix
+    )
+}
+```
+
+## S1.1 Heterospecific Pollen (HP)
+
+```{r}
+#| label: diag-hp
+#| fig-cap: "Diagnostics for Heterospecific Pollen (HP)."
+#| fig-height: 8
+#| fig-width: 12
+#| warning: false
+#| message: false
+
+run_transformation_diagnostics(model_data, "heterospecific_pollen", "Heterospecific Pollen")
+```
+
+**Selection**: The raw data (Left) shows severe heteroscedasticity. Both comparisons suggest stabilization, but Square-Root was chosen for alignment with standard count data practices.
+
+## S1.2 Conspecific Pollen (CP)
+
+```{r}
+#| label: diag-cp
+#| fig-cap: "Diagnostics for Conspecific Pollen (CP)."
+#| fig-height: 8
+#| fig-width: 12
+#| warning: false
+#| message: false
+
+run_transformation_diagnostics(model_data, "conspecific_pollen", "Conspecific Pollen")
+```
+
+**Selection**: CP loads are generally higher than HP but also exhibit skew. Transformations improve normality. The same Square-Root transformation is applied for consistency.
+
+## S1.3 Proportion HP (HP / Total)
+
+```{r}
+#| label: diag-prop
+#| fig-cap: "Diagnostics for Proportion HP (HP / (CP+HP))."
+#| fig-height: 8
+#| fig-width: 12
+#| warning: false
+#| message: false
+
+run_transformation_diagnostics(model_data, "prop_HP", "Proportion HP")
+```
+
+**Selection**: Proportions are bounded [0,1]. While Binomial/Beta models are theoretically superior, for the purpose of VCA (partitioning variance), the Square-Root transformation provides a reasonable approximation of normality for the residuals.
+
+
+
+# Section S2: Data Distribution
+
+The distribution of heterospecific pollen deposition counts is highly skewed, with many low values and a long tail of high deposition events.
+
+```{r}
+#| label: fig-distribution
+#| fig-cap: "Distribution of Heterospecific Pollen Counts on Stigmas."
+#| warning: false
+
+ggplot(model_data, aes(x = heterospecific_pollen)) +
+    geom_histogram(binwidth = 5, fill = "darkgreen", color = "white", alpha = 0.7) +
+    labs(
+        title = "Distribution of Heterospecific Pollen",
+        subtitle = "Raw counts per stigma (n = 714)",
+        x = "Heterospecific Pollen Count",
+        y = "Frequency"
+    ) +
+    theme_minimal()
+```
+
+# Section S3: Model Selection for CP-HP Relationship
+
+To determine the functional form of the relationship between Conspecific (CP) and Heterospecific (HP) pollen deposition, we compared Linear (Type 1) and Exponential (Type 3) models using Akaike Information Criterion (AIC).
+
+**Data Aggregation**: We aggregated pollen counts to the plant level (mean per plant) to account for multiple stigmas sampled from the same individual.
+
+**Model Selection Criteria**: If the Exponential model provided a significantly better fit ($\Delta > 2) compared to the Linear model, it was selected. Otherwise, the simpler Linear model was preferred.
+
+```{r}
+#| label: model-diagnostics-selection
+#| fig-cap: "Diagnostic plots for the selected models (Linear or Exponential) for each year. Comparisons based on AIC."
+#| echo: true
+#| warning: false
+#| message: false
+#| fig-height: 12
+#| fig-width: 10
+
+library(gridExtra)
+
+# 1. Prepare Aggregated Data (Same as MS)
+model_selection_data <- pollen_deposition %>%
+    mutate(plant_id = paste(year, inflorescence_id, day, sep = "_")) %>%
+    group_by(year, plant_id) %>%
+    summarise(
+        mean_HP = mean(heterospecific_pollen, na.rm = TRUE),
+        mean_CP = mean(conspecific_pollen, na.rm = TRUE),
+        .groups = "drop"
+    ) %>%
+    filter(is.finite(mean_HP) & is.finite(mean_CP))
+
+# Helper function to get diagnostics for the BEST model of a year
+get_year_diagnostics <- function(yr) {
+    dat <- subset(model_selection_data, year == yr)
+
+    # Fit Linear
+    m_lin <- lm(mean_HP ~ mean_CP, data = dat)
+    aic_lin <- AIC(m_lin)
+
+    # Fit Exponential
+    m_exp <- tryCatch(
+        nls(mean_HP ~ a * exp(b * mean_CP),
+            data = dat,
+            start = list(a = max(dat), b = -0.01)
+        ),
+        error = function(e) NULL
+    )
+    if (is.null(m_exp)) {
+        # Fallback start
+        m_exp <- tryCatch(
+            nls(mean_HP ~ a * exp(b * mean_CP),
+                data = dat,
+                start = list(a = mean(dat), b = -0.001)
+            ),
+            error = function(e) NULL
+        )
+    }
+
+    aic_exp <- if (!is.null(m_exp)) AIC(m_exp) else Inf
+
+    # Select Best
+    if (aic_exp < (aic_lin - 2)) {
+        best_model <- m_exp
+        type <- "Exponential (Type 3)"
+        delta_aic <- aic_lin - aic_exp
+        resids <- resid(best_model)
+        fitted_vals <- fitted(best_model)
+    } else {
+        best_model <- m_lin
+        type <- "Linear (Type 1)"
+        delta_aic <- 0
+        resids <- resid(best_model)
+        fitted_vals <- fitted(best_model)
+    }
+
+    # Diagnostic Plots
+    title_res <- paste0(yr, ": ", type, "\nResid vs Fitted")
+    title_qq <- paste0(yr, ": Q-Q Plot")
+
+    p_res <- ggplot(data.frame(F = fitted_vals, R = resids), aes(x = F, y = R)) +
+        geom_point(alpha = 0.6) +
+        geom_hline(yintercept = 0, color = "red", linetype = "dashed") +
+        labs(title = title_res, x = "Fitted", y = "Residuals") +
+        theme_minimal()
+
+    p_qq <- ggplot(data.frame(R = resids), aes(sample = R)) +
+        stat_qq() +
+        stat_qq_line(color = "red") +
+        labs(title = title_qq, x = "Theoretical", y = "Sample") +
+        theme_minimal()
+
+    return(list(p_res, p_qq))
+}
+
+# Generate plots for all 3 years
+plots_22 <- get_year_diagnostics(2022)
+plots_23 <- get_year_diagnostics(2023)
+plots_24 <- get_year_diagnostics(2024)
+
+# Arrange
+grid.arrange(
+    plots_22[[1]], plots_22[[2]],
+    plots_23[[1]], plots_23[[2]],
+    plots_24[[1]], plots_24[[2]],
+    ncol = 2
+)
+```
+
+# Section S4: Diagnostic Plots for Slope Comparison Model
+
+To validate the use of the square-root transformation for the "Slope Showdown" analysis (aggregated plant-level data), we examined the residual diagnostics of the linear model.
+
+**Model**: `lm(sqrt(mean_HP) ~ mean_CP * as.factor(year), data = aggregated_data)`
+
+```{r}
+#| label: fig-sqrt-diagnostics
+#| fig-cap: "Diagnostic plots for the Square-Root Transformed Model. A) Residuals vs Fitted showing no obvious patterns (homoscedasticity). B) Q-Q Plot showing reasonable normality."
+#| warning: false
+#| message: false
+#| fig-height: 5
+#| fig-width: 10
+
+# Re-create the aggregated data locally for the supplemental plot
+model_data_agg <- pollen_deposition %>%
+    mutate(plant_id = paste(year, inflorescence_id, day, sep = "_")) %>%
+    group_by(year, plant_id) %>%
+    summarise(
+        mean_HP = mean(heterospecific_pollen, na.rm = TRUE),
+        mean_CP = mean(conspecific_pollen, na.rm = TRUE),
+        .groups = "drop"
+    ) %>%
+    filter(is.finite(mean_HP) & is.finite(mean_CP)) %>%
+    filter(!is.na(year)) %>%
+    mutate(Year = as.factor(year))
+
+# Fit the model used in the main text
+fit_sqrt_supp <- lm(sqrt(mean_HP) ~ mean_CP * Year, data = model_data_agg)
+
+# Diagnostic Plots
+par(mfrow = c(1, 2))
+plot(fit_sqrt_supp, which = 1, main = "A. Residuals vs Fitted")
+plot(fit_sqrt_supp, which = 2, main = "B. Normal Q-Q")
+par(mfrow = c(1, 1))
+
+```
+
+# Section S5: Pollinator Community Composition
+
+Table S3 presents the abundance and relative abundance of all pollinator taxa recorded across the three study years.
+**Note on Abundance**: "Abundance" (Count) represents the raw number of recorded interaction events (unstandardized). Relative abundance (%) is calculated as the species' count divided by the total number of visits for that year.
+
+```{r}
+#| label: table-s3-abundance
+#| echo: false
+#| message: false
+#| warning: false
+
+library(tidyr)
+library(knitr)
+library(dplyr)
+
+# Calculate Counts and Relative (%) Abundance per Year
+rel_abund <- interaction_data_Succisa_22_24 %>%
+    # Filter out NA or unknown species
+    filter(!is.na(pollinator_id) & pollinator_id != "NA") %>%
+    group_by(year, pollinator_id) %>%
+    summarise(count = sum(interaction_count, na.rm = TRUE), .groups = "drop") %>%
+    group_by(year) %>%
+    mutate(
+        yearly_total = sum(count),
+        pct = (count / yearly_total) * 100
+    )
+
+# Calculate Grand Total for Sorting
+grand_totals <- rel_abund %>%
+    group_by(pollinator_id) %>%
+    summarise(grand_total = sum(count)) %>%
+    arrange(desc(grand_total))
+
+# Reshape for Display
+table_s3 <- rel_abund %>%
+    # Round for display
+    mutate(
+        count = as.integer(count),
+        pct = round(pct, 2)
+    ) %>%
+    pivot_wider(
+        id_cols = pollinator_id,
+        names_from = year,
+        values_from = c(count, pct),
+        values_fill = 0
+    ) %>%
+    # Join grand total to sort
+    left_join(grand_totals, by = "pollinator_id") %>%
+    arrange(desc(grand_total)) %>%
+    select(-grand_total) %>%
+    # Reorder columns to be Year-grouped: Count_22, Pct_22, Count_23, Pct_23...
+    select(
+        Species = pollinator_id,
+        `2022 (Count)` = count_22,
+        `2022 (%)` = pct_22,
+        `2023 (Count)` = count_23,
+        `2023 (%)` = pct_23,
+        `2024 (Count)` = count_24,
+        `2024 (%)` = pct_24
+    )
+
+# Print Table
+# Print Table
+table_s3 %>%
+    gt() %>%
+    tab_header(
+        title = md("**Table S3**: Raw abundance (Count) and relative abundance (%) of all pollinator taxa across study years")
+    ) %>%
+    cols_label(
+        Species = "Species",
+        `2022 (Count)` = "Count 2022",
+        `2022 (%)` = "% 2022",
+        `2023 (Count)` = "Count 2023",
+        `2023 (%)` = "% 2023",
+        `2024 (Count)` = "Count 2024",
+        `2024 (%)` = "% 2024"
+    ) %>%
+    tab_options(
+        column_labels.background.color = "#F0F0F0",
+        column_labels.font.weight = "bold",
+        table.border.top.color = "black",
+        table.border.top.width = px(2),
+        table.border.bottom.color = "black",
+        table.border.bottom.width = px(2),
+        table_body.hlines.color = "#E5E5E5",
+        data_row.padding = px(6)
+    ) %>%
+    tab_style(
+        style = list(
+            cell_text(color = "black", weight = "bold")
+        ),
+        locations = cells_column_labels()
+    ) %>%
+    opt_align_table_header(align = "left")
+```
+
+
+# Section S6: Data Descriptions
+
+The following table describes the variables contained in the archived datasets (`pollen_deposition.csv`, `SVD.csv`, `network_metrics.csv`).
+
+```{r}
+#| label: table-s6-metadata
+#| echo: false
+#| message: false
+#| warning: false
+
+# Read Metadata
+# Assuming output/publication_data is relative to the project root
+# If rendering from this file, path should be valid if working dir is project root
+dict_path <- file.path("output", "publication_data", "data_dictionary.csv")
+
+if (file.exists(dict_path)) {
+    data_dict <- read.csv(dict_path, stringsAsFactors = FALSE)
+
+    data_dict %>%
+        group_by(Dataset) %>%
+        gt() %>%
+        tab_header(
+            title = md("**Table S6**: Description of variables in the published datasets")
+        ) %>%
+        cols_label(
+            Variable = "Variable Name",
+            Description = "Description",
+            Unit = "Unit/Type"
+        ) %>%
+        tab_options(
+            row_group.background.color = "#E0E0E0",
+            row_group.font.weight = "bold",
+            column_labels.font.weight = "bold",
+            table.width = pct(100)
+        ) %>%
+        tab_style(
+            style = list(
+                cell_text(color = "black", weight = "bold")
+            ),
+            locations = cells_column_labels()
+        )
+} else {
+    print("Data dictionary not found. Please render the main manuscript to generate it.")
+}
+```

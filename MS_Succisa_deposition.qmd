@@ -10,8 +10,7 @@ format:
     toc: true
     code-fold: true
   docx: default
-  gfm:
-    output-file: README.md
+  gfm: default
 ---
 
 ```{r}
@@ -122,36 +121,23 @@ If the assemblage is **uneven** (dominated by a few high-quality specialists and
 
 ## Abstract
 
-
-
-
 ## Introduction
 
 In plant-pollinator communities, plants often share pollinators with other species [@Lazaro2009], leading to deposition of pollen from other species (Heterospecific Pollen) on the stigmas [@morales2008interspecific]. This is a common phenomenon in nature with significant implications for plant reproduction and evolution. Based on previous studies [@arceo2016patterns], it is expected that the network structure (particularly pollinator evenness) may drive the pattern of conspecific and heterospecific pollen deposition on stigmas. However, the relationship between deposited pollen, pollinator transfer capability and network structure is not well understood.
 
-*Pollen deposition dynamics*
-Pollinators visit flower to feed on nectar and pollen. Pollen is then deposited on the stigma of the same flower or another flower of the same plant (conspecific pollen) or another plant (heterospecific pollen). Pollen load is the amount of pollen a pollinator carries on its body.
+*Pollen deposition dynamics* Pollinators visit flower to feed on nectar and pollen. Pollen is then deposited on the stigma of the same flower or another flower of the same plant (conspecific pollen) or another plant (heterospecific pollen). Pollen load is the amount of pollen a pollinator carries on its body.
 
-- 
-
+-   
 
 *Pollen load and pollen feeding*
 
-
-
-
-
 "Pollinator quality, in particular, is likely a complex trait that results from not only inconstancy but also pollinator grooming (Thomson, 1986; Holmquist et al., 2012), pollen carryover (Thomson and Plowright, 1980), and pollen loss during transport (Wilcock and Neiland, 2002). Thus, pollinator quality may be difficult to capture with only information on the visitor functional groups defined herein." [@arceo2016patterns]
-
 
 *The effect of the network structure to the pollen deposition dynamics*
 
-- how may the pollen deposition dynamics be affected by the network structure
-
+-   how may the pollen deposition dynamics be affected by the network structure
 
 In their study @arceo2016patterns found that the network structure (pollinator evenness) may drive the pattern of conspecific and heterospecific pollen deposition on stigmas.
-
-
 
 This study aims to investigate interannual variation in pollen deposition patterns on *Succisa pratensis* stigmas, determine if the composition of pollinator spectra of *Succisa pratensis* functionally constrains the plant to high heterospecific pollen (HP) receipt, and whether pollinator pollen body load and content of pollinator intestines explain the persistence of this pattern across years. We structure our analysis around three specific objectives:
 
@@ -161,7 +147,7 @@ This study aims to investigate interannual variation in pollen deposition patter
 
 -   Assess whether the network evenness (the diversity of partners) correlates with the intensity of heterospecific pollen deposition. Following @arceo2016patterns, we test if high evenness drives Type 1 curves, even when absolute pollen pressure varies.
 
-To do so, we employ data on pollen load and pollen feeding of pollinators, pollen deposition on stigmas, and network evenness, collected in 2022-2024 within a diverse plant-pollinator community with *Succisa pratensis* Moench (Caprifoliaceae) as the focal species. In our previous studies, we identified that *Succisa pratensis* is visited by a diverse community of pollinators, dominated by hoverflies of genus *Eristalis*, which may be considered as generalistic pollinators carrying both conspecific and heterospecific pollen[@vstenc2025pollen]. Based on our previous studies, we expect high variation in pollen load and visitation rate of pollinators [@freudenfeld2025interannual], leading to high variation in pollen deposition on stigmas. 
+To do so, we employ data on pollen load and pollen feeding of pollinators, pollen deposition on stigmas, and network evenness, collected in 2022-2024 within a diverse plant-pollinator community with *Succisa pratensis* Moench (Caprifoliaceae) as the focal species. In our previous studies, we identified that *Succisa pratensis* is visited by a diverse community of pollinators, dominated by hoverflies of genus *Eristalis*, which may be considered as generalistic pollinators carrying both conspecific and heterospecific pollen[@vstenc2025pollen]. Based on our previous studies, we expect high variation in pollen load and visitation rate of pollinators [@freudenfeld2025interannual], leading to high variation in pollen deposition on stigmas.
 
 ```{r}
 #| label: fig-plant-pollinator-panel
@@ -205,7 +191,7 @@ plot_grid(p_A, p_B, p_C, p_D,
 
 Our observations were conducted in a seminatural grassland community with a high abundance of flowering plants (especially *Succisa pratensis*) and diverse pollinator community, dominated by hoverflies. The study site "K Handrkovu" is located near the village of Vernýřov, Central Bohemia, Czech Republic (N 49.8466; E 15.1498). The study site can be classified as a mosaic of moist to mesophilic and eutrophic to mesotrophic grasslands with more than 50 entomogamous plant species flowering in late summer every year [@janovsky2013conspecific]. The fieldwork was conducted in 2022-2024 during the peak of *Succisa pratensis* flowering activity (XXth-XXth August, XXh-XXth August and XXth-XXth August, respectively).
 
-*Succisa pratensis*, our focal plant species, is frequently visited by a wide spectrum of pollinators, especially hoverflies (see @fig-plant-pollinator-panel), feeding on both pollen and nectar on it. In addition, *Succisa pratensis* has a relatively large and stable population at our study site. Important traits related to pollination also include distinctive open inflorescences available to most pollinators, protandry preventing self-pollination [@bartovs2020self] and pollen releasing in the morning hours [@stenc2023pollinator]. 
+*Succisa pratensis*, our focal plant species, is frequently visited by a wide spectrum of pollinators, especially hoverflies (see @fig-plant-pollinator-panel), feeding on both pollen and nectar on it. In addition, *Succisa pratensis* has a relatively large and stable population at our study site. Important traits related to pollination also include distinctive open inflorescences available to most pollinators, protandry preventing self-pollination [@bartovs2020self] and pollen releasing in the morning hours [@stenc2023pollinator].
 
 We focused on the common hoverflies species with stable populations with a sufficient numbers of males and females adults occurring at the study site and frequently visiting *Succisa pratensis*. The most common visitors are hoverfly genera Eristalis (E. arbustorum, E. interruptus, E. intricaria, E. pertinax, E. similis and E. tenax) and Helophilus (H. pendulus and H. trivittatus) and meatfly genera Sarcophaga.
 
@@ -234,21 +220,24 @@ Thanks to long-term research on flowering plants and their interactions with pol
 All statistical analyses were performed in R (v4.x). Count data for heterospecific (HP) and conspecific (CP) pollen were **square-root transformed** prior to parametric modeling. Diagnostic plots (Supplementary Material Figs S1–S2) confirmed that this transformation stabilized variance and satisfied homoscedasticity assumptions more effectively than raw or log-transformed data.
 
 #### Variance Component Analysis
+
 To quantify the hierarchical scale of stochasticity in pollen deposition, we fitted Linear Mixed Models (LMMs) using the `lme4` package. We partitioned the total variance of sqrt-transformed pollen counts into **Year** (random effect), **Plant** (nested within Year), and **Stigma** (Residual variation). For the high-resolution 2024 dataset, we further partitioned variance into **Sampling Date**, **Plant** (nested within Date), and **Stigma**. While statistical inference focused on transformed counts, we also visualized the proportion of heterospecific pollen (`HP / (HP + CP)`) to assess deposition purity.
 
 #### Pollen Accumulation Dynamics
+
 To test if the rate of heterospecific pollen accumulation differed between years, we fitted a Linear Model (`lm`) of the form: `sqrt(HP) ~ CP * Year`. We used the `emtrends` function (from the `emmeans` package) to estimate and compare the slopes ($\beta$) of the HP-CP relationship for each year, interpreted as the "pollution efficiency" of the community.
 
 #### Network Stability
+
 We assessed the temporal stability of the pollinator community composition using the **Morisita-Horn similarity index**, calculated with the `vegan` package. This metric was selected for its robustness to differences in sample size and species richness.
 
 #### Single Visit Deposition
+
 To assess the efficiency and 'messiness' of major pollinator groups, we conducted a Single Visit Deposition (SVD) experiment. We presented unvisited (bagged) *Succisa* stigmas to foraging insects, allowed a single visit, and subsequently counted conspecific (CP) and heterospecific (HP) pollen loads. We classified visitors into broad morphogroups (e.g., *Eristalis* spp., *Bombus* spp.) and compared their CP and HP deposition using a Kruskal-Wallis test, followed by Dunn’s post-hoc test (Benjamini-Hochberg correction), as pollen counts were zero-inflated and non-normal.
 
 #### Macro-Ecological Context
+
 To contextualize the deposition results, we calculated annual network specialization ($H_2'$) using the `bipartite` package and estimated community floral resource abundance by summing plant counts in the permanent plots.
-
-
 
 ## Results
 
@@ -450,11 +439,9 @@ ggplot(species_composition_grouped, aes(x = year_label, y = proportion, fill = s
     )
 ```
 
-
 ### Pollinator Visitation Rates
 
 We also examined the changes in visitation intensity to *Succisa pratensis* across the three years.
-
 
 ```{r}
 #| label: analysis-visitation-curve-fit
@@ -787,26 +774,25 @@ ggplot(agg_data_2024, aes(x = mean_CP, y = mean_HP)) +
     theme_minimal()
 ```
 
-
-
-
-
 ### Variance Partitioning: Stability Validation
 
 To address the unbalanced sampling design (single sampling day in 2022/2023 vs. multiple in 2024), we performed a two-part Variance Component Analysis (VCA) to validate the stability of the pollen deposition patterns.
 
 #### Part 1: Inter-Annual Stability (All Years)
+
 We partitioned variance into **Year**, **Plant** (nested in Year), and **Stigma** (Residual) using the full dataset, ignoring the Date level to avoid confounding in 2022/23.
 
 #### Part 2: Intra-Annual Stability (2024 Only)
+
 Using only the 2024 data, we explicitly tested the effect of **Date** (Day-to-Day variation) vs. **Plant** (nested in Date) vs. **Stigma**.
 
-    Variance Partitioning of Pollen Deposition
+```         
+Variance Partitioning of Pollen Deposition
 
-    To determine the hierarchical scale of variability in heterospecific pollen (HP) receipt, we performed a variance component analysis on square-root transformed HP counts. The majority of the variation in HP deposition occurred at the finest scale—among individual stigmas within plants (Residual variance). In the global analysis across three years, stochastic stigma-level variation explained [XX.X%] of the total variance, while inter-annual fluctuations ('Year') accounted for only [XX.X%] (Table 2).
+To determine the hierarchical scale of variability in heterospecific pollen (HP) receipt, we performed a variance component analysis on square-root transformed HP counts. The majority of the variation in HP deposition occurred at the finest scale—among individual stigmas within plants (Residual variance). In the global analysis across three years, stochastic stigma-level variation explained [XX.X%] of the total variance, while inter-annual fluctuations ('Year') accounted for only [XX.X%] (Table 2).
 
-    This pattern of high fine-scale stochasticity was consistent when analyzing the detailed 2024 dataset. Within the 2024 flowering season, daily turnover ('Sampling Date') explained a negligible proportion of the variance ([XX.X%]), while plant identity explained [XX.X%]. The remaining [XX.X%] of variation was attributable to differences between individual stigmas on the same plant (Fig. 4). These results indicate that HP deposition is driven primarily by stochastic, single-visit mechanics rather than by systemic temporal shifts or plant-level traits.
-
+This pattern of high fine-scale stochasticity was consistent when analyzing the detailed 2024 dataset. Within the 2024 flowering season, daily turnover ('Sampling Date') explained a negligible proportion of the variance ([XX.X%]), while plant identity explained [XX.X%]. The remaining [XX.X%] of variation was attributable to differences between individual stigmas on the same plant (Fig. 4). These results indicate that HP deposition is driven primarily by stochastic, single-visit mechanics rather than by systemic temporal shifts or plant-level traits.
+```
 
 ```{r}
 #| label: analysis-variance-partitioning
@@ -880,21 +866,20 @@ run_twopart_vca <- function(data, variable_col, metric_label) {
     return(combined)
 }
 
-# 3. Run for all 3 metrics (using Sqrt as validated in Supplement)
-res_HP <- run_twopart_vca(vca_data, "sqrt_HP", "Heterospecific Pollen (Sq)")
-res_CP <- run_twopart_vca(vca_data, "sqrt_CP", "Conspecific Pollen (Sq)")
-res_Prop <- run_twopart_vca(vca_data, "sqrt_Prop", "Proportion HP (Sq)")
+# 3. Run for all 2 metrics (using Sqrt as validated in Supplement)
+res_HP <- run_twopart_vca(vca_data, "sqrt_HP", "Heterospecific")
+res_CP <- run_twopart_vca(vca_data, "sqrt_CP", "Conspecific")
 
-all_results <- rbind(res_HP, res_CP, res_Prop)
+all_results <- rbind(res_HP, res_CP)
 
 # Define factor levels
 all_results$level <- factor(all_results$level, levels = c("Year", "Date", "Plant", "Stigma"))
-all_results$Metric <- factor(all_results$Metric, levels = c("Heterospecific Pollen (Sq)", "Conspecific Pollen (Sq)", "Proportion HP (Sq)"))
+all_results$Metric <- factor(all_results$Metric, levels = c("Heterospecific", "Conspecific"))
 
 # 4. Visualization (Percent only)
-p_var <- ggplot(all_results, aes(x = Part, y = percent, fill = level)) +
+p_var <- ggplot(all_results, aes(x = Metric, y = percent, fill = level)) +
     geom_bar(stat = "identity", width = 0.6) +
-    facet_wrap(~Metric) +
+    facet_wrap(~Part) +
     scale_fill_brewer(palette = "Set2") +
     geom_text(aes(label = ifelse(percent > 1.5, paste0(round(percent, 0), "%"), "")),
         position = position_stack(vjust = 0.5),
@@ -919,7 +904,7 @@ print(p_var)
 
 # 5. GENERATE PUBLICATION TABLE (Table 2 for HP)
 table_detailed <- all_results %>%
-    filter(Metric == "Heterospecific Pollen (Sq)") %>%
+    filter(Metric == "Heterospecific") %>%
     select(Part, level, vcov, sdcor, percent) %>%
     rename(
         Analysis = Part,
@@ -979,10 +964,7 @@ table_detailed %>%
     opt_align_table_header(align = "left")
 ```
 
-
-
 ### Single Visit Efficiency (SVD)
-
 
 ```{r}
 #| label: analysis-svd
@@ -1223,14 +1205,11 @@ ggplot(cv_data, aes(x = Compartment, y = CV, fill = Pollen_Type)) +
     )
 ```
 
-
-
 ### Gap 2: Community Stability & Composition
 
 To assess the temporal stability of the pollinator community, we compared species composition across years using the **Morisita-Horn similarity index** (Horn, 1966). This metric was selected for its robustness to differences in sample size and species richness compared to incidence-based metrics (Jost et al., 2011). Pairwise similarities were calculated on abundance data (standardized by sampling effort) using the `vegan` package.
 
-The core structure of the pollinator community remained highly stable across the three years. The Morisita-Horn index indicated high compositional overlap (Similarity > 0.9 for all pairwise comparisons), driven by the consistent dominance of key generalist taxa such as *Eristalis* spp. and *Syrphus* spp. (see Table S3 in Supplementary Material).
-
+The core structure of the pollinator community remained highly stable across the three years. The Morisita-Horn index indicated high compositional overlap (Similarity \> 0.9 for all pairwise comparisons), driven by the consistent dominance of key generalist taxa such as *Eristalis* spp. and *Syrphus* spp. (see Table S3 in Supplementary Material).
 
 ```{r}
 #| label: analysis-community-stability-evenness
@@ -1430,8 +1409,6 @@ ggpubr::ggarrange(row1, row2, nrow = 2, heights = c(1, 1))
 
 ```
 
-
-
 ```{r}
 # Script to generate Summary Table for Discussion
 # Calculates:
@@ -1481,6 +1458,9 @@ calc_net_metrics <- function(year_val, data) {
             select(Plant = all_of(plant_col), Pollinator = all_of(pol_col), Interaction = all_of(int_col)) %>%
             # Force numeric, unlisting if necessary
             mutate(Interaction = as.numeric(unlist(Interaction))) %>%
+            # Aggregate duplicated Plant-Pollinator pairs to avoid list-columns during pivot_wider
+            group_by(Plant, Pollinator) %>%
+            summarise(Interaction = sum(Interaction, na.rm = TRUE), .groups = "drop") %>%
             pivot_wider(names_from = Pollinator, values_from = Interaction, values_fill = 0) %>%
             tibble::column_to_rownames("Plant") %>%
             as.matrix()
@@ -1493,7 +1473,7 @@ calc_net_metrics <- function(year_val, data) {
     if(is.null(web_matrix)) return(data.frame(Year = year_val, H2 = NA, Succisa_d = NA, Succisa_H = NA))
 
     # --- Metric A: Network H2' ---
-    h2 <- bipartite::H2fun(web_matrix)[1]
+    h2 <- bipartite::H2fun(web_matrix, H2_integer = FALSE)[1]
 
     # --- Metric B: Succisa d' (Specialization) ---
     # Calculate d' for all plants
@@ -1602,14 +1582,9 @@ kable(final_table_formatted,
 )
 ```
 
-
 ## Discussion
 
-keypoints: 
-- CP is quite constant
-- HP is variable
-- Variability is highest in the SVD
-
+keypoints: - CP is quite constant - HP is variable - Variability is highest in the SVD
 
 Our results suggest that the relationship between conspecific and heterospecific pollen deposition is driven by specific functional mechanisms rather than simple abundance.
 
@@ -1619,11 +1594,9 @@ The dominance of specific pollinator groups (e.g., Eristalis) acts as a filter. 
 
 ### Network Structure as a Driver
 
-We hypothesized that years or sites with higher pollinator evenness would exhibit stronger linear (Type 1) dynamics. Our "Driver" analysis (Fig. X) shows [To be completed with results]. 
-This moves our analysis beyond simple abundance ("we found less HP") to **functional mechanisms**. If *Succisa* fits a **Type 3** curve in years with low evenness, it suggests that "pollinator sharing" (a network metric) does not translate linearly to pollen deposition. It would prove that the *identity* and *quality* of specific visitors shield the plant from heterospecific pollen interference, even when surrounded by heterospecific neighbors.
+We hypothesized that years or sites with higher pollinator evenness would exhibit stronger linear (Type 1) dynamics. Our "Driver" analysis (Fig. X) shows \[To be completed with results\]. This moves our analysis beyond simple abundance ("we found less HP") to **functional mechanisms**. If *Succisa* fits a **Type 3** curve in years with low evenness, it suggests that "pollinator sharing" (a network metric) does not translate linearly to pollen deposition. It would prove that the *identity* and *quality* of specific visitors shield the plant from heterospecific pollen interference, even when surrounded by heterospecific neighbors.
 
 The ratio of HP/CP deposited on stigmas is thus a function of both the "messiness" of the dominant vector and the overall evenness of the visitor community.
-
 
 ## Data Availability
 
@@ -1704,4 +1677,5 @@ if (exists("final_table")) {
 write.csv(data_dictionary, file.path(output_dir, "data_dictionary.csv"), row.names = FALSE)
 
 ```
+
 ## References

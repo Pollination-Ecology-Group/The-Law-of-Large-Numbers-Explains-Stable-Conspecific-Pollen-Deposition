@@ -3,11 +3,12 @@ project:
   output-dir: docs
   # The post-render script must be indented here, under 'project'
   post-render:
-    - cp docs/README.md README.md
+    - bash -c 'cp docs/*md README.md 2>/dev/null || true' # Copies any generated markdown to README, or nothing. 
   render:
     - "!local_packages/"
     - "!hanpolnet_temp/"
     - MS_Succisa_deposition.qmd
+    - MS_FML.qmd
     - Supplementary_Material.qmd
 
 format:
@@ -17,5 +18,4 @@ format:
     self-contained: true
   gfm:
     preview-mode: webtex
-    output-file: "README.md"
 
