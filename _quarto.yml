@@ -3,7 +3,7 @@ project:
   output-dir: docs
   # The post-render script must be indented here, under 'project'
   post-render:
-    - bash -c 'cp docs/*md README.md 2>/dev/null || true' # Copies any generated markdown to README, or nothing. 
+    - ./post-render.sh
   render:
     - "!local_packages/"
     - "!hanpolnet_temp/"

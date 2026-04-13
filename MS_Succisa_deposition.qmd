@@ -566,7 +566,7 @@ aggregated_data <- pollen_deposition %>%
 
 # 2. Model Fitting (Square Root Transformation)
 # sqrt(mean_HP) ~ mean_CP * Year
-fit_sqrt <- lm(sqrt(mean_HP) ~ mean_CP * Year, data = aggregated_data)
+fit_sqrt <- lm(sqrt(mean_HP) ~sqrt(mean_CP) * Year, data = aggregated_data)
 
 # 3. Model Results
 # Type III ANOVA (if using car::Anova) or standard anova

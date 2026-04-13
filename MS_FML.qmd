@@ -38,7 +38,7 @@ library(vegan)
 library(gt)
 library(dunn.test)
 # 3. Global Settings
-theme_set(theme_bw())
+theme_set(theme_classic())
 
 # 4. Package Checks
 # Install devtools if you haven't already
@@ -99,47 +99,27 @@ SVD_Succisa_22_24 <- read.csv("data/SVD_Succisa_pratensis.csv")
 
 ## Abstract
 
-**Premise:** Generalist plants rely on diverse pollinator assemblages, but individual visitors vary wildly in their pollination efficiency. It remains unclear how plants achieve reliable conspecific pollen (CP) deposition when relying on such unpredictable, "messy" single-visit dynamics, and how this relates to the accumulation of heterospecific pollen (HP) from shared networks.
+***Premise*****:** Pollen transfer by animal vectors is inherently stochastic at the micro-level, yet population-level conspecific pollen (CP) deposition often remains remarkably stable. It remains unclear how generalist plants compensate for the extreme variance of individual pollinator visits to secure reliable CP receipt while mitigating heterospecific pollen (HP) accumulation from shared networks.
 
-**Methods:** We tracked pollen deposition on stigmas of *Succisa pratensis* across three years in a diverse plant-pollinator community. We compared the variability of CP and HP across multiple scales: single-visit deposition (SVD) experiments, total stigmatic loads.
+***Methods*****:** Using a three-year dataset (2022–2024) for the generalist plant *Succisa pratensis*, we evaluated pollen transfer dynamics across multiple hierarchical scales. We combined variance partitioning of terminal pollen deposition (TPD) on stigma, single-visit deposition (SVD) on stigma experiments, and inter-annual dynamic of the plant-pollinator .
 
-**Results:** While core pollinator community composition remained stable, the efficiency of individual visits was highly chaotic. SVDs exhibited extreme variability in CP delivery. However, at the whole-stigma level, this micro-scale chaos averaged out into remarkably constant and reliable CP loads across days and years. Variance partitioning confirmed that systemic temporal shifts played almost no role in CP deposition. Instead, predictable total deposition was achieved through high floral abundance and redundant visitation, which effectively stabilized CP receipt and buffered the plant against proportional HP accumulation during population spikes.
+***Results*****:** Variance partitioning revealed that temporal shifts (years and days) explained negligible variation in CP deposition; rather, the vast majority of variance occurred at the micro-scale among individual stigmas. SVD experiments confirmed that individual generalist visits are highly stochastic, exhibiting extreme variance in CP delivery. However, at the whole-stigma level, this micro-scale unpredictability averaged out into constant CP loads. Furthermore, while HP accumulated linearly with CP during standard years, a dramatic inter-annual spike in *S. pratensis* floral abundance significantly flattened the HP accumulation curve.
 
-**Conclusions:** Despite the high unpredictability of individual pollinator visits, *Succisa pratensis* can secure highly stable conspecific pollen deposition across years, but the deposition of heterospecific pollen remains variable and most likely depending on the co-flowering community.
+***Conclusions*****:** Despite the unpredictability of individual pollinator visits, generalist plants can secure highly stable conspecific pollen deposition and buffer against heterospecific pollen.
 
 ## Introduction
 
-\[1. Pollinator sharing leads to HPD\]
+Pollen transfer by animal vectors is inherently stochastic at the micro-level (reviewed in @Minnaar2019), characterized by highly variable, heterogeneous pollen loads delivered during individual foraging events [@richards2009variation; @king2013]. Yet, despite this fine-scale unpredictability, population-level studies demonstrate that conspecific pollen (CP) deposition on stigmas can remain remarkably stable across multiple years (e.g., @fang2019multi; @Fang2022). This paradox highlights a fundamental gap in pollination ecology: how do generalist plants compensate for the extreme variance of individual pollinator visits to secure reliable CP receipt on their stigmas, while simultaneously mitigating the accumulation of heterospecific pollen (HP) from other plants within the co-flowering community?
 
-In plant-pollinator communities, plants often share pollinators with other species [@Lazaro2009], leading to deposition of pollen from other plant species (Heterospecific Pollen) on the stigmas [@morales2008interspecific]. This is a common phenomenon in nature with significant implications for plant reproduction [@Dorin2021; @Broz2021] caused by the stochastic nature of pollen transfer by animal pollinators. Previous studies aimed to explain the general patterns[@arceo2016patterns]
+To resolve this paradox, it is critical to examine pollen transfer dynamics across hierarchical scales, from the single-visit deposition (SVD) to the total pollen deposition (TPD). At the scale of an SVD, the mechanical delivery of conspecific pollen is intrinsically unpredictable. Even among legitimate, generalist pollinators, the exact quantity of pollen deposited during a brief floral interaction fluctuates dramatically due to highly variable individual pollen loads [@king2013; @freudenfeld2025interannual]. This micro-scale stochasticity is further compounded by taxon-specific differences in pollinator behavior, such as grooming [@holmquist2012influence], complex pollen carryover dynamics across successive flower visits [@thomson1980], and fluctuating adaptive foraging decisions within the network [@valdovinos2025effect]. Consequently, from the perspective of an individual receptive stigma, the absolute number of CP grains received during any single visit exhibits extreme depositional variance, requiring plants to rely on broader ecological mechanisms to aggregate these variable events into a stable reproductive outcome [@richards2009variation].
 
-However, the relationship between pollen deposition pollen, pollinator transfer capability and network structure is not well understood.
+To overcome the extreme unpredictability of individual pollinator visits, some plants depend on the high visitation rates generated by dense local floral displays [@vazquez2005degree; @janovsky2013conspecific]. By accumulating a high volume of pollinator visits, plants can average out the extreme depositional variance of individual vectors, ensuring reliable CP receipt. However, relying on generalized pollination networks concurrently introduces the risk of reproductive interference from the surrounding floral community [@ArceoGomez2011; @morales2008interspecific; @morales2013heterospecific]. Co-flowering heterospecific neighbors not only act as sources of competitive pollen, but they actively alter the composition and fidelity of the pollinator assemblage visiting the focal plant [@Lazaro2009; @ye2020]. Therefore, effective buffering mechanisms must secure CP while resisting neighbor-induced shifts in pollinator behavior. High conspecific floral density achieves this by diluting the proportion of HP in the local environmental pollen pool and overriding the attractive pull of heterospecific neighbors [@arceo2016patterns].
 
-\[2. Stochasticity of pollen transfer\]
-
-The fate of pollen grain is often uncertain and only small proportion of produced pollen is deposited on stigma [reviewed in @Minnaar2019]. Pollinators in particular are causing a vast proportion of the pollen loses due to low flower constancy \[\], pollen grooming (Thomson, 1986; Holmquist et al., 2012), pollen carryover (Thomson and Plowright, 1980), and pollen loss during transport (Wilcock and Neiland, 2002). Thus,
-
-Moreover, from the male fitness perspective, heterospecific pollen transfer depletes pollen from anthers by depositing it on another plant species where it cannot successfully fertilize ovules (Pinto & Schlindwein, 2015). This may be the fate of a considerable part of the produced pollen which is then not able to play a role in reproduction and can be considered a lost investment (Minnaar et al., 2019). Therefore, plants may benefit from adopting mechanisms mitigating heterospecific pollen transfer such as partitioning pollinator body placement, partitioning pollen release during the day or promoting pollinator flower constancy. On the community level, such adaptations mitigating the heterospecific pollen transfer may then promote the long-term coexistence of plants with the generalized pollinator spectrum (Brosi, 2016) and consequently be prtly responsible for more stable structures of plant-pollinator networks.
-
-\[3. Mechanisms of Mitigation\]
-
-Plants
-
-Despite all the
-
-However, studies show that pollinator sharing does not necessarily lead to heterospecific pollen transfer among plant species (Ashman & Arceo-Gómez, 2013; Bartomeus et al., 2008) because several mechanisms can mitigate the effect of pollinator sharing, e.g., the timing of pollen release and pollinator activity (Štenc et al., 2023; Stone et al., 1998); flower constancy (Brosi, 2016; Waser, 1986); differential pollen placement on pollinator body (Huang et al., 2015) etc. The understanding of how heterospecific pollen transfer moderated through pollinator sharing is then critical to understanding plant co-existence and plant evolution (Moreira-Hernández & Muchhala, 2019).
-
-\[4. Micro scale is understudied\]
-
-[@arceo2016patterns]
-
--   **Core Idea:** Most studies evaluate HP transfer by looking at seasonal averages or species-level networks. However, pollen transfer physically happens at the micro-scale: during single pollinator visits to individual stigmas.
-
--   **The Problem:** There is a critical gap in understanding how the extreme stochasticity of a single visit translates into the predictable, population-level deposition patterns required for a plant to successfully reproduce.
+Furthermore, this density-dependent buffering can be significantly enhanced by temporal stratification [@Stone1998; @Schwarz2021]. For example, the diurnal pollen release schedules previously observed in *Succisa pratensis* allow the plant to establish temporal dominance early in the day [@stenc2023pollinator]. By releasing pollen and attracting vectors before co-flowering competitors do, a plant can secure massive CP delivery prior to the accumulation of heterogeneous pollen loads on shared vectors, functioning as a form of temporal specialization [@Brosi2016]. This temporal stratification ensures that the highest frequency of redundant visits occurs during an optimal window, overriding the subsequent accumulation of HP when shared vectors ultimately shift their foraging efforts toward afternoon-flowering competitors [@Schwarz2021; @stenc2023pollinator]How can position the .
 
 \[Aims\]
 
-In this study, we aim to (1) quantify the hierarchical scale of variance in pollen receipt, (2) assess the stochasticity of single-visit depositions compared to total stigma loads, (3) test the functional form of HP/CP accumulation across years, and (4) evaluate how inter-annual spikes in plant abundance buffer against micro-scale pollination chaos. To do so, we employ data on pollen load and pollen feeding of pollinators, pollen deposition on stigmas, and pollinator network, collected in 2022-2024 within a diverse plant-pollinator community with *Succisa pratensis* Moench (Caprifoliaceae) as the focal species. In our previous studies, we identified that *Succisa pratensis* is visited by a diverse community of pollinators, dominated by hoverflies of genus *Eristalis*, which may be considered as generalistic pollinators carrying both conspecific and heterospecific pollen[@vstenc2025pollen]. Based on our previous studies, we expect high variation in pollen load and visitation rate of pollinators [@freudenfeld2025interannual], leading to high variation in pollen deposition on stigmas.
+While the variability of individual visits and the theoretical frameworks for HP accumulation are well known, empirical studies rarely measure these processes across multiple scales in a single natural system. In this study, we evaluate pollen transfer using a three-year dataset (2022–2024) for the highly visited, generalist plant *Succisa pratensis*. We address the following objectives: (1) to quantify the variance in pollen deposition across years, days, individual plants, and individual stigmas; (2) to compare the variability of CP and HP across transport stages, from single-visit depositions to final stigmatic loads; and (3) to determine how year-to-year changes in local floral abundance influence the accumulation of HP relative to CP. We hypothesize that despite the high variability of individual generalist visits, *S. pratensis* achieves stable CP deposition because high local floral abundance and early morning pollen release [@Stenc2023; @vstenc2025pollen] buffer the plant against unpredictable single-visit deliveries.
 
 ## Methods
 
@@ -164,24 +144,27 @@ We focused on the common hoverflies species with stable populations with a suffi
 
 # Read and process images
 # image_trim() removes the surrounding whitespace
-img_A <- image_read("images/Blizna_Suc_pra_2.jpg") %>% image_trim()
-img_B <- image_read("images/IMG_2335_small.jpg") %>% image_trim()
-img_C <- image_read("images/P8197736.jpg") %>% image_trim() # Anther
-img_D <- image_read("images/P8197678.jpg") %>% image_trim() # Stigma Detail
+
+img_A <-image_read("images/IMG_2335_small.jpg") %>% image_trim() # visitation
+img_B <- image_read("images/P8197678.jpg") %>% image_trim() # Anther Detail
+img_C <- image_read("images/P8197736.jpg") %>% image_trim() # Stigma 
+img_D <- image_read("images/Blizna_Suc_pra_2.jpg") %>% image_trim() #Stigma pollen
 
 # Create plot objects
-# fitting the image into the draw area
-p_A <- ggdraw() + draw_image(img_A, scale = 1)
-p_B <- ggdraw() + draw_image(img_B, scale = 1)
+# fitting the image into the draw area, scale down to prevent overlap with labels
+p_A <- ggdraw() + draw_image(img_A, scale = 0.9)
+p_B <- ggdraw() + draw_image(img_B, scale = 0.8)
 p_C <- ggdraw() + draw_image(img_C, scale = 1)
 p_D <- ggdraw() + draw_image(img_D, scale = 1)
 
 # Arrange in a grid
 # Using labels="AUTO" creates A, B, C, D automatically
-# Adjusted label size and placement
+# Adjusted label size and placement with margins for labels
 plot_grid(p_A, p_B, p_C, p_D,
     labels = "AUTO",
     label_size = 18,
+    label_x = 0.02,
+    label_y = 0.98,
     label_fontface = "bold",
     ncol = 2,
     align = "hv",
@@ -189,51 +172,408 @@ plot_grid(p_A, p_B, p_C, p_D,
 )
 ```
 
-### Pollen load and pollen feeding
-
-Foraging hoverflies visiting Succisa inflorescence were caught with entomological net and killed immediately after capture. We swabbed pollen grains from one half (randomly selecting left or right) of each pollinator’s body with a small block of fuchsin jelly, following @beattie Beattie (1971). We stored captured pollinators in the 70% ethanol. On the same day, we produced semi-permanent samples by melting fuchsin jelly with a heating pad on a microscope slide, covering and sealing with nail polish. Later, we counted and determined all pollen grains using a light microscope. We sorted pollen into conspecific Succisa pollen and heterospecific pollen of other plant species.
-
-To find out how much and what types of pollen grains were consumed by hoverflies we dissected the guts of captured and killed individuals stored in 70% ethanol using tweezers and sharp scissors under a stereomicroscope. We put separated intestines into small closable tubes with 5 µl of 70% ethanol. Shortly afterwards, we added 50 µl of 10% KOH into the samples and moved it to the warming bath at a temperature of 70° C for 3 hours. After cooling down, we vortexed the samples for 30 seconds to be homogenized and placed 5 µl of the solution on the microscope slides. We let the samples dry on a heating pad and we added 13 µl of 8% vinegar to neutralize KOH. After further drying, we added 5 µl of dye (safranin, water and glycerol), covered the samples with a coverslip and sealed with nail polish to produce semi-permanent samples.
-
-### Single visit deposition
-
-To prevent pollinators access to flowers, we bagged selected inflorences into a tulle bag before the plants have entered the male phase and opened the anthers. When the plant entered the female phase with receptive stigmas, we removed the bag and collected two control stigmas into a tube with 70% ethanol. We watched the inflorescence for thirty minutes and recorded every pollinator that visited it. The pollinators were allowed to visit only one flower within the inflorescence, the stigma of which we collected into a tube with 70% ethanol. If the pollinator visited multiple flowers, we collected only the first visited stigma and removed other from the plant.
-
-### Pollen deposited on stigmas
+### Total Pollen Deposition (TPD) on Stigma
 
 We put collected stigmas on the slide and let the ethanol evaporate on the heating pad. After that we added 1 µl of 10% KOH, let the samples dry, added 3 µl of 3% hydrogen peroxide, let the samples dry again and we added 13 µl of 8% vinegar to neutralize KOH. After further drying we added 5 µl of dye (safranin, water and glycerol), covered the samples with a coverslip, applied gentle, even pressure on the cover glass to squash the stigma and sealed with nail polish to produce semi-permanent samples.
 
+### Single Visit Deposition (SVD)
+
+To prevent pollinators access to flowers, we bagged selected inflorences into a tulle bag before the plants have entered the male phase and opened the anthers. When the plant entered the female phase with receptive stigmas, we removed the bag and collected two control stigmas into a tube with 70% ethanol. We watched the inflorescence for thirty minutes and recorded every pollinator that visited it. The pollinators were allowed to visit only one flower within the inflorescence, the stigma of which we collected into a tube with 70% ethanol. If the pollinator visited multiple flowers, we collected only the first visited stigma and removed other from the plant.
+
+### Pollen load and pollen feeding
+
+Foraging hoverflies visiting Succisa inflorescence were caught with entomological net and killed immediately after capture. We swabbed pollen grains from one half (randomly selecting left or right) of each pollinator’s body with a small block of fuchsin jelly, following @beattie1971technique. We stored captured pollinators in the 70% ethanol. On the same day, we produced semi-permanent samples by melting fuchsin jelly with a heating pad on a microscope slide, covering and sealing with nail polish. Later, we counted and determined all pollen grains using a light microscope. We sorted pollen into conspecific Succisa pollen and heterospecific pollen of other plant species.
+
+To find out how much and what types of pollen grains were consumed by hoverflies we dissected the guts of captured and killed individuals stored in 70% ethanol using tweezers and sharp scissors under a stereomicroscope. We put separated intestines into small closable tubes with 5 µl of 70% ethanol. Shortly afterwards, we added 50 µl of 10% KOH into the samples and moved it to the warming bath at a temperature of 70° C for 3 hours. After cooling down, we vortexed the samples for 30 seconds to be homogenized and placed 5 µl of the solution on the microscope slides. We let the samples dry on a heating pad and we added 13 µl of 8% vinegar to neutralize KOH. After further drying, we added 5 µl of dye (safranin, water and glycerol), covered the samples with a coverslip and sealed with nail polish to produce semi-permanent samples.
+
 ### Plant-pollinator interactions and plant abundace
 
-Following Janovský et al. (2013) we collected data on pollinator visitation activity. We used same permanent plots as in the flowering plant abundance to record all interactions of flower-visiting pollinators with flowering Succisa pratensis and other plant species in the surrounding of S. pratensis. All flowers within the plot were checked only one time to avoid pseudo-replication and all interactions occurring at the moment of the survey were recorded, lasting up to five minutes. Each plot was recorded at least twenty times during the activity period of pollinators (7:00 - 19:00) at the peak of flowering (mid-August) each year. We recorded only the pollinators touching the reproductive organs of the visited plant and each individual pollinator only once. Finally, we counted standardized interaction rates (total number of interactions per sampling visit) for pollinators visiting S. pratensis from 2022 to 2024 and compared the distribution of interaction rates for the specific group of pollinators visiting S. pratensis and the same pollinators on all other plant species.
+Following the same protocol at the study locality as published in @Janovsky2013, we collected data on pollinator visitation activity. We used same permanent plots as in the flowering plant abundance to record all interactions of flower-visiting pollinators with flowering Succisa pratensis and other plant species in the surrounding of S. pratensis. All flowers within the plot were checked only one time to avoid pseudo-replication and all interactions occurring at the moment of the survey were recorded, lasting up to five minutes. Each plot was recorded at least twenty times during the activity period of pollinators (7:00 - 19:00) at the peak of flowering (mid-August) each year. We recorded only the pollinators touching the reproductive organs of the visited plant and each individual pollinator only once. Finally, we counted standardized interaction rates (total number of interactions per sampling visit) for pollinators visiting S. pratensis from 2022 to 2024 and compared the distribution of interaction rates for the specific group of pollinators visiting S. pratensis and the same pollinators on all other plant species.
 
 Thanks to long-term research on flowering plants and their interactions with pollinators, we obtained information on the abundances of individual plants at the study site and it’s changes over time (see Janovský et al., 2013). We used 4 × 4 m2 permanent plots each placed in the center of each grid point of a 20 × 20 m2 grid covering a total area of 300 × 300 m2 of the study site. To determine the floral neighborhood of Succisa pratensis from 2022 to 2024, we counted distribution of plant abundance for individual plots where S. pratensis was present. We counted conspecific abundance of the focal species and heterospecific co-flowering abundance index, which is the cumulative abundance of all other co-flowering plant species in the plot.
 
 ### Statistical Analysis
 
-All statistical analyses were performed in R (v4.x). Count data for heterospecific (HP) and conspecific (CP) pollen were **square-root transformed** prior to parametric modeling. Diagnostic plots (Supplementary Material Figs S1–S2) confirmed that this transformation stabilized variance and satisfied homoscedasticity assumptions more effectively than raw or log-transformed data.
-
-#### Variance Component Analysis
-
-To quantify the hierarchical scale of stochasticity in pollen deposition, we fitted Linear Mixed Models (LMMs) using the `lme4` package. We partitioned the total variance of sqrt-transformed pollen counts into **Year** (random effect), **Plant** (nested within Year), and **Stigma** (Residual variation). For the high-resolution 2024 dataset, we further partitioned variance into **Sampling Date**, **Plant** (nested within Date), and **Stigma**. While statistical inference focused on transformed counts, we also visualized the proportion of heterospecific pollen (`HP / (HP + CP)`) to assess deposition purity.
-
-#### Pollen Accumulation Dynamics
-
-To test if the rate of heterospecific pollen accumulation differed between years, we fitted a Linear Model (`lm`) of the form: `sqrt(HP) ~ CP * Year`. We used the `emtrends` function (from the `emmeans` package) to estimate and compare the slopes ($\beta$) of the HP-CP relationship for each year, interpreted as the "pollution efficiency" of the community.
-
-#### Network Stability
-
-We assessed the temporal stability of the pollinator community composition using the **Morisita-Horn similarity index**, calculated with the `vegan` package. This metric was selected for its robustness to differences in sample size and species richness.
-
-#### Single Visit Deposition
-
-To assess the efficiency and 'messiness' of major pollinator groups, we conducted a Single Visit Deposition (SVD) experiment. We presented unvisited (bagged) *Succisa* stigmas to foraging insects, allowed a single visit, and subsequently counted conspecific (CP) and heterospecific (HP) pollen loads. We classified visitors into broad morphogroups (e.g., *Eristalis* spp., *Bombus* spp.) and compared their CP and HP deposition using a Kruskal-Wallis test, followed by Dunn’s post-hoc test (Benjamini-Hochberg correction), as pollen counts were zero-inflated and non-normal.
-
-#### Macro-Ecological Context
-
-To contextualize the deposition results, we calculated annual network specialization ($H_2'$) using the `bipartite` package and estimated community floral resource abundance by summing plant counts in the permanent plots.
-
 ## Results
+
+In total, we collected 693 stigmas from 273 individual plants in (84, 89, 520 stigmas in 2022, 2023 and 2024 respectively).
+
+```{r}
+#| label: fig-cp-hp-scatter
+#| echo: false
+#| warning: false
+#| message: false
+#| fig-cap: "Distribution of Conspecific (CP) and Heterospecific (HP) pollen grains on individual stigmas across years."
+
+ggplot(pollen_deposition, aes(x = conspecific_pollen, y = heterospecific_pollen, color = as.factor(year))) +
+    geom_point(alpha = 0.6, size = 2) +
+    scale_color_viridis_d(begin = 0.2, end = 0.8, option = "D", name = "Year") +
+    labs(
+        x = "Conspecific Pollen (CP)",
+        y = "Heterospecific Pollen (HP)"
+    ) +
+    theme_classic() +
+    theme(
+        legend.position = "right"
+    )
+```
+
+### The Hierarchical Scale of Total Pollen Depositional Variance
+
+```{r}
+#| label: analysis-variance-partitioning
+#| echo: false
+#| warning: false
+#| message: false
+#| fig-cap: "Variance Partitioning Results. A) Inter-Annual Stability (All Years). B) Intra-Annual Stability (2024 Only)."
+
+# 1. Data Preparation
+vca_data <- pollen_deposition %>%
+    filter(!is.na(heterospecific_pollen) & !is.na(conspecific_pollen)) %>%
+    mutate(
+        # Response Variables
+        sqrt_HP = sqrt(heterospecific_pollen),
+        sqrt_CP = sqrt(conspecific_pollen),
+
+        # Calculate Proportion HP (approximate normality with sqrt)
+        total = heterospecific_pollen + conspecific_pollen,
+        prop = ifelse(total > 0, heterospecific_pollen / total, 0),
+        sqrt_Prop = sqrt(prop),
+
+        # Factors
+        year_fac = as.factor(year),
+        date_fac = as.factor(paste(year, day, sep = "_")),
+        plant_id = inflorescence_id # unique within year
+    )
+
+# 2. General Function for Two-Part VCA
+run_twopart_vca <- function(data, variable_col, metric_label) {
+    # Internal helper to extract variance
+    extract_lmer_var <- function(model, name) {
+        vc <- VarCorr(model)
+        df <- as.data.frame(vc)
+
+        # Ensure Residual is included
+        if (!("Residual" %in% df$grp)) {
+            sigma_sq <- attr(vc, "sc")^2
+            df <- rbind(df, data.frame(grp = "Residual", var1 = NA, var2 = NA, vcov = sigma_sq, sdcor = attr(vc, "sc")))
+        }
+
+        # Calculate Percent
+        total_var <- sum(df$vcov)
+        df$percent <- (df$vcov / total_var) * 100
+        df$Part <- name
+        df$level <- dplyr::case_when(
+            grepl("inflorescence", df$grp) ~ "Plant",
+            grepl("plant_id", df$grp) ~ "Plant",
+            df$grp == "year_fac" ~ "Year",
+            df$grp == "date_fac" ~ "Date",
+            df$grp == "Residual" ~ "Stigma",
+            TRUE ~ "Other"
+        )
+        return(df[, c("Part", "level", "vcov", "sdcor", "percent")])
+    }
+
+    # Part 1: Inter-Annual (Global)
+    f_inter <- as.formula(paste(variable_col, "~ 1 + (1 | year_fac / plant_id)"))
+    m_inter <- lmer(f_inter, data = data)
+    res_inter <- extract_lmer_var(m_inter, "Inter-Annual")
+
+    # Part 2: Intra-Annual (2024 Only)
+    data_24 <- filter(data, year == 2024)
+    # Check if we have date variation in 2024
+    f_intra <- as.formula(paste(variable_col, "~ 1 + (1 | date_fac / plant_id)"))
+    m_intra <- lmer(f_intra, data = data_24)
+    res_intra <- extract_lmer_var(m_intra, "Intra-Annual (2024 only)")
+
+    # Combine
+    combined <- rbind(res_inter, res_intra)
+    combined$Metric <- metric_label
+    return(combined)
+}
+
+# 3. Run for all 2 metrics (using Sqrt as validated in Supplement)
+res_HP <- run_twopart_vca(vca_data, "sqrt_HP", "Heterospecific pollen")
+res_CP <- run_twopart_vca(vca_data, "sqrt_CP", "Conspecific pollen")
+
+all_results <- rbind(res_HP, res_CP)
+
+# Define factor levels
+all_results$level <- factor(all_results$level, levels = c("Year", "Date", "Plant", "Stigma"))
+all_results$Metric <- factor(all_results$Metric, levels = c("Heterospecific pollen", "Conspecific pollen"))
+
+# 4. Visualization (Percent only)
+p_var <- ggplot(all_results, aes(x = Metric, y = percent, fill = level)) +
+    geom_bar(stat = "identity", width = 0.6) +
+    facet_wrap(~Part) +
+    scale_x_discrete(labels = function(x) stringr::str_wrap(x, width = 15)) +
+    scale_fill_brewer(palette = "Set2") +
+    geom_text(aes(label = ifelse(percent > 1.5, paste0(round(percent, 0), "%"), "")),
+        position = position_stack(vjust = 0.5),
+        size = 4,
+        fontface = "bold",
+        color = "black"
+    ) +
+    labs(
+        title = "Variance Partitioning (Transformed Data) of pollen deposited on stigmas",
+        y = "% of Total Variance",
+        x = "",
+        fill = "Variance Source"
+    ) +
+    theme_classic() +
+    theme(
+        axis.text.x = element_text(face = "bold", angle = 0, hjust = 0.5, size = 11),
+        strip.text = element_text(size = 12, face = "bold"),
+        legend.position = "bottom"
+    )
+
+print(p_var)
+
+# 5. GENERATE PUBLICATION TABLE (Table 2 for HP)
+table_detailed <- all_results %>%
+    filter(Metric == "Heterospecific pollen") %>%
+    select(Part, level, vcov, sdcor, percent) %>%
+    rename(
+        Analysis = Part,
+        Source = level,
+        Variance = vcov,
+        Std_Dev = sdcor,
+        Percent_Total = percent
+    ) %>%
+    mutate(
+        Variance = round(Variance, 2),
+        Std_Dev = round(Std_Dev, 2),
+        Percent_Total = paste0(round(Percent_Total, 1), "%")
+    ) %>%
+    arrange(Analysis, desc(Source))
+
+# Identify the last row of Inter-Annual analysis for styling
+last_inter_row <- max(which(table_detailed$Analysis == "Inter-Annual"))
+
+# Print the table with GT
+table_detailed %>%
+    gt() %>%
+    tab_header(
+        title = md("**Table 2**: Variance partitioning of square-root transformed heterospecific pollen deposition"),
+        subtitle = "Results for Global (Inter-Annual) and 2024 (Intra-Annual) analyses."
+    ) %>%
+    cols_label(
+        Analysis = "Analysis Scope",
+        Source = "Variance Source",
+        Variance = "Variance Component",
+        Std_Dev = "SD",
+        Percent_Total = "% Total"
+    ) %>%
+    tab_style(
+        style = cell_text(weight = "bold"),
+        locations = cells_column_labels()
+    ) %>%
+    tab_options(
+        column_labels.background.color = "#F0F0F0",
+        table.border.top.color = "black",
+        table.border.top.width = px(2),
+        table.border.bottom.color = "black",
+        table.border.bottom.width = px(2),
+        data_row.padding = px(6)
+    ) %>%
+    # Add dashed line separating the two analyses
+    tab_style(
+        style = cell_borders(
+            sides = "bottom",
+            color = "black",
+            weight = px(1), # Standard solid line
+            style = "solid"
+        ),
+        locations = cells_body(
+            rows = last_inter_row
+        )
+    ) %>%
+    opt_align_table_header(align = "left")
+```
+
+### Single Visit Efficiency (SVD)
+
+Per species or per group?
+
+```{r}
+#| label: table-svd-species-counts
+#| echo: false
+#| warning: false
+#| message: false
+
+# Generate table of SVD occurrences per species
+SVD_Succisa_22_24 %>%
+    count(pollinator_species, name = "count") %>%
+    arrange(desc(count)) %>%
+    gt() %>%
+    tab_header(
+        title = "Table S1: SVD Sample Sizes",
+        subtitle = "Number of single-visit deposition observations recorded per pollinator species."
+    ) %>%
+    cols_label(
+        pollinator_species = "Pollinator Species",
+        count = "Sample Size (N)"
+    ) %>%
+    tab_style(
+        style = cell_text(style = "italic"),
+        locations = cells_body(columns = pollinator_species)
+    ) %>%
+    tab_options(
+        table.width = pct(60),
+        column_labels.background.color = "#F0F0F0",
+        table.border.top.color = "black",
+        table.border.bottom.color = "black"
+    )
+```
+
+```{r}
+#| label: analysis-svd
+#| echo: false
+#| warning: false
+#| message: false
+#| fig-cap: "Single Visit Deposition (SVD). A) Conspecific Pollen (Efficiency). B) Heterospecific Pollen"
+# 2. Data Cleaning & Grouping
+SVD_clean <- SVD_Succisa_22_24 %>%
+    rename(
+        duration_sec = delka_navstevy,
+        year = rok,
+        species = pollinator_species
+    ) %>%
+    mutate(
+        # Create Morphogroups
+        morphogroup = case_when(
+            grepl("Eristalis", species) ~ "Eristalis spp.",
+            grepl("Bombus", species) ~ "Bombus spp.",
+            species == "Apis mellifera" ~ "Apis mellifera",
+            grepl("Syrphus", species) ~ "Syrphus spp.",
+            grepl("Helophilus", species) ~ "Helophilus spp.",
+            TRUE ~ "Other"
+        )
+    )
+
+# Filter for groups with sufficient sample size (N > 5) for visualization
+group_counts <- SVD_clean %>%
+    count(morphogroup) %>%
+    filter(n >= 5)
+SVD_final <- SVD_clean %>%
+    filter(morphogroup %in% group_counts$morphogroup)
+
+# 3. Visualization
+
+# Panel A: Efficiency (CP)
+p_eff <- ggplot(SVD_final, aes(x = morphogroup, y = conspecific_pollen, fill = morphogroup)) +
+    geom_boxplot(alpha = 0.6, outlier.shape = NA) +
+    geom_jitter(width = 0.2, alpha = 0.5, size = 1.5) +
+    labs(
+        title = "A. Conspecific Pollen (CP)",
+        y = "Conspecific Pollen",
+        x = ""
+    ) +
+    theme_classic() +
+    theme(
+        axis.text.x = element_text(angle = 45, hjust = 1, face = "italic"),
+        legend.position = "none"
+    )
+
+# Panel B: Messiness (HP)
+p_mess <- ggplot(SVD_final, aes(x = morphogroup, y = heterospecific_pollen, fill = morphogroup)) +
+    geom_boxplot(alpha = 0.6, outlier.shape = NA) +
+    geom_jitter(width = 0.2, alpha = 0.5, size = 1.5) +
+    labs(
+        title = "B) Heterospecific Pollen (HP)",
+        y = "Heterospecific Pollen",
+        x = "Pollinator Group"
+    ) +
+    theme_classic() +
+    theme(
+        axis.text.x = element_text(angle = 45, hjust = 1, face = "italic"),
+        legend.position = "none"
+    )
+
+# Combine
+p_combined <- p_eff + p_mess + plot_layout(ncol = 2)
+print(p_combined)
+
+```
+
+## 
+
+### Variability Analysis: Coefficient of Variation
+
+To assess the relative variability of pollen counts across the transport network, we calculated the Coefficient of Variation (CV %) for Conspecific (CP) and Heterospecific (HP) pollen loads on Stigmas, Bodies, and in Guts.
+
+```{r}
+#| label: analysis-cv-comparison
+#| echo: false
+#| warning: false
+#| message: false
+#| fig-cap: "Coefficient of Variation (CV) of Conspecific (CP) and Heterospecific (HP) pollen counts across compartments."
+
+# 1. Stigma CV
+cv_stigma <- pollen_deposition %>%
+    summarise(
+        CP = sd(conspecific_pollen, na.rm = TRUE) / mean(conspecific_pollen, na.rm = TRUE) * 100,
+        HP = sd(heterospecific_pollen, na.rm = TRUE) / mean(heterospecific_pollen, na.rm = TRUE) * 100
+    ) %>%
+    mutate(Compartment = "Stigma")
+
+# 2. Body CV
+# Ensure pollen_load_guts_24 is available (loaded in previous chunks or package)
+if (!exists("pollen_load_guts_24")) {
+    # Fallback to loading if not in env
+    data("pollen_load_guts_24", package = "HanPolNet")
+}
+
+cv_body <- pollen_load_guts_24 %>%
+    summarise(
+        CP = sd(suc_pra_load, na.rm = TRUE) / mean(suc_pra_load, na.rm = TRUE) * 100,
+        HP = sd(other_pollen_load, na.rm = TRUE) / mean(other_pollen_load, na.rm = TRUE) * 100
+    ) %>%
+    mutate(Compartment = "Body")
+
+# 3. Gut CV
+cv_gut <- pollen_load_guts_24 %>%
+    summarise(
+        CP = sd(suc_pra_guts, na.rm = TRUE) / mean(suc_pra_guts, na.rm = TRUE) * 100,
+        HP = sd(other_pollen_guts, na.rm = TRUE) / mean(other_pollen_guts, na.rm = TRUE) * 100
+    ) %>%
+    mutate(Compartment = "Gut")
+
+cv_SVD <- SVD_Succisa_22_24 %>%
+    summarise(
+        CP = sd(conspecific_pollen, na.rm = TRUE) / mean(conspecific_pollen, na.rm = TRUE) * 100,
+        HP = sd(heterospecific_pollen, na.rm = TRUE) / mean(heterospecific_pollen, na.rm = TRUE) * 100
+    ) %>%
+    mutate(Compartment = "SVD")
+
+
+# Combine and Reshape
+cv_data <- bind_rows(cv_stigma, cv_body, cv_gut, cv_SVD) %>%
+    pivot_longer(cols = c(CP, HP), names_to = "Pollen_Type", values_to = "CV")
+
+# Set Factor Levels
+cv_data$Compartment <- factor(cv_data$Compartment, levels = c("Body", "Gut", "SVD", "Stigma"))
+
+# Plot
+ggplot(cv_data, aes(x = Compartment, y = CV, fill = Pollen_Type)) +
+    geom_bar(stat = "identity", position = position_dodge(width = 0.9), color = "black", width = 0.8) +
+    geom_text(aes(label = round(CV, 1)), position = position_dodge(width = 0.9), vjust = -0.5, size = 4) +
+    scale_fill_manual(
+        values = c("CP" = "#1ABC9C", "HP" = "#F1948A"),
+        labels = c("CP" = "Conspecific", "HP" = "Heterospecific")
+    ) +
+    labs(
+        title = "Variability of Pollen Counts",
+        y = "CV (%)",
+        fill = "Pollen Type"
+    ) +
+    theme_classic() +
+    theme(
+        axis.text.x = element_text(size = 12, face = "bold"),
+        axis.text.y = element_text(size = 12),
+        legend.position = "top"
+    )
+```
 
 ### Succisa pratensis Distribution
 
@@ -242,7 +582,7 @@ The presence of *Succisa pratensis* in the study plots across the surveyed years
 ```{r}
 #| label: fig-spatial-temporal-abundance
 #| fig-cap: "Distribution and abundance of Succisa pratensis (2022-2024). A) Spatial distribution of plots with Succisa presence. B) Total abundance recorded per year. C) Differences in standardized visitation rates to Succisa pratensis across years (2022-2024)."
-#| echo: true
+#| echo: false
 #| warning: false
 #| message: false
 #| fig-height: 8
@@ -279,7 +619,7 @@ p_map <- ggplot() +
     geom_sf(data = map_data, aes(color = year_label), size = 2) +
     facet_wrap(~year_label) +
     scale_color_viridis_d(begin = 0.2, end = 0.8, option = "D") +
-    theme_minimal() +
+    theme_classic() +
     labs(
         title = "Succisa pratensis Presence",
         subtitle = "Plots with recorded abundance > 0",
@@ -310,7 +650,7 @@ p_abundance <- ggplot(abundance_summary, aes(x = year_label, y = total_abundance
         y = "Total Abundance\n (flowering stalks)"
     ) +
     scale_fill_viridis_d(begin = 0.2, end = 0.8, option = "D") +
-    theme_minimal() +
+    theme_classic() +
     theme(legend.position = "none")
 
 
@@ -331,7 +671,7 @@ p_visitation <- ggplot(visitation_per_plot, aes(x = year, y = total_rate, fill =
         y = "Standardized Visitation Rate\n (interactions/sampling effort)"
     ) +
     scale_fill_viridis_d(begin = 0.3, end = 0.7) +
-    theme_minimal() +
+    theme_classic() +
     theme(legend.position = "none")
 
 # --- COMBINE ---
@@ -348,7 +688,7 @@ Comparisons of the proportional representation of different pollinator species v
 
 ```{r}
 #| label: analysis-pollinator-composition
-#| echo: true
+#| echo: false
 #| warning: false
 #| message: false
 #| fig-cap: "Pollinator spectra composition on Succisa pratensis (2022-2024). Stacked bars show the proportion of standardized visitation rates for the most abundant species."
@@ -426,7 +766,7 @@ ggplot(species_composition_grouped, aes(x = year_label, y = proportion, fill = s
         x = "Year",
         y = "Proportion"
     ) +
-    theme_minimal() +
+    theme_classic() +
     theme(
         legend.position = "right",
         legend.text = element_text(face = "italic")
@@ -439,7 +779,7 @@ We also examined the changes in visitation intensity to *Succisa pratensis* acro
 
 ```{r}
 #| label: analysis-visitation-curve-fit
-#| echo: true
+#| echo: false
 #| code-fold: true
 
 test_curve_shape <- function(year_data, year_label) {
@@ -535,273 +875,6 @@ rbind(results_2022, results_2023, results_2024) %>%
 
 ```
 
-### Variance Partitioning: Stability Validation
-
-To address the unbalanced sampling design (single sampling day in 2022/2023 vs. multiple in 2024), we performed a two-part Variance Component Analysis (VCA) to validate the stability of the pollen deposition patterns.
-
-#### Part 1: Inter-Annual Stability (All Years)
-
-We partitioned variance into **Year**, **Plant** (nested in Year), and **Stigma** (Residual) using the full dataset, ignoring the Date level to avoid confounding in 2022/23.
-
-#### Part 2: Intra-Annual Stability (2024 Only)
-
-Using only the 2024 data, we explicitly tested the effect of **Date** (Day-to-Day variation) vs. **Plant** (nested in Date) vs. **Stigma**.
-
-```         
-Variance Partitioning of Pollen Deposition
-
-To determine the hierarchical scale of variability in heterospecific pollen (HP) receipt, we performed a variance component analysis on square-root transformed HP counts. The majority of the variation in HP deposition occurred at the finest scale—among individual stigmas within plants (Residual variance). In the global analysis across three years, stochastic stigma-level variation explained [XX.X%] of the total variance, while inter-annual fluctuations ('Year') accounted for only [XX.X%] (Table 2).
-
-This pattern of high fine-scale stochasticity was consistent when analyzing the detailed 2024 dataset. Within the 2024 flowering season, daily turnover ('Sampling Date') explained a negligible proportion of the variance ([XX.X%]), while plant identity explained [XX.X%]. The remaining [XX.X%] of variation was attributable to differences between individual stigmas on the same plant (Fig. 4). These results indicate that HP deposition is driven primarily by stochastic, single-visit mechanics rather than by systemic temporal shifts or plant-level traits.
-```
-
-```{r}
-#| label: analysis-variance-partitioning
-#| echo: true
-#| warning: false
-#| message: false
-#| fig-cap: "Variance Partitioning Results. A) Inter-Annual Stability (All Years). B) Intra-Annual Stability (2024 Only)."
-
-# 1. Data Preparation
-vca_data <- pollen_deposition %>%
-    filter(!is.na(heterospecific_pollen) & !is.na(conspecific_pollen)) %>%
-    mutate(
-        # Response Variables
-        sqrt_HP = sqrt(heterospecific_pollen),
-        sqrt_CP = sqrt(conspecific_pollen),
-
-        # Calculate Proportion HP (approximate normality with sqrt)
-        total = heterospecific_pollen + conspecific_pollen,
-        prop = ifelse(total > 0, heterospecific_pollen / total, 0),
-        sqrt_Prop = sqrt(prop),
-
-        # Factors
-        year_fac = as.factor(year),
-        date_fac = as.factor(paste(year, day, sep = "_")),
-        plant_id = inflorescence_id # unique within year
-    )
-
-# 2. General Function for Two-Part VCA
-run_twopart_vca <- function(data, variable_col, metric_label) {
-    # Internal helper to extract variance
-    extract_lmer_var <- function(model, name) {
-        vc <- VarCorr(model)
-        df <- as.data.frame(vc)
-
-        # Ensure Residual is included
-        if (!("Residual" %in% df$grp)) {
-            sigma_sq <- attr(vc, "sc")^2
-            df <- rbind(df, data.frame(grp = "Residual", var1 = NA, var2 = NA, vcov = sigma_sq, sdcor = attr(vc, "sc")))
-        }
-
-        # Calculate Percent
-        total_var <- sum(df$vcov)
-        df$percent <- (df$vcov / total_var) * 100
-        df$Part <- name
-        df$level <- dplyr::case_when(
-            grepl("inflorescence", df$grp) ~ "Plant",
-            grepl("plant_id", df$grp) ~ "Plant",
-            df$grp == "year_fac" ~ "Year",
-            df$grp == "date_fac" ~ "Date",
-            df$grp == "Residual" ~ "Stigma",
-            TRUE ~ "Other"
-        )
-        return(df[, c("Part", "level", "vcov", "sdcor", "percent")])
-    }
-
-    # Part 1: Inter-Annual (Global)
-    f_inter <- as.formula(paste(variable_col, "~ 1 + (1 | year_fac / plant_id)"))
-    m_inter <- lmer(f_inter, data = data)
-    res_inter <- extract_lmer_var(m_inter, "Inter-Annual")
-
-    # Part 2: Intra-Annual (2024 Only)
-    data_24 <- filter(data, year == 2024)
-    # Check if we have date variation in 2024
-    f_intra <- as.formula(paste(variable_col, "~ 1 + (1 | date_fac / plant_id)"))
-    m_intra <- lmer(f_intra, data = data_24)
-    res_intra <- extract_lmer_var(m_intra, "Intra-Annual")
-
-    # Combine
-    combined <- rbind(res_inter, res_intra)
-    combined$Metric <- metric_label
-    return(combined)
-}
-
-# 3. Run for all 2 metrics (using Sqrt as validated in Supplement)
-res_HP <- run_twopart_vca(vca_data, "sqrt_HP", "Heterospecific")
-res_CP <- run_twopart_vca(vca_data, "sqrt_CP", "Conspecific")
-
-all_results <- rbind(res_HP, res_CP)
-
-# Define factor levels
-all_results$level <- factor(all_results$level, levels = c("Year", "Date", "Plant", "Stigma"))
-all_results$Metric <- factor(all_results$Metric, levels = c("Heterospecific", "Conspecific"))
-
-# 4. Visualization (Percent only)
-p_var <- ggplot(all_results, aes(x = Metric, y = percent, fill = level)) +
-    geom_bar(stat = "identity", width = 0.6) +
-    facet_wrap(~Part) +
-    scale_fill_brewer(palette = "Set2") +
-    geom_text(aes(label = ifelse(percent > 1.5, paste0(round(percent, 0), "%"), "")),
-        position = position_stack(vjust = 0.5),
-        size = 4,
-        fontface = "bold",
-        color = "black"
-    ) +
-    labs(
-        title = "Variance Partitioning (Transformed Data)",
-        y = "% of Total Variance",
-        x = "",
-        fill = "Variance Source"
-    ) +
-    theme_minimal() +
-    theme(
-        axis.text.x = element_text(face = "bold", angle = 0, hjust = 0.5, size = 11),
-        strip.text = element_text(size = 12, face = "bold"),
-        legend.position = "bottom"
-    )
-
-print(p_var)
-
-# 5. GENERATE PUBLICATION TABLE (Table 2 for HP)
-table_detailed <- all_results %>%
-    filter(Metric == "Heterospecific") %>%
-    select(Part, level, vcov, sdcor, percent) %>%
-    rename(
-        Analysis = Part,
-        Source = level,
-        Variance = vcov,
-        Std_Dev = sdcor,
-        Percent_Total = percent
-    ) %>%
-    mutate(
-        Variance = round(Variance, 2),
-        Std_Dev = round(Std_Dev, 2),
-        Percent_Total = paste0(round(Percent_Total, 1), "%")
-    ) %>%
-    arrange(Analysis, desc(Source))
-
-# Identify the last row of Inter-Annual analysis for styling
-last_inter_row <- max(which(table_detailed$Analysis == "Inter-Annual"))
-
-# Print the table with GT
-table_detailed %>%
-    gt() %>%
-    tab_header(
-        title = md("**Table 2**: Variance partitioning of square-root transformed heterospecific pollen deposition"),
-        subtitle = "Results for Global (Inter-Annual) and 2024 (Intra-Annual) analyses."
-    ) %>%
-    cols_label(
-        Analysis = "Analysis Scope",
-        Source = "Variance Source",
-        Variance = "Variance Component",
-        Std_Dev = "SD",
-        Percent_Total = "% Total"
-    ) %>%
-    tab_style(
-        style = cell_text(weight = "bold"),
-        locations = cells_column_labels()
-    ) %>%
-    tab_options(
-        column_labels.background.color = "#F0F0F0",
-        table.border.top.color = "black",
-        table.border.top.width = px(2),
-        table.border.bottom.color = "black",
-        table.border.bottom.width = px(2),
-        data_row.padding = px(6)
-    ) %>%
-    # Add dashed line separating the two analyses
-    tab_style(
-        style = cell_borders(
-            sides = "bottom",
-            color = "black",
-            weight = px(1), # Standard solid line
-            style = "solid"
-        ),
-        locations = cells_body(
-            rows = last_inter_row
-        )
-    ) %>%
-    opt_align_table_header(align = "left")
-```
-
-### Variability Analysis: Coefficient of Variation
-
-To assess the relative variability of pollen counts across the transport network, we calculated the Coefficient of Variation (CV %) for Conspecific (CP) and Heterospecific (HP) pollen loads on Stigmas, Bodies, and in Guts.
-
-```{r}
-#| label: analysis-cv-comparison
-#| echo: true
-#| warning: false
-#| message: false
-#| fig-cap: "Coefficient of Variation (CV) of Conspecific (CP) and Heterospecific (HP) pollen counts across compartments."
-
-# 1. Stigma CV
-cv_stigma <- pollen_deposition %>%
-    summarise(
-        CP = sd(conspecific_pollen, na.rm = TRUE) / mean(conspecific_pollen, na.rm = TRUE) * 100,
-        HP = sd(heterospecific_pollen, na.rm = TRUE) / mean(heterospecific_pollen, na.rm = TRUE) * 100
-    ) %>%
-    mutate(Compartment = "Stigma")
-
-# 2. Body CV
-# Ensure pollen_load_guts_24 is available (loaded in previous chunks or package)
-if (!exists("pollen_load_guts_24")) {
-    # Fallback to loading if not in env
-    data("pollen_load_guts_24", package = "HanPolNet")
-}
-
-cv_body <- pollen_load_guts_24 %>%
-    summarise(
-        CP = sd(suc_pra_load, na.rm = TRUE) / mean(suc_pra_load, na.rm = TRUE) * 100,
-        HP = sd(other_pollen_load, na.rm = TRUE) / mean(other_pollen_load, na.rm = TRUE) * 100
-    ) %>%
-    mutate(Compartment = "Body")
-
-# 3. Gut CV
-cv_gut <- pollen_load_guts_24 %>%
-    summarise(
-        CP = sd(suc_pra_guts, na.rm = TRUE) / mean(suc_pra_guts, na.rm = TRUE) * 100,
-        HP = sd(other_pollen_guts, na.rm = TRUE) / mean(other_pollen_guts, na.rm = TRUE) * 100
-    ) %>%
-    mutate(Compartment = "Gut")
-
-cv_SVD <- SVD_Succisa_22_24 %>%
-    summarise(
-        CP = sd(conspecific_pollen, na.rm = TRUE) / mean(conspecific_pollen, na.rm = TRUE) * 100,
-        HP = sd(heterospecific_pollen, na.rm = TRUE) / mean(heterospecific_pollen, na.rm = TRUE) * 100
-    ) %>%
-    mutate(Compartment = "SVD")
-
-
-# Combine and Reshape
-cv_data <- bind_rows(cv_stigma, cv_body, cv_gut, cv_SVD) %>%
-    pivot_longer(cols = c(CP, HP), names_to = "Pollen_Type", values_to = "CV")
-
-# Set Factor Levels
-cv_data$Compartment <- factor(cv_data$Compartment, levels = c("Body", "Gut", "SVD", "Stigma"))
-
-# Plot
-ggplot(cv_data, aes(x = Compartment, y = CV, fill = Pollen_Type)) +
-    geom_bar(stat = "identity", position = position_dodge(width = 0.9), color = "black", width = 0.8) +
-    geom_text(aes(label = round(CV, 1)), position = position_dodge(width = 0.9), vjust = -0.5, size = 4) +
-    scale_fill_manual(
-        values = c("CP" = "#1ABC9C", "HP" = "#F1948A"),
-        labels = c("CP" = "Conspecific", "HP" = "Heterospecific")
-    ) +
-    labs(
-        title = "Variability of Pollen Counts",
-        y = "CV (%)",
-        fill = "Pollen Type"
-    ) +
-    theme_minimal() +
-    theme(
-        axis.text.x = element_text(size = 12, face = "bold"),
-        axis.text.y = element_text(size = 12),
-        legend.position = "top"
-    )
-```
-
 ### Gap 2: Community Stability & Composition
 
 To assess the temporal stability of the pollinator community, we compared species composition across years using the **Morisita-Horn similarity index** (Horn, 1966). This metric was selected for its robustness to differences in sample size and species richness compared to incidence-based metrics (Jost et al., 2011). Pairwise similarities were calculated on abundance data (standardized by sampling effort) using the `vegan` package.
@@ -810,7 +883,7 @@ The core structure of the pollinator community remained highly stable across the
 
 ```{r}
 #| label: analysis-community-stability-evenness
-#| echo: true
+#| echo: false
 #| warning: false
 #| message: false
 #| fig-cap: "Community Stability and Structure. A) Temporal Stability (Morisita-Horn Similarity). B) Pollinator Evenness (J') per plot across years."
@@ -865,7 +938,7 @@ p_similarity <- ggplot(mh_long, aes(x = Year2, y = Year1, fill = Similarity)) +
         x = "",
         y = ""
     ) +
-    theme_minimal() +
+    theme_classic() +
     theme(
         axis.text = element_text(size = 12, face = "bold"),
         panel.grid = element_blank(),
@@ -921,7 +994,7 @@ if (nrow(plant_matrix_prep) > 0) {
             x = "",
             y = ""
         ) +
-        theme_minimal() +
+        theme_classic() +
         theme(
             axis.text = element_text(size = 12, face = "bold"),
             panel.grid = element_blank(),
@@ -968,7 +1041,7 @@ p_evenness_morph <- ggplot(morph_evenness, aes(x = as.factor(year), y = J, fill 
         x = "Year",
         y = "Pielou's Evenness (J')"
     ) +
-    theme_minimal() +
+    theme_classic() +
     theme(legend.position = "none")
 
 
@@ -1186,7 +1259,7 @@ The datasets used in this study are available in the supplementary material and 
 
 ```{r}
 #| label: export-publication-data
-#| echo: true
+#| echo: false
 #| eval: true
 #| message: false
 #| warning: false
@@ -1262,92 +1335,6 @@ write.csv(data_dictionary, file.path(output_dir, "data_dictionary.csv"), row.nam
 
 ## Supllements
 
-### Single Visit Efficiency (SVD)
-
-```{r}
-#| label: analysis-svd
-#| echo: true
-#| warning: false
-#| message: false
-#| fig-cap: "Single Visit Deposition (SVD). A) Conspecific Pollen (Efficiency). B) Heterospecific Pollen (Messiness)."
-# 2. Data Cleaning & Grouping
-SVD_clean <- SVD_Succisa_22_24 %>%
-    rename(
-        duration_sec = delka_navstevy,
-        year = rok,
-        species = pollinator_species
-    ) %>%
-    mutate(
-        # Create Morphogroups
-        morphogroup = case_when(
-            grepl("Eristalis", species) ~ "Eristalis spp.",
-            grepl("Bombus", species) ~ "Bombus spp.",
-            species == "Apis mellifera" ~ "Apis mellifera",
-            grepl("Syrphus", species) ~ "Syrphus spp.",
-            grepl("Helophilus", species) ~ "Helophilus spp.",
-            TRUE ~ "Other"
-        )
-    )
-
-# Filter for groups with sufficient sample size (N > 5) for visualization
-group_counts <- SVD_clean %>%
-    count(morphogroup) %>%
-    filter(n >= 5)
-SVD_final <- SVD_clean %>%
-    filter(morphogroup %in% group_counts$morphogroup)
-
-# 3. Visualization
-
-# Panel A: Efficiency (CP)
-p_eff <- ggplot(SVD_final, aes(x = morphogroup, y = conspecific_pollen, fill = morphogroup)) +
-    geom_boxplot(alpha = 0.6, outlier.shape = NA) +
-    geom_jitter(width = 0.2, alpha = 0.5, size = 1.5) +
-    labs(
-        title = "A. Efficiency (CP)",
-        y = "Conspecific Pollen",
-        x = ""
-    ) +
-    theme_bw() +
-    theme(
-        axis.text.x = element_text(angle = 45, hjust = 1, face = "italic"),
-        legend.position = "none"
-    )
-
-# Panel B: Messiness (HP)
-p_mess <- ggplot(SVD_final, aes(x = morphogroup, y = heterospecific_pollen, fill = morphogroup)) +
-    geom_boxplot(alpha = 0.6, outlier.shape = NA) +
-    geom_jitter(width = 0.2, alpha = 0.5, size = 1.5) +
-    labs(
-        title = "B. Messiness (HP)",
-        y = "Heterospecific Pollen",
-        x = "Pollinator Group"
-    ) +
-    theme_bw() +
-    theme(
-        axis.text.x = element_text(angle = 45, hjust = 1, face = "italic"),
-        legend.position = "none"
-    )
-
-# Combine
-p_combined <- p_eff + p_mess + plot_layout(ncol = 2)
-print(p_combined)
-
-# 4. Statistical Analysis
-cat("\n--- Kruskal-Wallis Test: Conspecific Pollen (CP) ---\n")
-kw_cp <- kruskal.test(conspecific_pollen ~ morphogroup, data = SVD_final)
-print(kw_cp)
-
-cat("\n--- Kruskal-Wallis Test: Heterospecific Pollen (HP) ---\n")
-kw_hp <- kruskal.test(heterospecific_pollen ~ morphogroup, data = SVD_final)
-print(kw_hp)
-
-# Post-hoc Dunn Test if significant
-if (kw_cp$p.value < 0.05) {
-    cat("\nPost-hoc Dunn Test (CP):\n")
-    dunn.test::dunn.test(SVD_final$conspecific_pollen, SVD_final$morphogroup, method = "bh")
-}
-```
-
-### 
-
 ## References
+
+###

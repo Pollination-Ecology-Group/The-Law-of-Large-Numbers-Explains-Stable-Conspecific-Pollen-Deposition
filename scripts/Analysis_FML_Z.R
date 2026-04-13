@@ -59,6 +59,14 @@ pollen_deposition <- pollen_deposition %>%
         plant_id = paste(year, inflorescence_id, day, sep = "_")
     )
 
+# Remove rows with NA values in conspecific_pollen or heterospecific_pollen
+pollen_deposition <- subset(pollen_deposition, (!is.na(conspecific_pollen)) & (!is.na(heterospecific_pollen)))
+
+summary(pollen_deposition)
+table(pollen_deposition$year)
+length(unique(pollen_deposition$plant_id))
+
+
 # 1.3 Interaction Data (Succisa specific)
 interaction_data_Succisa_22_24 <- get_interaction_data(
     years = c(22, 23, 24),
@@ -87,6 +95,9 @@ plant_abundance_22_24 <- get_plant_data(
 
 # 1.6 Single Visit Deposition (SVD) Data
 SVD_Succisa_22_24 <- read.csv("data/SVD_Succisa_pratensis.csv")
+
+table(SVD_Succisa_22_24$rok, SVD_Succisa_22_24$pollinator_species)
+
 
 # 1.7 Plot Coordinates (HanPolNet)
 # Assuming 'hanpolnet_plots' comes from the package or is loaded in environment
@@ -124,7 +135,24 @@ print(p_dist)
 # ------------------------------------------------------------------------------
 # S2. Variance Partitioning Model Diagnostics (Transformation Check)
 # ------------------------------------------------------------------------------
-# We compared Raw, Log, and Sqrt transformations to stabilize variance for VCA.
+# Variance Components Analysis (VCA) is used to partition the total variability 
+# in pollen deposition into hierarchical levels (e.g., Year vs. Plant vs. Stigma level).
+# This helps us identify the exact scale at which pollen transfer is most unpredictable.
+#
+# Because pollen deposition is count data, it frequently exhibits right-skewness 
+# and heteroscedasticity (variance increases with the mean). Linear Mixed Models (LMMs), 
+# which we use for VCA, strictly assume that residuals are normally distributed and 
+# have constant variance (homoscedasticity).
+#
+# To satisfy these assumptions, we visually compare three states of the data:
+#  1. Raw: The original counts (often violates assumptions).
+#  2. Log (log1p): Squashes large extreme values, standard for overdispersed counts.
+#  3. Sqrt (sqrt): The theoretical variance-stabilizing transformation for Poisson-like 
+#     data, where variance naturally scales linearly with the mean. 
+#
+# The generated diagnostic plots (Residuals vs Fitted, and Residual Histograms) 
+# allow us to select the transformation that provides the best model fit before 
+# running the formal VCA in Section 2.5.
 
 # Prepare data for VCA diagnostics
 vca_diag_data <- pollen_deposition %>%
@@ -183,8 +211,7 @@ message("Running VCA Diagnostics (Outputs plots)...")
 run_transformation_diagnostics(vca_diag_data, "heterospecific_pollen", "S1.1 Heterospecific Pollen")
 # Conspecific Pollen
 run_transformation_diagnostics(vca_diag_data, "conspecific_pollen", "S1.2 Conspecific Pollen")
-# Variation in Proportions
-run_transformation_diagnostics(vca_diag_data, "prop_HP", "S1.3 Proportion HP")
+
 
 
 # ------------------------------------------------------------------------------
@@ -277,7 +304,18 @@ grid.arrange(
 # ------------------------------------------------------------------------------
 # S4. Slope Comparison Diagnostics
 # ------------------------------------------------------------------------------
-# Validating the Square-Root transformed Linear Model used for slope comparison.
+# In Section 2.3, we formally test if the rate of Heterospecific Pollen (HP) 
+# accumulation changes across years. We parameterize this as a Linear Model 
+# testing how HP scales with Conspecific Pollen (CP), interacting with Year.
+#
+# Based on the VCA diagnostics in S2, we apply a Square-Root transformation to HP
+# prior to fitting this linear model. This step visually validates the assumptions 
+# of that specific LM (lm(sqrt(HP) ~ CP * Year)).
+#
+# By examining the Residuals vs Fitted plot and the Normal Q-Q plot, reviewers 
+# can confirm that the square-root transformation successfully achieves 
+# relatively constant variance and normally distributed residuals, justifying 
+# the subsequent extraction and comparison of the slope estimates using emmeans.
 
 model_data_agg <- model_selection_data %>% # Reuse aggregated data
     filter(!is.na(year)) %>%
@@ -301,6 +339,21 @@ message("Diagnostics Complete. Proceeding to Main Analyses.")
 # ------------------------------------------------------------------------------
 # 2.1 Pollinator Spectra Composition (Analysis of Stability)
 # ------------------------------------------------------------------------------
+# This analysis evaluates the relative abundance (visitation rate) of different 
+# pollinator taxa visiting the focal plant across the three years.
+#
+# Ecological Relevance: Before attributing changes in pollen deposition to floral 
+# density or single-visit stochasticity, we must confirm whether the core 
+# plant-pollinator network remains broadly stable over time. If the pollinator 
+# community composition remains consistent (e.g., heavily dominated by Eristalis), 
+# then any observed buffering in conspecific pollen receipt is likely driven by 
+# mechanisms like visitation redundancy rather than a complete turnover or 
+# collapse of the local insect assemblage.
+#
+# Process: We aggregate the total standard visitation rate for each pollinator 
+# taxon per year, lump the rare, low-frequency taxa into a unified "Other" 
+# category to reduce noise, and calculate the proportional composition to allow 
+# for year-to-year comparisons of the main interacting guild.
 message("Analyzing Pollinator Spectra...")
 
 # Aggregate visitation rates
@@ -439,50 +492,87 @@ agg_data_2024 <- pollen_deposition %>%
         .groups = "drop"
     )
 
+# Model
 fit_daily <- lm(mean_HP ~ mean_CP * as.factor(day), data = agg_data_2024)
 print(anova(fit_daily))
+# Result Interpretation:
+# The interaction term (mean_CP:as.factor(day)) is not significant (p = 0.366),
+# and the main effect of day is also non-significant (p = 0.197).
+# This confirms that the relationship between CP and HP deposition does not
+# vary significantly day-to-day. The micro-scale stabilization holds reliable
+# throughout 6 days of 2024 despite any behavioral shifts
+# or minor weather fluctuations.
 
 
 # ------------------------------------------------------------------------------
 # 2.5 Variance Partitioning (VCA)
 # ------------------------------------------------------------------------------
-# Analyzing hierarchical variance structure (Inter-annual vs Intra-annual).
+# We quantify how much variation in pollen deposition occurs at different 
+# hierarchical levels: Inter-annual (Year), Intra-annual (Date), Plant (Inflorescence), 
+# and the base micro-scale (Individual Stigma).
 
 message("Running Variance Partitioning...")
 
+# Step 1: Data Preparation
+# We explicitly define the grouping factors used for the random effects in the LMMs. 
+# We use the square root of HP to stabilize the variance, as confirmed in S4.
+# We use the square root of CP to stabilize the variance, as confirmed in S4.
 vca_data <- pollen_deposition %>%
     filter(!is.na(heterospecific_pollen) & !is.na(conspecific_pollen)) %>%
     mutate(
         sqrt_HP = sqrt(heterospecific_pollen),
-        year_fac = as.factor(year),
-        date_fac = as.factor(paste(year, day, sep = "_")),
-        plant_id = inflorescence_id
+        sqrt_CP = sqrt(conspecific_pollen),
+        year_fac = as.factor(year), # Defines the Year level
+        date_fac = as.factor(paste(year, day, sep = "_")), # Defines the specific Day level
+        plant_id = inflorescence_id # Defines the Plant/Individual level
     )
 
-# Function to run Two-Part VCA (Global + 2024 Detailed)
+# Step 2: Two-Part LMM Function definition
+# Because we only have fine-scale day-to-day data for 2024, a single fully-nested 
+# model (Year/Date/Plant) across all three years is rank-deficient. Thus, we run 
+# two separate models to isolate the specific variance components.  
+#
+# Arguments:
+#   data: The pre-processed dataframe (e.g., vca_data) containing the nested factors.
+#   variable_col: A string specifying the column name of the response variable to analyze 
+#                 (e.g., "sqrt_HP" or "sqrt_CP").
+#   metric_label: A string used to label the output dataframe rows for visualization 
+#                 (e.g., "Heterospecific Pollen (Sq)").
+# returns: A dataframe with columns: Part, level, vcov, sdcor, percent.
 run_twopart_vca <- function(data, variable_col, metric_label) {
+    
+    # Helper: Extracts raw variance from LMM random effects, calculates the 
+    # percentage of total variance explained, and labels the spatial/temporal level.
+    #
+    # Arguments:
+    #   model: The fitted lmer model object.
+    #   name: A string label for the "Part" column (e.g., "Inter-Annual").
+    #
+    # Returns:
+    #   A dataframe with columns: Part, level, vcov, sdcor, percent.
     extract_lmer_var <- function(model, name) {
-        vc <- VarCorr(model)
-        df <- as.data.frame(vc)
-        if (!("Residual" %in% df$grp)) {
-            sigma_sq <- attr(vc, "sc")^2
-            df <- rbind(df, data.frame(grp = "Residual", var1 = NA, var2 = NA, vcov = sigma_sq, sdcor = attr(vc, "sc")))
+        vc <- VarCorr(model) # Extracts variance components from the fitted LMM.
+        df <- as.data.frame(vc) # Converts the variance components to a dataframe.
+        if (!("Residual" %in% df$grp)) { # Adds the residual variance component if it is not already present.
+            sigma_sq <- attr(vc, "sc")^2 # Calculates the residual variance.
+            df <- rbind(df, data.frame(grp = "Residual", var1 = NA, var2 = NA, vcov = sigma_sq, sdcor = attr(vc, "sc"))) # Adds the residual variance component to the dataframe.
         }
-        total_var <- sum(df$vcov)
-        df$percent <- (df$vcov / total_var) * 100
-        df$Part <- name
-        df$level <- dplyr::case_when(
-            grepl("inflorescence", df$grp) ~ "Plant",
-            grepl("plant_id", df$grp) ~ "Plant",
-            df$grp == "year_fac" ~ "Year",
-            df$grp == "date_fac" ~ "Date",
-            df$grp == "Residual" ~ "Stigma",
-            TRUE ~ "Other"
+        total_var <- sum(df$vcov) # Calculates the total variance.
+        df$percent <- (df$vcov / total_var) * 100 # Calculates the percentage of total variance explained by each component.
+        df$Part <- name # Adds a "Part" column with the provided name.
+        df$level <- dplyr::case_when( # Adds a "level" column with the spatial/temporal level.
+            grepl("inflorescence", df$grp) ~ "Plant", # If the group name contains "inflorescence", the level is "Plant".
+            grepl("plant_id", df$grp) ~ "Plant", # If the group name contains "plant_id", the level is "Plant".
+            df$grp == "year_fac" ~ "Year", # If the group name is "year_fac", the level is "Year".
+            df$grp == "date_fac" ~ "Date", # If the group name is "date_fac", the level is "Date".
+            df$grp == "Residual" ~ "Stigma", # If the group name is "Residual", the level is "Stigma".
+            TRUE ~ "Other" # Otherwise, the level is "Other".
         )
         return(df[, c("Part", "level", "vcov", "sdcor", "percent")])
     }
 
-    # Global
+    # Model A (Inter-Annual): Uses all data (2022-2024) to estimate how much 
+    # variance belongs to the sweeping 'Year' shifts vs individual 'Plants'.
     f_inter <- as.formula(paste(variable_col, "~ 1 + (1 | year_fac / plant_id)"))
     m_inter <- lmer(f_inter, data = data)
     res_inter <- extract_lmer_var(m_inter, "Inter-Annual")
@@ -501,6 +591,52 @@ run_twopart_vca <- function(data, variable_col, metric_label) {
 # Run for HP (Sqrt)
 res_vca_hp <- run_twopart_vca(vca_data, "sqrt_HP", "Heterospecific Pollen (Sq)")
 print(res_vca_hp)
+
+# Run for CP    
+res_vca_cp <- run_twopart_vca(vca_data, "sqrt_CP", "Conspecific Pollen (Sq)")
+print(res_vca_cp)
+
+
+# Define factor levels
+all_results <- rbind(res_vca_hp, res_vca_cp)
+all_results$level <- factor(all_results$level, levels = c("Year", "Date", "Plant", "Stigma"))
+
+# Ensure the Metric names match the desired target strings before forcing them to factors
+all_results$Metric <- dplyr::case_when(
+    grepl("Heterospecific", all_results$Metric) ~ "Heterospecific pollen",
+    grepl("Conspecific", all_results$Metric) ~ "Conspecific pollen",
+    TRUE ~ all_results$Metric
+)
+all_results$Metric <- factor(all_results$Metric, levels = c("Heterospecific pollen", "Conspecific pollen"))
+
+# 4. Visualization (Percent only)
+p_var <- ggplot(all_results, aes(x = Metric, y = percent, fill = level)) +
+    geom_bar(stat = "identity", width = 0.6) +
+    facet_wrap(~Part) +
+    scale_fill_brewer(palette = "Set2") +
+    geom_text(aes(label = ifelse(percent > 1.5, paste0(round(percent, 0), "%"), "")),
+        position = position_stack(vjust = 0.5),
+        size = 4,
+        fontface = "bold",
+        color = "black"
+    ) +
+    labs(
+        title = "Variance Partitioning (Transformed Data) of pollen deposited on stigmas",
+        y = "% of Total Variance",
+        x = "",
+        fill = "Variance Source"
+    ) +
+    theme_classic() +
+    theme(
+        axis.text.x = element_text(face = "bold", angle = 0, hjust = 0.5, size = 11),
+        strip.text = element_text(size = 12, face = "bold"),
+        legend.position = "bottom"
+    )
+
+print(p_var)
+
+
+### Otestovat!! 
 
 
 # ------------------------------------------------------------------------------
@@ -565,6 +701,8 @@ cv_gut <- pollen_load_guts_24 %>%
 
 cv_table <- bind_rows(cv_stigma, cv_body, cv_gut)
 print(cv_table)
+
+
 
 
 # ------------------------------------------------------------------------------
@@ -677,3 +815,12 @@ final_table <- net_metrics %>%
 print(final_table)
 
 message("Analysis Script Complete!")
+
+
+
+
+
+
+
+
+
