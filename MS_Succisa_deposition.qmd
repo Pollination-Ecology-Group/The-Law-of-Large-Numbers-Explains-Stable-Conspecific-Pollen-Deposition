@@ -16,7 +16,6 @@ format:
 ```{r}
 #| label: global-setup
 #| include: false
-
 # 1. Global Knitr Options
 knitr::opts_chunk$set(echo = FALSE, warning = FALSE, message = FALSE, fig.path = "docs/images/", dev = c("png", "pdf"))
 
@@ -93,8 +92,6 @@ plant_abundance_22_24 <- get_plant_data(
 
 # SVD data - data on Single visit deposition (SVD)
 SVD_Succisa_22_24 <- read.csv("data/SVD_Succisa_pratensis.csv")
-
-
 ```
 
 ## The Conceptual Framework
@@ -157,7 +154,6 @@ To do so, we employ data on pollen load and pollen feeding of pollinators, polle
 #| message: false
 #| fig-width: 10
 #| fig-height: 8
-
 # Read and process images
 # image_trim() removes the surrounding whitespace
 img_A <- image_read("images/Blizna_Suc_pra_2.jpg") %>% image_trim()
@@ -252,7 +248,6 @@ The presence of *Succisa pratensis* in the study plots across the surveyed years
 #| warning: false
 #| message: false
 #| fig-height: 8
-
 # --- PART A: MAP ---
 
 # 1. Prepare Presence Data
@@ -358,7 +353,6 @@ Comparisons of the proportional representation of different pollinator species v
 #| warning: false
 #| message: false
 #| fig-cap: "Pollinator spectra composition on Succisa pratensis (2022-2024). Stacked bars show the proportion of standardized visitation rates for the most abundant species."
-
 # 1. Aggregation
 # Calculate total visitation rate per species per year
 species_composition <- interaction_data_Succisa_22_24 %>%
@@ -447,7 +441,6 @@ We also examined the changes in visitation intensity to *Succisa pratensis* acro
 #| label: analysis-visitation-curve-fit
 #| echo: true
 #| code-fold: true
-
 test_curve_shape <- function(year_data, year_label) {
     # 0. Data Aggregation (Mean per Plant)
     # Using the 'plant_id' we created earlier
@@ -538,7 +531,6 @@ rbind(results_2022, results_2023, results_2024) %>%
         locations = cells_column_labels()
     ) %>%
     opt_align_table_header(align = "left")
-
 ```
 
 ### Slope Showdown: Analysis of Aggregated Data
@@ -551,7 +543,6 @@ To address potential pseudoreplication (multiple stigmas per plant) and heterosc
 #| warning: false
 #| message: false
 #| fig-cap: "Relationship between Conspecific and Heterospecific pollen (Plant Means). Curves represent back-transformed fits from the sqrt-scale model."
-
 # 1. Data Aggregation
 aggregated_data <- pollen_deposition %>%
     group_by(year, plant_id) %>%
@@ -566,7 +557,7 @@ aggregated_data <- pollen_deposition %>%
 
 # 2. Model Fitting (Square Root Transformation)
 # sqrt(mean_HP) ~ mean_CP * Year
-fit_sqrt <- lm(sqrt(mean_HP) ~sqrt(mean_CP) * Year, data = aggregated_data)
+fit_sqrt <- lm(sqrt(mean_HP) ~ sqrt(mean_CP) * Year, data = aggregated_data)
 
 # 3. Model Results
 # Type III ANOVA (if using car::Anova) or standard anova
@@ -718,7 +709,7 @@ ggplot(aggregated_data, aes(x = mean_CP, y = mean_HP, color = Year, fill = Year)
     geom_line(data = pred_data, size = 1) +
     labs(
         title = "Slope Showdown: CP vs HP",
-        subtitle = "Model: sqrt(HP) ~ CP * Year (Back-transformed)",
+        subtitle = "Model: sqrt(HP) ~ sqrt(CP) * Year (Back-transformed)",
         x = "Mean Conspecific Pollen (per plant)",
         y = "Mean Heterospecific Pollen (per plant)",
         color = "Year",
@@ -739,7 +730,6 @@ To determine if the relationship between Conspecific and Heterospecific pollen d
 #| warning: false
 #| message: false
 #| fig-cap: "Daily stability of pollen deposition network structure in 2024. A) Faceted by Day. B) Combined trends."
-
 # 1. Data Prep
 # Filter for 2024 and aggregate by plant_id (which is day-specific)
 agg_data_2024 <- pollen_deposition %>%
@@ -800,7 +790,6 @@ This pattern of high fine-scale stochasticity was consistent when analyzing the 
 #| warning: false
 #| message: false
 #| fig-cap: "Variance Partitioning Results. A) Inter-Annual Stability (All Years). B) Intra-Annual Stability (2024 Only)."
-
 # 1. Data Preparation
 vca_data <- pollen_deposition %>%
     filter(!is.na(heterospecific_pollen) & !is.na(conspecific_pollen)) %>%
@@ -1061,7 +1050,6 @@ To understand *why* the deposition pattern follows a specific functional form (T
 #| message: false
 #| fig-height: 10
 #| fig-cap: "Pollen Purity by Species. A) Proportion of Conspecific Pollen (CP) on pollinator bodies. B) Proportion of CP in pollinator guts."
-
 # 1. Prepare Data (Body Loads)
 pollen_loads <- pollen_load_guts_24 %>%
     filter(!is.na(suc_pra_load) & !is.na(other_pollen_load)) %>%
@@ -1138,7 +1126,6 @@ To assess the relative variability of pollen counts across the transport network
 #| warning: false
 #| message: false
 #| fig-cap: "Coefficient of Variation (CV) of Conspecific (CP) and Heterospecific (HP) pollen counts across compartments."
-
 # 1. Stigma CV
 cv_stigma <- pollen_deposition %>%
     summarise(
@@ -1219,7 +1206,6 @@ The core structure of the pollinator community remained highly stable across the
 #| fig-cap: "Community Stability and Structure. A) Temporal Stability (Morisita-Horn Similarity). B) Pollinator Evenness (J') per plot across years."
 #| fig-height: 10
 #| fig-width: 10
-
 # --- Part 1: Community Similarity (Heatmap) ---
 
 # 1. Aggregation for Stability Analysis
@@ -1290,7 +1276,7 @@ plant_matrix_prep <- plant_abundance_22_24 %>%
     pivot_wider(names_from = Species, values_from = total_abundance, values_fill = 0)
 
 # Extract Matrix
-if(nrow(plant_matrix_prep) > 0) {
+if (nrow(plant_matrix_prep) > 0) {
     comm_mat_plant <- as.matrix(plant_matrix_prep[, -1])
     rownames(comm_mat_plant) <- as.character(plant_matrix_prep$year)
 
@@ -1331,7 +1317,8 @@ if(nrow(plant_matrix_prep) > 0) {
             legend.position = "right"
         )
 } else {
-    p_plant_similarity <- ggplot() + labs(title = "No Plant Data Available")
+    p_plant_similarity <- ggplot() +
+        labs(title = "No Plant Data Available")
 }
 
 # --- Part 3: Pollinator Evenness (Boxplot) ---
@@ -1376,7 +1363,7 @@ morph_evenness <- interaction_groups %>%
     summarise(abundance = sum(interaction_count, na.rm = TRUE), .groups = "drop") %>%
     pivot_wider(names_from = morphogroup, values_from = abundance, values_fill = 0) %>%
     mutate(
-        J = vegan::diversity(across(where(is.numeric) & !any_of(c("year", "plot_id"))), index = "shannon") / 
+        J = vegan::diversity(across(where(is.numeric) & !any_of(c("year", "plot_id"))), index = "shannon") /
             log(vegan::specnumber(across(where(is.numeric) & !any_of(c("year", "plot_id")))))
     ) %>%
     filter(is.finite(J)) %>% # Remove 0/0 (no diversity)
@@ -1405,8 +1392,6 @@ row1 <- ggpubr::ggarrange(p_similarity, p_plant_similarity, ncol = 2, labels = N
 row2 <- ggpubr::ggarrange(p_evenness, p_evenness_morph, ncol = 2, labels = NULL)
 
 ggpubr::ggarrange(row1, row2, nrow = 2, heights = c(1, 1))
-
-
 ```
 
 ```{r}
@@ -1428,8 +1413,8 @@ library(knitr)
 calc_net_metrics <- function(year_val, data) {
     # Filter data for the year
     # Handle potential 2-digit year in data vs 4-digit year_val
-    target_year <- if(year_val > 2000) year_val - 2000 else year_val
-    
+    target_year <- if (year_val > 2000) year_val - 2000 else year_val
+
     yr_data <- data %>% filter(year == target_year | year == year_val)
 
     # Check if data exists
@@ -1440,37 +1425,42 @@ calc_net_metrics <- function(year_val, data) {
     # Detect cols (robust)
     pol_cols_possible <- c("pollinator_id", "pollinator_species", "pollinator")
     pol_col <- pol_cols_possible[pol_cols_possible %in% names(yr_data)][1]
-    
+
     plant_cols_possible <- c("plant_code", "plant_species", "plant_id", "plant")
     plant_col <- plant_cols_possible[plant_cols_possible %in% names(yr_data)][1]
-    
+
     int_cols_possible <- c("rate", "interaction_count", "interaction", "count")
     int_col <- int_cols_possible[int_cols_possible %in% names(yr_data)][1]
 
-    if(is.na(pol_col) | is.na(plant_col) | is.na(int_col)) {
+    if (is.na(pol_col) | is.na(plant_col) | is.na(int_col)) {
         return(data.frame(Year = year_val, H2 = NA, Succisa_d = NA, Succisa_H = NA))
     }
 
     # Bipartite Matrix (Plants x Pollinators)
     # Refactoring to handle potential list-columns or type mismatches
-    web_matrix <- tryCatch({
-        mat <- yr_data %>%
-            select(Plant = all_of(plant_col), Pollinator = all_of(pol_col), Interaction = all_of(int_col)) %>%
-            # Force numeric, unlisting if necessary
-            mutate(Interaction = as.numeric(unlist(Interaction))) %>%
-            # Aggregate duplicated Plant-Pollinator pairs to avoid list-columns during pivot_wider
-            group_by(Plant, Pollinator) %>%
-            summarise(Interaction = sum(Interaction, na.rm = TRUE), .groups = "drop") %>%
-            pivot_wider(names_from = Pollinator, values_from = Interaction, values_fill = 0) %>%
-            tibble::column_to_rownames("Plant") %>%
-            as.matrix()
-        mat
-    }, error = function(e) {
-        warning(paste("Error creating matrix for year", year_val, ":", e$message))
-        return(NULL)
-    })
-    
-    if(is.null(web_matrix)) return(data.frame(Year = year_val, H2 = NA, Succisa_d = NA, Succisa_H = NA))
+    web_matrix <- tryCatch(
+        {
+            mat <- yr_data %>%
+                select(Plant = all_of(plant_col), Pollinator = all_of(pol_col), Interaction = all_of(int_col)) %>%
+                # Force numeric, unlisting if necessary
+                mutate(Interaction = as.numeric(unlist(Interaction))) %>%
+                # Aggregate duplicated Plant-Pollinator pairs to avoid list-columns during pivot_wider
+                group_by(Plant, Pollinator) %>%
+                summarise(Interaction = sum(Interaction, na.rm = TRUE), .groups = "drop") %>%
+                pivot_wider(names_from = Pollinator, values_from = Interaction, values_fill = 0) %>%
+                tibble::column_to_rownames("Plant") %>%
+                as.matrix()
+            mat
+        },
+        error = function(e) {
+            warning(paste("Error creating matrix for year", year_val, ":", e$message))
+            return(NULL)
+        }
+    )
+
+    if (is.null(web_matrix)) {
+        return(data.frame(Year = year_val, H2 = NA, Succisa_d = NA, Succisa_H = NA))
+    }
 
     # --- Metric A: Network H2' ---
     h2 <- bipartite::H2fun(web_matrix, H2_integer = FALSE)[1]
@@ -1478,15 +1468,15 @@ calc_net_metrics <- function(year_val, data) {
     # --- Metric B: Succisa d' (Specialization) ---
     # Calculate d' for all plants
     d_vals <- bipartite::specieslevel(web_matrix, index = "d", level = "lower")
-    
+
     # Extract Succisa
     # Try different name variations
     suc_names <- c("Suc_pra", "Succisa pratensis", "Succisa_pratensis")
     suc_row <- rownames(d_vals)[rownames(d_vals) %in% suc_names][1]
-    
-    if(!is.na(suc_row)) {
+
+    if (!is.na(suc_row)) {
         succisa_d <- d_vals[suc_row, "d"]
-        
+
         # --- Metric C: Succisa Partner Diversity (H) ---
         # Get interaction row for Succisa from web matrix
         suc_int <- web_matrix[suc_row, ]
@@ -1608,48 +1598,47 @@ The datasets used in this study are available in the supplementary material and 
 #| eval: true
 #| message: false
 #| warning: false
-
 # --- 1. Define Metadata (Data Dictionary) ---
 
 data_dictionary <- data.frame(
-  Dataset = character(),
-  Variable = character(),
-  Description = character(),
-  Unit = character(),
-  stringsAsFactors = FALSE
+    Dataset = character(),
+    Variable = character(),
+    Description = character(),
+    Unit = character(),
+    stringsAsFactors = FALSE
 )
 
 # Helper to append rows
 add_meta <- function(df, dataset, var, desc, unit) {
-  rbind(df, data.frame(Dataset = dataset, Variable = var, Description = desc, Unit = unit))
+    rbind(df, data.frame(Dataset = dataset, Variable = var, Description = desc, Unit = unit))
 }
 
 # Pollen Deposition Metadata
 data_dictionary <- data_dictionary %>%
-  add_meta("pollen_deposition", "year", "Year of sampling", "Year (2022-2024)") %>%
-  add_meta("pollen_deposition", "plot_id", "Unique identifier for the study plot", "Categorical") %>%
-  add_meta("pollen_deposition", "inflorescence_id", "Unique identifier for the sampled inflorescence", "Categorical") %>%
-  add_meta("pollen_deposition", "conspecific_pollen", "Count of conspecific (Succisa) pollen grains on stigma", "Count") %>%
-  add_meta("pollen_deposition", "heterospecific_pollen", "Count of heterospecific (non-Succisa) pollen grains on stigma", "Count") %>%
-  add_meta("pollen_deposition", "total_pollen", "Sum of conspecific and heterospecific pollen", "Count")
+    add_meta("pollen_deposition", "year", "Year of sampling", "Year (2022-2024)") %>%
+    add_meta("pollen_deposition", "plot_id", "Unique identifier for the study plot", "Categorical") %>%
+    add_meta("pollen_deposition", "inflorescence_id", "Unique identifier for the sampled inflorescence", "Categorical") %>%
+    add_meta("pollen_deposition", "conspecific_pollen", "Count of conspecific (Succisa) pollen grains on stigma", "Count") %>%
+    add_meta("pollen_deposition", "heterospecific_pollen", "Count of heterospecific (non-Succisa) pollen grains on stigma", "Count") %>%
+    add_meta("pollen_deposition", "total_pollen", "Sum of conspecific and heterospecific pollen", "Count")
 
 # SVD Metadata
 data_dictionary <- data_dictionary %>%
-  add_meta("SVD", "year", "Year of observation", "Year") %>%
-  add_meta("SVD", "morphogroup", "Functional group of the visitor (e.g., Eristalis, Bombus)", "Categorical") %>%
-  add_meta("SVD", "duration_sec", "Duration of the single visit", "Seconds") %>%
-  add_meta("SVD", "conspecific_pollen", "Conspecific pollen deposited during single visit", "Count") %>%
-  add_meta("SVD", "heterospecific_pollen", "Heterospecific pollen deposited during single visit", "Count")
+    add_meta("SVD", "year", "Year of observation", "Year") %>%
+    add_meta("SVD", "morphogroup", "Functional group of the visitor (e.g., Eristalis, Bombus)", "Categorical") %>%
+    add_meta("SVD", "duration_sec", "Duration of the single visit", "Seconds") %>%
+    add_meta("SVD", "conspecific_pollen", "Conspecific pollen deposited during single visit", "Count") %>%
+    add_meta("SVD", "heterospecific_pollen", "Heterospecific pollen deposited during single visit", "Count")
 
 # Network Metrics Metadata
 data_dictionary <- data_dictionary %>%
-  add_meta("network_metrics", "Year", "Year of sampling", "Year") %>%
-  add_meta("network_metrics", "H2", "Network Specialization index (H2')", "Index [0-1]") %>%
-  add_meta("network_metrics", "Evenness", "Interaction Evenness (Shannon's)", "Index [0-1]") %>%
-  add_meta("network_metrics", "Slope", "Slope (Beta) of the CP-HP relationship (Type 1 dynamics)", "Coefficient") %>%
-  add_meta("network_metrics", "Mean_HP", "Mean Heterospecific Pollen per stigma", "Count") %>%
-  add_meta("network_metrics", "Succisa_Abundance", "Mean abundance of Succisa pratensis per plot", "Count / Patch") %>%
-  add_meta("network_metrics", "Total_Abundance", "Total floral abundance in the community", "Count")
+    add_meta("network_metrics", "Year", "Year of sampling", "Year") %>%
+    add_meta("network_metrics", "H2", "Network Specialization index (H2')", "Index [0-1]") %>%
+    add_meta("network_metrics", "Evenness", "Interaction Evenness (Shannon's)", "Index [0-1]") %>%
+    add_meta("network_metrics", "Slope", "Slope (Beta) of the CP-HP relationship (Type 1 dynamics)", "Coefficient") %>%
+    add_meta("network_metrics", "Mean_HP", "Mean Heterospecific Pollen per stigma", "Count") %>%
+    add_meta("network_metrics", "Succisa_Abundance", "Mean abundance of Succisa pratensis per plot", "Count / Patch") %>%
+    add_meta("network_metrics", "Total_Abundance", "Total floral abundance in the community", "Count")
 
 
 # --- 2. Export Data ---
@@ -1657,7 +1646,7 @@ data_dictionary <- data_dictionary %>%
 # Create output directory if it doesn't exist
 output_dir <- file.path("output", "publication_data")
 if (!dir.exists(output_dir)) {
-  dir.create(output_dir, recursive = TRUE)
+    dir.create(output_dir, recursive = TRUE)
 }
 
 # Export Dataframes
@@ -1675,7 +1664,6 @@ if (exists("final_table")) {
 
 # Export Metadata
 write.csv(data_dictionary, file.path(output_dir, "data_dictionary.csv"), row.names = FALSE)
-
 ```
 
 ## References
