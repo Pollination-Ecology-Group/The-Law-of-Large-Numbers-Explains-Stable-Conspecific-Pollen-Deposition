@@ -7,9 +7,9 @@ project:
   render:
     - "!local_packages/"
     - "!hanpolnet_temp/"
-    - index.qmd
-    - labmeeting_presentation/index.qmd
-    - MS_Succisa_deposition.qmd
+    # - index.qmd
+    #- labmeeting_presentation/index.qmd
+    #- MS_Succisa_deposition.qmd
     - MS_FML.qmd
     - Supplementary_Material.qmd
 

@@ -11,6 +11,8 @@ format:
   pdf:
     toc: true
     number-sections: true
+  docx:
+    reference-doc: tech_docs/template.docx
 ---
 
 ```{r}
@@ -18,7 +20,6 @@ format:
 #| include: false
 #| message: false
 #| warning: false
-
 knitr::opts_chunk$set(fig.path = "docs/images/")
 library(lme4)
 library(dplyr)
@@ -66,7 +67,6 @@ Model Structure: `variable ~ 1 + (1 | year_fac / plant_id)`
 #| echo: true
 #| warning: false
 #| message: false
-
 # Helper function to fit 3 models and plot diagnostics
 run_transformation_diagnostics <- function(data, variable_name, title_prefix) {
     # Extract variable
@@ -75,7 +75,7 @@ run_transformation_diagnostics <- function(data, variable_name, title_prefix) {
     y_log <- log1p(y)
     # Handle distribution for Sqrt
     y_sqrt <- sqrt(y)
-    
+
     # 1. Fit Models
     # A) Raw
     m_raw <- lmer(y ~ 1 + (1 | year_fac / plant_id), data = data)
@@ -83,16 +83,16 @@ run_transformation_diagnostics <- function(data, variable_name, title_prefix) {
     m_log <- lmer(y_log ~ 1 + (1 | year_fac / plant_id), data = data)
     # C) Sqrt
     m_sqrt <- lmer(y_sqrt ~ 1 + (1 | year_fac / plant_id), data = data)
-    
+
     # 2. Plotting Helper
     make_plots <- function(model, suffix) {
         df <- data.frame(Fitted = fitted(model), Residuals = resid(model))
-        
+
         p_hist <- ggplot(df, aes(x = Residuals)) +
             geom_histogram(bins = 30, fill = "steelblue", color = "white", alpha = 0.7) +
             labs(title = paste("Hist:", suffix), x = "", y = "Freq") +
             theme_minimal()
-            
+
         p_res <- ggplot(df, aes(x = Fitted, y = Residuals)) +
             geom_point(alpha = 0.3) +
             geom_hline(yintercept = 0, color = "red", linetype = "dashed") +
@@ -100,11 +100,11 @@ run_transformation_diagnostics <- function(data, variable_name, title_prefix) {
             theme_minimal()
         return(list(p_hist, p_res))
     }
-    
+
     pl_raw <- make_plots(m_raw, "Raw")
     pl_log <- make_plots(m_log, "Log")
     pl_sqrt <- make_plots(m_sqrt, "Sqrt")
-    
+
     # Combine
     grid.arrange(
         pl_raw[[1]], pl_log[[1]], pl_sqrt[[1]],
@@ -124,7 +124,6 @@ run_transformation_diagnostics <- function(data, variable_name, title_prefix) {
 #| fig-width: 12
 #| warning: false
 #| message: false
-
 run_transformation_diagnostics(model_data, "heterospecific_pollen", "Heterospecific Pollen")
 ```
 
@@ -139,7 +138,6 @@ run_transformation_diagnostics(model_data, "heterospecific_pollen", "Heterospeci
 #| fig-width: 12
 #| warning: false
 #| message: false
-
 run_transformation_diagnostics(model_data, "conspecific_pollen", "Conspecific Pollen")
 ```
 
@@ -154,7 +152,6 @@ run_transformation_diagnostics(model_data, "conspecific_pollen", "Conspecific Po
 #| fig-width: 12
 #| warning: false
 #| message: false
-
 run_transformation_diagnostics(model_data, "prop_HP", "Proportion HP")
 ```
 
@@ -170,7 +167,6 @@ The distribution of heterospecific pollen deposition counts is highly skewed, wi
 #| label: fig-distribution
 #| fig-cap: "Distribution of Heterospecific Pollen Counts on Stigmas."
 #| warning: false
-
 ggplot(model_data, aes(x = heterospecific_pollen)) +
     geom_histogram(binwidth = 5, fill = "darkgreen", color = "white", alpha = 0.7) +
     labs(
@@ -198,7 +194,6 @@ To determine the functional form of the relationship between Conspecific (CP) an
 #| message: false
 #| fig-height: 12
 #| fig-width: 10
-
 library(gridExtra)
 
 # 1. Prepare Aggregated Data (Same as MS)
@@ -302,7 +297,6 @@ To validate the use of the square-root transformation for the "Slope Showdown" a
 #| message: false
 #| fig-height: 5
 #| fig-width: 10
-
 # Re-create the aggregated data locally for the supplemental plot
 model_data_agg <- pollen_deposition %>%
     mutate(plant_id = paste(year, inflorescence_id, day, sep = "_")) %>%
@@ -324,7 +318,6 @@ par(mfrow = c(1, 2))
 plot(fit_sqrt_supp, which = 1, main = "A. Residuals vs Fitted")
 plot(fit_sqrt_supp, which = 2, main = "B. Normal Q-Q")
 par(mfrow = c(1, 1))
-
 ```
 
 # Section S5: Pollinator Community Composition
@@ -337,7 +330,6 @@ Table S3 presents the abundance and relative abundance of all pollinator taxa re
 #| echo: false
 #| message: false
 #| warning: false
-
 library(tidyr)
 library(knitr)
 library(dplyr)
@@ -433,7 +425,6 @@ The following table describes the variables contained in the archived datasets (
 #| echo: false
 #| message: false
 #| warning: false
-
 # Read Metadata
 # Assuming output/publication_data is relative to the project root
 # If rendering from this file, path should be valid if working dir is project root
@@ -477,34 +468,67 @@ if (file.exists(dict_path)) {
 #| echo: false
 #| warning: false
 #| message: false
+library(dplyr)
+library(tidyr)
+library(gt)
 
 # Generate table of SVD occurrences per species
 if (!exists("SVD_Succisa_22_24")) {
     SVD_Succisa_22_24 <- read.csv("data/SVD_Succisa_pratensis.csv")
 }
 
-SVD_Succisa_22_24 %>%
-    count(pollinator_species, name = "count") %>%
-    arrange(desc(count)) %>%
-    gt() %>%
+SVD_clean <- SVD_Succisa_22_24 %>%
+    mutate(
+        year = if ("rok" %in% names(.)) as.numeric(rok) else as.numeric(year),
+        morphogroup = case_when(
+            grepl("Eristalis", pollinator_species) ~ "Eristalis spp.",
+            grepl("Bombus", pollinator_species) ~ "Bombus spp.",
+            pollinator_species %in% c("Apis_mellifera", "Apis mellifera") ~ "Apis mellifera",
+            grepl("Syrphus", pollinator_species) ~ "Syrphus spp.",
+            grepl("Helophilus", pollinator_species) ~ "Helophilus spp.",
+            TRUE ~ "Other"
+        )
+    ) %>%
+    filter(!is.na(year))
+
+svd_summary <- SVD_clean %>%
+    count(morphogroup, pollinator_species, year, name = "count") %>%
+    pivot_wider(
+        id_cols = c(morphogroup, pollinator_species),
+        names_from = year,
+        values_from = count,
+        values_fill = 0
+    )
+
+# Safely calculate Total (handling variable year columns)
+year_cols <- as.character(sort(unique(SVD_clean$year)))
+svd_summary <- svd_summary %>%
+    mutate(Total = rowSums(across(all_of(year_cols)))) %>%
+    arrange(morphogroup, desc(Total))
+
+svd_summary %>%
+    gt(groupname_col = "morphogroup") %>%
     tab_header(
         title = "Table S1: SVD Sample Sizes",
-        subtitle = "Number of single-visit deposition observations recorded per pollinator species."
+        subtitle = "Number of single-visit deposition observations recorded per pollinator species and year."
     ) %>%
     cols_label(
-        pollinator_species = "Pollinator Species",
-        count = "Sample Size (N)"
+        pollinator_species = "Species",
+        Total = "Grand Total"
     ) %>%
     tab_style(
         style = cell_text(style = "italic"),
         locations = cells_body(columns = pollinator_species)
     ) %>%
     tab_options(
-        table.width = pct(60),
+        table.width = pct(70),
         column_labels.background.color = "#F0F0F0",
         table.border.top.color = "black",
-        table.border.bottom.color = "black"
-    )
+        table.border.bottom.color = "black",
+        row_group.font.weight = "bold",
+        row_group.background.color = "#F9F9F9"
+    ) %>%
+    opt_align_table_header(align = "left")
 ```
 
 # Section S8: Significance Testing of Variance Partitioning
@@ -516,7 +540,6 @@ To test the statistical significance of the variance components (Year, Date, and
 #| echo: false
 #| warning: false
 #| message: false
-
 library(lmerTest)
 library(dplyr)
 library(gt)
@@ -527,9 +550,9 @@ vca_data <- pollen_deposition %>%
     mutate(
         sqrt_HP = sqrt(heterospecific_pollen),
         sqrt_CP = sqrt(conspecific_pollen),
-        year_fac = as.factor(year), 
-        date_fac = as.factor(paste(year, day, sep = "_")), 
-        plant_id = inflorescence_id 
+        year_fac = as.factor(year),
+        date_fac = as.factor(paste(year, day, sep = "_")),
+        plant_id = inflorescence_id
     )
 
 # Inter-Annual Model Testing (Years 2022-2024)
@@ -549,7 +572,7 @@ test_intra_cp <- ranova(m_intra_cp)
 format_ranova <- function(ranova_res, model_type, pollen_type) {
     df <- as.data.frame(ranova_res)
     df$Term <- rownames(df)
-    
+
     df <- df %>%
         filter(!is.na(LRT)) %>%
         mutate(
@@ -559,7 +582,7 @@ format_ranova <- function(ranova_res, model_type, pollen_type) {
             Term = gsub("\\\\)", "", Term)
         ) %>%
         select(Model, Pollen, Term, npar, logLik, AIC, LRT, Df, `Pr(>Chisq)`)
-        
+
     return(df)
 }
 
@@ -615,7 +638,6 @@ The following tables detail the variance components (Inter-Annual and Intra-Annu
 #| echo: false
 #| message: false
 #| warning: false
-
 library(lme4)
 library(dplyr)
 library(gt)
@@ -653,12 +675,12 @@ run_twopart_vca_supp <- function(data, variable_col, metric_label) {
         )
         return(df[, c("Part", "level", "vcov", "sdcor", "percent")])
     }
-    
+
     # Inter-Annual (Global)
     f_inter <- as.formula(paste(variable_col, "~ 1 + (1 | year_fac / plant_id)"))
     m_inter <- lmer(f_inter, data = data)
     res_inter <- extract_lmer_var(m_inter, "Inter-Annual")
-    
+
     # Intra-Annual (2024 Only)
     data_24 <- filter(data, year == 2024)
     # Check if we have date variation in 2024
@@ -672,7 +694,7 @@ run_twopart_vca_supp <- function(data, variable_col, metric_label) {
         m_intra <- lmer(f_intra, data = data_24)
         res_intra <- extract_lmer_var(m_intra, "Intra-Annual (2024 only)")
     }
-    
+
     combined <- rbind(res_inter, res_intra)
     combined$Metric <- metric_label
     return(combined)
@@ -700,9 +722,9 @@ make_vca_table <- function(data_subset, title, subtitle_text) {
             Percent_Total = paste0(round(Percent_Total, 1), "%")
         ) %>%
         arrange(Analysis, desc(Source))
-    
+
     last_inter_row <- max(which(table_detailed$Analysis == "Inter-Annual"))
-    
+
     table_detailed %>%
         gt() %>%
         tab_header(
@@ -747,71 +769,116 @@ make_vca_table(
     filter(all_results_supp, Metric == "Conspecific pollen"),
     "**Table S9**: Variance partitioning of square-root transformed conspecific pollen deposition",
     "Results for Global (Inter-Annual) and 2024 (Intra-Annual) analyses."
-) %>% print()
+)
 
 # Heterospecific Pollen Table (Second)
 make_vca_table(
     filter(all_results_supp, Metric == "Heterospecific pollen"),
     "**Table S10**: Variance partitioning of square-root transformed heterospecific pollen deposition",
     "Results for Global (Inter-Annual) and 2024 (Intra-Annual) analyses."
-) %>% print()
+)
 ```
 
-# Section S11: Monte Carlo Statistical Validation
+# Section S11: Monte Carlo Simulation Parameters and Year-by-Year Validation Statistics
 
-The following output compares the observed and simulated variance of conspecific pollen deposition, validating that the stabilization of pollen on the stigma can be explained by the statistical averaging of multiple single-visit depositions (the variance filter).
+To investigate inter-annual differences in the effect of visitation redundancy, we applied the Monte Carlo Single Visit Deposition (SVD) averaging simulation strictly to each study year. Using a robust Global SVD pool, we estimated yearly required visitation rates and modeled the accumulation of conspecific and heterospecific pollen.
 
 ```{r}
-#| label: monte-carlo-stats
+#| label: monte-carlo-stats-new
 #| echo: false
+#| warning: false
 #| message: false
+library(dplyr)
+library(gt)
 
-# Recompute necessary variables for the output
-empirical_stigma_CP <- pollen_deposition$conspecific_pollen
-mean_stigma_CP <- mean(empirical_stigma_CP, na.rm = TRUE)
-var_stigma_CP <- var(empirical_stigma_CP, na.rm = TRUE)
+set.seed(42)
+n_sim <- 10000
 
-if (!exists("SVD_Succisa_22_24")) {
-    SVD_Succisa_22_24 <- read.csv("data/SVD_Succisa_pratensis.csv")
+# 1. Establish the Global SVD Pool
+global_emp_svd_cp <- SVD_Succisa_22_24$conspecific_pollen[!is.na(SVD_Succisa_22_24$conspecific_pollen)]
+global_emp_svd_hp <- SVD_Succisa_22_24$heterospecific_pollen[!is.na(SVD_Succisa_22_24$heterospecific_pollen)]
+
+ks_results <- data.frame()
+
+years <- c(2022, 2023, 2024)
+
+for (y in years) {
+    # Extract year-specific final stigmas
+    stigma_y <- pollen_deposition %>% filter(year == y)
+    emp_stigma_cp <- stigma_y$conspecific_pollen[!is.na(stigma_y$conspecific_pollen)]
+    emp_stigma_hp <- stigma_y$heterospecific_pollen[!is.na(stigma_y$heterospecific_pollen)]
+    
+    # Calculate year-specific visitation rate (N)
+    N_visits <- max(1, round(mean(emp_stigma_cp) / mean(global_emp_svd_cp)))
+    
+    # Run the simulation using the GLOBAL SVD pool
+    sim_cp <- replicate(n_sim, sum(sample(global_emp_svd_cp, size = N_visits, replace = TRUE)))
+    sim_hp <- replicate(n_sim, sum(sample(global_emp_svd_hp, size = N_visits, replace = TRUE)))
+    
+    # Run K-S statistical tests
+    ks_cp <- ks.test(emp_stigma_cp, sim_cp)
+    ks_hp <- ks.test(emp_stigma_hp, sim_hp)
+    
+    # Run overlapping tests
+    ov_cp <- overlapping::overlap(list(emp_stigma_cp, sim_cp))
+    ov_hp <- overlapping::overlap(list(emp_stigma_hp, sim_hp))
+    
+    # Save statistics
+    ks_results <- rbind(ks_results, data.frame(
+        Year = y, 
+        Estimated_Visits = N_visits,
+        Obs_Mean_CP = mean(emp_stigma_cp), 
+        Sim_Mean_CP = mean(sim_cp),
+        KS_CP_D = ks_cp$statistic, 
+        KS_CP_P = ks_cp$p.value,
+        OVL_CP = ov_cp$OV,
+        Obs_Mean_HP = mean(emp_stigma_hp), 
+        Sim_Mean_HP = mean(sim_hp),
+        KS_HP_D = ks_hp$statistic, 
+        KS_HP_P = ks_hp$p.value,
+        OVL_HP = ov_hp$OV
+    ))
 }
-empirical_SVD_CP <- SVD_Succisa_22_24$conspecific_pollen
-mean_SVD_CP <- mean(empirical_SVD_CP, na.rm = TRUE)
 
-N_visits_CP <- round(mean_stigma_CP / mean_SVD_CP)
-
-set.seed(123)
-n_simulations <- 10000
-simulated_stigma_CP <- numeric(n_simulations)
-
-for (i in 1:n_simulations) {
-    drawn_visits <- sample(empirical_SVD_CP, size = N_visits_CP, replace = TRUE)
-    simulated_stigma_CP[i] <- sum(drawn_visits)
-}
-
-var_simulated_CP <- var(simulated_stigma_CP)
-mean_simulated_CP <- mean(simulated_stigma_CP)
-
-cat("--- Monte Carlo Statistical Validation ---\n\n")
-
-cat("1. Compare the Means\n")
-cat("Observed Mean CP on Stigma: ", round(mean_stigma_CP, 2), "\n")
-cat("Simulated Mean CP on Stigma: ", round(mean_simulated_CP, 2), "\n\n")
-
-cat("2. Compare the Variances (The actual proof of the \"Filter\")\n")
-cat("Observed Variance on Stigma: ", round(var_stigma_CP, 2), "\n")
-cat("Simulated Variance: ", round(var_simulated_CP, 2), "\n")
-
-var_SVD_CP <- var(empirical_SVD_CP, na.rm = TRUE)
-cat("Raw SVD Variance (The Chaos): ", round(var_SVD_CP, 2), "\n")
-cat("Variance Reduction Factor (SVD to Observed Stigma): ", round(var_SVD_CP / var_stigma_CP, 2), "x smaller\n\n")
-
-cat("3. Two-Sample Kolmogorov-Smirnov Test\n")
-ks_result <- ks.test(empirical_stigma_CP, simulated_stigma_CP)
-
-cat("D-statistic (Distance between curves): ", round(ks_result$statistic, 3), "\n")
-cat("P-value: ", signif(ks_result$p.value, 3), "\n\n")
-
-if(ks_result$p.value < 0.05) {
-  cat("Note: P-value is < 0.05. With 10,000 simulations, the K-S test is highly sensitive to minor deviations (like stigma saturation caps). Focus on reporting the visual overlap, the mean/variance matching, and the D-statistic size in your manuscript.\n")
-}
+ks_results %>%
+    gt() %>%
+    tab_header(
+        title = md("**Table S11**: Monte Carlo Simulation Parameters and Year-by-Year Validation Statistics"),
+        subtitle = "K-S test results and means comparing empirical final stigmas to the simulated null model generated from the global SVD pool."
+    ) %>%
+    cols_label(
+        Year = "Year",
+        Estimated_Visits = "Visits (N)",
+        Obs_Mean_CP = "Obs. Mean (CP)",
+        Sim_Mean_CP = "Sim. Mean (CP)",
+        KS_CP_D = "K-S D (CP)",
+        KS_CP_P = "P-value (CP)",
+        OVL_CP = "OVL (CP)",
+        Obs_Mean_HP = "Obs. Mean (HP)",
+        Sim_Mean_HP = "Sim. Mean (HP)",
+        KS_HP_D = "K-S D (HP)",
+        KS_HP_P = "P-value (HP)",
+        OVL_HP = "OVL (HP)"
+    ) %>%
+    fmt_number(
+        columns = c(Obs_Mean_CP, Sim_Mean_CP, Obs_Mean_HP, Sim_Mean_HP),
+        decimals = 1
+    ) %>%
+    fmt_number(
+        columns = c(KS_CP_D, KS_HP_D, OVL_CP, OVL_HP),
+        decimals = 3
+    ) %>%
+    fmt_scientific(
+        columns = c(KS_CP_P, KS_HP_P),
+        decimals = 3
+    ) %>%
+    tab_options(
+        column_labels.background.color = "#F0F0F0",
+        column_labels.font.weight = "bold",
+        table.border.top.color = "black",
+        table.border.top.width = px(2),
+        table.border.bottom.color = "black",
+        table.border.bottom.width = px(2)
+    ) %>%
+    opt_align_table_header(align = "left")
 ```

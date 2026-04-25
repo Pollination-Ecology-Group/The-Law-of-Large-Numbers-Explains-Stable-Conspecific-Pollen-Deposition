@@ -39,14 +39,8 @@ library(gridExtra)
 library(lmerTest)
 library(igraph)
 
-# Check for HanPolNet package installation
-# What is HanPolNet:
-# HanPolNet is a package that contains data and functions for analyzing plant-pollinator interactions.
-# It is a custom made package currated by the Pollination Ecology Group and hosted on their GitHub.
-if (!require("HanPolNet")) {
-    devtools::install("local_packages/HanPolNet", upgrade = "never")
-    library(HanPolNet)
-}
+# Data is now loaded directly from CSV/RDS files in the local 'data/' directory.
+# The dependency on the HanPolNet package has been removed for standalone sharing.
 
 # Set global theme
 theme_set(theme_bw())
@@ -59,8 +53,8 @@ message("Loading Data...")
 # 1.1 Pollen Load & Gut Content Data
 pollen_load_guts_24 <- read.csv(file.path("data", "pollen_load_and_guts_2024_Succisa_pratensis.csv"))
 
-# 1.2 Pollen Deposition Data (from package)
-data("pollen_deposition", package = "HanPolNet")
+# 1.2 Pollen Deposition Data (Exported from HanPolNet)
+pollen_deposition <- read.csv(file.path("data", "pollen_deposition.csv"))
 
 # Pre-processing: Create unique plant_id grouping
 pollen_deposition <- pollen_deposition %>%
@@ -78,44 +72,28 @@ table(pollen_deposition$year)
 length(unique(pollen_deposition$plant_id))
 
 
-# 1.3 Interaction Data (Succisa specific)
-interaction_data_Succisa_22_24 <- get_interaction_data(
-    years = c(22, 23, 24),
-    plant_species = "Suc_pra",
-    is_pollinator = TRUE,
-    remove_zeros = TRUE,
-    standardize = TRUE
-)
+# 1.3 Interaction Data (Succisa specific - Exported from HanPolNet)
+interaction_data_Succisa_22_24 <- read.csv(file.path("data", "interaction_data_Succisa_22_24.csv"))
 
-# 1.4 Interaction Data (Whole Community for context)
-interaction_data_all_22_24 <- get_interaction_data(
-    years = c(22, 23, 24),
-    is_pollinator = TRUE,
-    remove_zeros = TRUE,
-    standardize = TRUE
-)
+# 1.4 Interaction Data (Whole Community for context - Exported from HanPolNet)
+interaction_data_all_22_24 <- read.csv(file.path("data", "interaction_data_all_22_24.csv"))
 
-# 1.5 Plant Abundance Data (Standardized)
-plant_abundance_22_24 <- get_plant_data(
-    years = c(22, 23, 24),
-    output = "standardized"
-)
+# 1.5 Plant Abundance Data (Standardized - Exported from HanPolNet)
+plant_abundance_22_24 <- read.csv(file.path("data", "plant_abundance_22_24.csv"))
 # Note: Standardization details:
 # Sublot Counts / 64 -> Proportion
 # Stalk Counts / Max(Dataset) -> Relative Abundance
 
 # 1.6 Single Visit Deposition (SVD) Data
-SVD_Succisa_22_24 <- read.csv("data/SVD_Succisa_pratensis.csv")
+SVD_Succisa_22_24 <- read.csv(file.path("data", "SVD_Succisa_pratensis.csv"))
 
 table(SVD_Succisa_22_24$rok, SVD_Succisa_22_24$pollinator_species)
 
 
-# 1.7 Plot Coordinates (HanPolNet)
+# 1.7 Plot Coordinates (HanPolNet -> RDS Format)
 # Assuming 'hanpolnet_plots' comes from the package or is loaded in environment
-if (!exists("hanpolnet_plots")) {
-    # Placeholder if not in package, but typically is
-    # data("hanpolnet_plots", package = "HanPolNet")
-    # Or creating a mockup if needed for review logic
+if (file.exists(file.path("data", "hanpolnet_plots.rds"))) {
+    hanpolnet_plots <- readRDS(file.path("data", "hanpolnet_plots.rds"))
 }
 
 
@@ -142,6 +120,17 @@ p_dist <- ggplot(pollen_deposition, aes(x = heterospecific_pollen)) +
     theme_minimal()
 print(p_dist)
 
+
+p_dist2 <- ggplot(pollen_deposition, aes(x = conspecific_pollen)) +
+    geom_histogram(binwidth = 5, fill = "darkgreen", color = "white", alpha = 0.7) +
+    labs(
+        title = "Distribution of Conspecific Pollen",
+        subtitle = "Raw counts per stigma",
+        x = "Conspecific Pollen Count",
+        y = "Frequency"
+    ) +
+    theme_minimal()
+print(p_dist2)
 
 # ------------------------------------------------------------------------------
 # MARK: S2. Variance Partitioning Model Diagnostics (Transformation Check)
@@ -363,7 +352,7 @@ message("Diagnostics Complete. Proceeding to Main Analyses.")
 # --- PART A: PRESENCE ---
 
 # 1. Prepare Presence Data
-succisa_presence <- plant_abundance %>%
+succisa_presence <- plant_abundance_22_24 %>%
     filter(year %in% c(22, 23, 24)) %>%
     select(year, plot_id, Suc_pra) %>%
     filter(Suc_pra > 0) %>%
@@ -376,8 +365,8 @@ succisa_presence <- plant_abundance %>%
 plots_sf <- hanpolnet_plots %>%
     mutate(
         plot_id_join = ifelse(grepl("^[0-9]+$", plot_id),
-            as.character(as.integer(plot_id)),
-            plot_id
+            as.character(suppressWarnings(as.integer(as.character(plot_id)))),
+            as.character(plot_id)
         )
     )
 
@@ -408,7 +397,7 @@ p_map <- ggplot() +
 # --- PART B: ABUNDANCE ---
 
 # 1. Summarize
-abundance_summary <- plant_abundance %>%
+abundance_summary <- plant_abundance_22_24 %>%
     filter(year %in% c(22, 23, 24)) %>%
     group_by(year) %>%
     summarise(total_abundance = sum(Suc_pra, na.rm = TRUE)) %>%
@@ -586,7 +575,7 @@ pollinator_colors <- c(
 )
 
 p_composition <- ggplot(species_composition_grouped, aes(x = year_label, y = proportion, fill = species_label)) +
-    geom_col(width = 0.6, color = "white", size = 0.2) +
+    geom_col(width = 0.6, color = "white", linewidth = 0.2) +
     scale_fill_manual(values = pollinator_colors, name = "Species") +
     labs(
         title = "A. Pollinator Spectra Composition",
@@ -643,7 +632,7 @@ p_similarity <- ggplot(mh_long, aes(x = Year2, y = Year1, fill = Similarity)) +
     # Reverse Y axis to put first year on top (Matrix layout)
     scale_y_discrete(limits = rev) +
     labs(
-        title = "B. Pollinator Composition Similarity",
+        title = "C. Pollinator Composition Similarity",
         subtitle = "Morisita-Horn Similarity Index",
         x = "",
         y = ""
@@ -699,7 +688,7 @@ if (nrow(plant_matrix_prep) > 0) {
         ) +
         scale_y_discrete(limits = rev) +
         labs(
-            title = "C. Floral Community Similarity",
+            title = "D. Floral Community Similarity",
             subtitle = "Morisita-Horn Similarity Index",
             x = "",
             y = ""
@@ -715,14 +704,58 @@ if (nrow(plant_matrix_prep) > 0) {
         labs(title = "No Plant Data Available")
 }
 
+# --- Part 3: Floral Spectra Composition ---
+plant_composition_grouped <- plant_matrix_prep %>%
+    pivot_longer(cols = -year, names_to = "Species", values_to = "total_abundance") %>%
+    filter(total_abundance > 0) %>%
+    group_by(year) %>%
+    mutate(
+        yearly_total = sum(total_abundance),
+        proportion = total_abundance / yearly_total,
+        year_label = as.character(year)
+    ) %>%
+    ungroup()
+
+top_n_plants <- 9
+top_plant_list <- plant_composition_grouped %>%
+    group_by(Species) %>%
+    summarise(grand_total = sum(total_abundance)) %>%
+    arrange(desc(grand_total)) %>%
+    slice_head(n = top_n_plants) %>%
+    pull(Species)
+
+plant_composition_grouped <- plant_composition_grouped %>%
+    mutate(species_label = ifelse(Species %in% top_plant_list, Species, "Other")) %>%
+    group_by(year_label, species_label) %>%
+    summarise(proportion = sum(proportion), .groups = "drop")
+
+plant_composition_grouped$species_label <- factor(
+    plant_composition_grouped$species_label,
+    levels = c("Other", rev(top_plant_list))
+)
+
+p_plant_composition <- ggplot(plant_composition_grouped, aes(x = year_label, y = proportion, fill = species_label)) +
+    geom_col(width = 0.6, color = "white", linewidth = 0.2) +
+    scale_fill_viridis_d(option = "H", direction = 1, name = "Species") +
+    labs(
+        title = "B. Floral Spectra Composition",
+        subtitle = "Proportion of Plant Abundance",
+        x = "Year",
+        y = "Proportion"
+    ) +
+    theme_classic() +
+    theme(
+        legend.position = "right",
+        legend.text = element_text(face = "italic")
+    )
 
 
 if (!requireNamespace("ggpubr", quietly = TRUE)) install.packages("ggpubr")
 
 # Combine in Layout
-# Row 1: A (Pollinator Spectra)
-# Row 2: B (Pollinator Sim) | C (Floral Sim)
-row1 <- ggpubr::ggarrange(p_composition, ncol = 1, labels = NULL)
+# Row 1: A (Pollinator Spectra) | B (Floral Spectra)
+# Row 2: C (Pollinator Sim) | D (Floral Sim)
+row1 <- ggpubr::ggarrange(p_composition, p_plant_composition, ncol = 2, labels = NULL)
 row2 <- ggpubr::ggarrange(p_similarity, p_plant_similarity, ncol = 2, labels = NULL)
 ggpubr::ggarrange(row1, row2, nrow = 2, heights = c(1.5, 1))
 
@@ -783,6 +816,7 @@ p_model <- ggplot() +
     geom_ribbon(data = pred_grid, aes(x = mean_CP, ymin = lwr_HP, ymax = upr_HP, fill = Year), alpha = 0.2) +
     geom_point(data = aggregated_data, aes(x = mean_CP, y = mean_HP, color = Year), alpha = 0.6, size = 2) +
     geom_line(data = pred_grid, aes(x = mean_CP, y = pred_HP, color = Year), linewidth = 1.2) +
+    geom_abline(intercept = 0, slope = 1, linetype = "dashed", color = "gray50", linewidth = 0.8) +
     scale_color_viridis_d(begin = 0.2, end = 0.8, option = "D", name = "Year") +
     scale_fill_viridis_d(begin = 0.2, end = 0.8, option = "D", name = "Year") +
     labs(
@@ -987,11 +1021,12 @@ print(p_var)
 
 
 # ------------------------------------------------------------------------------
-# 2.5 Single Visit Deposition (SVD) Analysis
+# MARK: 2.5 Single Visit Deposition (SVD) Analysis
 # ------------------------------------------------------------------------------
 # Comparing efficiency (CP) and messiness (HP) across morphogroups.
 
 message("Running SVD Analysis...")
+# 1. Prepare Data
 SVD_clean <- SVD_Succisa_22_24 %>%
     rename(species = pollinator_species) %>%
     mutate(
@@ -1005,21 +1040,34 @@ SVD_clean <- SVD_Succisa_22_24 %>%
         )
     )
 
-# Filter for sufficient N
 group_counts_svd <- SVD_clean %>%
     count(morphogroup) %>%
     filter(n >= 5)
 SVD_final <- SVD_clean %>% filter(morphogroup %in% group_counts_svd$morphogroup)
 
-# Kruskal-Wallis Tests
-cat("Kruskal-Wallis CP:\n")
-print(kruskal.test(conspecific_pollen ~ morphogroup, data = SVD_final))
-cat("Kruskal-Wallis HP:\n")
-print(kruskal.test(heterospecific_pollen ~ morphogroup, data = SVD_final))
+# 2. Kruskal-Wallis and Dunn's Test for CP
+cat("\n--- SVD Conspecific Pollen (CP) by Morphogroup ---\n")
+kw_cp <- kruskal.test(conspecific_pollen ~ morphogroup, data = SVD_final)
+print(kw_cp)
+
+if (kw_cp$p.value < 0.05) {
+    cat("\nPairwise Differences (CP):\n")
+    dunn.test(SVD_final$conspecific_pollen, SVD_final$morphogroup, method = "bh")
+}
+
+# 3. Kruskal-Wallis and Dunn's Test for HP
+cat("\n--- SVD Heterospecific Pollen (HP) by Morphogroup ---\n")
+kw_hp <- kruskal.test(heterospecific_pollen ~ morphogroup, data = SVD_final)
+print(kw_hp)
+
+if (kw_hp$p.value < 0.05) {
+    cat("\nPairwise Differences (HP):\n")
+    dunn.test(SVD_final$heterospecific_pollen, SVD_final$morphogroup, method = "bh")
+}
 
 
 # ------------------------------------------------------------------------------
-# 2.6 Pollen CP/HP relationship & CV Analysis
+# MARK: 2.6 Pollen CP/HP relationship & CV Analysis
 # ------------------------------------------------------------------------------
 # Calculating Coefficients of Variation for robustness check.
 
@@ -1053,98 +1101,10 @@ cv_by_year <- pollen_deposition %>%
 print(cv_by_year)
 
 
-
 # ------------------------------------------------------------------------------
-# MARK: 2.8 Final Summary Table Generation
+# MARK: 2.7 Detailed Coefficient of Variation (CV) Breakdown
 # ------------------------------------------------------------------------------
-# Generates the master table (Table 4/5 in MS) summarizing all metrics by year.
-
-message("Generating Final Summary Table...")
-
-calc_net_metrics <- function(year_val, data) {
-    target_year <- if (year_val > 2000) year_val - 2000 else year_val
-    yr_data <- data %>% filter(year == target_year | year == year_val)
-    if (nrow(yr_data) == 0) {
-        return(data.frame(Year = year_val, H2 = NA, Succisa_d = NA, Succisa_H = NA))
-    }
-
-    # Identify columns dynamically
-    pol_col <- names(yr_data)[names(yr_data) %in% c("pollinator_id", "pollinator_species", "pollinator")][1]
-    plant_col <- names(yr_data)[names(yr_data) %in% c("plant_code", "plant_species", "plant_id")][1]
-    int_col <- names(yr_data)[names(yr_data) %in% c("rate", "interaction_count", "interaction")][1]
-
-    # Matrix
-    web_matrix <- tryCatch(
-        {
-            mat <- yr_data %>%
-                select(Plant = all_of(plant_col), Pollinator = all_of(pol_col), Interaction = all_of(int_col)) %>%
-                mutate(Interaction = as.numeric(unlist(Interaction))) %>%
-                pivot_wider(names_from = Pollinator, values_from = Interaction, values_fill = 0) %>%
-                tibble::column_to_rownames("Plant") %>%
-                as.matrix()
-            mat
-        },
-        error = function(e) NULL
-    )
-
-    if (is.null(web_matrix)) {
-        return(data.frame(Year = year_val, H2 = NA, Succisa_d = NA, Succisa_H = NA))
-    }
-
-    # Metrics
-    h2 <- bipartite::H2fun(web_matrix)[1]
-    d_vals <- bipartite::specieslevel(web_matrix, index = "d", level = "lower")
-    suc_row <- rownames(d_vals)[rownames(d_vals) %in% c("Suc_pra", "Succisa pratensis")][1]
-
-    if (!is.na(suc_row)) {
-        succisa_d <- d_vals[suc_row, "d"]
-        suc_int <- web_matrix[suc_row, ]
-        succisa_H <- vegan::diversity(suc_int, index = "shannon")
-    } else {
-        succisa_d <- NA
-        succisa_H <- NA
-    }
-    return(data.frame(Year = year_val, H2 = h2, Succisa_d = succisa_d, Succisa_H = succisa_H))
-}
-
-# 1. Network Metrics
-net_metrics <- do.call(rbind, lapply(c(2022, 2023, 2024), calc_net_metrics, data = interaction_data_all_22_24))
-
-# 2. Slopes
-dep_model <- lm(sqrt(heterospecific_pollen) ~ conspecific_pollen * as.factor(year), data = pollen_deposition)
-slopes_df <- as.data.frame(emtrends(dep_model, pairwise ~ year, var = "conspecific_pollen")$emtrends) %>%
-    mutate(Year = as.numeric(as.character(year))) %>%
-    select(Year, Slope = conspecific_pollen.trend)
-
-# 3. Mean HP
-hp_means <- pollen_deposition %>%
-    group_by(year) %>%
-    summarise(Mean_HP = mean(heterospecific_pollen, na.rm = TRUE), .groups = "drop") %>%
-    mutate(Year = as.numeric(as.character(year)))
-
-# 4. Abundance
-plant_summary <- plant_abundance_22_24 %>%
-    pivot_longer(cols = -c(year, plot_id), names_to = "Species", values_to = "Abundance") %>%
-    group_by(year) %>%
-    summarise(
-        Succisa_Abundance = mean(Abundance[Species %in% c("Suc_pra", "Succisa pratensis")], na.rm = TRUE),
-        Total_Abundance = sum(Abundance, na.rm = TRUE),
-        .groups = "drop"
-    ) %>%
-    mutate(Year = as.numeric(as.character(year))) %>%
-    mutate(Year = if_else(Year < 100, Year + 2000, Year))
-
-# Combine
-final_table <- net_metrics %>%
-    left_join(slopes_df, by = "Year") %>%
-    left_join(hp_means, by = "Year") %>%
-    left_join(plant_summary, by = "Year")
-
-print(final_table)
-
-message("Analysis Script Complete!")
-
-
+# Further analysis of CV for Body, SVD and TPD compartments + TPD in years.
 
 
 # 1. Stigma CV
@@ -1303,261 +1263,308 @@ print(test_intra_hp)
 # ==============================================================================
 
 # ------------------------------------------------------------------------------
-# MARK: 3.1 Monte Carlo SVD Bootstrapping (The Mathematical Proof)
+# MARK: 3.1 Monte Carlo SVD Bootstrapping (Year-by-Year with Global Pool)
 # ------------------------------------------------------------------------------
-# This simulation tests if the stable variance seen on final stigmas can be
-# completely explained by the statistical averaging of multiple chaotic SVDs
-# (The Law of Large Numbers).
+message("Running Monte Carlo Simulation per year (Global SVD Pool)...")
+library(patchwork)
 
-message("Running Monte Carlo SVD Bootstrapping (CP and HP)...")
+set.seed(42)
+n_sim <- 10000
 
-# --- CONSPECIFIC POLLEN (CP) ---
-empirical_stigma_CP <- pollen_deposition$conspecific_pollen
-mean_stigma_CP <- mean(empirical_stigma_CP, na.rm = TRUE)
-var_stigma_CP <- var(empirical_stigma_CP, na.rm = TRUE)
+# 1. Establish the Global SVD Pool
+# We use the entire dataset because pollinator morphology/efficiency is assumed constant
+global_emp_svd_cp <- SVD_Succisa_22_24$conspecific_pollen[!is.na(SVD_Succisa_22_24$conspecific_pollen)]
+global_emp_svd_hp <- SVD_Succisa_22_24$heterospecific_pollen[!is.na(SVD_Succisa_22_24$heterospecific_pollen)]
 
-empirical_SVD_CP <- SVD_Succisa_22_24$conspecific_pollen
-mean_SVD_CP <- mean(empirical_SVD_CP, na.rm = TRUE)
+# Initialize empty dataframes for plotting and stats
+df_sim_cp <- data.frame()
+df_sim_hp <- data.frame()
+ks_results <- data.frame()
 
-N_visits_CP <- round(mean_stigma_CP / mean_SVD_CP)
+years <- c(2022, 2023, 2024)
 
-set.seed(123)
-n_simulations <- 10000
-simulated_stigma_CP <- numeric(n_simulations)
+for (y in years) {
+    # 2. Extract year-specific final stigmas
+    stigma_y <- pollen_deposition %>% filter(year == y)
+    emp_stigma_cp <- stigma_y$conspecific_pollen[!is.na(stigma_y$conspecific_pollen)]
+    emp_stigma_hp <- stigma_y$heterospecific_pollen[!is.na(stigma_y$heterospecific_pollen)]
 
-for (i in 1:n_simulations) {
-    drawn_visits <- sample(empirical_SVD_CP, size = N_visits_CP, replace = TRUE)
-    simulated_stigma_CP[i] <- sum(drawn_visits)
+    # 3. Calculate year-specific visitation rate (N)
+    # Target (Yearly Stigma CP Mean) / Efficiency (Global SVD CP Mean)
+    N_visits <- round(mean(emp_stigma_cp) / mean(global_emp_svd_cp))
+
+    # 4. Run the simulation using the GLOBAL SVD pool
+    sim_cp <- replicate(n_sim, sum(sample(global_emp_svd_cp, size = N_visits, replace = TRUE)))
+    sim_hp <- replicate(n_sim, sum(sample(global_emp_svd_hp, size = N_visits, replace = TRUE)))
+
+    # 5. Run K-S statistical tests
+    ks_cp <- ks.test(emp_stigma_cp, sim_cp)
+    ks_hp <- ks.test(emp_stigma_hp, sim_hp)
+
+    # Run overlapping tests
+    ov_cp <- overlapping::overlap(list(emp_stigma_cp, sim_cp))
+    ov_hp <- overlapping::overlap(list(emp_stigma_hp, sim_hp))
+
+    # Save statistics
+    ks_results <- rbind(ks_results, data.frame(
+        Year = y,
+        Estimated_Visits = N_visits,
+        Obs_Mean_CP = round(mean(emp_stigma_cp), 1), Sim_Mean_CP = round(mean(sim_cp), 1),
+        KS_CP_D = round(ks_cp$statistic, 3), KS_CP_p = signif(ks_cp$p.value, 3), OVL_CP = round(ov_cp$OV, 3),
+        Obs_Mean_HP = round(mean(emp_stigma_hp), 1), Sim_Mean_HP = round(mean(sim_hp), 1),
+        KS_HP_D = round(ks_hp$statistic, 3), KS_HP_p = signif(ks_hp$p.value, 3), OVL_HP = round(ov_hp$OV, 3)
+    ))
+
+    # Save data for plotting
+    df_sim_cp <- rbind(
+        df_sim_cp,
+        data.frame(Year = factor(y), Pollen = emp_stigma_cp, Type = "Observed Final Stigma"),
+        data.frame(Year = factor(y), Pollen = sim_cp, Type = "Simulated (Averaged SVDs)")
+    )
+    df_sim_hp <- rbind(
+        df_sim_hp,
+        data.frame(Year = factor(y), Pollen = emp_stigma_hp, Type = "Observed Final Stigma"),
+        data.frame(Year = factor(y), Pollen = sim_hp, Type = "Simulated (Averaged SVDs)")
+    )
 }
 
-var_simulated_CP <- var(simulated_stigma_CP)
-
-# --- HETEROSPECIFIC POLLEN (HP) ---
-empirical_stigma_HP <- pollen_deposition$heterospecific_pollen
-mean_stigma_HP <- mean(empirical_stigma_HP, na.rm = TRUE)
-var_stigma_HP <- var(empirical_stigma_HP, na.rm = TRUE)
-
-empirical_SVD_HP <- SVD_Succisa_22_24$heterospecific_pollen
-mean_SVD_HP <- mean(empirical_SVD_HP, na.rm = TRUE)
-
-N_visits_HP <- round(mean_stigma_HP / mean_SVD_HP)
-
-simulated_stigma_HP <- numeric(n_simulations)
-
-for (i in 1:n_simulations) {
-    drawn_visits_HP <- sample(empirical_SVD_HP, size = N_visits_HP, replace = TRUE)
-    simulated_stigma_HP[i] <- sum(drawn_visits_HP)
-}
-
-var_simulated_HP <- var(simulated_stigma_HP)
-
-message(sprintf("CP: Empirical Stigma Variance: %.2f | Simulated Stigma Variance: %.2f", var_stigma_CP, var_simulated_CP))
-message(sprintf("HP: Empirical Stigma Variance: %.2f | Simulated Stigma Variance: %.2f", var_stigma_HP, var_simulated_HP))
-
-mean_simulated_CP <- mean(simulated_stigma_CP)
+cat("\n--- Monte Carlo Year-by-Year Validation (Global SVD Pool) ---\n")
+print(ks_results)
 
 # ------------------------------------------------------------------------------
-# 3.1b Monte Carlo Statistical Validation
+# 3.2 Plotting the Per-Year Simulation (8-Panel Original Layout)
 # ------------------------------------------------------------------------------
-message("\n--- Monte Carlo Statistical Validation ---")
+# Global Stigmas
+emp_CP_global <- pollen_deposition$conspecific_pollen[!is.na(pollen_deposition$conspecific_pollen)]
+emp_HP_global <- pollen_deposition$heterospecific_pollen[!is.na(pollen_deposition$heterospecific_pollen)]
+n_vis_global <- max(1, round(mean(emp_CP_global) / mean(global_emp_svd_cp)))
 
-# 1. Compare the Means
-cat("Observed Mean CP on Stigma: ", round(mean_stigma_CP, 2), "\n")
-cat("Simulated Mean CP on Stigma: ", round(mean_simulated_CP, 2), "\n")
+make_mc_plot <- function(emp, svd_pool, n_vis, title_text, col_obs) {
+    sim <- replicate(n_sim, sum(sample(svd_pool, size = n_vis, replace = TRUE)))
 
-# 2. Compare the Variances (The actual proof of the "Filter")
-cat("Observed Variance on Stigma: ", round(var_stigma_CP, 2), "\n")
-cat("Simulated Variance: ", round(var_simulated_CP, 2), "\n")
+    # Compute statistics
+    ks_res <- ks.test(emp, sim)
+    ov_res <- overlapping::overlap(list(emp, sim))
 
-# Calculate the reduction in variance from SVD to Stigma
-var_SVD_CP <- var(empirical_SVD_CP, na.rm = TRUE)
-cat("Raw SVD Variance (The Chaos): ", round(var_SVD_CP, 2), "\n")
-cat("Variance Reduction Factor (SVD to Observed Stigma): ", round(var_SVD_CP / var_stigma_CP, 2), "x smaller\n")
+    annot_text <- sprintf("Overlap: %.1f%%\nKS D = %.3f", ov_res$OV * 100, ks_res$statistic)
 
-# 3. Two-Sample Kolmogorov-Smirnov Test
-# This tests the maximum distance (D) between the cumulative distribution functions.
-# D ranges from 0 (perfect overlap) to 1 (no overlap).
-ks_result <- ks.test(empirical_stigma_CP, simulated_stigma_CP)
-
-cat("\nKolmogorov-Smirnov Test Results:\n")
-cat("D-statistic (Distance between curves): ", round(ks_result$statistic, 3), "\n")
-cat("P-value: ", signif(ks_result$p.value, 3), "\n\n")
-
-# Contextual warning for the console:
-if (ks_result$p.value < 0.05) {
-    message("Note: P-value is < 0.05. With 10,000 simulations, the K-S test is highly sensitive to minor deviations (like stigma saturation caps). Focus on reporting the visual overlap, the mean/variance matching, and the D-statistic size in your manuscript.")
-}
-
-# 4. Plot Comparison: Simulated vs Observed
-df_plot_cp <- data.frame(
-    Value = c(empirical_stigma_CP, simulated_stigma_CP),
-    Type = c(
-        rep("Observed Final Stigma", length(empirical_stigma_CP)),
-        rep("Simulated (Averaged SVDs)", length(simulated_stigma_CP))
-    ),
-    Pollen = "Conspecific Pollen"
-)
-
-df_plot_hp <- data.frame(
-    Value = c(empirical_stigma_HP, simulated_stigma_HP),
-    Type = c(
-        rep("Observed Final Stigma", length(empirical_stigma_HP)),
-        rep("Simulated (Averaged SVDs)", length(simulated_stigma_HP))
-    ),
-    Pollen = "Heterospecific Pollen"
-)
-
-df_plot_mc <- bind_rows(df_plot_cp, df_plot_hp) %>%
-    mutate(Pollen = factor(Pollen, levels = c("Conspecific Pollen", "Heterospecific Pollen")))
-
-p_mc <- ggplot(df_plot_mc, aes(x = Value, fill = Type)) +
-    geom_density(alpha = 0.5) +
-    facet_wrap(~Pollen, scales = "free_x") +
-    theme_classic() +
-    labs(
-        title = "Monte Carlo Simulation: SVD Averaging",
-        subtitle = "Does visitation redundancy explain stigma stability?",
-        x = "Pollen Count", y = "Density", fill = "Data Type"
-    ) +
-    scale_fill_manual(values = c(
-        "Observed Final Stigma" = "#1ABC9C",
-        "Simulated (Averaged SVDs)" = "gray50"
-    )) +
-    theme(
-        strip.text = element_text(size = 12, face = "bold"),
-        legend.position = "top"
+    df <- data.frame(
+        Value = c(emp, sim),
+        Type = factor(
+            c(rep("Observed Final Stigma", length(emp)), rep("Simulated (Averaged SVDs)", length(sim))),
+            levels = c("Observed Final Stigma", "Simulated (Averaged SVDs)")
+        )
     )
 
-print(p_mc)
+    max_x_val <- as.numeric(quantile(df$Value, 0.98))
 
-# ------------------------------------------------------------------------------
-# 3.2 Morphogroup Quality Filtering (The Vector Mechanism)
-# ------------------------------------------------------------------------------
-# Not all vectors are equal. Here we multiply per-visit quality (SVD) by the
-# population-level visitation rate to see which groups actually drive the pollen economy.
+    p <- ggplot(df, aes(x = Value, fill = Type)) +
+        geom_density(alpha = 0.6, color = "white", linewidth = 0.2) +
+        coord_cartesian(xlim = c(0, max_x_val)) +
+        theme_classic() +
+        labs(title = title_text, subtitle = annot_text, x = "Pollen Count", y = "Density") +
+        scale_fill_manual(values = c("Observed Final Stigma" = col_obs, "Simulated (Averaged SVDs)" = "gray50")) +
+        theme(
+            plot.title = element_text(face = "bold", size = 11),
+            plot.subtitle = element_text(size = 9, color = "gray20"),
+            legend.position = "none"
+        )
+    return(p)
+}
 
-message("Analyzing Morphogroup Contributions...")
+# Colors
+col_global <- "#1ABC9C"
+if (!requireNamespace("viridisLite", quietly = TRUE)) install.packages("viridisLite")
+viridis_cols <- viridisLite::viridis(3, begin = 0.2, end = 0.8, option = "D")
 
-# 1. Get mean CP and HP per visit by morphogroup from SVD data
-svd_quality <- SVD_final %>%
-    group_by(morphogroup) %>%
-    summarise(
-        mean_CP_per_visit = mean(conspecific_pollen, na.rm = TRUE),
-        mean_HP_per_visit = mean(heterospecific_pollen, na.rm = TRUE),
-        .groups = "drop"
-    )
+inner_legend <- theme(
+    legend.position = c(1, 1),
+    legend.justification = c(1, 1),
+    legend.title = element_blank(),
+    legend.background = element_rect(fill = alpha("white", 0.7), color = NA),
+    legend.key = element_rect(fill = "transparent")
+)
 
-# 2. Get total visitation frequency by morphogroup from interaction data
-interaction_groups <- interaction_data_Succisa_22_24 %>%
+# Row 1: Global
+pA <- make_mc_plot(emp_CP_global, global_emp_svd_cp, n_vis_global, "A. Global Conspecific Pollen", col_global)
+pB <- make_mc_plot(emp_HP_global, global_emp_svd_hp, n_vis_global, "B. Global Heterospecific Pollen", col_global) + inner_legend
+
+# Row 2: 2022
+emp_CP_22 <- pollen_deposition$conspecific_pollen[pollen_deposition$year == 2022]
+emp_CP_22 <- emp_CP_22[!is.na(emp_CP_22)]
+emp_HP_22 <- pollen_deposition$heterospecific_pollen[pollen_deposition$year == 2022]
+emp_HP_22 <- emp_HP_22[!is.na(emp_HP_22)]
+n_vis_22 <- max(1, round(mean(emp_CP_22) / mean(global_emp_svd_cp)))
+pC <- make_mc_plot(emp_CP_22, global_emp_svd_cp, n_vis_22, "C. 2022 Conspecific Pollen", viridis_cols[1])
+pD <- make_mc_plot(emp_HP_22, global_emp_svd_hp, n_vis_22, "D. 2022 Heterospecific Pollen", viridis_cols[1]) + inner_legend
+
+# Row 3: 2023
+emp_CP_23 <- pollen_deposition$conspecific_pollen[pollen_deposition$year == 2023]
+emp_CP_23 <- emp_CP_23[!is.na(emp_CP_23)]
+emp_HP_23 <- pollen_deposition$heterospecific_pollen[pollen_deposition$year == 2023]
+emp_HP_23 <- emp_HP_23[!is.na(emp_HP_23)]
+n_vis_23 <- max(1, round(mean(emp_CP_23) / mean(global_emp_svd_cp)))
+pE <- make_mc_plot(emp_CP_23, global_emp_svd_cp, n_vis_23, "E. 2023 Conspecific Pollen", viridis_cols[2])
+pF <- make_mc_plot(emp_HP_23, global_emp_svd_hp, n_vis_23, "F. 2023 Heterospecific Pollen", viridis_cols[2]) + inner_legend
+
+# Row 4: 2024
+emp_CP_24 <- pollen_deposition$conspecific_pollen[pollen_deposition$year == 2024]
+emp_CP_24 <- emp_CP_24[!is.na(emp_CP_24)]
+emp_HP_24 <- pollen_deposition$heterospecific_pollen[pollen_deposition$year == 2024]
+emp_HP_24 <- emp_HP_24[!is.na(emp_HP_24)]
+n_vis_24 <- max(1, round(mean(emp_CP_24) / mean(global_emp_svd_cp)))
+pG <- make_mc_plot(emp_CP_24, global_emp_svd_cp, n_vis_24, "G. 2024 Conspecific Pollen", viridis_cols[3])
+pH <- make_mc_plot(emp_HP_24, global_emp_svd_hp, n_vis_24, "H. 2024 Heterospecific Pollen", viridis_cols[3]) + inner_legend
+
+p_combined_mc <- (pA + pB) / (pC + pD) / (pE + pF) / (pG + pH)
+print(p_combined_mc)
+
+
+
+# ==============================================================================
+# 4. THE DENSITY SHIELD (Per-Capita Visitation & The Dilution Effect)
+# ==============================================================================
+message("Analyzing the Density Shield (Dilution Effect)...")
+
+library(patchwork)
+
+# 0. Load data for all years
+interaction_data_all_years <- interaction_data_Succisa_22_24
+plant_abundance_all_years <- plant_abundance_22_24
+
+# 1. Calculate floral abundance per plot for all years
+plant_abundance_per_plot_all <- plant_abundance_all_years %>%
+    group_by(year, plot_id) %>%
+    summarise(plot_abundance = sum(Suc_pra, na.rm = TRUE), .groups = "drop") %>%
     filter(!is.na(year)) %>%
     mutate(
-        morphogroup = case_when(
-            grepl("Eristalis", pollinator_id) ~ "Eristalis spp.",
-            grepl("Bombus", pollinator_id) ~ "Bombus spp.",
-            pollinator_id == "Apis mellifera" ~ "Apis mellifera",
-            grepl("Syrphus", pollinator_id) ~ "Syrphus spp.",
-            grepl("Helophilus", pollinator_id) ~ "Helophilus spp.",
-            TRUE ~ "Other"
-        )
-    ) %>%
-    group_by(morphogroup) %>%
-    summarise(total_visits = sum(rate, na.rm = TRUE), .groups = "drop")
+        year_str = as.character(year),
+        year = factor(ifelse(nchar(year_str) == 2, paste0("20", year_str), year_str)),
+        plot_id = as.character(plot_id)
+    )
 
-# 3. Merge and calculate expected cumulative load
-vector_filter <- interaction_groups %>%
-    inner_join(svd_quality, by = "morphogroup") %>%
+# 2. Calculate plot-level visitation for all years
+visitation_per_plot_all <- interaction_data_all_years %>%
+    group_by(year, plot_id) %>%
+    summarise(total_rate = sum(rate, na.rm = TRUE), .groups = "drop") %>%
+    filter(!is.na(year)) %>%
     mutate(
-        expected_total_CP = total_visits * mean_CP_per_visit,
-        expected_total_HP = total_visits * mean_HP_per_visit,
-        CP_purity_percent = round(expected_total_CP / (expected_total_CP + expected_total_HP) * 100, 1)
+        year_str = as.character(year),
+        year = factor(ifelse(nchar(year_str) == 2, paste0("20", year_str), year_str)),
+        plot_id = as.character(plot_id)
+    )
+
+# 3. Calculate Per-Capita Visitation Rate (rate_per_plant)
+visitation_per_plant_all <- visitation_per_plot_all %>%
+    left_join(plant_abundance_per_plot_all, by = c("year", "plot_id")) %>%
+    mutate(
+        rate_per_plant = ifelse(plot_abundance > 0, total_rate / plot_abundance, NA)
     ) %>%
-    arrange(desc(expected_total_CP))
+    filter(!is.na(rate_per_plant) & !is.na(plot_abundance))
 
-cat("\n--- Expected Cumulative Pollen Economy by Vector ---\n")
-print(vector_filter %>% select(morphogroup, expected_total_CP, expected_total_HP, CP_purity_percent))
+# 4. Statistical Test: Does abundance predict per-plant visitation?
+# A simple linear model to get the p-value and R-squared for your Results section
+dilution_model <- lm(log(rate_per_plant) ~ log(plot_abundance), data = visitation_per_plant_all)
+cat("\n--- Dilution Effect Model Summary (log-log) ---\n")
+print(summary(dilution_model))
 
-# 4. Visualization: The Volume Filter
-df_vector_plot <- vector_filter %>%
-    select(morphogroup, expected_total_CP, expected_total_HP) %>%
-    pivot_longer(
-        cols = c(expected_total_CP, expected_total_HP),
-        names_to = "Pollen_Type", values_to = "Expected_Load"
-    )
+# 5. Visualization: The Density Shield (2-Panel Figure)
 
-p_vec <- ggplot(df_vector_plot, aes(x = reorder(morphogroup, -Expected_Load), y = Expected_Load, fill = Pollen_Type)) +
-    geom_bar(stat = "identity", position = "stack", color = "black", width = 0.7) +
+# Panel A: The general dilution rule (Scatterplot)
+p_dilution <- ggplot(visitation_per_plant_all, aes(x = plot_abundance, y = rate_per_plant)) +
+    geom_point(aes(color = year), size = 3, alpha = 0.7) +
+    geom_smooth(aes(color = year, group = year), method = "lm", se = FALSE, linewidth = 0.8, alpha = 0.5) +
+    geom_smooth(method = "lm", color = "black", linetype = "dashed", se = TRUE) +
+    scale_x_continuous(trans = "log1p") +
+    scale_y_continuous(trans = "log1p") +
     theme_classic() +
-    theme(axis.text.x = element_text(angle = 45, hjust = 1, face = "italic")) +
     labs(
-        title = "Expected Cumulative Pollen Load by Vector",
-        subtitle = "Volume vs. Messiness",
-        x = "Morphogroup", y = "Relative Cumulative Pollen Load"
+        title = "A) The Dilution Effect",
+        subtitle = "Higher floral density dilutes per-capita visitation",
+        x = "Local Floral Abundance (log scale)",
+        y = "Visits per Plant (log scale)",
+        color = "Year"
     ) +
-    scale_fill_manual(
-        values = c("expected_total_CP" = "#1ABC9C", "expected_total_HP" = "#F1948A"),
-        labels = c("Conspecific (Efficiency)", "Heterospecific (Messiness)")
-    )
+    scale_color_viridis_d(option = "plasma", end = 0.8)
 
-print(p_vec)
+# Panel B: The Anomaly (Boxplot)
+p_anomaly <- ggplot(visitation_per_plant_all, aes(x = year, y = rate_per_plant, fill = year)) +
+    geom_boxplot(alpha = 0.8, outlier.shape = 21, outlier.size = 2) +
+    theme_classic() +
+    labs(
+        title = "B) Interannual Shift in Per-Capita Rate",
+        subtitle = "Comparison across all surveyed years",
+        x = "Year",
+        y = "Visits per Plant"
+    ) +
+    scale_fill_viridis_d(option = "plasma", end = 0.8) +
+    theme(legend.position = "none", axis.text.x = element_text(angle = 45, hjust = 1))
+
+# Combine panels
+final_shield_plot <- p_dilution + p_anomaly + plot_layout(widths = c(1.5, 1))
+print(final_shield_plot)
 
 
-# ------------------------------------------------------------------------------
-# 3.3 The Variance Funnel (Body -> SVD -> Stigma)
-# ------------------------------------------------------------------------------
-# This visualizes how variance changes across the three sequential stages of
-# pollen transfer, demonstrating the plant's ability to filter out noise.
+# ==============================================================================
+# 4. THE DENSITY SHIELD (Pollen Accumulation on Final Stigmas)
+# ==============================================================================
+message("Analyzing HP vs CP Accumulation on Stigmas across Years...")
 
-message("Plotting the Variance Funnel...")
+# 1. Clean the pollen deposition data for the plot
+stigma_accumulation <- pollen_deposition %>%
+    filter(!is.na(conspecific_pollen) & !is.na(heterospecific_pollen) & !is.na(year)) %>%
+    mutate(year = factor(year))
 
-# Filter out the 'Gut' compartment as it's not part of the direct physical transfer pathway
-funnel_data <- cv_data %>%
-    filter(Compartment %in% c("Body", "SVD", "Stigma")) %>%
-    # Ensure the sequential order of events
-    mutate(Compartment = factor(Compartment, levels = c("Body", "SVD", "Stigma")))
+# 2. Statistical Test: Does the year change the rate of HP accumulation?
+# We use a linear model with an interaction term (CP * Year)
+accumulation_model <- lm(heterospecific_pollen ~ conspecific_pollen * year, data = stigma_accumulation)
+cat("\n--- Pollen Accumulation Model (Does the slope change by year?) ---\n")
+print(summary(accumulation_model))
 
-p_funnel <- ggplot(funnel_data, aes(x = Compartment, y = CV, group = Pollen_Type, color = Pollen_Type)) +
-    geom_line(size = 1.5) +
-    geom_point(size = 4, fill = "white", shape = 21, stroke = 2) +
+# 3. Visualization: The "Slope Showdown"
+p_accumulation <- ggplot(stigma_accumulation, aes(x = conspecific_pollen, y = heterospecific_pollen, color = year, fill = year)) +
+    geom_point(alpha = 0.4, size = 2, shape = 21, color = "black") +
+    geom_smooth(method = "lm", se = TRUE, alpha = 0.2, linewidth = 1.2) +
+    # Using a log1p scale for HP because it is usually highly skewed towards zero
+    scale_y_continuous(trans = "log1p", breaks = c(0, 1, 5, 10, 50, 100)) +
     theme_classic() +
     theme(
-        axis.text.x = element_text(size = 12, face = "bold"),
-        axis.text.y = element_text(size = 11),
-        legend.position = "top"
+        legend.position = "top",
+        strip.background = element_blank(),
+        strip.text = element_text(size = 12, face = "bold")
     ) +
     labs(
-        title = "The Variance Funnel",
-        subtitle = "Tracking unpredictability from pollinator bodies to final stigmatic loads",
-        x = "Pollen Transfer Stage",
-        y = "Coefficient of Variation (CV %)",
-        color = "Pollen Type"
+        title = "Heterospecific Pollen Accumulation Rates",
+        subtitle = "How CP receipt drives HP accumulation across varying density years",
+        x = "Conspecific Pollen on Stigma",
+        y = "Heterospecific Pollen on Stigma (log scale)",
+        color = "Year",
+        fill = "Year"
     ) +
-    scale_color_manual(
-        values = c("CP" = "#1ABC9C", "HP" = "#F1948A"),
-        labels = c("CP" = "Conspecific", "HP" = "Heterospecific")
-    )
+    scale_color_viridis_d(option = "plasma", end = 0.8) +
+    scale_fill_viridis_d(option = "plasma", end = 0.8) +
+    facet_wrap(~year) # Separating by year makes the slope changes obvious
 
-print(p_funnel)
+print(p_accumulation)
 
 
-# ------------------------------------------------------------------------------
-# 3.4 Body Load Purity (The Diurnal "Fresh Coat of Paint" Proof)
-# ------------------------------------------------------------------------------
-# To prove that diurnal timing works, we need to show that the bodies of
-# pollinators are actually heavily loaded with Conspecific Pollen (CP)
-# despite their generalist foraging behavior.
+library(overlapping)
 
-message("Analyzing Pollen Purity on Pollinator Bodies...")
+# Compute simulated global CP and HP for the overlap test
+simulated_stigma_CP <- replicate(n_sim, sum(sample(global_emp_svd_cp, size = n_vis_global, replace = TRUE)))
+simulated_stigma_HP <- replicate(n_sim, sum(sample(global_emp_svd_hp, size = n_vis_global, replace = TRUE)))
 
-body_purity <- pollen_load_guts_24 %>%
-    summarise(
-        mean_CP_body = mean(suc_pra_load, na.rm = TRUE),
-        mean_HP_body = mean(other_pollen_load, na.rm = TRUE)
-    ) %>%
-    mutate(
-        total_body_pollen = mean_CP_body + mean_HP_body,
-        CP_ratio_percent = round((mean_CP_body / total_body_pollen) * 100, 1),
-        HP_ratio_percent = round((mean_HP_body / total_body_pollen) * 100, 1)
-    )
+# Calculate the overlapping area (returns a value between 0 and 1)
+# Comparing global empirical CP vs global simulated CP
+overlap_result_cp <- overlap(list(emp_CP_global, simulated_stigma_CP))
+cat("\n--- Overlap between Empirical and Simulated Global CP ---\n")
+print(overlap_result_cp$OV)
 
-cat("\n--- Average Pollen Composition on Pollinator Bodies ---\n")
-print(body_purity)
+# Comparing global empirical HP vs global simulated HP
+overlap_result_hp <- overlap(list(emp_HP_global, simulated_stigma_HP))
+cat("\n--- Overlap between Empirical and Simulated Global HP ---\n")
+print(overlap_result_hp$OV)
+
+
+# Remove everything and clear environment
+rm(list = ls())
