@@ -203,6 +203,11 @@ Finally, we evaluated the fit of the simulated null models against our true fiel
 
 ### Plant-pollinator interactions and plant abundance
 
+To determine if the 2024 high-density anomaly altered the mechanical interaction between pollinators and the focal plant population, we modeled the per-capita visitation rate as a function of local floral abundance. A log-log linear regression revealed a significant negative relationship (t=−2.75, p=0.008, R2=0.12). As local conspecific floral abundance increased, the per-capita visitation rate per flower significantly decreased. This confirms a density-driven dilution effect: while the massive floral bloom successfully recruited shared generalist vectors, the sheer volume of available conspecific resources diluted the frequency of individual visits, trapping vectors within a pure conspecific foraging loop for extended periods.
+
+Decoupled Accumulation: The Spatial Mitigation of HP
+To test if this spatial dilution effectively mitigated heterospecific pollen (HP) transfer, we analyzed the accumulation rates of HP relative to conspecific pollen (CP) receipt on final stigmas. An analysis of variance (ANOVA) revealed a highly significant interaction between CP accumulation and study year (F2,231​=13.38, p<0.001). In standard-density years (2022 and 2023), the accumulation of CP was tightly coupled with heavy HP contamination, resulting in steep, positive slopes. In these years, receiving more conspecific visits inevitably resulted in higher reproductive interference from the shared network. However, during the extreme high-density anomaly of 2024, this relationship structurally shifted. The accumulation slope flattened significantly (CP × Year 2024 interaction: t=−2.44, p=0.015), demonstrating that stigmas could accumulate their required baseline of CP without the proportional accumulation of HP. This confirms that extreme local floral density actively decouples conspecific reproduction from heterospecific contamination in the field.
+
 Plant abundance shift and the effect on visitation - needs to be tested.
 
 ```{r}
@@ -687,7 +692,7 @@ SVD_final <- SVD_clean %>%
 p_eff <- ggplot(SVD_final, aes(x = morphogroup, y = conspecific_pollen, fill = morphogroup)) +
     geom_boxplot(alpha = 0.6, outlier.shape = NA) +
     geom_jitter(width = 0.2, alpha = 0.5, size = 1.5) +
-    ggpubr::stat_compare_means(method = "kruskal.test", label.y.npc = "top", vjust = -1) +
+    ggpubr::stat_compare_means(method = "kruskal.test", label.y.npc = 0.95) +
     labs(
         title = "C. Conspecific Pollen (CP)",
         y = "Conspecific Pollen SVD",
@@ -703,7 +708,7 @@ p_eff <- ggplot(SVD_final, aes(x = morphogroup, y = conspecific_pollen, fill = m
 p_mess <- ggplot(SVD_final, aes(x = morphogroup, y = heterospecific_pollen, fill = morphogroup)) +
     geom_boxplot(alpha = 0.6, outlier.shape = NA) +
     geom_jitter(width = 0.2, alpha = 0.5, size = 1.5) +
-    ggpubr::stat_compare_means(method = "kruskal.test", label.y.npc = "top", vjust = -1) +
+    ggpubr::stat_compare_means(method = "kruskal.test", label.y.npc = 0.95) +
     labs(
         title = "D. Heterospecific Pollen (HP)",
         y = "Heterospecific Pollen SVD",
@@ -1261,7 +1266,7 @@ make_mc_plot <- function(emp, svd_pool, n_vis, title_text, col_obs) {
     # Compute statistics
     ks_res <- ks.test(emp, sim)
     ov_res <- overlapping::overlap(list(emp, sim))
-    
+
     annot_text <- sprintf("Overlap: %.1f%%\nKS D = %.3f", ov_res$OV * 100, ks_res$statistic)
 
     df <- data.frame(
