@@ -1,0 +1,1869 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="quarto-1.8.25" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+
+<meta name="author" content="Jakub Štenc" />
+
+<title>ms_fml</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
+
+<!-- htmldependencies:E3FAD763 -->
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+
+</head>
+
+<body>
+
+<div id="quarto-search-results"></div>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <div id="quarto-toc-target"></div>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<p class="subtitle lead">Case study on Succisa pratensis</p>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Jakub Štenc </p>
+          </div>
+  </div>
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+<nav id="TOC" role="doc-toc">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#abstract" id="toc-abstract">Abstract</a></li>
+  <li><a href="#introduction" id="toc-introduction">Introduction</a></li>
+  <li><a href="#methods" id="toc-methods">Methods</a>
+  <ul>
+  <li><a href="#study-system" id="toc-study-system">Study system</a></li>
+  <li><a href="#section" id="toc-section"></a></li>
+  <li><a href="#plant-pollinator-interactions-and-plant-abundance" id="toc-plant-pollinator-interactions-and-plant-abundance">Plant-pollinator interactions and plant abundance</a></li>
+  <li><a href="#pollen-load" id="toc-pollen-load">Pollen load</a></li>
+  <li><a href="#single-visit-deposition-svd" id="toc-single-visit-deposition-svd">Single Visit Deposition (SVD)</a></li>
+  <li><a href="#total-pollen-deposition-tpd-on-stigma" id="toc-total-pollen-deposition-tpd-on-stigma">Total Pollen Deposition (TPD) on Stigma</a></li>
+  <li><a href="#statistical-analysis" id="toc-statistical-analysis">Statistical Analysis</a></li>
+  </ul></li>
+  <li><a href="#results" id="toc-results">Results</a>
+  <ul>
+  <li><a href="#plant-pollinator-interactions-and-plant-abundance-1" id="toc-plant-pollinator-interactions-and-plant-abundance-1">Plant-pollinator interactions and plant abundance</a></li>
+  <li><a href="#pollinator-spectra-composition" id="toc-pollinator-spectra-composition">Pollinator Spectra Composition</a></li>
+  <li><a href="#pollen-load-and-single-visit-deposition-svd" id="toc-pollen-load-and-single-visit-deposition-svd">Pollen Load and Single Visit Deposition (SVD)</a></li>
+  <li><a href="#tpd" id="toc-tpd">TPD</a></li>
+  <li><a href="#coefficient-of-variation-and-variance-partitioning" id="toc-coefficient-of-variation-and-variance-partitioning">Coefficient of Variation and Variance Partitioning</a></li>
+  <li><a href="#the-hierarchical-scale-of-total-pollen-depositional-variance" id="toc-the-hierarchical-scale-of-total-pollen-depositional-variance">The Hierarchical Scale of Total Pollen Depositional Variance</a></li>
+  <li><a href="#monte-carlo-simulation-the-interannual-variance-filter" id="toc-monte-carlo-simulation-the-interannual-variance-filter">Monte Carlo Simulation: The Interannual Variance Filter</a></li>
+  </ul></li>
+  <li><a href="#discussion" id="toc-discussion">Discussion</a>
+  <ul>
+  <li><a href="#svd" id="toc-svd">SVD</a></li>
+  </ul></li>
+  <li><a href="#data-availability" id="toc-data-availability">Data Availability</a></li>
+  <li><a href="#acknowledgements" id="toc-acknowledgements">Acknowledgements</a></li>
+  <li><a href="#supplementary-material" id="toc-supplementary-material">Supplementary Material</a></li>
+  <li><a href="#references" id="toc-references">References</a></li>
+  </ul>
+</nav>
+<section id="abstract" class="level2">
+<h2>Abstract</h2>
+<p><strong><em>Premise</em>:</strong> Pollen transfer by animal vectors is inherently stochastic at the micro-level, yet population-level conspecific pollen (CP) deposition often remains remarkably stable. It remains unclear how generalist plants compensate for the extreme variance of individual pollinator visits to secure reliable CP receipt while mitigating heterospecific pollen (HP) accumulation from shared networks.</p>
+<p><strong><em>Methods</em>:</strong> Using a three-year dataset (2022–2024) for the generalist plant <em>Succisa pratensis</em>, we evaluated pollen transfer dynamics across multiple hierarchical scales. We combined variance partitioning of terminal pollen deposition (TPD) on stigma, single-visit deposition (SVD) on stigma experiments, and inter-annual dynamic of the plant-pollinator .</p>
+<p><strong><em>Results</em>:</strong> Variance partitioning revealed that temporal shifts (years and days) explained negligible variation in CP deposition; rather, the vast majority of variance occurred at the micro-scale among individual stigmas. SVD experiments confirmed that individual generalist visits are highly stochastic, exhibiting extreme variance in CP delivery. However, at the whole-stigma level, this micro-scale unpredictability averaged out into constant CP loads. Furthermore, while HP accumulated linearly with CP during standard years, a dramatic inter-annual spike in <em>S. pratensis</em> floral abundance significantly flattened the HP accumulation curve.</p>
+<p><strong><em>Conclusions</em>:</strong> Despite the unpredictability of individual pollinator visits, generalist plants can secure highly stable conspecific pollen deposition and buffer against heterospecific pollen.</p>
+</section>
+<section id="introduction" class="level2">
+<h2>Introduction</h2>
+<p>Pollen transfer by animal vectors is inherently stochastic at the micro-level (reviewed in <span class="citation" data-cites="Minnaar2019">Minnaar et al. (<a href="#ref-Minnaar2019" role="doc-biblioref">2019</a>)</span>), characterized by highly variable, heterogeneous pollen loads delivered during individual foraging events <span class="citation" data-cites="richards2009variation king2013">(<a href="#ref-richards2009variation" role="doc-biblioref">Richards et al., 2009</a>; <a href="#ref-king2013" role="doc-biblioref">King et al., 2013</a>)</span>. Yet, despite this fine-scale unpredictability, population-level studies demonstrate that conspecific pollen (CP) deposition on stigmas can remain remarkably stable across multiple years (e.g., <span class="citation" data-cites="fang2019multi">Fang et al. (<a href="#ref-fang2019multi" role="doc-biblioref">2019</a>)</span>; <span class="citation" data-cites="Fang2022">Fang et al. (<a href="#ref-Fang2022" role="doc-biblioref">2022</a>)</span>). This paradox highlights a fundamental gap in pollination ecology: how do generalist plants compensate for the extreme variance of individual pollinator visits to secure reliable CP receipt on their stigmas, while simultaneously mitigating the accumulation of heterospecific pollen (HP) from other plants within the co-flowering community?</p>
+<p>To resolve this paradox, it is critical to examine pollen transfer dynamics across hierarchical scales, from the single-visit deposition (SVD) to the total pollen deposition (TPD). At the scale of an SVD, the mechanical delivery of conspecific pollen is intrinsically unpredictable. Even among legitimate, generalist pollinators, the exact quantity of pollen deposited during a brief floral interaction fluctuates dramatically due to highly variable individual pollen loads <span class="citation" data-cites="king2013 freudenfeld2025interannual">(<a href="#ref-king2013" role="doc-biblioref">King et al., 2013</a>; <a href="#ref-freudenfeld2025interannual" role="doc-biblioref">Freudenfeld et al., 2025</a>)</span>. This micro-scale stochasticity is further compounded by taxon-specific differences in pollinator behavior, such as grooming <span class="citation" data-cites="holmquist2012influence">(<a href="#ref-holmquist2012influence" role="doc-biblioref">Holmquist et al., 2012</a>)</span>, complex pollen carryover dynamics across successive flower visits <span class="citation" data-cites="thomson1980">(<a href="#ref-thomson1980" role="doc-biblioref">Thomson and Plowright, 1980</a>)</span>, and fluctuating adaptive foraging decisions within the network <span class="citation" data-cites="valdovinos2025effect">(<a href="#ref-valdovinos2025effect" role="doc-biblioref">Valdovinos, 2025</a>)</span>. Consequently, from the perspective of an individual receptive stigma, the absolute number of CP grains received during any single visit exhibits extreme depositional variance, requiring plants to rely on broader ecological mechanisms to aggregate these variable events into a stable reproductive outcome <span class="citation" data-cites="richards2009variation">(<a href="#ref-richards2009variation" role="doc-biblioref">Richards et al., 2009</a>)</span>.</p>
+<p>To overcome the extreme unpredictability of individual pollinator visits, some plants depend on the high visitation rates generated by dense local floral displays <span class="citation" data-cites="vazquez2005degree janovsky2013conspecific">(<a href="#ref-vazquez2005degree" role="doc-biblioref">Vázquez, 2005</a>; <a href="#ref-janovsky2013conspecific" role="doc-biblioref">Janovskỳ et al., 2013</a>)</span>. By accumulating a high volume of pollinator visits, plants can average out the extreme depositional variance of individual vectors, ensuring reliable CP receipt. However, relying on generalized pollination networks concurrently introduces the risk of reproductive interference from the surrounding floral community <span class="citation" data-cites="ArceoGomez2011 morales2008interspecific morales2013heterospecific">(<a href="#ref-morales2008interspecific" role="doc-biblioref">Morales and Traveset, 2008</a>, <a href="#ref-morales2013heterospecific" role="doc-biblioref">2013</a>; <a href="#ref-ArceoGomez2011" role="doc-biblioref">Arceo-Gómez and Ashman, 2011</a>)</span>. Co-flowering heterospecific neighbors not only act as sources of competitive pollen, but they actively alter the composition and fidelity of the pollinator assemblage visiting the focal plant <span class="citation" data-cites="Lazaro2009 ye2020">(<a href="#ref-Lazaro2009" role="doc-biblioref">Lázaro et al., 2009</a>; <a href="#ref-ye2020" role="doc-biblioref">Ye et al., 2020</a>)</span>. Therefore, effective buffering mechanisms must secure CP while resisting neighbor-induced shifts in pollinator behavior. High conspecific floral density achieves this by diluting the proportion of HP in the local environmental pollen pool and overriding the attractive pull of heterospecific neighbors <span class="citation" data-cites="arceo2016patterns">(<a href="#ref-arceo2016patterns" role="doc-biblioref">Arceo-Gómez et al., 2016</a>)</span>.</p>
+<p>Furthermore, this density-dependent buffering can be significantly enhanced by temporal stratification <span class="citation" data-cites="Stone1998 Schwarz2021">(<a href="#ref-Stone1998" role="doc-biblioref">Stone et al., 1998</a>; <a href="#ref-Schwarz2021" role="doc-biblioref">Schwarz et al., 2021</a>)</span>. For example, the diurnal pollen release schedules previously observed in <em>Succisa pratensis</em> allow the plant to establish temporal dominance early in the day <span class="citation" data-cites="stenc2023pollinator">(<a href="#ref-stenc2023pollinator" role="doc-biblioref">Štenc et al., 2023b</a>)</span>. By releasing pollen and attracting vectors before co-flowering competitors do, a plant can secure massive CP delivery prior to the accumulation of heterogeneous pollen loads on shared vectors, functioning as a form of temporal specialization <span class="citation" data-cites="Brosi2016">(<a href="#ref-Brosi2016" role="doc-biblioref">Brosi, 2016</a>)</span>. This temporal stratification ensures that the highest frequency of redundant visits occurs during an optimal window, overriding the subsequent accumulation of HP when shared vectors ultimately shift their foraging efforts toward afternoon-flowering competitors <span class="citation" data-cites="Schwarz2021 stenc2023pollinator">(<a href="#ref-Schwarz2021" role="doc-biblioref">Schwarz et al., 2021</a>; <a href="#ref-stenc2023pollinator" role="doc-biblioref">Štenc et al., 2023b</a>)</span>How can position the .</p>
+<p>[Aims]</p>
+<p>While the variability of individual visits and the theoretical frameworks for HP accumulation are well known, empirical studies rarely measure these processes across multiple scales in a single natural system. In this study, we evaluate pollen transfer using a three-year dataset (2022–2024) for the highly visited, generalist plant <em>Succisa pratensis</em>. We address the following objectives: (1) to quantify the variance in pollen deposition across years, days, individual plants, and individual stigmas; (2) to compare the variability of CP and HP across transport stages, from single-visit depositions to final stigmatic loads; and (3) to determine how year-to-year changes in local floral abundance influence the accumulation of HP relative to CP. We hypothesize that despite the high variability of individual generalist visits, <em>S. pratensis</em> achieves stable CP deposition because high local floral abundance and early morning pollen release <span class="citation" data-cites="Stenc2023 vstenc2025pollen">(<a href="#ref-Stenc2023" role="doc-biblioref">Štenc et al., 2023a</a>, <a href="#ref-vstenc2025pollen" role="doc-biblioref">2025</a>)</span> buffer the plant against unpredictable single-visit deliveries.</p>
+</section>
+<section id="methods" class="level2">
+<h2>Methods</h2>
+<section id="study-system" class="level3">
+<h3>Study system</h3>
+<p>Our observations were conducted in a seminatural grassland community with a high abundance of flowering plants (especially <em>Succisa pratensis</em>) and diverse pollinator community, dominated by hoverflies. The study site “K Handrkovu” is located near the village of Vernýřov, Central Bohemia, Czech Republic (N 49.8466; E 15.1498). The study site can be classified as a mosaic of moist to mesophilic and eutrophic to mesotrophic grasslands with more than 50 entomogamous plant species flowering in late summer every year <span class="citation" data-cites="janovsky2013conspecific">(<a href="#ref-janovsky2013conspecific" role="doc-biblioref">Janovskỳ et al., 2013</a>)</span>. The fieldwork was conducted in 2022-2024 during the peak of <em>Succisa pratensis</em> flowering activity (XXth-XXth August, XXh-XXth August and XXth-XXth August, respectively).</p>
+<p><em>Succisa pratensis</em>, our focal plant species, is frequently visited by a wide spectrum of pollinators, especially hoverflies (see <a href="#fig-plant-pollinator-panel" class="quarto-xref">Figure 1</a>), feeding on both pollen and nectar on it. In addition, <em>Succisa pratensis</em> has a relatively large and stable population at our study site. Important traits related to pollination also include distinctive open inflorescences available to most pollinators, protandry preventing self-pollination <span class="citation" data-cites="bartovs2020self">(<a href="#ref-bartovs2020self" role="doc-biblioref">Bartoš et al., 2020</a>)</span> and pollen releasing in the morning hours <span class="citation" data-cites="stenc2023pollinator">(<a href="#ref-stenc2023pollinator" role="doc-biblioref">Štenc et al., 2023b</a>)</span>.</p>
+<p>We focused on the common hoverflies species with stable populations with a sufficient numbers of males and females adults occurring at the study site and frequently visiting <em>Succisa pratensis</em>. The most common visitors are hoverfly genera <em>Eristalis</em> (<em>E. arbustorum, E. interruptus, E. intricaria, E. pertinax, E. similis</em> and <em>E. tenax</em>), <em>Helophilus</em> (<em>H. pendulus</em> and <em>H. trivittatus</em>) and meatfly genera <em>Sarcophaga</em>.</p>
+</section>
+<section id="section" class="level3">
+<h3></h3>
+<div class="cell">
+<div class="cell-output-display">
+<div id="fig-plant-pollinator-panel" class="quarto-float quarto-figure quarto-figure-center">
+<figure class="quarto-float quarto-float-fig">
+<div aria-describedby="fig-plant-pollinator-panel-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="docs/images/fig-plant-pollinator-panel-1.png" class="img-fluid" width="960" />
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-plant-pollinator-panel-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure 1: A) Stigma of <em>Succisa pratensis</em> with several pollen morphotypes, B) Pollinator (<em>Eristalis</em> sp.) on flower of <em>Succisa pratensis</em>, see the pollen on pollinator body, C) Detail of anther with visible pollen grains of <em>Succisa pratensis</em>, D) Detail of stigma of <em>Succisa pratensis</em> with visible deposited pollen grains
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="plant-pollinator-interactions-and-plant-abundance" class="level3">
+<h3>Plant-pollinator interactions and plant abundance</h3>
+<p>Following the same protocol at the study locality as published in <span class="citation" data-cites="Janovsky2013">Janovský et al. (<a href="#ref-Janovsky2013" role="doc-biblioref">2013</a>)</span>, we collected data on pollinator visitation activity. We used same permanent plots as in the flowering plant abundance to record all interactions of flower-visiting pollinators with flowering <em>Succisa pratensis</em> and other plant species in the surrounding of <em>S. pratensis</em>. All flowers within the plot were checked only one time to avoid pseudo-replication and all interactions occurring at the moment of the survey were recorded, lasting up to five minutes. Each plot was recorded at least twenty times during the activity period of pollinators (7:00 - 19:00) at the peak of flowering (mid-August) each year. We recorded only the pollinators touching the reproductive organs of the visited plant and each individual pollinator only once. Finally, we counted standardized interaction rates (total number of interactions per sampling visit) for pollinators visiting S<em>. pratensis</em> from 2022 to 2024 and compared the distribution of interaction rates for the specific group of pollinators visiting <em>S. pratensis</em> and the same pollinators on all other plant species.</p>
+<p>Thanks to long-term research on flowering plants and their interactions with pollinators, we obtained information on the abundances of individual plants at the study site and it’s changes over time (see Janovský et al., 2013). We used 4 × 4 m2 permanent plots each placed in the center of each grid point of a 20 × 20 m2 grid covering a total area of 300 × 300 m2 of the study site. To determine the floral neighborhood of <em>S. pratensis</em> from 2022 to 2024, we counted distribution of plant abundance for individual plots where <em>S. pratensis</em> was present. We counted conspecific abundance of the focal species and heterospecific co-flowering abundance index, which is the cumulative abundance of all other co-flowering plant species in the plot.</p>
+</section>
+<section id="pollen-load" class="level3">
+<h3>Pollen load</h3>
+<p>Foraging hoverflies visiting Succisa inflorescence were caught with entomological net and killed immediately after capture. We swabbed pollen grains from one half (randomly selecting left or right) of each pollinator’s body with a small block of fuchsin jelly, following <span class="citation" data-cites="beattie1971technique">Beattie (<a href="#ref-beattie1971technique" role="doc-biblioref">1971</a>)</span>. We stored captured pollinators in the 70% ethanol. On the same day, we produced semi-permanent samples by melting fuchsin jelly with a heating pad on a microscope slide, covering and sealing with nail polish. Later, we counted and determined all pollen grains using a light microscope. We sorted pollen into conspecific <em>S. pratensis</em> pollen and heterospecific pollen of other plant species.</p>
+</section>
+<section id="single-visit-deposition-svd" class="level3">
+<h3>Single Visit Deposition (SVD)</h3>
+<p>To prevent pollinators access to flowers, we bagged selected inflorences into a tulle bag before the plants have entered the male phase and opened the anthers. When the plant entered the female phase with receptive stigmas, we removed the bag and collected two control stigmas into a tube with 70% ethanol. We watched the inflorescence for thirty minutes and recorded every pollinator that visited it. The pollinators were allowed to visit only one flower within the inflorescence, the stigma of which we collected into a tube with 70% ethanol. If the pollinator visited multiple flowers, we collected only the first visited stigma and removed other from the plant.</p>
+</section>
+<section id="total-pollen-deposition-tpd-on-stigma" class="level3">
+<h3>Total Pollen Deposition (TPD) on Stigma</h3>
+<p>We put collected stigmas on the slide and let the ethanol evaporate on the heating pad. After that we added 1 µl of 10% KOH, let the samples dry, added 3 µl of 3% hydrogen peroxide, let the samples dry again and we added 13 µl of 8% vinegar to neutralize KOH. After further drying we added 5 µl of dye (safranin, water and glycerol), covered the samples with a coverslip, applied gentle, even pressure on the cover glass to squash the stigma and sealed with nail polish to produce semi-permanent samples.</p>
+</section>
+<section id="statistical-analysis" class="level3">
+<h3>Statistical Analysis</h3>
+<section id="variance-partitioning" class="level4">
+<h4>Variance partitioning</h4>
+</section>
+<section id="monte-carlo-simulation-of-visitation-redundancy" class="level4">
+<h4>Monte Carlo Simulation of Visitation Redundancy</h4>
+<p>To test whether visitation redundancy mathematically drives stable pollen deposition, we constructed a Monte Carlo bootstrapping simulation. Because pollinator morphology and mechanical transfer efficiency are functionally consistent traits, we pooled all single-visit deposition (SVD) data across the three study years to create a single, highly robust global pool of vector deposition profiles. This allowed us to mathematically isolate the effect of the plant’s changing floral density while holding vector baseline deposition constant.</p>
+<p>We parameterized the simulation independently for each study year (2022–2024). For a given year, we estimated the average required visitation rate by dividing the empirical mean of conspecific pollen (CP) on that year’s stigmas by the mean CP of the global SVD pool. We then generated 10,000 virtual stigmas per year, randomly sampling (with replacement) from the global SVD pool based on that year’s specific visitation rate.</p>
+<p>Finally, we evaluated the fit of the simulated null models against our true field observations. Because the massive sample size of the simulation (N=10,000) renders traditional two-sample Kolmogorov-Smirnov (K-S) p-values hyper-sensitive to trivial biological deviations—such as physical stigma saturation limits—we focused on the K-S D-statistic to quantify the maximum distributional divergence as a measure of effect size. Furthermore, to provide a robust and intuitive measure of simulation accuracy independent of sample size, we calculated the Overlapping Coefficient (OVL; Pastore &amp; Calcagnì, 2019). The OVL quantifies the exact proportion of area shared between the empirical and simulated probability density curves, providing a direct metric of functional overlap between the theoretical null model and field reality.</p>
+</section>
+</section>
+</section>
+<section id="results" class="level2">
+<h2>Results</h2>
+<section id="plant-pollinator-interactions-and-plant-abundance-1" class="level3">
+<h3>Plant-pollinator interactions and plant abundance</h3>
+<p>To determine if the 2024 high-density anomaly altered the mechanical interaction between pollinators and the focal plant population, we modeled the per-capita visitation rate as a function of local floral abundance. A log-log linear regression revealed a significant negative relationship (t=−2.75, p=0.008, R2=0.12). As local conspecific floral abundance increased, the per-capita visitation rate per flower significantly decreased. This confirms a density-driven dilution effect: while the massive floral bloom successfully recruited shared generalist vectors, the sheer volume of available conspecific resources diluted the frequency of individual visits, trapping vectors within a pure conspecific foraging loop for extended periods.</p>
+<p>Decoupled Accumulation: The Spatial Mitigation of HP To test if this spatial dilution effectively mitigated heterospecific pollen (HP) transfer, we analyzed the accumulation rates of HP relative to conspecific pollen (CP) receipt on final stigmas. An analysis of variance (ANOVA) revealed a highly significant interaction between CP accumulation and study year (F2,231​=13.38, p&lt;0.001). In standard-density years (2022 and 2023), the accumulation of CP was tightly coupled with heavy HP contamination, resulting in steep, positive slopes. In these years, receiving more conspecific visits inevitably resulted in higher reproductive interference from the shared network. However, during the extreme high-density anomaly of 2024, this relationship structurally shifted. The accumulation slope flattened significantly (CP × Year 2024 interaction: t=−2.44, p=0.015), demonstrating that stigmas could accumulate their required baseline of CP without the proportional accumulation of HP. This confirms that extreme local floral density actively decouples conspecific reproduction from heterospecific contamination in the field.</p>
+<p>Plant abundance shift and the effect on visitation - needs to be tested.</p>
+<div class="cell">
+<div class="cell-output-display">
+<div id="fig-spatial-temporal-abundance" class="quarto-float quarto-figure quarto-figure-center">
+<figure class="quarto-float quarto-float-fig">
+<div aria-describedby="fig-spatial-temporal-abundance-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="docs/images/fig-spatial-temporal-abundance-1.png" class="img-fluid" width="672" />
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-spatial-temporal-abundance-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure 2: Distribution and abundance of Succisa pratensis (2022-2024). A) Spatial distribution of plots with Succisa presence. B) Total abundance recorded per year. C) Differences in standardized visitation rates to Succisa pratensis across years (2022-2024).
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="pollinator-spectra-composition" class="level3">
+<h3>Pollinator Spectra Composition</h3>
+<p>To assess the temporal stability of the pollinator community, we compared species composition across years using the <strong>Morisita-Horn similarity index</strong> (Horn, 1966). This metric was selected for its robustness to differences in sample size and species richness compared to incidence-based metrics (Jost et al., 2011). Pairwise similarities were calculated on abundance data (standardized by sampling effort) using the <code>vegan</code> package.</p>
+<p>The core structure of the pollinator community remained highly stable across the three years. The Morisita-Horn index indicated high compositional overlap (Similarity &gt; 0.9 for all pairwise comparisons), driven by the consistent dominance of key generalist taxa such as <em>Eristalis</em> spp. and <em>Syrphus</em> spp. (see Table S3 in Supplementary Material).</p>
+<div class="cell">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img src="docs/images/analysis-community-stability-evenness-1.png" class="img-fluid" width="1344" /></p>
+<figcaption>Community Stability and Structure. A) Pollinator Spectra Composition. B) Floral Spectra Composition. C) Temporal Pollinator Stability (Morisita-Horn). D) Floral Community Similarity.</figcaption>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="pollen-load-and-single-visit-deposition-svd" class="level3">
+<h3>Pollen Load and Single Visit Deposition (SVD)</h3>
+<p>To determine if specific pollinator taxa drive the depositional variance observed across the network, we compared single-visit depositions (SVD) across the dominant floral visitor morphogroups (e.g., Eristalis spp., Helophilus spp., Bombus spp.). Kruskal-Wallis rank sum tests revealed no significant differences among pollinator taxa in the amount of conspecific pollen deposited during a single visit (H3​=1.59, p=0.661). Similarly, there were no significant differences across taxa in the deposition of heterospecific pollen per visit (H3​=5.20, p=0.158). These results indicate that per-visit pollen transfer efficiency and heterospecific carryover are highly stochastic but functionally equivalent across the generalist pollinator assemblage. Consequently, the total stigmatic pollen loads received by Succisa pratensis are not dictated by the taxonomic identity or morphological specialization of its visitors, but purely by the cumulative frequency of their visits.</p>
+<div class="cell">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img src="docs/images/analysis-body-and-svd-1.png" class="img-fluid" width="960" /></p>
+<figcaption>Pollen Load and Single Visit Deposition (SVD). A) Conspecific Body Pollen Load, B) Heterospecific Body Pollen Load, C) Conspecific Single Visit Deposition, D) Heterospecific Single Visit Deposition.</figcaption>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="tpd" class="level3">
+<h3>TPD</h3>
+<div class="cell">
+<div class="cell-output-display">
+<div id="iprfaormjl" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#iprfaormjl table {
+  font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+#iprfaormjl thead, #iprfaormjl tbody, #iprfaormjl tfoot, #iprfaormjl tr, #iprfaormjl td, #iprfaormjl th {
+  border-style: none;
+}
+
+#iprfaormjl p {
+  margin: 0;
+  padding: 0;
+}
+
+#iprfaormjl .gt_table {
+  display: table;
+  border-collapse: collapse;
+  line-height: normal;
+  margin-left: auto;
+  margin-right: auto;
+  color: #333333;
+  font-size: 16px;
+  font-weight: normal;
+  font-style: normal;
+  background-color: #FFFFFF;
+  width: auto;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #000000;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #000000;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+}
+
+#iprfaormjl .gt_caption {
+  padding-top: 4px;
+  padding-bottom: 4px;
+}
+
+#iprfaormjl .gt_title {
+  color: #333333;
+  font-size: 125%;
+  font-weight: initial;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-color: #FFFFFF;
+  border-bottom-width: 0;
+}
+
+#iprfaormjl .gt_subtitle {
+  color: #333333;
+  font-size: 85%;
+  font-weight: initial;
+  padding-top: 3px;
+  padding-bottom: 5px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-color: #FFFFFF;
+  border-top-width: 0;
+}
+
+#iprfaormjl .gt_heading {
+  background-color: #FFFFFF;
+  text-align: left;
+  border-bottom-color: #FFFFFF;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#iprfaormjl .gt_bottom_border {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#iprfaormjl .gt_col_headings {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#iprfaormjl .gt_col_heading {
+  color: #333333;
+  background-color: #F0F0F0;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 6px;
+  padding-left: 5px;
+  padding-right: 5px;
+  overflow-x: hidden;
+}
+
+#iprfaormjl .gt_column_spanner_outer {
+  color: #333333;
+  background-color: #F0F0F0;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  padding-top: 0;
+  padding-bottom: 0;
+  padding-left: 4px;
+  padding-right: 4px;
+}
+
+#iprfaormjl .gt_column_spanner_outer:first-child {
+  padding-left: 0;
+}
+
+#iprfaormjl .gt_column_spanner_outer:last-child {
+  padding-right: 0;
+}
+
+#iprfaormjl .gt_column_spanner {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  overflow-x: hidden;
+  display: inline-block;
+  width: 100%;
+}
+
+#iprfaormjl .gt_spanner_row {
+  border-bottom-style: hidden;
+}
+
+#iprfaormjl .gt_group_heading {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  text-align: left;
+}
+
+#iprfaormjl .gt_empty_group_heading {
+  padding: 0.5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: middle;
+}
+
+#iprfaormjl .gt_from_md > :first-child {
+  margin-top: 0;
+}
+
+#iprfaormjl .gt_from_md > :last-child {
+  margin-bottom: 0;
+}
+
+#iprfaormjl .gt_row {
+  padding-top: 6px;
+  padding-bottom: 6px;
+  padding-left: 5px;
+  padding-right: 5px;
+  margin: 10px;
+  border-top-style: solid;
+  border-top-width: 1px;
+  border-top-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  overflow-x: hidden;
+}
+
+#iprfaormjl .gt_stub {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#iprfaormjl .gt_stub_row_group {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+  vertical-align: top;
+}
+
+#iprfaormjl .gt_row_group_first td {
+  border-top-width: 2px;
+}
+
+#iprfaormjl .gt_row_group_first th {
+  border-top-width: 2px;
+}
+
+#iprfaormjl .gt_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#iprfaormjl .gt_first_summary_row {
+  border-top-style: solid;
+  border-top-color: #D3D3D3;
+}
+
+#iprfaormjl .gt_first_summary_row.thick {
+  border-top-width: 2px;
+}
+
+#iprfaormjl .gt_last_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#iprfaormjl .gt_grand_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#iprfaormjl .gt_first_grand_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-style: double;
+  border-top-width: 6px;
+  border-top-color: #D3D3D3;
+}
+
+#iprfaormjl .gt_last_grand_summary_row_top {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: double;
+  border-bottom-width: 6px;
+  border-bottom-color: #D3D3D3;
+}
+
+#iprfaormjl .gt_striped {
+  background-color: rgba(128, 128, 128, 0.05);
+}
+
+#iprfaormjl .gt_table_body {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#iprfaormjl .gt_footnotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#iprfaormjl .gt_footnote {
+  margin: 0px;
+  font-size: 90%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#iprfaormjl .gt_sourcenotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#iprfaormjl .gt_sourcenote {
+  font-size: 90%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#iprfaormjl .gt_left {
+  text-align: left;
+}
+
+#iprfaormjl .gt_center {
+  text-align: center;
+}
+
+#iprfaormjl .gt_right {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+#iprfaormjl .gt_font_normal {
+  font-weight: normal;
+}
+
+#iprfaormjl .gt_font_bold {
+  font-weight: bold;
+}
+
+#iprfaormjl .gt_font_italic {
+  font-style: italic;
+}
+
+#iprfaormjl .gt_super {
+  font-size: 65%;
+}
+
+#iprfaormjl .gt_footnote_marks {
+  font-size: 75%;
+  vertical-align: 0.4em;
+  position: initial;
+}
+
+#iprfaormjl .gt_asterisk {
+  font-size: 100%;
+  vertical-align: 0;
+}
+
+#iprfaormjl .gt_indent_1 {
+  text-indent: 5px;
+}
+
+#iprfaormjl .gt_indent_2 {
+  text-indent: 10px;
+}
+
+#iprfaormjl .gt_indent_3 {
+  text-indent: 15px;
+}
+
+#iprfaormjl .gt_indent_4 {
+  text-indent: 20px;
+}
+
+#iprfaormjl .gt_indent_5 {
+  text-indent: 25px;
+}
+
+#iprfaormjl .katex-display {
+  display: inline-flex !important;
+  margin-bottom: 0.75em !important;
+}
+
+#iprfaormjl div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
+  height: 0px !important;
+}
+</style>
+
+<table class="gt_table caption-top" data-quarto-postprocess="true" data-quarto-disable-processing="false" data-quarto-bootstrap="false">
+<thead>
+<tr class="gt_heading header">
+<th colspan="6" class="gt_heading gt_title gt_font_normal gt_bottom_border"><strong>A) ANOVA Results</strong></th>
+</tr>
+<tr class="gt_col_headings even">
+<th id="Term" class="gt_col_heading gt_columns_bottom_border gt_left" data-quarto-table-cell-role="th" style="font-weight: bold" scope="col">Predictor</th>
+<th id="Df" class="gt_col_heading gt_columns_bottom_border gt_center" data-quarto-table-cell-role="th" style="font-weight: bold" scope="col">df</th>
+<th id="Stat1" class="gt_col_heading gt_columns_bottom_border gt_center" data-quarto-table-cell-role="th" style="font-weight: bold" scope="col">Sum Sq</th>
+<th id="Stat2" class="gt_col_heading gt_columns_bottom_border gt_center" data-quarto-table-cell-role="th" style="font-weight: bold" scope="col">Mean Sq</th>
+<th id="Stat3" class="gt_col_heading gt_columns_bottom_border gt_center" data-quarto-table-cell-role="th" style="font-weight: bold" scope="col">F-value</th>
+<th id="P_value" class="gt_col_heading gt_columns_bottom_border gt_center" data-quarto-table-cell-role="th" style="font-weight: bold" scope="col">P-value</th>
+</tr>
+</thead>
+<tbody class="gt_table_body">
+<tr class="odd">
+<td class="gt_row gt_left" headers="Term">Conspecific Pollen (CP)</td>
+<td class="gt_row gt_center" headers="Df">1</td>
+<td class="gt_row gt_center" headers="Stat1">39.035</td>
+<td class="gt_row gt_center" headers="Stat2">39.035</td>
+<td class="gt_row gt_center" headers="Stat3">15.04</td>
+<td class="gt_row gt_center" headers="P_value">&lt;0.001</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_left" headers="Term">Year</td>
+<td class="gt_row gt_center" headers="Df">2</td>
+<td class="gt_row gt_center" headers="Stat1">552.940</td>
+<td class="gt_row gt_center" headers="Stat2">276.470</td>
+<td class="gt_row gt_center" headers="Stat3">106.51</td>
+<td class="gt_row gt_center" headers="P_value">&lt;0.001</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_left" headers="Term">Conspecific Pollen (CP):Year</td>
+<td class="gt_row gt_center" headers="Df">2</td>
+<td class="gt_row gt_center" headers="Stat1">72.937</td>
+<td class="gt_row gt_center" headers="Stat2">36.468</td>
+<td class="gt_row gt_center" headers="Stat3">14.05</td>
+<td class="gt_row gt_center" headers="P_value">&lt;0.001</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_left" headers="Term">Residuals</td>
+<td class="gt_row gt_center" headers="Df">231</td>
+<td class="gt_row gt_center" headers="Stat1">599.614</td>
+<td class="gt_row gt_center" headers="Stat2">2.596</td>
+<td class="gt_row gt_center" headers="Stat3"></td>
+<td class="gt_row gt_center" headers="P_value"></td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+<div class="cell-output-display">
+<div id="sxjcuhbjug" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#sxjcuhbjug table {
+  font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+#sxjcuhbjug thead, #sxjcuhbjug tbody, #sxjcuhbjug tfoot, #sxjcuhbjug tr, #sxjcuhbjug td, #sxjcuhbjug th {
+  border-style: none;
+}
+
+#sxjcuhbjug p {
+  margin: 0;
+  padding: 0;
+}
+
+#sxjcuhbjug .gt_table {
+  display: table;
+  border-collapse: collapse;
+  line-height: normal;
+  margin-left: auto;
+  margin-right: auto;
+  color: #333333;
+  font-size: 16px;
+  font-weight: normal;
+  font-style: normal;
+  background-color: #FFFFFF;
+  width: auto;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #000000;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #000000;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+}
+
+#sxjcuhbjug .gt_caption {
+  padding-top: 4px;
+  padding-bottom: 4px;
+}
+
+#sxjcuhbjug .gt_title {
+  color: #333333;
+  font-size: 125%;
+  font-weight: initial;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-color: #FFFFFF;
+  border-bottom-width: 0;
+}
+
+#sxjcuhbjug .gt_subtitle {
+  color: #333333;
+  font-size: 85%;
+  font-weight: initial;
+  padding-top: 3px;
+  padding-bottom: 5px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-color: #FFFFFF;
+  border-top-width: 0;
+}
+
+#sxjcuhbjug .gt_heading {
+  background-color: #FFFFFF;
+  text-align: left;
+  border-bottom-color: #FFFFFF;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#sxjcuhbjug .gt_bottom_border {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#sxjcuhbjug .gt_col_headings {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#sxjcuhbjug .gt_col_heading {
+  color: #333333;
+  background-color: #F0F0F0;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 6px;
+  padding-left: 5px;
+  padding-right: 5px;
+  overflow-x: hidden;
+}
+
+#sxjcuhbjug .gt_column_spanner_outer {
+  color: #333333;
+  background-color: #F0F0F0;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  padding-top: 0;
+  padding-bottom: 0;
+  padding-left: 4px;
+  padding-right: 4px;
+}
+
+#sxjcuhbjug .gt_column_spanner_outer:first-child {
+  padding-left: 0;
+}
+
+#sxjcuhbjug .gt_column_spanner_outer:last-child {
+  padding-right: 0;
+}
+
+#sxjcuhbjug .gt_column_spanner {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  overflow-x: hidden;
+  display: inline-block;
+  width: 100%;
+}
+
+#sxjcuhbjug .gt_spanner_row {
+  border-bottom-style: hidden;
+}
+
+#sxjcuhbjug .gt_group_heading {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  text-align: left;
+}
+
+#sxjcuhbjug .gt_empty_group_heading {
+  padding: 0.5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: middle;
+}
+
+#sxjcuhbjug .gt_from_md > :first-child {
+  margin-top: 0;
+}
+
+#sxjcuhbjug .gt_from_md > :last-child {
+  margin-bottom: 0;
+}
+
+#sxjcuhbjug .gt_row {
+  padding-top: 6px;
+  padding-bottom: 6px;
+  padding-left: 5px;
+  padding-right: 5px;
+  margin: 10px;
+  border-top-style: solid;
+  border-top-width: 1px;
+  border-top-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  overflow-x: hidden;
+}
+
+#sxjcuhbjug .gt_stub {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#sxjcuhbjug .gt_stub_row_group {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+  vertical-align: top;
+}
+
+#sxjcuhbjug .gt_row_group_first td {
+  border-top-width: 2px;
+}
+
+#sxjcuhbjug .gt_row_group_first th {
+  border-top-width: 2px;
+}
+
+#sxjcuhbjug .gt_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#sxjcuhbjug .gt_first_summary_row {
+  border-top-style: solid;
+  border-top-color: #D3D3D3;
+}
+
+#sxjcuhbjug .gt_first_summary_row.thick {
+  border-top-width: 2px;
+}
+
+#sxjcuhbjug .gt_last_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#sxjcuhbjug .gt_grand_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#sxjcuhbjug .gt_first_grand_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-style: double;
+  border-top-width: 6px;
+  border-top-color: #D3D3D3;
+}
+
+#sxjcuhbjug .gt_last_grand_summary_row_top {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: double;
+  border-bottom-width: 6px;
+  border-bottom-color: #D3D3D3;
+}
+
+#sxjcuhbjug .gt_striped {
+  background-color: rgba(128, 128, 128, 0.05);
+}
+
+#sxjcuhbjug .gt_table_body {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#sxjcuhbjug .gt_footnotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#sxjcuhbjug .gt_footnote {
+  margin: 0px;
+  font-size: 90%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#sxjcuhbjug .gt_sourcenotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#sxjcuhbjug .gt_sourcenote {
+  font-size: 90%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#sxjcuhbjug .gt_left {
+  text-align: left;
+}
+
+#sxjcuhbjug .gt_center {
+  text-align: center;
+}
+
+#sxjcuhbjug .gt_right {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+#sxjcuhbjug .gt_font_normal {
+  font-weight: normal;
+}
+
+#sxjcuhbjug .gt_font_bold {
+  font-weight: bold;
+}
+
+#sxjcuhbjug .gt_font_italic {
+  font-style: italic;
+}
+
+#sxjcuhbjug .gt_super {
+  font-size: 65%;
+}
+
+#sxjcuhbjug .gt_footnote_marks {
+  font-size: 75%;
+  vertical-align: 0.4em;
+  position: initial;
+}
+
+#sxjcuhbjug .gt_asterisk {
+  font-size: 100%;
+  vertical-align: 0;
+}
+
+#sxjcuhbjug .gt_indent_1 {
+  text-indent: 5px;
+}
+
+#sxjcuhbjug .gt_indent_2 {
+  text-indent: 10px;
+}
+
+#sxjcuhbjug .gt_indent_3 {
+  text-indent: 15px;
+}
+
+#sxjcuhbjug .gt_indent_4 {
+  text-indent: 20px;
+}
+
+#sxjcuhbjug .gt_indent_5 {
+  text-indent: 25px;
+}
+
+#sxjcuhbjug .katex-display {
+  display: inline-flex !important;
+  margin-bottom: 0.75em !important;
+}
+
+#sxjcuhbjug div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
+  height: 0px !important;
+}
+</style>
+
+<table class="gt_table caption-top" data-quarto-postprocess="true" data-quarto-disable-processing="false" data-quarto-bootstrap="false">
+<thead>
+<tr class="gt_heading header">
+<th colspan="6" class="gt_heading gt_title gt_font_normal gt_bottom_border"><strong>B) Pairwise Slope Contrasts</strong></th>
+</tr>
+<tr class="gt_col_headings even">
+<th id="Term" class="gt_col_heading gt_columns_bottom_border gt_left" data-quarto-table-cell-role="th" style="font-weight: bold" scope="col">Contrast</th>
+<th id="Df" class="gt_col_heading gt_columns_bottom_border gt_center" data-quarto-table-cell-role="th" style="font-weight: bold" scope="col">df</th>
+<th id="Stat1" class="gt_col_heading gt_columns_bottom_border gt_center" data-quarto-table-cell-role="th" style="font-weight: bold" scope="col">Estimate</th>
+<th id="Stat2" class="gt_col_heading gt_columns_bottom_border gt_center" data-quarto-table-cell-role="th" style="font-weight: bold" scope="col">SE</th>
+<th id="Stat3" class="gt_col_heading gt_columns_bottom_border gt_center" data-quarto-table-cell-role="th" style="font-weight: bold" scope="col">t-ratio</th>
+<th id="P_value" class="gt_col_heading gt_columns_bottom_border gt_center" data-quarto-table-cell-role="th" style="font-weight: bold" scope="col">P-value</th>
+</tr>
+</thead>
+<tbody class="gt_table_body">
+<tr class="odd">
+<td class="gt_row gt_left" headers="Term">Year2022 - Year2023</td>
+<td class="gt_row gt_center" headers="Df">231</td>
+<td class="gt_row gt_center" headers="Stat1">-0.023</td>
+<td class="gt_row gt_center" headers="Stat2">0.025</td>
+<td class="gt_row gt_center" headers="Stat3">-0.93</td>
+<td class="gt_row gt_center" headers="P_value">0.62408</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_left" headers="Term">Year2022 - Year2024</td>
+<td class="gt_row gt_center" headers="Df">231</td>
+<td class="gt_row gt_center" headers="Stat1">0.062</td>
+<td class="gt_row gt_center" headers="Stat2">0.020</td>
+<td class="gt_row gt_center" headers="Stat3">3.13</td>
+<td class="gt_row gt_center" headers="P_value">0.00553</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_left" headers="Term">Year2023 - Year2024</td>
+<td class="gt_row gt_center" headers="Df">231</td>
+<td class="gt_row gt_center" headers="Stat1">0.085</td>
+<td class="gt_row gt_center" headers="Stat2">0.018</td>
+<td class="gt_row gt_center" headers="Stat3">4.64</td>
+<td class="gt_row gt_center" headers="P_value">&lt; 0.001</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+<p>In total, we collected 693 stigmas from 273 individual plants in (84, 89, 520 stigmas in 2022, 2023 and 2024 respectively).</p>
+</section>
+<section id="coefficient-of-variation-and-variance-partitioning" class="level3">
+<h3>Coefficient of Variation and Variance Partitioning</h3>
+<p>To quantify the reduction of unpredictability across the pollen transport network, we compared the Coefficient of Variation (CV) across functional transport compartments. Conspecific pollen (CP) exhibited extreme variability on pollinator bodies (CV = <strong>[X]</strong>%) and during single-visit depositions (CV = <strong>[X]</strong>%). However, at the terminal depositional stage on final stigmas, this variability was heavily buffered, dropping dramatically (CV = <strong>[X]</strong>%). Conversely, heterospecific pollen (HP) maintained extreme hyper-variability across all compartments, from vector bodies (CV = <strong>[X]</strong>%) through to final stigmatic loads (CV = <strong>[X]</strong>%).</p>
+<p>Hierarchical variance partitioning further confirmed the micro-scale nature of this stochasticity. For CP, temporal phenology (years and days) explained negligible variation; instead, the vast majority of depositional variance occurred at the micro-spatial scale, driven by differences among individual plants (<strong>[X]</strong>%) and individual stigmas (<strong>[X]</strong>%). The reduction in CP variance at the terminal stage, despite intense micro-scale unpredictability during transport, indicates a functional filtering mechanism stabilizing conspecific reproductive receipt. Notably, the variance explained by day in the 2024 dataset was negligible.</p>
+<div class="cell">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img src="docs/images/analysis-cv-comparison-1.png" class="img-fluid" width="672" /></p>
+<figcaption>Coefficient of Variation (CV) and Mean of Conspecific (CP) and Heterospecific (HP) pollen counts. A-B) CV of pollen counts; C-D) Mean pollen counts + SE.</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<p>19, p=0.663). Instead, variance during this single season was heavily driven by differences among individual plants (χ2=126.53, p&lt;0.001), suggesting #### Variance Partitioning</p>
+<p>Variance partitioning and subsequent likelihood ratio tests revealed significant temporal and spatial drivers of heterospecific pollen (HP) deposition. At the inter-annual scale (2022-2024), we found significant variation in HP deposition driven by both the sampling year (χ2=32.39, p&lt;0.001) and the individual plant nested within year (χ2=104.73, p&lt;0.001).</p>
+<p>However, fine-scale intra-annual analysis of the 2024 season showed that daily temporal variation was not a significant driver of HP deposition (χ2=0.19, p=0.663). Instead, variance during this single season was heavily driven by differences among individual plants (χ2=126.53, p&lt;0.001), suggesting that plant-level traits or highly localized micro-spatial effects dictate heterospecific pollen transfer more than daily phenological shifts.</p>
+</section>
+<section id="the-hierarchical-scale-of-total-pollen-depositional-variance" class="level3">
+<h3>The Hierarchical Scale of Total Pollen Depositional Variance</h3>
+<div class="cell">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img src="docs/images/analysis-variance-partitioning-1.png" class="img-fluid" width="672" /></p>
+<figcaption>Pollen Deposition Model and Variance Partitioning. A) Model depicting Heterospecific vs Conspecific Pollen deposition. The dashed gray line represents the 1:1 expected relationship. B) Hierarchical Variance Partitioning of pollen deposited on stigmas.</figcaption>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="monte-carlo-simulation-the-interannual-variance-filter" class="level3">
+<h3>Monte Carlo Simulation: The Interannual Variance Filter</h3>
+<p>The year-by-year Monte Carlo simulation confirmed that visitation redundancy effectively neutralizes micro-scale stochasticity for conspecific pollen (CP) across all measured years in the TPD. Regardless of the study year, the random additive accumulation of SVD from the global vector pool successfully recreated the stable mean CP loads observed in the field (e.g., 2024 Simulated CP Mean: 26.8; Observed CP Mean: 27.4). While the two-sample K-S tests flagged mathematical divergences (p&lt;0.001) due to the hypersensitivity of a 10,000-iteration model to biological saturation limits, the tight convergence of the central tendencies and the functional overlap of the distributions (D-statistics ranging from 0.103 to 0.166) demonstrate that visitation frequency alone acts as a robust mathematical filter, effectively translating single-visit variance into stable CP deposition.</p>
+<p>Conversely, for heterospecific pollen (HP), the simulation’s accuracy varied sharply between years, revealing that HP accumulation is governed by environmental context rather than simple mechanical redundancy. If generalist vectors deposit mixed pollen loads based strictly on their baseline single-visit profiles, the null model dictates that stigmas should accumulate a low, normalized baseline load of HP (3.4 to 4.5 grains). In standard-density years (2022 and 2023), empirical stigmas accumulated HP loads that exceeded this mathematical expectation by more than tenfold (e.g., 2023 Observed HP: 50.4 vs. Simulated: 3.4), resulting in severe structural divergence from the null model (D&gt;0.77). Crucially, during the increased density of <em>S. pratensis</em> in 2024, this neighborhood-driven accumulation declined. The observed HP dropped to 9.6 grains, forcing the empirical distribution significantly closer to the mechanical baseline (D=0.265). Because vector mechanical efficiency was held constant in our simulation, this interannual shift confirms that while standard-density years suffer heavy reproductive interference from shared networks, the increased conspecific floral abundance in 2024 actively mitigated HP accumulation, suppressing it back toward the mechanical minimum.</p>
+<div class="cell">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img src="docs/images/analysis-monte-carlo-svd-1.png" class="img-fluid" width="1152" /></p>
+<figcaption>Monte Carlo Simulation: SVD Averaging. A, B) Global comparisons. C-H) Yearly comparisons. Densities compare observed final stigma pollen loads and the expected distribution if stigmas accumulate randomized single visits.</figcaption>
+</figure>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="discussion" class="level2">
+<h2>Discussion</h2>
+<p>Generalist pollination systems are characterized by extreme micro-scaleosition stochasticity, yet population-level pollen dep often remains remarkably stable. Resolving how plants buffer against highly variable, mixed pollen loads delivered by shared vectors remains a central challenge in pollination ecology. Our analysis of <em>Succisa pratensis</em> pollen transfer and deposition patterns in 3 years resolves this paradox by demonstrating that stable pollen deposition does not require specialized vectors. Instead, the plant relies on overwhelming visitation redundancy, which mitigates conspecific depositional variance, while extreme local floral density acts as a filter, actively mitigating the accumulation of heterospecific pollen from the co-flowering community.</p>
+<p>Here we discuss possible drivers of the CP deposition stability and HP deposition mitigation and consequences for <em>S. pratensis</em> pollen transfer and reproduction.</p>
+<section id="svd" class="level3">
+<h3>SVD</h3>
+<p>The necessity of this spatial density filter is further underscored by the functional equivalence of the pollinator assemblage. Our single-visit deposition (SVD) analysis revealed no significant differences in conspecific or heterospecific pollen transfer across the dominant vector taxa; a single visit from a morphologically specialized <em>Bombus</em> was functionally indistinguishable from a visit by a generalized <em>Eristalis</em> syrphid fly. Because the plant cannot rely on pollinator constancy or morphological specialization to filter out environmental noise at the single-visit level, reproductive success is dictated entirely by interaction frequency.</p>
+<p>This aligns perfectly with the concept of pollinator importance (Vázquez et al., 2005). Previous empirical studies have demonstrated that taxa with low or highly variable per-visit efficiency can dominate total pollen transfer simply through overwhelming visitation frequency (e.g., Sahli and Conner, 2007). In our system, the hyper-abundant <em>Eristalis</em> guild drives the pollination economy. While these generalist flies introduce substantial micro-scale stochasticity, their overwhelming visitation redundancy mathematically guarantees conspecific stability. By deploying extreme local floral density to mitigate the associated heterospecific carryover, <em>S. pratensis</em> safely leverages the massive visitation volume of the most abundant—albeit individually unpredictable—insects in the network.</p>
+<section id="pollen-transfer---from-stochasticity-to-stability" class="level4">
+<h4>Pollen transfer - from stochasticity to stability</h4>
+<p>Securing reliable pollen receipt within a diverse, generalist plant-pollinator community requires plants to overcome profound micro-scale stochasticity. As outlined by Richards et al. (2009), single-visit deposition is inherently variable, forcing plants to rely on broader ecological mechanisms to aggregate these individual events into stable reproductive outcomes. <strong>Our variance partitioning analysis empirically validates this premise: temporal phenology (years and days) explained negligible variation in conspecific pollen (CP) receipt. Instead, the vast majority of depositional variance was driven entirely by micro-scale interactions at the individual plant and stigma level.</strong> &gt; Our Monte Carlo simulation successfully isolates the mechanism by which plants overcome this micro-scale variance: the statistical law of large numbers. By demonstrating that the random aggregation of highly variable single visits naturally produces the stable CP loads observed in the field, we confirm that <em>Succisa pratensis</em> successfully extracts stable pollination services from generalist vectors. Extreme visitation redundancy acts as a macro-scale filter, effectively neutralizing the intense micro-scale depositional variance of individual syrphid flies and bees.</p>
+<p>The Narrative: Discuss how the mechanical transfer of pollen (SVD) is inherently messy. However, your Monte Carlo simulation proves mathematically that the plant doesn’t need SVDs to be neat. It relies on the statistical “Law of Large Numbers.” As long as the plant receives enough visits, the high variance is mathematically forced to average out into a stable mean.</p>
+<p>The Literature Tie-in: Cite Vázquez et al. (2005) here to confirm that interaction frequency (redundancy) is the ultimate driver of pollination success, easily overriding the unpredictability of single-visit events (SVDs) highlighted by King et al. (2013).</p>
+<p>The Caveat: Mention the slight discrepancy between the Monte Carlo simulation and reality (the taller peak). Explain this biologically: mathematical models assume perfect additivity, but real stigmas have physical saturation limits (clogging) and real flowers experience unequal visitation.</p>
+<p>Paragraph 3: Volume Defeats Messiness (The Vector Economy)</p>
+<p>The Goal: Explain the Eristalis vs. Bombus finding.</p>
+<p>The Narrative: Challenge the traditional assumption that “messy” pollinators (bringing high HP) are detrimental. Your data proves that while Bombus is a “clean” pollinator, its low visitation rate makes it ecologically less important. Eristalis introduces the most HP, but its overwhelming visitation frequency floods the stigma with so much CP that the HP is rendered negligible.</p>
+<p>The Literature Tie-in: This is the perfect place to cite Sahli &amp; Conner (2007), who found the exact same thing with syrphid flies driving the pollen economy of wild radish purely through volume, despite poor single-visit efficiency.</p>
+<p>Paragraph 4: The Shield of Floral Density (The 2024 Anomaly)</p>
+<p>The Goal: Interpret the “Slope Showdown” and the failure of the Monte Carlo HP simulation.</p>
+<p>The Narrative: Explain why the Monte Carlo simulation failed to predict HP (the plant dodged the expected HP load). Then, use the 2024 data to explain how it dodged it. In standard years, generalist pollinators are pulled by the “neighborhood effect,” bringing linear HP accumulation. But in 2024, the massive spike in Succisa floral abundance completely overrode the neighborhood. The plant became so locally dominant that it essentially neutralized the ability of heterospecific neighbors to alter pollinator fidelity.</p>
+<p>The Literature Tie-in: Cite Ye et al. (2020) for the “neighborhood effect” (how neighbors alter pollinator fidelity) and Arceo-Gómez et al. (2016) for the dilution effect of high conspecific density.</p>
+<p>Paragraph 5: The Temporal Engine (The “Fresh Coat of Paint”)</p>
+<p>The Goal: Interpret the Body Load Purity (83.1% CP).</p>
+<p>While our simulation models demonstrated that high visitation rates guarantee stable conspecific pollen delivery, mathematical redundancy alone cannot explain how S. pratensis avoids heterospecific pollen. If generalist vectors continuously deposit mixed pollen loads, heterospecific pollen should accumulate linearly alongside conspecific pollen as a function of total visits. Our multi-year accumulation analysis confirmed this baseline expectation during standard-density years (2022 and 2023), where conspecific pollen receipt reliably predicted heterospecific accumulation. However, during the pronounced high-density anomaly of 2024, this depositional relationship was fundamentally decoupled. Despite stigmas accumulating massive volumes of conspecific pollen, the heterospecific accumulation curve flattened entirely. This decoupling provides direct empirical evidence that high local floral abundance acts as a structural density shield. By aggressively diluting the proportion of heterospecific pollen within the local environmental pool, the density spike allowed the plant to extract the required visitation volume from dominant generalist vectors—such as Eristalis spp.—without paying the anticipated cost of reproductive interference.visitation redundancy work.</p>
+<p>The Literature Tie-in: Cite your own work (Štenc et al., 2023) for the diurnal pollen release, and Brosi (2016) for how temporal specialization by generalist pollinators increases floral fidelity.</p>
+<p>Paragraph 6: Conclusion and Broader Impacts</p>
+<p>The Goal: Wrap it up with a strong takeaway for conservation or future network studies.</p>
+<p>The Narrative: Conclude that generalized pollination networks are not “suboptimal” fallback strategies, but highly robust, multi-scale systems. Furthermore, point out that maintaining stable pollination services requires more than just saving the bees; it requires maintaining high, dense populations of the plants themselves. If plant populations thin out, they lose their “density shield,” exposing them to reproductive interference even if the pollinator network remains perfectly intact.</p>
+<p>Our results suggest that the relationship between conspecific and heterospecific pollen deposition is driven by specific functional mechanisms rather than simple abundance.</p>
+<p>Our Monte Carlo simulation proved that high visitation rates are sufficient to explain how Succisa pratensis secures a stable, reliable load of conspecific pollen (CP). The simple mathematical averaging of multiple, highly variable single visits naturally produced the stable CP loads we observed in the field.</p>
+<p>However, simple visitation redundancy cannot explain the patterns of heterospecific pollen (HP) deposition. If insects were simply depositing random mixtures of pollen at a constant rate, our simulation showed that every flower should receive a moderate, unavoidable dose of HP. Instead, observed stigmas overwhelmingly avoided HP entirely, peaking near zero. This disconnect between the simulation and reality proves that S. pratensis actively filters out HP using broader ecological strategies. By relying on dense local floral displays to dilute environmental HP, and utilizing early-morning pollen release to ensure insects are loaded with CP before visiting other species, the plant successfully overrides the expected accumulation of heterospecific noise. The few observed flowers that did receive massive HP loads likely represent rare events where a pollinator exhibited extreme flower inconstancy, switching directly from a neighboring heterospecific plant.</p>
+<p>Our finding that Eristalis spp. drives the pollen economy despite introducing the most heterospecific noise perfectly aligns with the concept of ‘pollinator importance’ (Vázquez et al., 2005). Previous empirical studies have similarly demonstrated that taxa with low per-visit efficiency can dominate total pollen transfer simply through overwhelming visitation frequency. For example, Sahli and Conner (2007) found that while syrphid flies deposited minimal pollen during single visits, their exceptionally high visitation rates made them the most important contributors to total pollination. Likewise, our data proves that for Succisa pratensis, the sheer volume of generalist visits acts as a macro-scale filter, effectively drowning out the micro-scale ‘messiness’ of individual vectors.</p>
+<p>“However, simple mathematical redundancy cannot explain the plant’s heterospecific pollen (HP) dynamics. If generalist insects were simply depositing random, mixed loads at a constant rate, our simulation proved that every flower should receive a relatively low, unavoidable baseline dose of HP. In standard years (2022 and 2023), empirical HP accumulation exceeded this baseline tenfold, proving that when conspecific density is standard, the co-flowering neighborhood actively pulls generalists away, resulting in heavily contaminated loads. Yet, during the 2024 high-density anomaly, empirical HP deposition crashed. The high local floral abundance acted as a structural shield, overriding the neighborhood effect and forcing HP accumulation down toward the baseline mechanical minimum. This demonstrates that generalized networks are robust, provided the focal plant maintains sufficient local density to dilute environmental HP and enforce vector fidelity</p>
+<p>https://nph.onlinelibrary.wiley.com/doi/full/10.1111/nph.15868 - pollen competition - zahrát tuhle linku</p>
+</section>
+</section>
+</section>
+<section id="data-availability" class="level2">
+<h2>Data Availability</h2>
+<p>The datasets used in this study are available in the supplementary material and have been exported for archiving.</p>
+</section>
+<section id="acknowledgements" class="level2">
+<h2>Acknowledgements</h2>
+<p>This research was supported by the Czech Science Foundation (grant No. 23-06433S). We also thank to the members of the PEE and PEG groups for suggestions during writing the manuscript, namely Tomáš Herben and Martin Weiser. Lastly, we acknowledge the support of the Municipality of Chlístovice in providing access to the study sites and field laboratory.</p>
+</section>
+<section id="supplementary-material" class="level2">
+<h2>Supplementary Material</h2>
+</section>
+<section id="references" class="level2">
+<h2>References</h2>
+<div id="quarto-navigation-envelope" class="hidden">
+
+</div>
+<div id="quarto-meta-markdown" class="hidden">
+<p><span class="hidden quarto-markdown-envelope-contents" data-render-id="cXVhcnRvLW1ldGF0aXRsZQ=="></span> <span class="hidden quarto-markdown-envelope-contents" data-render-id="cXVhcnRvLXR3aXR0ZXJjYXJkdGl0bGU="></span> <span class="hidden quarto-markdown-envelope-contents" data-render-id="cXVhcnRvLW9nY2FyZHRpdGxl"></span> <span class="hidden quarto-markdown-envelope-contents" data-render-id="cXVhcnRvLXR3aXR0ZXJjYXJkZGVzYw==">Case study on Succisa pratensis</span> <span class="hidden quarto-markdown-envelope-contents" data-render-id="cXVhcnRvLW9nY2FyZGRkZXNj">Case study on Succisa pratensis</span></p>
+</div>
+<div id="refs" class="references csl-bib-body hanging-indent" role="list">
+<div id="ref-arceo2016patterns" class="csl-entry" role="listitem">
+Arceo-Gómez, G., L. Abdala-Roberts, A. Jankowiak, C. Kohler, G. A. Meindl, C. M. Navarro-Fernández, V. Parra-Tabla, et al. 2016. Patterns of among-and within-species variation in heterospecific pollen receipt: The importance of ecological generalization. <em>American Journal of Botany</em> 103: 396–407.
+</div>
+<div id="ref-ArceoGomez2011" class="csl-entry" role="listitem">
+Arceo-Gómez, G., and T. L. Ashman. 2011. <a href="https://doi.org/10.1111/J.1469-8137.2011.03831.X">Heterospecific pollen deposition: Does diversity alter the consequences?</a> <em>New Phytologist</em> 192: 738–746.
+</div>
+<div id="ref-bartovs2020self" class="csl-entry" role="listitem">
+Bartoš, M., Š. Janeček, P. Janečková, E. Padyšáková, R. Tropek, L. Götzenberger, Y. Klomberg, and J. Jersáková. 2020. Self-compatibility and autonomous selfing of plants in meadow communities. <em>Plant Biology</em> 22: 120–128.
+</div>
+<div id="ref-beattie1971technique" class="csl-entry" role="listitem">
+Beattie, A. 1971. A technique for the study of insect-borne pollen. <em>The Pan-Pacific Entomologist</em> 47: 82.
+</div>
+<div id="ref-Brosi2016" class="csl-entry" role="listitem">
+Brosi, B. J. 2016. <a href="https://doi.org/10.1111/nph.13951">Pollinator specialization: From the individual to the community</a>. <em>New Phytologist</em>: 1190–1194.
+</div>
+<div id="ref-fang2019multi" class="csl-entry" role="listitem">
+Fang, Q., J. Gao, W. S. Armbruster, and S.-Q. Huang. 2019. Multi-year stigmatic pollen-load sampling reveals temporal stability in interspecific pollination of flowers in a subalpine meadow. <em>Oikos</em> 128: 1739–1747.
+</div>
+<div id="ref-Fang2022" class="csl-entry" role="listitem">
+Fang, Q., S. Guo, T. Zhang, and X. Tang. 2022. <a href="https://doi.org/10.1093/jpe/rtac094">Relative stable interannual variation in plant‒plant pollen transfer rather than the plant‒pollinator network of a subalpine meadow</a>. <em>Journal of Plant Ecology</em>.
+</div>
+<div id="ref-freudenfeld2025interannual" class="csl-entry" role="listitem">
+Freudenfeld, M., J. Štenc, J. Hadrava, M. Mikát, E. Matoušková, K. Daňková, T. Jor, et al. 2025. Interannual differences in pollinator contributions to pollen transfer are mainly driven by changes in pollinator abundance. <em>AoB Plants</em> 17: plaf009.
+</div>
+<div id="ref-holmquist2012influence" class="csl-entry" role="listitem">
+Holmquist, K. G., R. J. Mitchell, and J. D. Karron. 2012. Influence of pollinator grooming on pollen-mediated gene dispersal in mimulus ringens (phrymaceae). <em>Plant Species Biology</em> 27: 77–85.
+</div>
+<div id="ref-Janovsky2013" class="csl-entry" role="listitem">
+Janovský, Z., M. Mikát, J. Hadrava, E. Horčičková, K. Kmecová, D. Požárová, J. Smyčka, and T. Herben. 2013. <a href="https://doi.org/10.1371/journal.pone.0077361">Conspecific and heterospecific plant densities at small-scale can drive plant-pollinator interactions</a>. <em>PLoS ONE</em> 8: 77361.
+</div>
+<div id="ref-janovsky2013conspecific" class="csl-entry" role="listitem">
+Janovskỳ, Z., M. Mikát, J. Hadrava, E. Horčičková, K. Kmecová, D. Požárová, J. Smyčka, and T. Herben. 2013. Conspecific and heterospecific plant densities at small-scale can drive plant-pollinator interactions. <em>PLoS One</em> 8: e77361.
+</div>
+<div id="ref-king2013" class="csl-entry" role="listitem">
+King, C., G. Ballantyne, and P. G. Willmer. 2013. <a href="https://doi.org/10.1111/2041-210X.12074">Why flower visitation is a poor proxy for pollination: Measuring single-visit pollen deposition, with implications for pollination networks and conservation</a>. <em>Methods in Ecology and Evolution</em> 4: 811818.
+</div>
+<div id="ref-Lazaro2009" class="csl-entry" role="listitem">
+Lázaro, A., R. Lundgren, and Ø. Totland. 2009. <a href="https://doi.org/10.1111/j.1600-0706.2008.17168.x">Co-flowering neighbors influence the diversity and identity of pollinator groups visiting plant species</a>. <em>Oikos</em> 118: 691–702.
+</div>
+<div id="ref-Minnaar2019" class="csl-entry" role="listitem">
+Minnaar, C., B. Anderson, M. L. D. Jager, and J. D. Karron. 2019. <a href="https://doi.org/10.1093/aob/mcy167">Plant-pollinator interactions along the pathway to paternity</a>. <em>Annals of Botany</em> 123: 225–245.
+</div>
+<div id="ref-morales2013heterospecific" class="csl-entry" role="listitem">
+Morales, C. L., and A. Traveset. 2013. Heterospecific pollen deposition: Does diversity matter? <em>Functional Ecology</em> 27: 130–137.
+</div>
+<div id="ref-morales2008interspecific" class="csl-entry" role="listitem">
+Morales, C. L., and A. Traveset. 2008. Interspecific pollen transfer: Magnitude, prevalence and consequences for plant fitness. <em>Critical Reviews in Plant Sciences</em> 27: 221–238.
+</div>
+<div id="ref-richards2009variation" class="csl-entry" role="listitem">
+Richards, S. A., N. M. Williams, and L. D. Harder. 2009. Variation in pollination: Causes and consequences for plant reproduction. <em>The American Naturalist</em> 174: 382–398.
+</div>
+<div id="ref-Schwarz2021" class="csl-entry" role="listitem">
+Schwarz, B., C. F. Dormann, D. P. Vázquez, and J. Fründ. 2021. <a href="https://doi.org/10.1007/s00442-021-04952-5">Within-day dynamics of plant–pollinator networks are dominated by early flower closure: An experimental test of network plasticity</a>. <em>Oecologia</em> 196: 781–794.
+</div>
+<div id="ref-Stenc2023" class="csl-entry" role="listitem">
+Štenc, J., L. Janošík, E. Matoušková, J. Hadrava, M. Mikát, and Z. Janovský. 2023a. <a href="https://doi.org/10.1002/AJB2.16179">Pollinator visitation closely tracks diurnal patterns in pollen release</a>. <em>American Journal of Botany</em>: e16179.
+</div>
+<div id="ref-vstenc2025pollen" class="csl-entry" role="listitem">
+Štenc, J., L. Janošı́k, M. Freudenfeld, E. Matoušková, J. Hadrava, M. Mikát, K. Daňková, et al. 2025. Pollen presentation mitigates competition for pollinators due to diurnal stratification of pollen transfer. <em>Perspectives in Plant Ecology, Evolution and Systematics</em> 67: 125868.
+</div>
+<div id="ref-stenc2023pollinator" class="csl-entry" role="listitem">
+Štenc, J., L. Janošı́k, E. Matoušková, J. Hadrava, M. Mikát, and Z. Janovskỳ. 2023b. Pollinator visitation closely tracks diurnal patterns in pollen release. <em>American Journal of Botany</em> 110: e16179.
+</div>
+<div id="ref-Stone1998" class="csl-entry" role="listitem">
+Stone, G. N., P. Willmer, and J. A. Rowe. 1998. <a href="https://doi.org/10.1890/0012-9658(1998)079[2808:popdfi]2.0.co;2">Partitioning of pollinators during flowering in an african acacia community</a>. <em>Ecology</em> 79: 2808–2827.
+</div>
+<div id="ref-thomson1980" class="csl-entry" role="listitem">
+Thomson, J. D., and R. C. Plowright. 1980. <a href="https://doi.org/10.1007/BF00346968">Pollen carryover, nectar rewards, and pollinator behavior with special reference to diervilla loniceraPollen carryover, nectar rewards, and pollinator behavior with special reference to diervilla lonicera</a>. <em>Oecologia</em> 46: 68–74.
+</div>
+<div id="ref-valdovinos2025effect" class="csl-entry" role="listitem">
+Valdovinos, F. S. 2025. Effect of network structure and adaptive foraging on pollination services of species-rich plant-pollinator communities. <em>Integrative and Comparative Biology</em> 65: 981–990.
+</div>
+<div id="ref-vazquez2005degree" class="csl-entry" role="listitem">
+Vázquez, D. P. 2005. Degree distribution in plant–animal mutualistic networks: Forbidden links or random interactions? <em>Oikos</em> 108: 421–426.
+</div>
+<div id="ref-ye2020" class="csl-entry" role="listitem">
+Ye, Z. M., X. F. Jin, Q. F. Wang, and C. F. Yang. 2020. <a href="https://doi.org/10.1007/S11258-020-01000-9/TABLES/2">Co-flowering neighbor alters pollinator composition and influences reproductive success in a plant pollinated by multiple insects</a>. <em>Plant Ecology</em> 221: 219–228.
+</div>
+</div>
+</section>
+
+</main> <!-- /main -->
+<script id = "quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp('/' + window.location.host + '/');
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+</div> <!-- /content -->
+
+</body>
+
+</html>

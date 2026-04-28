@@ -205,8 +205,7 @@ Finally, we evaluated the fit of the simulated null models against our true fiel
 
 To determine if the 2024 high-density anomaly altered the mechanical interaction between pollinators and the focal plant population, we modeled the per-capita visitation rate as a function of local floral abundance. A log-log linear regression revealed a significant negative relationship (t=−2.75, p=0.008, R2=0.12). As local conspecific floral abundance increased, the per-capita visitation rate per flower significantly decreased. This confirms a density-driven dilution effect: while the massive floral bloom successfully recruited shared generalist vectors, the sheer volume of available conspecific resources diluted the frequency of individual visits, trapping vectors within a pure conspecific foraging loop for extended periods.
 
-Decoupled Accumulation: The Spatial Mitigation of HP
-To test if this spatial dilution effectively mitigated heterospecific pollen (HP) transfer, we analyzed the accumulation rates of HP relative to conspecific pollen (CP) receipt on final stigmas. An analysis of variance (ANOVA) revealed a highly significant interaction between CP accumulation and study year (F2,231​=13.38, p<0.001). In standard-density years (2022 and 2023), the accumulation of CP was tightly coupled with heavy HP contamination, resulting in steep, positive slopes. In these years, receiving more conspecific visits inevitably resulted in higher reproductive interference from the shared network. However, during the extreme high-density anomaly of 2024, this relationship structurally shifted. The accumulation slope flattened significantly (CP × Year 2024 interaction: t=−2.44, p=0.015), demonstrating that stigmas could accumulate their required baseline of CP without the proportional accumulation of HP. This confirms that extreme local floral density actively decouples conspecific reproduction from heterospecific contamination in the field.
+Decoupled Accumulation: The Spatial Mitigation of HP To test if this spatial dilution effectively mitigated heterospecific pollen (HP) transfer, we analyzed the accumulation rates of HP relative to conspecific pollen (CP) receipt on final stigmas. An analysis of variance (ANOVA) revealed a highly significant interaction between CP accumulation and study year (F2,231​=13.38, p\<0.001). In standard-density years (2022 and 2023), the accumulation of CP was tightly coupled with heavy HP contamination, resulting in steep, positive slopes. In these years, receiving more conspecific visits inevitably resulted in higher reproductive interference from the shared network. However, during the extreme high-density anomaly of 2024, this relationship structurally shifted. The accumulation slope flattened significantly (CP × Year 2024 interaction: t=−2.44, p=0.015), demonstrating that stigmas could accumulate their required baseline of CP without the proportional accumulation of HP. This confirms that extreme local floral density actively decouples conspecific reproduction from heterospecific contamination in the field.
 
 Plant abundance shift and the effect on visitation - needs to be tested.
 
@@ -630,6 +629,8 @@ Body_final <- Body_clean %>%
 p_eff_body <- ggplot(Body_final, aes(x = morphogroup, y = suc_pra_load, fill = morphogroup)) +
     geom_boxplot(alpha = 0.6, outlier.shape = NA) +
     geom_jitter(width = 0.2, alpha = 0.5, size = 1.5) +
+    ggpubr::stat_compare_means(method = "kruskal.test", label = "p.format",
+        label.x.npc = "left", label.y.npc = 0.05, size = 3.5) +
     labs(
         title = "A. Conspecific Pollen (CP)",
         y = "Conspecific Pollen on Body",
@@ -647,6 +648,8 @@ p_eff_body <- ggplot(Body_final, aes(x = morphogroup, y = suc_pra_load, fill = m
 p_mess_body <- ggplot(Body_final, aes(x = morphogroup, y = other_pollen_load, fill = morphogroup)) +
     geom_boxplot(alpha = 0.6, outlier.shape = NA) +
     geom_jitter(width = 0.2, alpha = 0.5, size = 1.5) +
+    ggpubr::stat_compare_means(method = "kruskal.test", label = "p.format",
+        label.x.npc = "left", label.y.npc = 0.05, size = 3.5) +
     labs(
         title = "B. Heterospecific Pollen (HP)",
         y = "Heterospecific Pollen on Body",
@@ -692,7 +695,8 @@ SVD_final <- SVD_clean %>%
 p_eff <- ggplot(SVD_final, aes(x = morphogroup, y = conspecific_pollen, fill = morphogroup)) +
     geom_boxplot(alpha = 0.6, outlier.shape = NA) +
     geom_jitter(width = 0.2, alpha = 0.5, size = 1.5) +
-    ggpubr::stat_compare_means(method = "kruskal.test", label.y.npc = 0.95) +
+    ggpubr::stat_compare_means(method = "kruskal.test", label = "p.format",
+        label.x.npc = "left", label.y.npc = 0.05, size = 3.5) +
     labs(
         title = "C. Conspecific Pollen (CP)",
         y = "Conspecific Pollen SVD",
@@ -708,7 +712,8 @@ p_eff <- ggplot(SVD_final, aes(x = morphogroup, y = conspecific_pollen, fill = m
 p_mess <- ggplot(SVD_final, aes(x = morphogroup, y = heterospecific_pollen, fill = morphogroup)) +
     geom_boxplot(alpha = 0.6, outlier.shape = NA) +
     geom_jitter(width = 0.2, alpha = 0.5, size = 1.5) +
-    ggpubr::stat_compare_means(method = "kruskal.test", label.y.npc = 0.95) +
+    ggpubr::stat_compare_means(method = "kruskal.test", label = "p.format",
+        label.x.npc = "left", label.y.npc = 0.05, size = 3.5) +
     labs(
         title = "D. Heterospecific Pollen (HP)",
         y = "Heterospecific Pollen SVD",
@@ -1358,8 +1363,7 @@ This aligns perfectly with the concept of pollinator importance (Vázquez et al.
 
 #### Pollen transfer - from stochasticity to stability
 
-Securing reliable pollen receipt within a diverse, generalist plant-pollinator community requires plants to overcome profound micro-scale stochasticity. As outlined by Richards et al. (2009), single-visit deposition is inherently variable, forcing plants to rely on broader ecological mechanisms to aggregate these individual events into stable reproductive outcomes. **Our variance partitioning analysis empirically validates this premise: temporal phenology (years and days) explained negligible variation in conspecific pollen (CP) receipt. Instead, the vast majority of depositional variance was driven entirely by micro-scale interactions at the individual plant and stigma level.** \>
-Our Monte Carlo simulation successfully isolates the mechanism by which plants overcome this micro-scale variance: the statistical law of large numbers. By demonstrating that the random aggregation of highly variable single visits naturally produces the stable CP loads observed in the field, we confirm that *Succisa pratensis* successfully extracts stable pollination services from generalist vectors. Extreme visitation redundancy acts as a macro-scale filter, effectively neutralizing the intense micro-scale depositional variance of individual syrphid flies and bees.
+Securing reliable pollen receipt within a diverse, generalist plant-pollinator community requires plants to overcome profound micro-scale stochasticity. As outlined by Richards et al. (2009), single-visit deposition is inherently variable, forcing plants to rely on broader ecological mechanisms to aggregate these individual events into stable reproductive outcomes. **Our variance partitioning analysis empirically validates this premise: temporal phenology (years and days) explained negligible variation in conspecific pollen (CP) receipt. Instead, the vast majority of depositional variance was driven entirely by micro-scale interactions at the individual plant and stigma level.** \> Our Monte Carlo simulation successfully isolates the mechanism by which plants overcome this micro-scale variance: the statistical law of large numbers. By demonstrating that the random aggregation of highly variable single visits naturally produces the stable CP loads observed in the field, we confirm that *Succisa pratensis* successfully extracts stable pollination services from generalist vectors. Extreme visitation redundancy acts as a macro-scale filter, effectively neutralizing the intense micro-scale depositional variance of individual syrphid flies and bees.
 
 The Narrative: Discuss how the mechanical transfer of pollen (SVD) is inherently messy. However, your Monte Carlo simulation proves mathematically that the plant doesn't need SVDs to be neat. It relies on the statistical "Law of Large Numbers." As long as the plant receives enough visits, the high variance is mathematically forced to average out into a stable mean.
 
@@ -1406,6 +1410,8 @@ However, simple visitation redundancy cannot explain the patterns of heterospeci
 Our finding that Eristalis spp. drives the pollen economy despite introducing the most heterospecific noise perfectly aligns with the concept of 'pollinator importance' (Vázquez et al., 2005). Previous empirical studies have similarly demonstrated that taxa with low per-visit efficiency can dominate total pollen transfer simply through overwhelming visitation frequency. For example, Sahli and Conner (2007) found that while syrphid flies deposited minimal pollen during single visits, their exceptionally high visitation rates made them the most important contributors to total pollination. Likewise, our data proves that for Succisa pratensis, the sheer volume of generalist visits acts as a macro-scale filter, effectively drowning out the micro-scale 'messiness' of individual vectors.
 
 "However, simple mathematical redundancy cannot explain the plant’s heterospecific pollen (HP) dynamics. If generalist insects were simply depositing random, mixed loads at a constant rate, our simulation proved that every flower should receive a relatively low, unavoidable baseline dose of HP. In standard years (2022 and 2023), empirical HP accumulation exceeded this baseline tenfold, proving that when conspecific density is standard, the co-flowering neighborhood actively pulls generalists away, resulting in heavily contaminated loads. Yet, during the 2024 high-density anomaly, empirical HP deposition crashed. The high local floral abundance acted as a structural shield, overriding the neighborhood effect and forcing HP accumulation down toward the baseline mechanical minimum. This demonstrates that generalized networks are robust, provided the focal plant maintains sufficient local density to dilute environmental HP and enforce vector fidelity
+
+https://nph.onlinelibrary.wiley.com/doi/full/10.1111/nph.15868 - pollen competition - zahrát tuhle linku
 
 ## Data Availability
 
