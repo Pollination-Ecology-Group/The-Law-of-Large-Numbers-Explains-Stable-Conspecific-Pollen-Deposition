@@ -5,3 +5,5 @@
 
 /.quarto/
 **/*.quarto_ipynb
+
+labmeeting_presentation/
