@@ -629,8 +629,10 @@ Body_final <- Body_clean %>%
 p_eff_body <- ggplot(Body_final, aes(x = morphogroup, y = suc_pra_load, fill = morphogroup)) +
     geom_boxplot(alpha = 0.6, outlier.shape = NA) +
     geom_jitter(width = 0.2, alpha = 0.5, size = 1.5) +
-    ggpubr::stat_compare_means(method = "kruskal.test", label = "p.format",
-        label.x.npc = "left", label.y.npc = 0.05, size = 3.5) +
+    ggpubr::stat_compare_means(
+        method = "kruskal.test", label = "p.format",
+        label.x.npc = "left", label.y.npc = 0.95, size = 3.5
+    ) +
     labs(
         title = "A. Conspecific Pollen (CP)",
         y = "Conspecific Pollen on Body",
@@ -648,8 +650,10 @@ p_eff_body <- ggplot(Body_final, aes(x = morphogroup, y = suc_pra_load, fill = m
 p_mess_body <- ggplot(Body_final, aes(x = morphogroup, y = other_pollen_load, fill = morphogroup)) +
     geom_boxplot(alpha = 0.6, outlier.shape = NA) +
     geom_jitter(width = 0.2, alpha = 0.5, size = 1.5) +
-    ggpubr::stat_compare_means(method = "kruskal.test", label = "p.format",
-        label.x.npc = "left", label.y.npc = 0.05, size = 3.5) +
+    ggpubr::stat_compare_means(
+        method = "kruskal.test", label = "p.format",
+        label.x.npc = "left", label.y.npc = 0.95, size = 3.5
+    ) +
     labs(
         title = "B. Heterospecific Pollen (HP)",
         y = "Heterospecific Pollen on Body",
@@ -695,8 +699,10 @@ SVD_final <- SVD_clean %>%
 p_eff <- ggplot(SVD_final, aes(x = morphogroup, y = conspecific_pollen, fill = morphogroup)) +
     geom_boxplot(alpha = 0.6, outlier.shape = NA) +
     geom_jitter(width = 0.2, alpha = 0.5, size = 1.5) +
-    ggpubr::stat_compare_means(method = "kruskal.test", label = "p.format",
-        label.x.npc = "left", label.y.npc = 0.05, size = 3.5) +
+    ggpubr::stat_compare_means(
+        method = "kruskal.test", label = "p.format",
+        label.x.npc = "left", label.y.npc = 0.95, size = 3.5
+    ) +
     labs(
         title = "C. Conspecific Pollen (CP)",
         y = "Conspecific Pollen SVD",
@@ -712,8 +718,10 @@ p_eff <- ggplot(SVD_final, aes(x = morphogroup, y = conspecific_pollen, fill = m
 p_mess <- ggplot(SVD_final, aes(x = morphogroup, y = heterospecific_pollen, fill = morphogroup)) +
     geom_boxplot(alpha = 0.6, outlier.shape = NA) +
     geom_jitter(width = 0.2, alpha = 0.5, size = 1.5) +
-    ggpubr::stat_compare_means(method = "kruskal.test", label = "p.format",
-        label.x.npc = "left", label.y.npc = 0.05, size = 3.5) +
+    ggpubr::stat_compare_means(
+        method = "kruskal.test", label = "p.format",
+        label.x.npc = "left", label.y.npc = 0.95, size = 3.5
+    ) +
     labs(
         title = "D. Heterospecific Pollen (HP)",
         y = "Heterospecific Pollen SVD",
