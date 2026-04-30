@@ -286,74 +286,95 @@ functional overlap between the theoretical null model and field reality.
 
 ## Results
 
-### Plant-pollinator interactions and plant abundance
+Across the three-year study period (2022–2024), we collected and
+analyzed a total of 693 stigmas in terminal stage from 273 individual
+*Succisa pratensis* plants to evaluate total pollen deposition (TPD). We
+sampled 84 stigmas in 2022, 89 stigmas in 2023, and 520 stigmas in 2024,
+with collection separated into 6 consequential days. To quantify
+micro-scale transfer dynamics and vector efficiency, we captured pollen
+from **\[X\]** individual visitors of *S. pratensis* to assess body
+pollen loads, and we sampled **\[X\]** controlled single-visit
+deposition (SVD) events on virgin stigmas. Finally, we recorded
+**\[X\]** individual plant-pollinator interactions during standardized
+focal plot observations. Individual results descriptions follows.
 
-To determine if the 2024 high-density anomaly altered the mechanical
-interaction between pollinators and the focal plant population, we
-modeled the per-capita visitation rate as a function of local floral
-abundance. A log-log linear regression revealed a significant negative
-relationship (t=−2.75, p=0.008, R2=0.12). As local conspecific floral
-abundance increased, the per-capita visitation rate per flower
-significantly decreased. This confirms a density-driven dilution effect:
-while the massive floral bloom successfully recruited shared generalist
-vectors, the sheer volume of available conspecific resources diluted the
-frequency of individual visits, trapping vectors within a pure
-conspecific foraging loop for extended periods.
+### Coefficient of Variation and Variance Partitioning
 
-Decoupled Accumulation: The Spatial Mitigation of HP To test if this
-spatial dilution effectively mitigated heterospecific pollen (HP)
-transfer, we analyzed the accumulation rates of HP relative to
-conspecific pollen (CP) receipt on final stigmas. An analysis of
-variance (ANOVA) revealed a highly significant interaction between CP
-accumulation and study year (F2,231​=13.38, p\<0.001). In
-standard-density years (2022 and 2023), the accumulation of CP was
-tightly coupled with heavy HP contamination, resulting in steep,
-positive slopes. In these years, receiving more conspecific visits
-inevitably resulted in higher reproductive interference from the shared
-network. However, during the extreme high-density anomaly of 2024, this
-relationship structurally shifted. The accumulation slope flattened
-significantly (CP × Year 2024 interaction: t=−2.44, p=0.015),
-demonstrating that stigmas could accumulate their required baseline of
-CP without the proportional accumulation of HP. This confirms that
-extreme local floral density actively decouples conspecific reproduction
-from heterospecific contamination in the field.
+To quantify the unpredictability of the pollen transport, we compared
+the Coefficient of Variation (CV) across functional transport
+compartments (<a href="#fig-plots-2" class="quarto-xref">Figure 2</a>).
+Conspecific pollen (CP) exhibited extreme variability on pollinator
+bodies (CV = **\[X\]**%) and in SVDs (CV = **\[X\]**%). However, at the
+TPD, the variability decreased considerably (CV = **\[X\]**%).
+Conversely, heterospecific pollen (HP) maintained highly variable across
+all compartments, from vector bodies (CV = **\[X\]**%) through to final
+stigmatic loads (CV = **\[X\]**%). The inter-annual variability of TPD
+remained quite stable across years for CP (CVs ranging from **\[X\]**%
+to **\[X\]**%), but the variability of HP increased in the year 2024 (CV
+= **\[X\]**%, <a href="#fig-plots-2" class="quarto-xref">Figure 2</a>).
 
-Plant abundance shift and the effect on visitation - needs to be tested.
+Hierarchical variance partitioning further confirmed the micro-scale
+nature of this stochasticity in TPD
+(([**analysis-variance-partitioning?**](#ref-analysis-variance-partitioning))).
+For CP, temporal phenology (years and days) explained only small
+proportion of variation; instead, the vast majority of depositional
+variance occurred at the micro-spatial scale, driven by differences
+among individual plants (**\[X\]**%) and individual stigmas
+(**\[X\]**%). Variance partitioning and subsequent likelihood ratio
+tests revealed that HP deposition was significantly driven by temporal
+shifts at this macro-scale (χ2=32.39, p\<0.001) and by spatial variation
+among individual plants nested within the year (χ2=104.73, p\<0.001).
 
-<div id="fig-spatial-temporal-abundance">
+Notably, intra-annual analysis of the 2024 season showed that daily
+temporal variation was not a significant driver of CP neither HP
+deposition (χ2=1.32, p=0.517 for CP; χ2=0.19, p=0.663 for HP). Instead,
+variance during this 2024 was heavily driven by differences among
+individual plants (χ2=126.53, p\<0.001), suggesting that plant-level
+traits or highly localized micro-spatial effects dictate heterospecific
+pollen transfer more than daily phenological shifts.
 
-![](docs/images/fig-spatial-temporal-abundance-1.png)
+<div id="fig-plots-2">
 
-Figure 2: Distribution and abundance of Succisa pratensis (2022-2024).
-A) Spatial distribution of plots with Succisa presence. B) Total
-abundance recorded per year. C) Differences in standardized visitation
-rates to Succisa pratensis across years (2022-2024).
+<div class="cell-output-display">
+
+<div id="fig-plots-2">
+
+<img src="docs/images/fig-plots-2-1.png"
+data-ref-parent="fig-plots-2" />
+
+(a) A
 
 </div>
 
-### Pollinator Spectra Composition
+</div>
 
-To assess the temporal stability of the pollinator community, we
-compared species composition across years using the **Morisita-Horn
-similarity index** (Horn, 1966). This metric was selected for its
-robustness to differences in sample size and species richness compared
-to incidence-based metrics (Jost et al., 2011). Pairwise similarities
-were calculated on abundance data (standardized by sampling effort)
-using the `vegan` package.
+Figure 2: Coefficient of Variation (CV) and Mean of Conspecific (CP) and
+Heterospecific (HP) pollen counts. A-B) CV of pollen counts; C-D) Mean
+pollen counts + SE.
 
-The core structure of the pollinator community remained highly stable
-across the three years. The Morisita-Horn index indicated high
-compositional overlap (Similarity \> 0.9 for all pairwise comparisons),
-driven by the consistent dominance of key generalist taxa such as
-*Eristalis* spp. and *Syrphus* spp. (see Table S3 in Supplementary
-Material).
+</div>
 
-![Community Stability and Structure. A) Pollinator Spectra Composition.
-B) Floral Spectra Composition. C) Temporal Pollinator Stability
-(Morisita-Horn). D) Floral Community
-Similarity.](docs/images/analysis-community-stability-evenness-1.png)
+<div id="fig-plots-3">
+
+![](docs/images/fig-plots-3-1.png)
+
+Figure 3: Pollen Deposition Model and Variance Partitioning. A) Model
+depicting Heterospecific vs Conspecific Pollen deposition. The dashed
+gray line represents the 1:1 expected relationship. B) Hierarchical
+Variance Partitioning of pollen deposited on stigmas.
+
+</div>
 
 ### Pollen Load and Single Visit Deposition (SVD)
+
+To evaluate the mechanical efficiency of pollen transfer, we compared
+the total pollen loads carried on vector bodies and the amounts
+successfully deposited pollen on stigmas during single-visit depositions
+(SVD). Pollinators carried quite high pollen loads (Mean Body CP =
+\[X\]; Mean Body HP = \[X\]). However, per-visit mechanical transfer was
+remarkably inefficient. Only a minute fraction of the available body
+load—approximately \[X\]% for CP and \[X\]% for HP—was successfully
+deposited onto a receptive stigma during a single floral visit.
 
 To determine if specific pollinator taxa drive the depositional variance
 observed across the network, we compared single-visit depositions (SVD)
@@ -364,33 +385,67 @@ conspecific pollen deposited during a single visit (H3​=1.59, p=0.661).
 Similarly, there were no significant differences across taxa in the
 deposition of heterospecific pollen per visit (H3​=5.20, p=0.158). These
 results indicate that per-visit pollen transfer efficiency and
-heterospecific carryover are highly stochastic but functionally
-equivalent across the generalist pollinator assemblage. Consequently,
-the total stigmatic pollen loads received by Succisa pratensis are not
-dictated by the taxonomic identity or morphological specialization of
-its visitors, but purely by the cumulative frequency of their visits.
+heterospecific pollen carryover may be highly stochastic but
+functionally equivalent across the studied pollinator morphogroups.
+Consequently, the total stigmatic pollen loads received by *S.
+pratensis* are not dictated by the taxonomic identity or morphological
+specialization of its visitors, but purely by the cumulative frequency
+of their visits.
 
 ![Pollen Load and Single Visit Deposition (SVD). A) Conspecific Body
 Pollen Load, B) Heterospecific Body Pollen Load, C) Conspecific Single
 Visit Deposition, D) Heterospecific Single Visit
 Deposition.](docs/images/analysis-body-and-svd-1.png)
 
+### Pollinator Visitation Spectra and Co-flowering Community Stability
+
+To assess the temporal stability of the pollinator visitation spectra of
+*S. pratensis* and the flowering plant species community , we compared
+species composition across years using the Morisita-Horn similarity
+index ([Horn, 1966](#ref-horn1966measurement)). The pollinator spectra
+showed high compositional overlap across the years, ranging from 0.78 to
+0.96 similarity. Flowering plant community composition showed lower
+overlap, ranging from 0.69 to 0.71
+(@analysis-community-stability-evenness).
+
+![Community Stability and Structure. A) Pollinator Spectra Composition.
+B) Floral Spectra Composition. C) Temporal Pollinator Stability
+(Morisita-Horn). D) Floral Community
+Similarity.](docs/images/analysis-community-stability-evenness-1.png)
+
+### Floral Density and Visitations
+
+Despite the increase e in *S. pratensis* abundance in 2024, sampling
+effort standardized visitation rates per plot and per plant did not
+differ significantly between years.
+
+<div id="fig-spatial-temporal-abundance">
+
+![](docs/images/fig-spatial-temporal-abundance-1.png)
+
+Figure 4: Distribution and abundance of Succisa pratensis (2022-2024).
+A) Spatial distribution of plots with Succisa presence. B) Total
+abundance recorded per year. C) Differences in standardized visitation
+rates to Succisa pratensis across years (2022-2024).
+
+</div>
+
 ### TPD
 
-<div id="zxjdbbaulq" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
-<style>#zxjdbbaulq table {
+<div id="upvnaiwooq" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#upvnaiwooq table {
   font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
-&#10;#zxjdbbaulq thead, #zxjdbbaulq tbody, #zxjdbbaulq tfoot, #zxjdbbaulq tr, #zxjdbbaulq td, #zxjdbbaulq th {
+&#10;#upvnaiwooq thead, #upvnaiwooq tbody, #upvnaiwooq tfoot, #upvnaiwooq tr, #upvnaiwooq td, #upvnaiwooq th {
   border-style: none;
 }
-&#10;#zxjdbbaulq p {
+&#10;#upvnaiwooq p {
   margin: 0;
   padding: 0;
 }
-&#10;#zxjdbbaulq .gt_table {
+&#10;#upvnaiwooq .gt_table {
   display: table;
   border-collapse: collapse;
   line-height: normal;
@@ -415,11 +470,11 @@ Deposition.](docs/images/analysis-body-and-svd-1.png)
   border-left-width: 2px;
   border-left-color: #D3D3D3;
 }
-&#10;#zxjdbbaulq .gt_caption {
+&#10;#upvnaiwooq .gt_caption {
   padding-top: 4px;
   padding-bottom: 4px;
 }
-&#10;#zxjdbbaulq .gt_title {
+&#10;#upvnaiwooq .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -430,7 +485,7 @@ Deposition.](docs/images/analysis-body-and-svd-1.png)
   border-bottom-color: #FFFFFF;
   border-bottom-width: 0;
 }
-&#10;#zxjdbbaulq .gt_subtitle {
+&#10;#upvnaiwooq .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -441,7 +496,7 @@ Deposition.](docs/images/analysis-body-and-svd-1.png)
   border-top-color: #FFFFFF;
   border-top-width: 0;
 }
-&#10;#zxjdbbaulq .gt_heading {
+&#10;#upvnaiwooq .gt_heading {
   background-color: #FFFFFF;
   text-align: left;
   border-bottom-color: #FFFFFF;
@@ -452,12 +507,12 @@ Deposition.](docs/images/analysis-body-and-svd-1.png)
   border-right-width: 1px;
   border-right-color: #D3D3D3;
 }
-&#10;#zxjdbbaulq .gt_bottom_border {
+&#10;#upvnaiwooq .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
-&#10;#zxjdbbaulq .gt_col_headings {
+&#10;#upvnaiwooq .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -471,7 +526,7 @@ Deposition.](docs/images/analysis-body-and-svd-1.png)
   border-right-width: 1px;
   border-right-color: #D3D3D3;
 }
-&#10;#zxjdbbaulq .gt_col_heading {
+&#10;#upvnaiwooq .gt_col_heading {
   color: #333333;
   background-color: #F0F0F0;
   font-size: 100%;
@@ -490,7 +545,7 @@ Deposition.](docs/images/analysis-body-and-svd-1.png)
   padding-right: 5px;
   overflow-x: hidden;
 }
-&#10;#zxjdbbaulq .gt_column_spanner_outer {
+&#10;#upvnaiwooq .gt_column_spanner_outer {
   color: #333333;
   background-color: #F0F0F0;
   font-size: 100%;
@@ -501,13 +556,13 @@ Deposition.](docs/images/analysis-body-and-svd-1.png)
   padding-left: 4px;
   padding-right: 4px;
 }
-&#10;#zxjdbbaulq .gt_column_spanner_outer:first-child {
+&#10;#upvnaiwooq .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
-&#10;#zxjdbbaulq .gt_column_spanner_outer:last-child {
+&#10;#upvnaiwooq .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
-&#10;#zxjdbbaulq .gt_column_spanner {
+&#10;#upvnaiwooq .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -518,10 +573,10 @@ Deposition.](docs/images/analysis-body-and-svd-1.png)
   display: inline-block;
   width: 100%;
 }
-&#10;#zxjdbbaulq .gt_spanner_row {
+&#10;#upvnaiwooq .gt_spanner_row {
   border-bottom-style: hidden;
 }
-&#10;#zxjdbbaulq .gt_group_heading {
+&#10;#upvnaiwooq .gt_group_heading {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -546,7 +601,7 @@ Deposition.](docs/images/analysis-body-and-svd-1.png)
   vertical-align: middle;
   text-align: left;
 }
-&#10;#zxjdbbaulq .gt_empty_group_heading {
+&#10;#upvnaiwooq .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -560,13 +615,13 @@ Deposition.](docs/images/analysis-body-and-svd-1.png)
   border-bottom-color: #D3D3D3;
   vertical-align: middle;
 }
-&#10;#zxjdbbaulq .gt_from_md > :first-child {
+&#10;#upvnaiwooq .gt_from_md > :first-child {
   margin-top: 0;
 }
-&#10;#zxjdbbaulq .gt_from_md > :last-child {
+&#10;#upvnaiwooq .gt_from_md > :last-child {
   margin-bottom: 0;
 }
-&#10;#zxjdbbaulq .gt_row {
+&#10;#upvnaiwooq .gt_row {
   padding-top: 6px;
   padding-bottom: 6px;
   padding-left: 5px;
@@ -584,7 +639,7 @@ Deposition.](docs/images/analysis-body-and-svd-1.png)
   vertical-align: middle;
   overflow-x: hidden;
 }
-&#10;#zxjdbbaulq .gt_stub {
+&#10;#upvnaiwooq .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -596,7 +651,7 @@ Deposition.](docs/images/analysis-body-and-svd-1.png)
   padding-left: 5px;
   padding-right: 5px;
 }
-&#10;#zxjdbbaulq .gt_stub_row_group {
+&#10;#upvnaiwooq .gt_stub_row_group {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -609,13 +664,13 @@ Deposition.](docs/images/analysis-body-and-svd-1.png)
   padding-right: 5px;
   vertical-align: top;
 }
-&#10;#zxjdbbaulq .gt_row_group_first td {
+&#10;#upvnaiwooq .gt_row_group_first td {
   border-top-width: 2px;
 }
-&#10;#zxjdbbaulq .gt_row_group_first th {
+&#10;#upvnaiwooq .gt_row_group_first th {
   border-top-width: 2px;
 }
-&#10;#zxjdbbaulq .gt_summary_row {
+&#10;#upvnaiwooq .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -624,14 +679,14 @@ Deposition.](docs/images/analysis-body-and-svd-1.png)
   padding-left: 5px;
   padding-right: 5px;
 }
-&#10;#zxjdbbaulq .gt_first_summary_row {
+&#10;#upvnaiwooq .gt_first_summary_row {
   border-top-style: solid;
   border-top-color: #D3D3D3;
 }
-&#10;#zxjdbbaulq .gt_first_summary_row.thick {
+&#10;#upvnaiwooq .gt_first_summary_row.thick {
   border-top-width: 2px;
 }
-&#10;#zxjdbbaulq .gt_last_summary_row {
+&#10;#upvnaiwooq .gt_last_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -640,7 +695,7 @@ Deposition.](docs/images/analysis-body-and-svd-1.png)
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
-&#10;#zxjdbbaulq .gt_grand_summary_row {
+&#10;#upvnaiwooq .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -649,7 +704,7 @@ Deposition.](docs/images/analysis-body-and-svd-1.png)
   padding-left: 5px;
   padding-right: 5px;
 }
-&#10;#zxjdbbaulq .gt_first_grand_summary_row {
+&#10;#upvnaiwooq .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -658,7 +713,7 @@ Deposition.](docs/images/analysis-body-and-svd-1.png)
   border-top-width: 6px;
   border-top-color: #D3D3D3;
 }
-&#10;#zxjdbbaulq .gt_last_grand_summary_row_top {
+&#10;#upvnaiwooq .gt_last_grand_summary_row_top {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -667,10 +722,10 @@ Deposition.](docs/images/analysis-body-and-svd-1.png)
   border-bottom-width: 6px;
   border-bottom-color: #D3D3D3;
 }
-&#10;#zxjdbbaulq .gt_striped {
+&#10;#upvnaiwooq .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
-&#10;#zxjdbbaulq .gt_table_body {
+&#10;#upvnaiwooq .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -678,7 +733,7 @@ Deposition.](docs/images/analysis-body-and-svd-1.png)
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
-&#10;#zxjdbbaulq .gt_footnotes {
+&#10;#upvnaiwooq .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -691,7 +746,7 @@ Deposition.](docs/images/analysis-body-and-svd-1.png)
   border-right-width: 2px;
   border-right-color: #D3D3D3;
 }
-&#10;#zxjdbbaulq .gt_footnote {
+&#10;#upvnaiwooq .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding-top: 4px;
@@ -699,7 +754,7 @@ Deposition.](docs/images/analysis-body-and-svd-1.png)
   padding-left: 5px;
   padding-right: 5px;
 }
-&#10;#zxjdbbaulq .gt_sourcenotes {
+&#10;#upvnaiwooq .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -712,64 +767,64 @@ Deposition.](docs/images/analysis-body-and-svd-1.png)
   border-right-width: 2px;
   border-right-color: #D3D3D3;
 }
-&#10;#zxjdbbaulq .gt_sourcenote {
+&#10;#upvnaiwooq .gt_sourcenote {
   font-size: 90%;
   padding-top: 4px;
   padding-bottom: 4px;
   padding-left: 5px;
   padding-right: 5px;
 }
-&#10;#zxjdbbaulq .gt_left {
+&#10;#upvnaiwooq .gt_left {
   text-align: left;
 }
-&#10;#zxjdbbaulq .gt_center {
+&#10;#upvnaiwooq .gt_center {
   text-align: center;
 }
-&#10;#zxjdbbaulq .gt_right {
+&#10;#upvnaiwooq .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
-&#10;#zxjdbbaulq .gt_font_normal {
+&#10;#upvnaiwooq .gt_font_normal {
   font-weight: normal;
 }
-&#10;#zxjdbbaulq .gt_font_bold {
+&#10;#upvnaiwooq .gt_font_bold {
   font-weight: bold;
 }
-&#10;#zxjdbbaulq .gt_font_italic {
+&#10;#upvnaiwooq .gt_font_italic {
   font-style: italic;
 }
-&#10;#zxjdbbaulq .gt_super {
+&#10;#upvnaiwooq .gt_super {
   font-size: 65%;
 }
-&#10;#zxjdbbaulq .gt_footnote_marks {
+&#10;#upvnaiwooq .gt_footnote_marks {
   font-size: 75%;
   vertical-align: 0.4em;
   position: initial;
 }
-&#10;#zxjdbbaulq .gt_asterisk {
+&#10;#upvnaiwooq .gt_asterisk {
   font-size: 100%;
   vertical-align: 0;
 }
-&#10;#zxjdbbaulq .gt_indent_1 {
+&#10;#upvnaiwooq .gt_indent_1 {
   text-indent: 5px;
 }
-&#10;#zxjdbbaulq .gt_indent_2 {
+&#10;#upvnaiwooq .gt_indent_2 {
   text-indent: 10px;
 }
-&#10;#zxjdbbaulq .gt_indent_3 {
+&#10;#upvnaiwooq .gt_indent_3 {
   text-indent: 15px;
 }
-&#10;#zxjdbbaulq .gt_indent_4 {
+&#10;#upvnaiwooq .gt_indent_4 {
   text-indent: 20px;
 }
-&#10;#zxjdbbaulq .gt_indent_5 {
+&#10;#upvnaiwooq .gt_indent_5 {
   text-indent: 25px;
 }
-&#10;#zxjdbbaulq .katex-display {
+&#10;#upvnaiwooq .katex-display {
   display: inline-flex !important;
   margin-bottom: 0.75em !important;
 }
-&#10;#zxjdbbaulq div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
+&#10;#upvnaiwooq div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
   height: 0px !important;
 }
 </style>
@@ -784,20 +839,20 @@ Deposition.](docs/images/analysis-body-and-svd-1.png)
 
 </div>
 
-<div id="xlanunponz" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
-<style>#xlanunponz table {
+<div id="aigvcjujam" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#aigvcjujam table {
   font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
-&#10;#xlanunponz thead, #xlanunponz tbody, #xlanunponz tfoot, #xlanunponz tr, #xlanunponz td, #xlanunponz th {
+&#10;#aigvcjujam thead, #aigvcjujam tbody, #aigvcjujam tfoot, #aigvcjujam tr, #aigvcjujam td, #aigvcjujam th {
   border-style: none;
 }
-&#10;#xlanunponz p {
+&#10;#aigvcjujam p {
   margin: 0;
   padding: 0;
 }
-&#10;#xlanunponz .gt_table {
+&#10;#aigvcjujam .gt_table {
   display: table;
   border-collapse: collapse;
   line-height: normal;
@@ -822,11 +877,11 @@ Deposition.](docs/images/analysis-body-and-svd-1.png)
   border-left-width: 2px;
   border-left-color: #D3D3D3;
 }
-&#10;#xlanunponz .gt_caption {
+&#10;#aigvcjujam .gt_caption {
   padding-top: 4px;
   padding-bottom: 4px;
 }
-&#10;#xlanunponz .gt_title {
+&#10;#aigvcjujam .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -837,7 +892,7 @@ Deposition.](docs/images/analysis-body-and-svd-1.png)
   border-bottom-color: #FFFFFF;
   border-bottom-width: 0;
 }
-&#10;#xlanunponz .gt_subtitle {
+&#10;#aigvcjujam .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -848,7 +903,7 @@ Deposition.](docs/images/analysis-body-and-svd-1.png)
   border-top-color: #FFFFFF;
   border-top-width: 0;
 }
-&#10;#xlanunponz .gt_heading {
+&#10;#aigvcjujam .gt_heading {
   background-color: #FFFFFF;
   text-align: left;
   border-bottom-color: #FFFFFF;
@@ -859,12 +914,12 @@ Deposition.](docs/images/analysis-body-and-svd-1.png)
   border-right-width: 1px;
   border-right-color: #D3D3D3;
 }
-&#10;#xlanunponz .gt_bottom_border {
+&#10;#aigvcjujam .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
-&#10;#xlanunponz .gt_col_headings {
+&#10;#aigvcjujam .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -878,7 +933,7 @@ Deposition.](docs/images/analysis-body-and-svd-1.png)
   border-right-width: 1px;
   border-right-color: #D3D3D3;
 }
-&#10;#xlanunponz .gt_col_heading {
+&#10;#aigvcjujam .gt_col_heading {
   color: #333333;
   background-color: #F0F0F0;
   font-size: 100%;
@@ -897,7 +952,7 @@ Deposition.](docs/images/analysis-body-and-svd-1.png)
   padding-right: 5px;
   overflow-x: hidden;
 }
-&#10;#xlanunponz .gt_column_spanner_outer {
+&#10;#aigvcjujam .gt_column_spanner_outer {
   color: #333333;
   background-color: #F0F0F0;
   font-size: 100%;
@@ -908,13 +963,13 @@ Deposition.](docs/images/analysis-body-and-svd-1.png)
   padding-left: 4px;
   padding-right: 4px;
 }
-&#10;#xlanunponz .gt_column_spanner_outer:first-child {
+&#10;#aigvcjujam .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
-&#10;#xlanunponz .gt_column_spanner_outer:last-child {
+&#10;#aigvcjujam .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
-&#10;#xlanunponz .gt_column_spanner {
+&#10;#aigvcjujam .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -925,10 +980,10 @@ Deposition.](docs/images/analysis-body-and-svd-1.png)
   display: inline-block;
   width: 100%;
 }
-&#10;#xlanunponz .gt_spanner_row {
+&#10;#aigvcjujam .gt_spanner_row {
   border-bottom-style: hidden;
 }
-&#10;#xlanunponz .gt_group_heading {
+&#10;#aigvcjujam .gt_group_heading {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -953,7 +1008,7 @@ Deposition.](docs/images/analysis-body-and-svd-1.png)
   vertical-align: middle;
   text-align: left;
 }
-&#10;#xlanunponz .gt_empty_group_heading {
+&#10;#aigvcjujam .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -967,13 +1022,13 @@ Deposition.](docs/images/analysis-body-and-svd-1.png)
   border-bottom-color: #D3D3D3;
   vertical-align: middle;
 }
-&#10;#xlanunponz .gt_from_md > :first-child {
+&#10;#aigvcjujam .gt_from_md > :first-child {
   margin-top: 0;
 }
-&#10;#xlanunponz .gt_from_md > :last-child {
+&#10;#aigvcjujam .gt_from_md > :last-child {
   margin-bottom: 0;
 }
-&#10;#xlanunponz .gt_row {
+&#10;#aigvcjujam .gt_row {
   padding-top: 6px;
   padding-bottom: 6px;
   padding-left: 5px;
@@ -991,7 +1046,7 @@ Deposition.](docs/images/analysis-body-and-svd-1.png)
   vertical-align: middle;
   overflow-x: hidden;
 }
-&#10;#xlanunponz .gt_stub {
+&#10;#aigvcjujam .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1003,7 +1058,7 @@ Deposition.](docs/images/analysis-body-and-svd-1.png)
   padding-left: 5px;
   padding-right: 5px;
 }
-&#10;#xlanunponz .gt_stub_row_group {
+&#10;#aigvcjujam .gt_stub_row_group {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1016,13 +1071,13 @@ Deposition.](docs/images/analysis-body-and-svd-1.png)
   padding-right: 5px;
   vertical-align: top;
 }
-&#10;#xlanunponz .gt_row_group_first td {
+&#10;#aigvcjujam .gt_row_group_first td {
   border-top-width: 2px;
 }
-&#10;#xlanunponz .gt_row_group_first th {
+&#10;#aigvcjujam .gt_row_group_first th {
   border-top-width: 2px;
 }
-&#10;#xlanunponz .gt_summary_row {
+&#10;#aigvcjujam .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -1031,14 +1086,14 @@ Deposition.](docs/images/analysis-body-and-svd-1.png)
   padding-left: 5px;
   padding-right: 5px;
 }
-&#10;#xlanunponz .gt_first_summary_row {
+&#10;#aigvcjujam .gt_first_summary_row {
   border-top-style: solid;
   border-top-color: #D3D3D3;
 }
-&#10;#xlanunponz .gt_first_summary_row.thick {
+&#10;#aigvcjujam .gt_first_summary_row.thick {
   border-top-width: 2px;
 }
-&#10;#xlanunponz .gt_last_summary_row {
+&#10;#aigvcjujam .gt_last_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1047,7 +1102,7 @@ Deposition.](docs/images/analysis-body-and-svd-1.png)
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
-&#10;#xlanunponz .gt_grand_summary_row {
+&#10;#aigvcjujam .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -1056,7 +1111,7 @@ Deposition.](docs/images/analysis-body-and-svd-1.png)
   padding-left: 5px;
   padding-right: 5px;
 }
-&#10;#xlanunponz .gt_first_grand_summary_row {
+&#10;#aigvcjujam .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1065,7 +1120,7 @@ Deposition.](docs/images/analysis-body-and-svd-1.png)
   border-top-width: 6px;
   border-top-color: #D3D3D3;
 }
-&#10;#xlanunponz .gt_last_grand_summary_row_top {
+&#10;#aigvcjujam .gt_last_grand_summary_row_top {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1074,10 +1129,10 @@ Deposition.](docs/images/analysis-body-and-svd-1.png)
   border-bottom-width: 6px;
   border-bottom-color: #D3D3D3;
 }
-&#10;#xlanunponz .gt_striped {
+&#10;#aigvcjujam .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
-&#10;#xlanunponz .gt_table_body {
+&#10;#aigvcjujam .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -1085,7 +1140,7 @@ Deposition.](docs/images/analysis-body-and-svd-1.png)
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
-&#10;#xlanunponz .gt_footnotes {
+&#10;#aigvcjujam .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -1098,7 +1153,7 @@ Deposition.](docs/images/analysis-body-and-svd-1.png)
   border-right-width: 2px;
   border-right-color: #D3D3D3;
 }
-&#10;#xlanunponz .gt_footnote {
+&#10;#aigvcjujam .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding-top: 4px;
@@ -1106,7 +1161,7 @@ Deposition.](docs/images/analysis-body-and-svd-1.png)
   padding-left: 5px;
   padding-right: 5px;
 }
-&#10;#xlanunponz .gt_sourcenotes {
+&#10;#aigvcjujam .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -1119,64 +1174,64 @@ Deposition.](docs/images/analysis-body-and-svd-1.png)
   border-right-width: 2px;
   border-right-color: #D3D3D3;
 }
-&#10;#xlanunponz .gt_sourcenote {
+&#10;#aigvcjujam .gt_sourcenote {
   font-size: 90%;
   padding-top: 4px;
   padding-bottom: 4px;
   padding-left: 5px;
   padding-right: 5px;
 }
-&#10;#xlanunponz .gt_left {
+&#10;#aigvcjujam .gt_left {
   text-align: left;
 }
-&#10;#xlanunponz .gt_center {
+&#10;#aigvcjujam .gt_center {
   text-align: center;
 }
-&#10;#xlanunponz .gt_right {
+&#10;#aigvcjujam .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
-&#10;#xlanunponz .gt_font_normal {
+&#10;#aigvcjujam .gt_font_normal {
   font-weight: normal;
 }
-&#10;#xlanunponz .gt_font_bold {
+&#10;#aigvcjujam .gt_font_bold {
   font-weight: bold;
 }
-&#10;#xlanunponz .gt_font_italic {
+&#10;#aigvcjujam .gt_font_italic {
   font-style: italic;
 }
-&#10;#xlanunponz .gt_super {
+&#10;#aigvcjujam .gt_super {
   font-size: 65%;
 }
-&#10;#xlanunponz .gt_footnote_marks {
+&#10;#aigvcjujam .gt_footnote_marks {
   font-size: 75%;
   vertical-align: 0.4em;
   position: initial;
 }
-&#10;#xlanunponz .gt_asterisk {
+&#10;#aigvcjujam .gt_asterisk {
   font-size: 100%;
   vertical-align: 0;
 }
-&#10;#xlanunponz .gt_indent_1 {
+&#10;#aigvcjujam .gt_indent_1 {
   text-indent: 5px;
 }
-&#10;#xlanunponz .gt_indent_2 {
+&#10;#aigvcjujam .gt_indent_2 {
   text-indent: 10px;
 }
-&#10;#xlanunponz .gt_indent_3 {
+&#10;#aigvcjujam .gt_indent_3 {
   text-indent: 15px;
 }
-&#10;#xlanunponz .gt_indent_4 {
+&#10;#aigvcjujam .gt_indent_4 {
   text-indent: 20px;
 }
-&#10;#xlanunponz .gt_indent_5 {
+&#10;#aigvcjujam .gt_indent_5 {
   text-indent: 25px;
 }
-&#10;#xlanunponz .katex-display {
+&#10;#aigvcjujam .katex-display {
   display: inline-flex !important;
   margin-bottom: 0.75em !important;
 }
-&#10;#xlanunponz div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
+&#10;#aigvcjujam div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
   height: 0px !important;
 }
 </style>
@@ -1189,64 +1244,6 @@ Deposition.](docs/images/analysis-body-and-svd-1.png)
 | Year2023 - Year2024             | 231 | 0.085    | 0.018 | 4.64    | \< 0.001 |
 
 </div>
-
-In total, we collected 693 stigmas from 273 individual plants in (84,
-89, 520 stigmas in 2022, 2023 and 2024 respectively).
-
-### Coefficient of Variation and Variance Partitioning
-
-To quantify the reduction of unpredictability across the pollen
-transport network, we compared the Coefficient of Variation (CV) across
-functional transport compartments. Conspecific pollen (CP) exhibited
-extreme variability on pollinator bodies (CV = **\[X\]**%) and during
-single-visit depositions (CV = **\[X\]**%). However, at the terminal
-depositional stage on final stigmas, this variability was heavily
-buffered, dropping dramatically (CV = **\[X\]**%). Conversely,
-heterospecific pollen (HP) maintained extreme hyper-variability across
-all compartments, from vector bodies (CV = **\[X\]**%) through to final
-stigmatic loads (CV = **\[X\]**%).
-
-Hierarchical variance partitioning further confirmed the micro-scale
-nature of this stochasticity. For CP, temporal phenology (years and
-days) explained negligible variation; instead, the vast majority of
-depositional variance occurred at the micro-spatial scale, driven by
-differences among individual plants (**\[X\]**%) and individual stigmas
-(**\[X\]**%). The reduction in CP variance at the terminal stage,
-despite intense micro-scale unpredictability during transport, indicates
-a functional filtering mechanism stabilizing conspecific reproductive
-receipt. Notably, the variance explained by day in the 2024 dataset was
-negligible.
-
-![Coefficient of Variation (CV) and Mean of Conspecific (CP) and
-Heterospecific (HP) pollen counts. A-B) CV of pollen counts; C-D) Mean
-pollen counts + SE.](docs/images/analysis-cv-comparison-1.png)
-
-19, p=0.663). Instead, variance during this single season was heavily
-driven by differences among individual plants (χ2=126.53, p\<0.001),
-suggesting \#### Variance Partitioning
-
-Variance partitioning and subsequent likelihood ratio tests revealed
-significant temporal and spatial drivers of heterospecific pollen (HP)
-deposition. At the inter-annual scale (2022-2024), we found significant
-variation in HP deposition driven by both the sampling year (χ2=32.39,
-p\<0.001) and the individual plant nested within year (χ2=104.73,
-p\<0.001).
-
-However, fine-scale intra-annual analysis of the 2024 season showed that
-daily temporal variation was not a significant driver of HP deposition
-(χ2=0.19, p=0.663). Instead, variance during this single season was
-heavily driven by differences among individual plants (χ2=126.53,
-p\<0.001), suggesting that plant-level traits or highly localized
-micro-spatial effects dictate heterospecific pollen transfer more than
-daily phenological shifts.
-
-### The Hierarchical Scale of Total Pollen Depositional Variance
-
-![Pollen Deposition Model and Variance Partitioning. A) Model depicting
-Heterospecific vs Conspecific Pollen deposition. The dashed gray line
-represents the 1:1 expected relationship. B) Hierarchical Variance
-Partitioning of pollen deposited on
-stigmas.](docs/images/analysis-variance-partitioning-1.png)
 
 ### Monte Carlo Simulation: The Interannual Variance Filter
 
@@ -1601,6 +1598,13 @@ pollinator abundance. *AoB Plants* 17: plaf009.
 Holmquist, K. G., R. J. Mitchell, and J. D. Karron. 2012. Influence of
 pollinator grooming on pollen-mediated gene dispersal in mimulus ringens
 (phrymaceae). *Plant Species Biology* 27: 77–85.
+
+</div>
+
+<div id="ref-horn1966measurement" class="csl-entry">
+
+Horn, H. S. 1966. Measurement of" overlap" in comparative ecological
+studies. *The American Naturalist* 100: 419–424.
 
 </div>
 

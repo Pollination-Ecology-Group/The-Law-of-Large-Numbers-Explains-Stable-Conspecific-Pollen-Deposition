@@ -1468,6 +1468,26 @@ dilution_model <- lm(log(rate_per_plant) ~ log(plot_abundance), data = visitatio
 cat("\n--- Dilution Effect Model Summary (log-log) ---\n")
 print(summary(dilution_model))
 
+# 1. Test for differences in Total Visitation Rate (Per Plot) across years
+cat("\n--- Visitation Rate (Per Plot) by Year ---\n")
+kw_plot <- kruskal.test(rate_per_plot ~ as.factor(Year), data = visitation_per_plot_all)
+print(kw_plot)
+
+if (kw_plot$p.value < 0.05) {
+    cat("\nPairwise Differences (Per Plot):\n")
+    dunn.test(visitation_per_plot_all$rate_per_plot, as.factor(visitation_per_plot_all$Year), method = "bh")
+}
+
+# 2. Test for differences in Per-Capita Visitation Rate (Per Plant) across years
+cat("\n--- Per-Capita Visitation Rate (Per Plant) by Year ---\n")
+kw_plant <- kruskal.test(rate_per_plant ~ as.factor(Year), data = visitation_per_plant_all)
+print(kw_plant)
+
+if (kw_plant$p.value < 0.05) {
+    cat("\nPairwise Differences (Per Plant):\n")
+    dunn.test(visitation_per_plant_all$rate_per_plant, as.factor(visitation_per_plant_all$Year), method = "bh")
+}
+
 # 5. Visualization: The Density Shield (2-Panel Figure)
 
 # Panel A: The general dilution rule (Scatterplot)
