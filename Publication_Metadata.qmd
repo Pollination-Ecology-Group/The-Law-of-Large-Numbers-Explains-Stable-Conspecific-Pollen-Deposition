@@ -1,0 +1,117 @@
+---
+title: "Data Publication Metadata"
+subtitle: "From Single Visit Stochasticity to Long-Term Stability of Pollen Stigmatic Deposition: A Multi-Scale Study on *Succisa pratensis*"
+author: "Jakub Štenc"
+date: last-modified
+format:
+  html:
+    toc: true
+    theme: cosmo
+    code-fold: true
+    embed-resources: true
+---
+
+## Overview
+This document provides metadata, variable dictionaries, and summary statistics for the datasets associated with the manuscript. These datasets are archived for reproducibility and public access.
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE, message = FALSE, warning = FALSE)
+library(tidyverse)
+library(gt)
+library(labelled)
+```
+
+```{r load-data}
+# Load the exported datasets
+data_dir <- "output/publication_data"
+df_pollen <- read.csv(file.path(data_dir, "pollen_deposition.csv"))
+df_svd <- read.csv(file.path(data_dir, "SVD.csv"))
+df_network <- read.csv(file.path(data_dir, "network_metrics.csv"))
+```
+
+---
+
+## 1. Pollen Deposition Dataset (`pollen_deposition.csv`)
+This dataset contains information regarding pollen deposition on individual stigmas of *Succisa pratensis* over three consecutive years.
+
+### Data Dictionary
+```{r dict-pollen}
+var_label(df_pollen$year) <- "Year of sampling (2022-2024)"
+var_label(df_pollen$id) <- "Unique sample identifier (Stigma ID)"
+var_label(df_pollen$conspecific_pollen) <- "Count of conspecific (Succisa) pollen grains on stigma"
+var_label(df_pollen$heterospecific_pollen) <- "Count of heterospecific (non-Succisa) pollen grains on stigma"
+
+look_for(df_pollen, details = FALSE) %>%
+  select(variable, label) %>%
+  gt() %>%
+  tab_header(title = "Variables in Pollen Deposition Dataset") %>%
+  opt_stylize(style = 1, color = "blue")
+```
+
+### Summary Statistics
+```{r summary-pollen}
+df_pollen %>%
+  select(year, conspecific_pollen, heterospecific_pollen) %>%
+  summary() %>%
+  knitr::kable()
+```
+
+---
+
+## 2. Single Visit Deposition (SVD) Dataset (`SVD.csv`)
+This dataset contains experimental observations of pollen deposition resulting from a single, uninterrupted visit by various pollinator morphogroups to virgin *Succisa pratensis* inflorescences.
+
+### Data Dictionary
+```{r dict-svd}
+var_label(df_svd$year) <- "Year of observation"
+var_label(df_svd$id) <- "Unique sample identifier (Stigma ID)"
+var_label(df_svd$morphogroup) <- "Functional group of the visitor (e.g., Eristalis spp., Bombus spp.)"
+var_label(df_svd$duration_sec) <- "Duration of the single visit (seconds)"
+var_label(df_svd$conspecific_pollen) <- "Conspecific pollen deposited during single visit (Count)"
+var_label(df_svd$heterospecific_pollen) <- "Heterospecific pollen deposited during single visit (Count)"
+
+look_for(df_svd, details = FALSE) %>%
+  select(variable, label) %>%
+  gt() %>%
+  tab_header(title = "Variables in SVD Dataset") %>%
+  opt_stylize(style = 1, color = "green")
+```
+
+### Summary Statistics
+```{r summary-svd}
+df_svd %>%
+  select(morphogroup, conspecific_pollen, heterospecific_pollen, duration_sec) %>%
+  summary() %>%
+  knitr::kable()
+```
+
+---
+
+## 3. Network Metrics Dataset (`network_metrics.csv`)
+This dataset aggregates plot-level and community-level metrics calculated from plant-pollinator interaction networks, floral abundance surveys, and overall stigmatic pollen loads.
+
+### Data Dictionary
+```{r dict-network}
+var_label(df_network$Year) <- "Year of sampling"
+var_label(df_network$H2) <- "Network Specialization index (H2')"
+var_label(df_network$Succisa_H) <- "Interaction Evenness (Shannon's H)"
+var_label(df_network$Succisa_d) <- "Interaction Specialization (d')"
+var_label(df_network$Slope) <- "Slope (Beta) of the CP-HP relationship (Type 1 dynamics)"
+var_label(df_network$Mean_HP) <- "Mean Heterospecific Pollen per stigma"
+var_label(df_network$Succisa_Abundance) <- "Mean abundance of Succisa pratensis per plot"
+var_label(df_network$Total_Abundance) <- "Total floral abundance in the community"
+
+look_for(df_network, details = FALSE) %>%
+  select(variable, label) %>%
+  gt() %>%
+  tab_header(title = "Variables in Network Metrics Dataset") %>%
+  opt_stylize(style = 1, color = "gray")
+```
+
+### Summary Statistics
+```{r summary-network}
+df_network %>%
+  select(Year, H2, Succisa_H, Slope, Mean_HP, Succisa_Abundance) %>%
+  summary() %>%
+  knitr::kable()
+```

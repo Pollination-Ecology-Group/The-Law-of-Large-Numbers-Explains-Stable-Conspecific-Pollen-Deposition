@@ -1,125 +1,125 @@
-"id","plant_species","type","conspecific_pollen","heterospecific_pollen","plant_height","pollinator_species","behaviour_during_visit","delka_navstevy","cas_navstevy","pohlavi","rok"
-"22_Suc_D1","Succisa_pratensis","SVD",0,1,29,"Eristalis_tenax","nectar_feeding",10,"08/13/2022 10:26:00","male",2022
-"22_Suc_D2","Succisa_pratensis","SVD",0,0,23,"Eristalis_tenax","nectar_feeding",9,"08/13/2022 10:39:00","male",2022
-"22_Suc_D3","Succisa_pratensis","SVD",0,0,29,"Eristalis_tenax","nectar_feeding",8,"08/13/2022 10:40:00","female",2022
-"22_Suc_D4","Succisa_pratensis","SVD",1,2,29,"Eristalis_tenax","nectar_feeding",3,"08/13/2022 10:41:00","female",2022
-"22_Suc_D5","Succisa_pratensis","SVD",0,2,28,"Eristalis_tenax","nectar_feeding",7,"08/13/2022 10:44:00","female",2022
-"22_Suc_D6","Succisa_pratensis","SVD",0,1,29,"Eristalis_tenax","nectar_feeding",3,"08/13/2022 10:45:00","female",2022
-"22_Suc_D7","Succisa_pratensis","SVD",3,20,28,"Eristalis_tenax","nectar_feeding",1,"08/13/2022 10:45:00","female",2022
-"22_Suc_D8","Succisa_pratensis","SVD",5,2,23,"Eristalis_tenax","nectar_feeding",1,"08/13/2022 10:46:00","female",2022
-"22_Suc_D9","Succisa_pratensis","SVD",0,1,NA,"Eristalis_tenax","nectar_feeding",3,"08/13/2022 10:46:00","female",2022
-"22_Suc_D10","Succisa_pratensis","SVD",1,3,NA,"Eristalis_tenax","nectar_feeding",7,"08/13/2022 10:46:00","male",2022
-"22_Suc_D11","Succisa_pratensis","SVD",0,1,NA,"Eristalis_intricaria","nectar_feeding",2,"08/13/2022 10:48:00",NA,2022
-"22_Suc_D12","Succisa_pratensis","SVD",0,0,43,"Eristalis_tenax","nectar_feeding",6,"08/13/2022 11:01:00","male",2022
-"22_Suc_D13","Succisa_pratensis","SVD",6,0,28,"Eristalis_tenax","nectar_feeding",30,"08/13/2022 11:41:00","male",2022
-"22_Suc_D14","Succisa_pratensis","SVD",0,6,28,"Eristalis_tenax","nectar_feeding",17,"08/13/2022 11:47:00","male",2022
-"22_Suc_D15","Succisa_pratensis","SVD",0,0,25,"Bombus_lapidarius","nectar_feeding",23,"08/13/2022 11:50:00",NA,2022
-"22_Suc_D16","Succisa_pratensis","SVD",1,0,25,"Helophilus_sp","nectar_feeding",4,"08/13/2022 11:54:00",NA,2022
-"22_Suc_D17","Succisa_pratensis","SVD",1,0,28,"Helophilus_trivittatus","nectar_feeding",2,"08/13/2022 11:58:00",NA,2022
-"22_Suc_D18","Succisa_pratensis","SVD",0,2,25,"Bombus_lapidarius","walked_by",4,"08/13/2022 12:21:00",NA,2022
-"22_Suc_D19","Succisa_pratensis","SVD",10,4,NA,"Eristalis_tenax","nectar_feeding",4,"08/13/2022 13:47:00","male",2022
-"23_Suc_D1","Succisa_pratensis","SVD",0,1,42.8,"Eristalis_intricaria","nectar_feeding",3,"08/16/2023 10:04:00","female",2023
-"23_Suc_D2","Succisa_pratensis","SVD",3,0,42.8,"Eristalis_tenax","nectar_feeding",4,"08/16/2023 10:12:00","male",2023
-"23_Suc_D3","Succisa_pratensis","SVD",2,0,42.8,"Eristalis_tenax","nectar_feeding",2,"08/16/2023 10:28:00","male",2023
-"23_Suc_D7","Succisa_pratensis","SVD",0,0,36.6,"Dasysyrphus_sp","pollen_feeding",4,"08/16/2023 11:38:00",NA,2023
-"23_Suc_D8","Succisa_pratensis","SVD",0,1,31.2,"Bombus_sylvarum","nectar_feeding",2,"08/17/2023 08:54:00","female",2023
-"23_Suc_D9","Succisa_pratensis","SVD",0,0,40.2,"Bombus_sylvarum","nectar_feeding",4,"08/17/2023 09:30:00","female",2023
-"23_Suc_D10","Succisa_pratensis","SVD",3,0,44.7,"Eristalis_arbustorum","nectar_feeding",3,"08/17/2023 10:19:00",NA,2023
-"23_Suc_D11","Succisa_pratensis","SVD",2,0,44.7,"Eristalis_arbustorum","nectar_feeding",2,"08/17/2023 10:21:00",NA,2023
-"23_Suc_D12","Succisa_pratensis","SVD",7,0,49,"Bombus_lapidarius","nectar_feeding",3,"08/17/2023 10:55:00","female",2023
-"23_Suc_D13","Succisa_pratensis","SVD",5,0,49,"Bombus_lapidarius","nectar_feeding",2,"08/17/2023 11:06:00","female",2023
-"23_Suc_D14","Succisa_pratensis","SVD",13,0,48.5,"Bombus_lapidarius","nectar_feeding",2,"08/17/2023 11:09:00","female",2023
-"23_Suc_D15","Succisa_pratensis","SVD",2,0,38.2,"Sphaerophoria_sp","pollen_feeding",5,"08/17/2023 11:44:00","male",2023
-"23_Suc_D16","Succisa_pratensis","SVD",16,0,36,"Eristalis_tenax","pollen_feeding",4,"08/17/2023 09:35:00","male",2023
-"23_Suc_D17","Succisa_pratensis","SVD",0,0,28.1,"Dasysyrphus_sp","pollen_feeding",21,"08/17/2023 10:35:00",NA,2023
-"23_Suc_D19","Succisa_pratensis","SVD",2,0,26.7,"Bombus_lapidarius","nectar_feeding",5,"08/17/2023 11:34:00","male",2023
-"24_Suc_D1","Succisa_pratensis","SVD",0,0,21.6,"Eristalis_tenax","nectar_feeding",9,"08/13/2024 09:41:00","male",2024
-"24_Suc_D2","Succisa_pratensis","SVD",1,0,21.6,"Eristalis_tenax","nectar_feeding",2,"08/13/2024 09:42:00","male",2024
-"24_Suc_D3","Succisa_pratensis","SVD",0,0,21.6,"Helophilus_pendulus","nectar_feeding",1,"08/13/2024 09:53:00",NA,2024
-"24_Suc_D4","Succisa_pratensis","SVD",0,0,21.6,"Eristalis_tenax","nectar_feeding",5,"08/13/2024 09:56:00","female",2024
-"24_Suc_D5","Succisa_pratensis","SVD",0,0,46.1,"Eristalis_tenax","pollen_feeding",5,"08/14/2024 09:15:00","male",2024
-"24_Suc_D7","Succisa_pratensis","SVD",1,0,46.1,"Eristalis_tenax","nectar_feeding",26,"08/14/2024 09:22:00","male",2024
-"24_Suc_D8","Succisa_pratensis","SVD",1,4,46.1,"Eristalis_interrupta","pollen_feeding",1,"08/14/2024 09:32:00",NA,2024
-"24_Suc_D9","Succisa_pratensis","SVD",1,0,46.1,"Eristalis_arbustorum","nectar_feeding",3,"08/14/2024 09:34:00","male",2024
-"24_Suc_D10","Succisa_pratensis","SVD",0,0,33.9,"Sarcophaga_sp","nectar_feeding",4,"08/14/2024 10:03:00",NA,2024
-"24_Suc_D11","Succisa_pratensis","SVD",0,0,33.9,"Eristalis_tenax","nectar_feeding",3,"08/14/2024 10:08:00","female",2024
-"24_Suc_D12","Succisa_pratensis","SVD",0,2,25.7,"Helophilus_pendulus","nectar_feeding",16,"08/14/2024 10:30:00",NA,2024
-"24_Suc_D13","Succisa_pratensis","SVD",0,0,25.7,"Apis_mellifera","nectar_feeding",4,"08/14/2024 10:35:00","female",2024
-"24_Suc_D14","Succisa_pratensis","SVD",0,0,25.7,"Helophilus_trivittatus","nectar_feeding",2,"08/14/2024 10:37:00",NA,2024
-"24_Suc_D15","Succisa_pratensis","SVD",2,1,25.7,"Eristalis_interrupta","pollen_feeding",3,"08/14/2024 10:41:00",NA,2024
-"24_Suc_D16","Succisa_pratensis","SVD",0,0,25.7,"Apis_mellifera","nectar_feeding",3,"08/14/2024 10:47:00","female",2024
-"24_Suc_D17","Succisa_pratensis","SVD",0,0,25.7,"Apis_mellifera","nectar_feeding",3,"08/14/2024 10:50:00","female",2024
-"24_Suc_D18","Succisa_pratensis","SVD",0,0,13,"Eristalis_interrupta","nectar_feeding",25,"08/14/2024 11:24:00",NA,2024
-"24_Suc_D19","Succisa_pratensis","SVD",1,0,12.5,"Sarcophaga_sp","nectar_feeding",5,"08/14/2024 11:45:00",NA,2024
-"24_Suc_D20","Succisa_pratensis","SVD",1,0,12.5,"Sarcophaga_sp","pollen_feeding",2,"08/14/2024 11:46:00",NA,2024
-"24_Suc_D21","Succisa_pratensis","SVD",3,0,46.1,"Eristalis_interrupta","nectar_feeding",22,"08/14/2024 12:18:00",NA,2024
-"24_Suc_D22","Succisa_pratensis","SVD",0,0,46.1,"Eristalis_interrupta","nectar_feeding",26,"08/14/2024 12:21:00","male",2024
-"24_Suc_D23","Succisa_pratensis","SVD",3,0,46.1,"Helophilus_trivittatus","nectar_feeding",8,"08/14/2024 12:25:00",NA,2024
-"24_Suc_D24","Succisa_pratensis","SVD",1,0,46.1,"Eristalis_interrupta","nectar_feeding",7,"08/14/2024 12:27:00",NA,2024
-"24_Suc_D25","Succisa_pratensis","SVD",0,1,46.1,"Eristalis_interrupta","nectar_feeding",22,"08/14/2024 12:29:00",NA,2024
-"24_Suc_D26","Succisa_pratensis","SVD",1,0,46.1,"Helophilus_trivittatus","nectar_feeding",9,"08/14/2024 12:37:00",NA,2024
-"24_Suc_D27","Succisa_pratensis","SVD",0,0,46.1,"Helophilus_trivittatus","nectar_feeding",6,"08/14/2024 12:38:00",NA,2024
-"24_Suc_D28","Succisa_pratensis","SVD",2,0,46.1,"Helophilus_pendulus","nectar_feeding",5,"08/14/2024 12:41:00","male",2024
-"24_Suc_D29","Succisa_pratensis","SVD",0,0,46.1,"Eristalis_interrupta","nectar_feeding",3,"08/14/2024 12:42:00",NA,2024
-"24_Suc_D30","Succisa_pratensis","SVD",0,1,46.1,"Helophilus_trivittatus","nectar_feeding",6,"08/14/2024 12:43:00","female",2024
-"24_Suc_D31","Succisa_pratensis","SVD",0,0,46.1,"Helophilus_pendulus","nectar_feeding",4,"08/14/2024 12:43:00",NA,2024
-"24_Suc_D32","Succisa_pratensis","SVD",9,0,42.9,"Sarcophaga_sp","nectar_feeding",36,"08/14/2024 13:19:00",NA,2024
-"24_Suc_D33","Succisa_pratensis","SVD",7,0,42.9,"Sarcophaga_sp","nectar_feeding",6,"08/14/2024 13:23:00",NA,2024
-"24_Suc_D34","Succisa_pratensis","SVD",0,1,42.9,"Helophilus_trivittatus","nectar_feeding",1,"08/14/2024 13:42:00",NA,2024
-"24_Suc_D35","Succisa_pratensis","SVD",0,0,26.5,"Eristalis_interrupta","pollen_feeding",2,"08/14/2024 13:53:00",NA,2024
-"24_Suc_D36","Succisa_pratensis","SVD",8,0,28.1,"Helophilus_trivittatus","nectar_feeding",3,"08/14/2024 14:47:00",NA,2024
-"24_Suc_D37","Succisa_pratensis","SVD",0,0,22.6,"Eristalis_tenax","nectar_feeding",4,"08/15/2024 08:58:00","female",2024
-"24_Suc_D38","Succisa_pratensis","SVD",0,0,22.6,"Eristalis_tenax","nectar_feeding",10,"08/15/2024 09:00:00","female",2024
-"24_Suc_D39","Succisa_pratensis","SVD",0,1,22.6,"Eristalis_tenax","nectar_feeding",9,"08/15/2024 09:01:00","male",2024
-"24_Suc_D40","Succisa_pratensis","SVD",0,1,22.6,"Eristalis_tenax","pollen_feeding",6,"08/15/2024 09:10:00","female",2024
-"24_Suc_D41","Succisa_pratensis","SVD",1,0,22.6,"Eristalis_tenax","nectar_feeding",8,"08/15/2024 09:14:00","female",2024
-"24_Suc_D42","Succisa_pratensis","SVD",19,0,22.6,"Eristalis_tenax","nectar_feeding",4,"08/15/2024","female",2024
-"24_Suc_D43","Succisa_pratensis","SVD",1,0,22.6,"Eristalis_tenax","nectar_feeding",8,"08/15/2024 09:23:00","male",2024
-"24_Suc_D44","Succisa_pratensis","SVD",1,0,22.6,"Eristalis_tenax","nectar_feeding",10,"08/15/2024 09:24:00","male",2024
-"24_Suc_D45","Succisa_pratensis","SVD",0,1,49.8,"Eristalis_tenax","nectar_feeding",2,"08/15/2024 09:30:00","female",2024
-"24_Suc_D46","Succisa_pratensis","SVD",0,0,49.8,"Eristalis_tenax","nectar_feeding",8,"08/15/2024 09:34:00","female",2024
-"24_Suc_D47","Succisa_pratensis","SVD",20,0,49.8,"Eristalis_tenax","nectar_feeding",2,"08/15/2024 09:35:00","male",2024
-"24_Suc_D48","Succisa_pratensis","SVD",1,0,49.8,"Eristalis_tenax","nectar_feeding",3,"08/15/2024 09:41:00","female",2024
-"24_Suc_D49","Succisa_pratensis","SVD",2,1,49.8,"Eristalis_tenax","nectar_feeding",2,"08/15/2024 09:46:00","male",2024
-"24_Suc_D50","Succisa_pratensis","SVD",8,0,49.8,"Eristalis_tenax","nectar_feeding",5,"08/15/2024 09:50:00","female",2024
-"24_Suc_D51","Succisa_pratensis","SVD",5,1,NA,"Eristalis_similis","nectar_feeding",4,"08/15/2024 10:14:00",NA,2024
-"24_Suc_D52","Succisa_pratensis","SVD",2,2,27.9,"Helophilus_pendulus","nectar_feeding",12,"08/15/2024 11:46:00",NA,2024
-"24_Suc_D53","Succisa_pratensis","SVD",5,0,40,"Eristalis_tenax","nectar_feeding",5,"08/15/2024 12:16:00","female",2024
-"24_Suc_D54","Succisa_pratensis","SVD",24,2,40,"Eristalis_tenax","nectar_feeding",2,"08/15/2024 12:16:00","female",2024
-"24_Suc_D55","Succisa_pratensis","SVD",0,0,52,"Bombus_terrestris","nectar_feeding",2,"08/15/2024 12:35:00",NA,2024
-"24_Suc_D56","Succisa_pratensis","SVD",0,0,52,"Eristalis_tenax","pollen_feeding",6,"08/15/2024 12:36:00","female",2024
-"24_Suc_D57","Succisa_pratensis","SVD",2,0,52,"Apis_mellifera","nectar_feeding",2,"08/15/2024 12:45:00","female",2024
-"24_Suc_D58","Succisa_pratensis","SVD",2,0,52,"Eristalis_arbustorum","pollen_feeding",3,"08/15/2024 12:47:00","male",2024
-"24_Suc_D59","Succisa_pratensis","SVD",1,0,52,"Eristalis_arbustorum","nectar_feeding",2,"08/15/2024 12:47:00","male",2024
-"24_Suc_D60","Succisa_pratensis","SVD",0,0,29.3,"Eristalis_tenax","pollen_feeding",9,"08/15/2024 13:26:00","male",2024
-"24_Suc_D61","Succisa_pratensis","SVD",0,0,43.8,"Eristalis_interrupta","pollen_feeding",1,"08/15/2024 15:38:00",NA,2024
-"24_Suc_D62","Succisa_pratensis","SVD",0,0,43.8,"Eristalis_tenax","pollen_feeding",16,"08/15/2024 15:42:00","female",2024
-"24_Suc_D63","Succisa_pratensis","SVD",8,0,50.4,"Apis_mellifera","nectar_feeding",9,"08/16/2024 08:06:00","female",2024
-"24_Suc_D64","Succisa_pratensis","SVD",2,0,50.4,"Eristalis_tenax","nectar_feeding",5,"08/16/2024 08:08:00","male",2024
-"24_Suc_D65","Succisa_pratensis","SVD",2,0,50.4,"Helophilus_trivittatus","nectar_feeding",3,"08/16/2024 08:14:00",NA,2024
-"24_Suc_D66","Succisa_pratensis","SVD",0,0,50.4,"Eristalis_tenax","nectar_feeding",2,"08/16/2024 08:16:00","female",2024
-"24_Suc_D67","Succisa_pratensis","SVD",0,0,50.4,"Helophilus_trivittatus","nectar_feeding",5,"08/16/2024 08:21:00","male",2024
-"24_Suc_D68","Succisa_pratensis","SVD",8,0,50.4,"Eristalis_interrupta","nectar_feeding",3,"08/16/2024 08:23:00","female",2024
-"24_Suc_D69","Succisa_pratensis","SVD",1,0,46.4,"Helophilus_trivittatus","nectar_feeding",3,"08/16/2024 08:42:00",NA,2024
-"24_Suc_D70","Succisa_pratensis","SVD",6,1,46.4,"Eristalis_tenax","nectar_feeding",4,"08/16/2024 08:43:00","male",2024
-"24_Suc_D71","Succisa_pratensis","SVD",14,0,46.4,"Eristalis_tenax","nectar_feeding",3,"08/16/2024 08:43:00","male",2024
-"24_Suc_D72","Succisa_pratensis","SVD",2,0,46.4,"Helophilus_trivittatus","nectar_feeding",4,"08/16/2024 08:44:00","male",2024
-"24_Suc_D73","Succisa_pratensis","SVD",58,0,46.4,"Helophilus_trivittatus","nectar_feeding",14,"08/16/2024 08:46:00","male",2024
-"24_Suc_D74","Succisa_pratensis","SVD",10,1,46.4,"Helophilus_trivittatus","nectar_feeding",5,"08/16/2024 08:49:00","male",2024
-"24_Suc_D75","Succisa_pratensis","SVD",21,0,46.4,"Helophilus_trivittatus","nectar_feeding",3,"08/16/2024 08:50:00","male",2024
-"24_Suc_D77","Succisa_pratensis","SVD",6,0,46.4,"Helophilus_trivittatus","nectar_feeding",6,"08/16/2024 08:56:00","male",2024
-"24_Suc_D78","Succisa_pratensis","SVD",12,2,46.4,"Helophilus_trivittatus","nectar_feeding",2,"08/16/2024 08:57:00",NA,2024
-"24_Suc_D79","Succisa_pratensis","SVD",5,0,46.4,"Helophilus_trivittatus","nectar_feeding",4,"08/16/2024 08:58:00",NA,2024
-"24_Suc_D80","Succisa_pratensis","SVD",1,0,45,"Eristalis_tenax","nectar_feeding",4,"08/16/2024 09:20:00","male",2024
-"24_Suc_D81","Succisa_pratensis","SVD",4,0,45,"Eristalis_tenax","nectar_feeding",4,"08/16/2024 09:21:00","male",2024
-"24_Suc_D82","Succisa_pratensis","SVD",8,0,45,"Eristalis_pertinax","nectar_feeding",5,"08/16/2024 09:24:00","male",2024
-"24_Suc_D83","Succisa_pratensis","SVD",1,0,45,"Eristalis_tenax","nectar_feeding",4,"08/16/2024 09:31:00","female",2024
-"24_Suc_D84","Succisa_pratensis","SVD",0,0,45,"Eristalis_tenax","nectar_feeding",2,"08/16/2024 09:33:00","female",2024
-"24_Suc_D85","Succisa_pratensis","SVD",4,1,45,"Eristalis_tenax","nectar_feeding",2,"08/16/2024 09:34:00","female",2024
-"24_Suc_D86","Succisa_pratensis","SVD",1,0,45,"Eristalis_interrupta","nectar_feeding",6,"08/16/2024 09:37:00","male",2024
-"24_Suc_D87","Succisa_pratensis","SVD",5,0,46.9,"Eristalis_tenax","nectar_feeding",4,"08/16/2024 10:18:00","male",2024
-"24_Suc_D88","Succisa_pratensis","SVD",0,0,46.9,"Eristalis_tenax","pollen_feeding",6,"08/16/2024 10:23:00","female",2024
-"24_Suc_D89","Succisa_pratensis","SVD",2,0,46.9,"Helophilus_pendulus","nectar_feeding",2,"08/16/2024 10:25:00",NA,2024
-"24_Suc_D90","Succisa_pratensis","SVD",16,0,46.9,"Eristalis_tenax","nectar_feeding",3,"08/16/2024 10:27:00","female",2024
-"24_Suc_D91","Succisa_pratensis","SVD",0,0,46.9,"Eristalis_intricaria","nectar_feeding",1,"08/16/2024 10:30:00","male",2024
-"24_Suc_D92","Succisa_pratensis","SVD",0,0,46.9,"Eristalis_tenax","nectar_feeding",1,"08/16/2024 10:35:00",NA,2024
+"id","plant_species","type","conspecific_pollen","heterospecific_pollen","plant_height","species","behaviour_during_visit","duration_sec","cas_navstevy","pohlavi","year","morphogroup"
+"22_Suc_D1","Succisa_pratensis","SVD",0,1,29,"Eristalis_tenax","nectar_feeding",10,"08/13/2022 10:26:00","male",2022,"Eristalis spp."
+"22_Suc_D2","Succisa_pratensis","SVD",0,0,23,"Eristalis_tenax","nectar_feeding",9,"08/13/2022 10:39:00","male",2022,"Eristalis spp."
+"22_Suc_D3","Succisa_pratensis","SVD",0,0,29,"Eristalis_tenax","nectar_feeding",8,"08/13/2022 10:40:00","female",2022,"Eristalis spp."
+"22_Suc_D4","Succisa_pratensis","SVD",1,2,29,"Eristalis_tenax","nectar_feeding",3,"08/13/2022 10:41:00","female",2022,"Eristalis spp."
+"22_Suc_D5","Succisa_pratensis","SVD",0,2,28,"Eristalis_tenax","nectar_feeding",7,"08/13/2022 10:44:00","female",2022,"Eristalis spp."
+"22_Suc_D6","Succisa_pratensis","SVD",0,1,29,"Eristalis_tenax","nectar_feeding",3,"08/13/2022 10:45:00","female",2022,"Eristalis spp."
+"22_Suc_D7","Succisa_pratensis","SVD",3,20,28,"Eristalis_tenax","nectar_feeding",1,"08/13/2022 10:45:00","female",2022,"Eristalis spp."
+"22_Suc_D8","Succisa_pratensis","SVD",5,2,23,"Eristalis_tenax","nectar_feeding",1,"08/13/2022 10:46:00","female",2022,"Eristalis spp."
+"22_Suc_D9","Succisa_pratensis","SVD",0,1,NA,"Eristalis_tenax","nectar_feeding",3,"08/13/2022 10:46:00","female",2022,"Eristalis spp."
+"22_Suc_D10","Succisa_pratensis","SVD",1,3,NA,"Eristalis_tenax","nectar_feeding",7,"08/13/2022 10:46:00","male",2022,"Eristalis spp."
+"22_Suc_D11","Succisa_pratensis","SVD",0,1,NA,"Eristalis_intricaria","nectar_feeding",2,"08/13/2022 10:48:00",NA,2022,"Eristalis spp."
+"22_Suc_D12","Succisa_pratensis","SVD",0,0,43,"Eristalis_tenax","nectar_feeding",6,"08/13/2022 11:01:00","male",2022,"Eristalis spp."
+"22_Suc_D13","Succisa_pratensis","SVD",6,0,28,"Eristalis_tenax","nectar_feeding",30,"08/13/2022 11:41:00","male",2022,"Eristalis spp."
+"22_Suc_D14","Succisa_pratensis","SVD",0,6,28,"Eristalis_tenax","nectar_feeding",17,"08/13/2022 11:47:00","male",2022,"Eristalis spp."
+"22_Suc_D15","Succisa_pratensis","SVD",0,0,25,"Bombus_lapidarius","nectar_feeding",23,"08/13/2022 11:50:00",NA,2022,"Bombus spp."
+"22_Suc_D16","Succisa_pratensis","SVD",1,0,25,"Helophilus_sp","nectar_feeding",4,"08/13/2022 11:54:00",NA,2022,"Helophilus spp."
+"22_Suc_D17","Succisa_pratensis","SVD",1,0,28,"Helophilus_trivittatus","nectar_feeding",2,"08/13/2022 11:58:00",NA,2022,"Helophilus spp."
+"22_Suc_D18","Succisa_pratensis","SVD",0,2,25,"Bombus_lapidarius","walked_by",4,"08/13/2022 12:21:00",NA,2022,"Bombus spp."
+"22_Suc_D19","Succisa_pratensis","SVD",10,4,NA,"Eristalis_tenax","nectar_feeding",4,"08/13/2022 13:47:00","male",2022,"Eristalis spp."
+"23_Suc_D1","Succisa_pratensis","SVD",0,1,42.8,"Eristalis_intricaria","nectar_feeding",3,"08/16/2023 10:04:00","female",2023,"Eristalis spp."
+"23_Suc_D2","Succisa_pratensis","SVD",3,0,42.8,"Eristalis_tenax","nectar_feeding",4,"08/16/2023 10:12:00","male",2023,"Eristalis spp."
+"23_Suc_D3","Succisa_pratensis","SVD",2,0,42.8,"Eristalis_tenax","nectar_feeding",2,"08/16/2023 10:28:00","male",2023,"Eristalis spp."
+"23_Suc_D7","Succisa_pratensis","SVD",0,0,36.6,"Dasysyrphus_sp","pollen_feeding",4,"08/16/2023 11:38:00",NA,2023,"Other"
+"23_Suc_D8","Succisa_pratensis","SVD",0,1,31.2,"Bombus_sylvarum","nectar_feeding",2,"08/17/2023 08:54:00","female",2023,"Bombus spp."
+"23_Suc_D9","Succisa_pratensis","SVD",0,0,40.2,"Bombus_sylvarum","nectar_feeding",4,"08/17/2023 09:30:00","female",2023,"Bombus spp."
+"23_Suc_D10","Succisa_pratensis","SVD",3,0,44.7,"Eristalis_arbustorum","nectar_feeding",3,"08/17/2023 10:19:00",NA,2023,"Eristalis spp."
+"23_Suc_D11","Succisa_pratensis","SVD",2,0,44.7,"Eristalis_arbustorum","nectar_feeding",2,"08/17/2023 10:21:00",NA,2023,"Eristalis spp."
+"23_Suc_D12","Succisa_pratensis","SVD",7,0,49,"Bombus_lapidarius","nectar_feeding",3,"08/17/2023 10:55:00","female",2023,"Bombus spp."
+"23_Suc_D13","Succisa_pratensis","SVD",5,0,49,"Bombus_lapidarius","nectar_feeding",2,"08/17/2023 11:06:00","female",2023,"Bombus spp."
+"23_Suc_D14","Succisa_pratensis","SVD",13,0,48.5,"Bombus_lapidarius","nectar_feeding",2,"08/17/2023 11:09:00","female",2023,"Bombus spp."
+"23_Suc_D15","Succisa_pratensis","SVD",2,0,38.2,"Sphaerophoria_sp","pollen_feeding",5,"08/17/2023 11:44:00","male",2023,"Other"
+"23_Suc_D16","Succisa_pratensis","SVD",16,0,36,"Eristalis_tenax","pollen_feeding",4,"08/17/2023 09:35:00","male",2023,"Eristalis spp."
+"23_Suc_D17","Succisa_pratensis","SVD",0,0,28.1,"Dasysyrphus_sp","pollen_feeding",21,"08/17/2023 10:35:00",NA,2023,"Other"
+"23_Suc_D19","Succisa_pratensis","SVD",2,0,26.7,"Bombus_lapidarius","nectar_feeding",5,"08/17/2023 11:34:00","male",2023,"Bombus spp."
+"24_Suc_D1","Succisa_pratensis","SVD",0,0,21.6,"Eristalis_tenax","nectar_feeding",9,"08/13/2024 09:41:00","male",2024,"Eristalis spp."
+"24_Suc_D2","Succisa_pratensis","SVD",1,0,21.6,"Eristalis_tenax","nectar_feeding",2,"08/13/2024 09:42:00","male",2024,"Eristalis spp."
+"24_Suc_D3","Succisa_pratensis","SVD",0,0,21.6,"Helophilus_pendulus","nectar_feeding",1,"08/13/2024 09:53:00",NA,2024,"Helophilus spp."
+"24_Suc_D4","Succisa_pratensis","SVD",0,0,21.6,"Eristalis_tenax","nectar_feeding",5,"08/13/2024 09:56:00","female",2024,"Eristalis spp."
+"24_Suc_D5","Succisa_pratensis","SVD",0,0,46.1,"Eristalis_tenax","pollen_feeding",5,"08/14/2024 09:15:00","male",2024,"Eristalis spp."
+"24_Suc_D7","Succisa_pratensis","SVD",1,0,46.1,"Eristalis_tenax","nectar_feeding",26,"08/14/2024 09:22:00","male",2024,"Eristalis spp."
+"24_Suc_D8","Succisa_pratensis","SVD",1,4,46.1,"Eristalis_interrupta","pollen_feeding",1,"08/14/2024 09:32:00",NA,2024,"Eristalis spp."
+"24_Suc_D9","Succisa_pratensis","SVD",1,0,46.1,"Eristalis_arbustorum","nectar_feeding",3,"08/14/2024 09:34:00","male",2024,"Eristalis spp."
+"24_Suc_D10","Succisa_pratensis","SVD",0,0,33.9,"Sarcophaga_sp","nectar_feeding",4,"08/14/2024 10:03:00",NA,2024,"Other"
+"24_Suc_D11","Succisa_pratensis","SVD",0,0,33.9,"Eristalis_tenax","nectar_feeding",3,"08/14/2024 10:08:00","female",2024,"Eristalis spp."
+"24_Suc_D12","Succisa_pratensis","SVD",0,2,25.7,"Helophilus_pendulus","nectar_feeding",16,"08/14/2024 10:30:00",NA,2024,"Helophilus spp."
+"24_Suc_D13","Succisa_pratensis","SVD",0,0,25.7,"Apis_mellifera","nectar_feeding",4,"08/14/2024 10:35:00","female",2024,"Other"
+"24_Suc_D14","Succisa_pratensis","SVD",0,0,25.7,"Helophilus_trivittatus","nectar_feeding",2,"08/14/2024 10:37:00",NA,2024,"Helophilus spp."
+"24_Suc_D15","Succisa_pratensis","SVD",2,1,25.7,"Eristalis_interrupta","pollen_feeding",3,"08/14/2024 10:41:00",NA,2024,"Eristalis spp."
+"24_Suc_D16","Succisa_pratensis","SVD",0,0,25.7,"Apis_mellifera","nectar_feeding",3,"08/14/2024 10:47:00","female",2024,"Other"
+"24_Suc_D17","Succisa_pratensis","SVD",0,0,25.7,"Apis_mellifera","nectar_feeding",3,"08/14/2024 10:50:00","female",2024,"Other"
+"24_Suc_D18","Succisa_pratensis","SVD",0,0,13,"Eristalis_interrupta","nectar_feeding",25,"08/14/2024 11:24:00",NA,2024,"Eristalis spp."
+"24_Suc_D19","Succisa_pratensis","SVD",1,0,12.5,"Sarcophaga_sp","nectar_feeding",5,"08/14/2024 11:45:00",NA,2024,"Other"
+"24_Suc_D20","Succisa_pratensis","SVD",1,0,12.5,"Sarcophaga_sp","pollen_feeding",2,"08/14/2024 11:46:00",NA,2024,"Other"
+"24_Suc_D21","Succisa_pratensis","SVD",3,0,46.1,"Eristalis_interrupta","nectar_feeding",22,"08/14/2024 12:18:00",NA,2024,"Eristalis spp."
+"24_Suc_D22","Succisa_pratensis","SVD",0,0,46.1,"Eristalis_interrupta","nectar_feeding",26,"08/14/2024 12:21:00","male",2024,"Eristalis spp."
+"24_Suc_D23","Succisa_pratensis","SVD",3,0,46.1,"Helophilus_trivittatus","nectar_feeding",8,"08/14/2024 12:25:00",NA,2024,"Helophilus spp."
+"24_Suc_D24","Succisa_pratensis","SVD",1,0,46.1,"Eristalis_interrupta","nectar_feeding",7,"08/14/2024 12:27:00",NA,2024,"Eristalis spp."
+"24_Suc_D25","Succisa_pratensis","SVD",0,1,46.1,"Eristalis_interrupta","nectar_feeding",22,"08/14/2024 12:29:00",NA,2024,"Eristalis spp."
+"24_Suc_D26","Succisa_pratensis","SVD",1,0,46.1,"Helophilus_trivittatus","nectar_feeding",9,"08/14/2024 12:37:00",NA,2024,"Helophilus spp."
+"24_Suc_D27","Succisa_pratensis","SVD",0,0,46.1,"Helophilus_trivittatus","nectar_feeding",6,"08/14/2024 12:38:00",NA,2024,"Helophilus spp."
+"24_Suc_D28","Succisa_pratensis","SVD",2,0,46.1,"Helophilus_pendulus","nectar_feeding",5,"08/14/2024 12:41:00","male",2024,"Helophilus spp."
+"24_Suc_D29","Succisa_pratensis","SVD",0,0,46.1,"Eristalis_interrupta","nectar_feeding",3,"08/14/2024 12:42:00",NA,2024,"Eristalis spp."
+"24_Suc_D30","Succisa_pratensis","SVD",0,1,46.1,"Helophilus_trivittatus","nectar_feeding",6,"08/14/2024 12:43:00","female",2024,"Helophilus spp."
+"24_Suc_D31","Succisa_pratensis","SVD",0,0,46.1,"Helophilus_pendulus","nectar_feeding",4,"08/14/2024 12:43:00",NA,2024,"Helophilus spp."
+"24_Suc_D32","Succisa_pratensis","SVD",9,0,42.9,"Sarcophaga_sp","nectar_feeding",36,"08/14/2024 13:19:00",NA,2024,"Other"
+"24_Suc_D33","Succisa_pratensis","SVD",7,0,42.9,"Sarcophaga_sp","nectar_feeding",6,"08/14/2024 13:23:00",NA,2024,"Other"
+"24_Suc_D34","Succisa_pratensis","SVD",0,1,42.9,"Helophilus_trivittatus","nectar_feeding",1,"08/14/2024 13:42:00",NA,2024,"Helophilus spp."
+"24_Suc_D35","Succisa_pratensis","SVD",0,0,26.5,"Eristalis_interrupta","pollen_feeding",2,"08/14/2024 13:53:00",NA,2024,"Eristalis spp."
+"24_Suc_D36","Succisa_pratensis","SVD",8,0,28.1,"Helophilus_trivittatus","nectar_feeding",3,"08/14/2024 14:47:00",NA,2024,"Helophilus spp."
+"24_Suc_D37","Succisa_pratensis","SVD",0,0,22.6,"Eristalis_tenax","nectar_feeding",4,"08/15/2024 08:58:00","female",2024,"Eristalis spp."
+"24_Suc_D38","Succisa_pratensis","SVD",0,0,22.6,"Eristalis_tenax","nectar_feeding",10,"08/15/2024 09:00:00","female",2024,"Eristalis spp."
+"24_Suc_D39","Succisa_pratensis","SVD",0,1,22.6,"Eristalis_tenax","nectar_feeding",9,"08/15/2024 09:01:00","male",2024,"Eristalis spp."
+"24_Suc_D40","Succisa_pratensis","SVD",0,1,22.6,"Eristalis_tenax","pollen_feeding",6,"08/15/2024 09:10:00","female",2024,"Eristalis spp."
+"24_Suc_D41","Succisa_pratensis","SVD",1,0,22.6,"Eristalis_tenax","nectar_feeding",8,"08/15/2024 09:14:00","female",2024,"Eristalis spp."
+"24_Suc_D42","Succisa_pratensis","SVD",19,0,22.6,"Eristalis_tenax","nectar_feeding",4,"08/15/2024","female",2024,"Eristalis spp."
+"24_Suc_D43","Succisa_pratensis","SVD",1,0,22.6,"Eristalis_tenax","nectar_feeding",8,"08/15/2024 09:23:00","male",2024,"Eristalis spp."
+"24_Suc_D44","Succisa_pratensis","SVD",1,0,22.6,"Eristalis_tenax","nectar_feeding",10,"08/15/2024 09:24:00","male",2024,"Eristalis spp."
+"24_Suc_D45","Succisa_pratensis","SVD",0,1,49.8,"Eristalis_tenax","nectar_feeding",2,"08/15/2024 09:30:00","female",2024,"Eristalis spp."
+"24_Suc_D46","Succisa_pratensis","SVD",0,0,49.8,"Eristalis_tenax","nectar_feeding",8,"08/15/2024 09:34:00","female",2024,"Eristalis spp."
+"24_Suc_D47","Succisa_pratensis","SVD",20,0,49.8,"Eristalis_tenax","nectar_feeding",2,"08/15/2024 09:35:00","male",2024,"Eristalis spp."
+"24_Suc_D48","Succisa_pratensis","SVD",1,0,49.8,"Eristalis_tenax","nectar_feeding",3,"08/15/2024 09:41:00","female",2024,"Eristalis spp."
+"24_Suc_D49","Succisa_pratensis","SVD",2,1,49.8,"Eristalis_tenax","nectar_feeding",2,"08/15/2024 09:46:00","male",2024,"Eristalis spp."
+"24_Suc_D50","Succisa_pratensis","SVD",8,0,49.8,"Eristalis_tenax","nectar_feeding",5,"08/15/2024 09:50:00","female",2024,"Eristalis spp."
+"24_Suc_D51","Succisa_pratensis","SVD",5,1,NA,"Eristalis_similis","nectar_feeding",4,"08/15/2024 10:14:00",NA,2024,"Eristalis spp."
+"24_Suc_D52","Succisa_pratensis","SVD",2,2,27.9,"Helophilus_pendulus","nectar_feeding",12,"08/15/2024 11:46:00",NA,2024,"Helophilus spp."
+"24_Suc_D53","Succisa_pratensis","SVD",5,0,40,"Eristalis_tenax","nectar_feeding",5,"08/15/2024 12:16:00","female",2024,"Eristalis spp."
+"24_Suc_D54","Succisa_pratensis","SVD",24,2,40,"Eristalis_tenax","nectar_feeding",2,"08/15/2024 12:16:00","female",2024,"Eristalis spp."
+"24_Suc_D55","Succisa_pratensis","SVD",0,0,52,"Bombus_terrestris","nectar_feeding",2,"08/15/2024 12:35:00",NA,2024,"Bombus spp."
+"24_Suc_D56","Succisa_pratensis","SVD",0,0,52,"Eristalis_tenax","pollen_feeding",6,"08/15/2024 12:36:00","female",2024,"Eristalis spp."
+"24_Suc_D57","Succisa_pratensis","SVD",2,0,52,"Apis_mellifera","nectar_feeding",2,"08/15/2024 12:45:00","female",2024,"Other"
+"24_Suc_D58","Succisa_pratensis","SVD",2,0,52,"Eristalis_arbustorum","pollen_feeding",3,"08/15/2024 12:47:00","male",2024,"Eristalis spp."
+"24_Suc_D59","Succisa_pratensis","SVD",1,0,52,"Eristalis_arbustorum","nectar_feeding",2,"08/15/2024 12:47:00","male",2024,"Eristalis spp."
+"24_Suc_D60","Succisa_pratensis","SVD",0,0,29.3,"Eristalis_tenax","pollen_feeding",9,"08/15/2024 13:26:00","male",2024,"Eristalis spp."
+"24_Suc_D61","Succisa_pratensis","SVD",0,0,43.8,"Eristalis_interrupta","pollen_feeding",1,"08/15/2024 15:38:00",NA,2024,"Eristalis spp."
+"24_Suc_D62","Succisa_pratensis","SVD",0,0,43.8,"Eristalis_tenax","pollen_feeding",16,"08/15/2024 15:42:00","female",2024,"Eristalis spp."
+"24_Suc_D63","Succisa_pratensis","SVD",8,0,50.4,"Apis_mellifera","nectar_feeding",9,"08/16/2024 08:06:00","female",2024,"Other"
+"24_Suc_D64","Succisa_pratensis","SVD",2,0,50.4,"Eristalis_tenax","nectar_feeding",5,"08/16/2024 08:08:00","male",2024,"Eristalis spp."
+"24_Suc_D65","Succisa_pratensis","SVD",2,0,50.4,"Helophilus_trivittatus","nectar_feeding",3,"08/16/2024 08:14:00",NA,2024,"Helophilus spp."
+"24_Suc_D66","Succisa_pratensis","SVD",0,0,50.4,"Eristalis_tenax","nectar_feeding",2,"08/16/2024 08:16:00","female",2024,"Eristalis spp."
+"24_Suc_D67","Succisa_pratensis","SVD",0,0,50.4,"Helophilus_trivittatus","nectar_feeding",5,"08/16/2024 08:21:00","male",2024,"Helophilus spp."
+"24_Suc_D68","Succisa_pratensis","SVD",8,0,50.4,"Eristalis_interrupta","nectar_feeding",3,"08/16/2024 08:23:00","female",2024,"Eristalis spp."
+"24_Suc_D69","Succisa_pratensis","SVD",1,0,46.4,"Helophilus_trivittatus","nectar_feeding",3,"08/16/2024 08:42:00",NA,2024,"Helophilus spp."
+"24_Suc_D70","Succisa_pratensis","SVD",6,1,46.4,"Eristalis_tenax","nectar_feeding",4,"08/16/2024 08:43:00","male",2024,"Eristalis spp."
+"24_Suc_D71","Succisa_pratensis","SVD",14,0,46.4,"Eristalis_tenax","nectar_feeding",3,"08/16/2024 08:43:00","male",2024,"Eristalis spp."
+"24_Suc_D72","Succisa_pratensis","SVD",2,0,46.4,"Helophilus_trivittatus","nectar_feeding",4,"08/16/2024 08:44:00","male",2024,"Helophilus spp."
+"24_Suc_D73","Succisa_pratensis","SVD",58,0,46.4,"Helophilus_trivittatus","nectar_feeding",14,"08/16/2024 08:46:00","male",2024,"Helophilus spp."
+"24_Suc_D74","Succisa_pratensis","SVD",10,1,46.4,"Helophilus_trivittatus","nectar_feeding",5,"08/16/2024 08:49:00","male",2024,"Helophilus spp."
+"24_Suc_D75","Succisa_pratensis","SVD",21,0,46.4,"Helophilus_trivittatus","nectar_feeding",3,"08/16/2024 08:50:00","male",2024,"Helophilus spp."
+"24_Suc_D77","Succisa_pratensis","SVD",6,0,46.4,"Helophilus_trivittatus","nectar_feeding",6,"08/16/2024 08:56:00","male",2024,"Helophilus spp."
+"24_Suc_D78","Succisa_pratensis","SVD",12,2,46.4,"Helophilus_trivittatus","nectar_feeding",2,"08/16/2024 08:57:00",NA,2024,"Helophilus spp."
+"24_Suc_D79","Succisa_pratensis","SVD",5,0,46.4,"Helophilus_trivittatus","nectar_feeding",4,"08/16/2024 08:58:00",NA,2024,"Helophilus spp."
+"24_Suc_D80","Succisa_pratensis","SVD",1,0,45,"Eristalis_tenax","nectar_feeding",4,"08/16/2024 09:20:00","male",2024,"Eristalis spp."
+"24_Suc_D81","Succisa_pratensis","SVD",4,0,45,"Eristalis_tenax","nectar_feeding",4,"08/16/2024 09:21:00","male",2024,"Eristalis spp."
+"24_Suc_D82","Succisa_pratensis","SVD",8,0,45,"Eristalis_pertinax","nectar_feeding",5,"08/16/2024 09:24:00","male",2024,"Eristalis spp."
+"24_Suc_D83","Succisa_pratensis","SVD",1,0,45,"Eristalis_tenax","nectar_feeding",4,"08/16/2024 09:31:00","female",2024,"Eristalis spp."
+"24_Suc_D84","Succisa_pratensis","SVD",0,0,45,"Eristalis_tenax","nectar_feeding",2,"08/16/2024 09:33:00","female",2024,"Eristalis spp."
+"24_Suc_D85","Succisa_pratensis","SVD",4,1,45,"Eristalis_tenax","nectar_feeding",2,"08/16/2024 09:34:00","female",2024,"Eristalis spp."
+"24_Suc_D86","Succisa_pratensis","SVD",1,0,45,"Eristalis_interrupta","nectar_feeding",6,"08/16/2024 09:37:00","male",2024,"Eristalis spp."
+"24_Suc_D87","Succisa_pratensis","SVD",5,0,46.9,"Eristalis_tenax","nectar_feeding",4,"08/16/2024 10:18:00","male",2024,"Eristalis spp."
+"24_Suc_D88","Succisa_pratensis","SVD",0,0,46.9,"Eristalis_tenax","pollen_feeding",6,"08/16/2024 10:23:00","female",2024,"Eristalis spp."
+"24_Suc_D89","Succisa_pratensis","SVD",2,0,46.9,"Helophilus_pendulus","nectar_feeding",2,"08/16/2024 10:25:00",NA,2024,"Helophilus spp."
+"24_Suc_D90","Succisa_pratensis","SVD",16,0,46.9,"Eristalis_tenax","nectar_feeding",3,"08/16/2024 10:27:00","female",2024,"Eristalis spp."
+"24_Suc_D91","Succisa_pratensis","SVD",0,0,46.9,"Eristalis_intricaria","nectar_feeding",1,"08/16/2024 10:30:00","male",2024,"Eristalis spp."
+"24_Suc_D92","Succisa_pratensis","SVD",0,0,46.9,"Eristalis_tenax","nectar_feeding",1,"08/16/2024 10:35:00",NA,2024,"Eristalis spp."

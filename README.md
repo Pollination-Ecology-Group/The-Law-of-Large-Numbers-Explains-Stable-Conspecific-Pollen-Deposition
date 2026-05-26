@@ -390,7 +390,8 @@ increased in 2024 (CV = 125%,
 <a href="#fig-plots-2" class="quarto-xref">Figure 2</a>).
 
 Hierarchical variance partitioning further confirmed the micro-scale
-nature of this stochasticity in TPD (**?@fig-plots-3**). For CP,
+nature of this stochasticity in TPD
+(<a href="#fig-plots-3" class="quarto-xref">Figure 3</a>). For CP,
 temporal phenology (years and days) explained only a small proportion of
 the variation; instead, the vast majority of depositional variance
 occurred at the micro-spatial scale, driven by differences among
@@ -409,13 +410,97 @@ season was heavily driven by differences among individual plants
 highly localised micro-spatial effects dictate heterospecific pollen
 transfer more than daily phenological shifts.
 
+             CP       HP Compartment
+    1  68.98609 147.6278      Stigma
+    2 129.28536 263.5995        Body
+
+    # A tibble: 3 × 3
+       year    CP    HP
+      <int> <dbl> <dbl>
+    1  2022  66.3  75.3
+    2  2023  73.4  93.6
+    3  2024  67.2 125. 
+
+
+    --- Significance Test: Inter-Annual HP Variance ---
+
+    ANOVA-like table for random-effects: Single term deletions
+
+    Model:
+    sqrt_HP ~ 1 + (1 | plant_id:year_fac) + (1 | year_fac)
+                            npar  logLik    AIC     LRT Df Pr(>Chisq)    
+    <none>                     4 -1479.6 2967.3                          
+    (1 | plant_id:year_fac)    3 -1532.0 3070.0 104.726  1  < 2.2e-16 ***
+    (1 | year_fac)             3 -1495.8 2997.7  32.389  1  1.262e-08 ***
+    ---
+    Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+
+    --- Significance Test: Intra-Annual HP Variance ---
+
+    ANOVA-like table for random-effects: Single term deletions
+
+    Model:
+    sqrt_HP ~ 1 + (1 | plant_id:date_fac) + (1 | date_fac)
+                            npar  logLik    AIC    LRT Df Pr(>Chisq)    
+    <none>                     4  -973.0 1954.0                         
+    (1 | plant_id:date_fac)    3 -1036.3 2078.5 126.53  1     <2e-16 ***
+    (1 | date_fac)             3  -973.1 1952.2   0.19  1     0.6628    
+    ---
+    Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
 <div id="fig-plots-2">
 
-Coefficient of Variation (CV) and Mean of Conspecific (CP) and
+<div class="cell-output-display">
+
+<div id="fig-plots-2">
+
+<img src="MS_FML_files/figure-commonmark/fig-plots-2-1.png"
+data-ref-parent="fig-plots-2" />
+
+(a) A
+
+</div>
+
+</div>
+
+Figure 2: Coefficient of Variation (CV) and Mean of Conspecific (CP) and
 Heterospecific (HP) pollen counts. A–B) CV of pollen counts; C–D) Mean
 pollen counts + SE.
 
-Figure 2
+</div>
+
+              Part  level       vcov     sdcor    percent
+    1 Inter-Annual  Plant 3.56366722 1.8877678 34.6018630
+    2 Inter-Annual   Year 3.51320272 1.8743539 34.1118717
+    3 Inter-Annual Stigma 3.22219176 1.7950465 31.2862652
+    4 Intra-Annual  Plant 1.65860567 1.2878687 52.1072944
+    5 Intra-Annual   Date 0.02255309 0.1501769  0.7085353
+    6 Intra-Annual Stigma 1.50189975 1.2255202 47.1841703
+                          Metric
+    1 Heterospecific Pollen (Sq)
+    2 Heterospecific Pollen (Sq)
+    3 Heterospecific Pollen (Sq)
+    4 Heterospecific Pollen (Sq)
+    5 Heterospecific Pollen (Sq)
+    6 Heterospecific Pollen (Sq)
+
+              Part  level       vcov     sdcor   percent                  Metric
+    1 Inter-Annual  Plant 0.70553657 0.8399622 14.724533 Conspecific Pollen (Sq)
+    2 Inter-Annual   Year 0.15220613 0.3901360  3.176539 Conspecific Pollen (Sq)
+    3 Inter-Annual Stigma 3.93382906 1.9833883 82.098928 Conspecific Pollen (Sq)
+    4 Intra-Annual  Plant 2.76284959 1.6621822 60.673889 Conspecific Pollen (Sq)
+    5 Intra-Annual   Date 0.04910614 0.2215991  1.078401 Conspecific Pollen (Sq)
+    6 Intra-Annual Stigma 1.74164980 1.3197158 38.247709 Conspecific Pollen (Sq)
+
+<div id="fig-plots-3">
+
+![](MS_FML_files/figure-commonmark/fig-plots-3-1.png)
+
+Figure 3: Pollen Deposition Model and Variance Partitioning. A) Model
+depicting Heterospecific vs Conspecific Pollen deposition. The dashed
+grey line represents the 1:1 expected relationship. B) Hierarchical
+Variance Partitioning of pollen deposited on stigmas.
 
 </div>
 
@@ -447,6 +532,34 @@ loads received by *S. pratensis* are not dictated by the taxonomic
 identity or morphological specialisation of its visitors, but purely by
 the cumulative frequency of their visits.
 
+
+    --- SVD Conspecific Pollen (CP) by Morphogroup ---
+
+
+        Kruskal-Wallis rank sum test
+
+    data:  conspecific_pollen by morphogroup
+    Kruskal-Wallis chi-squared = 1.5917, df = 3, p-value = 0.6613
+
+
+    --- SVD Heterospecific Pollen (HP) by Morphogroup ---
+
+
+        Kruskal-Wallis rank sum test
+
+    data:  heterospecific_pollen by morphogroup
+    Kruskal-Wallis chi-squared = 5.2009, df = 3, p-value = 0.1577
+
+<div id="fig-body-svd">
+
+![](MS_FML_files/figure-commonmark/fig-body-svd-1.png)
+
+Figure 4: Pollen Load and Single Visit Deposition (SVD). A) Conspecific
+Body Pollen Load, B) Heterospecific Body Pollen Load, C) Conspecific
+Single Visit Deposition, D) Heterospecific Single Visit Deposition.
+
+</div>
+
 ### Pollinator Visitation Spectra and Co-flowering Community Stability
 
 To assess the temporal stability of the pollinator visitation spectra of
@@ -455,16 +568,103 @@ composition across years using the Morisita-Horn similarity index
 ([Horn, 1966](#ref-horn1966measurement)). The pollinator spectra showed
 high compositional overlap across the years, ranging from 0.78 to 0.96
 similarity. The flowering plant community composition showed lower
-overlap, ranging from 0.69 to 0.71 (**?@fig-community-stability**).
+overlap, ranging from 0.69 to 0.71
+(<a href="#fig-community-stability" class="quarto-xref">Figure 5</a>).
+
+    # A tibble: 6 × 3
+      year_label species_label        proportion
+      <chr>      <chr>                     <dbl>
+    1 2022       Apis_mellifera          0.0128 
+    2 2022       Bombus_lapidarius       0.0197 
+    3 2022       Eristalis_interrupta    0.123  
+    4 2022       Eristalis_pertinax      0.00565
+    5 2022       Eristalis_tenax         0.450  
+    6 2022       Helophilus_pendulus     0.0175 
+
+<div id="fig-community-stability">
+
+![](MS_FML_files/figure-commonmark/fig-community-stability-1.png)
+
+Figure 5: Community Stability and Structure. A) Pollinator Spectra
+Composition. B) Floral Spectra Composition. C) Temporal Pollinator
+Stability (Morisita-Horn). D) Floral Community Similarity.
+
+</div>
 
 ### Floral Density and Visitations
 
 Despite the increase in *S. pratensis* abundance in 2024,
 sampling-effort-standardised visitation rates per plot and per plant did
 not differ significantly between years
-(**?@fig-spatial-temporal-abundance**).
+(<a href="#fig-spatial-temporal-abundance"
+class="quarto-xref">Figure 6</a>).
 
-### TPD
+<div id="fig-spatial-temporal-abundance">
+
+![](MS_FML_files/figure-commonmark/fig-spatial-temporal-abundance-1.png)
+
+Figure 6: Distribution and abundance of *Succisa pratensis* (2022-2024).
+A) Spatial distribution of plots with *Succisa* presence. B) Total
+abundance recorded per year. C) Differences in standardized visitation
+rates to *Succisa pratensis* across years (2022-2024).
+
+</div>
+
+### Total Pollen Deposition (TPD)
+
+    Analysis of Variance Table
+
+    Response: sqrt(mean_HP)
+                        Df Sum Sq Mean Sq F value    Pr(>F)    
+    sqrt(mean_CP)        1  39.04  39.035  15.038 0.0001374 ***
+    Year                 2 552.94 276.470 106.510 < 2.2e-16 ***
+    sqrt(mean_CP):Year   2  72.94  36.468  14.049 1.746e-06 ***
+    Residuals          231 599.61   2.596                      
+    ---
+    Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+     Year mean_CP.trend      SE  df lower.CL upper.CL
+     2022        0.0834 0.01860 231  0.04686   0.1200
+     2023        0.1068 0.01710 231  0.07310   0.1405
+     2024        0.0216 0.00676 231  0.00823   0.0349
+
+    Confidence level used: 0.95 
+
+     contrast            estimate     SE  df t.ratio p.value
+     Year2022 - Year2023  -0.0234 0.0252 231  -0.927  0.6241
+     Year2022 - Year2024   0.0619 0.0197 231   3.133  0.0055
+     Year2023 - Year2024   0.0852 0.0184 231   4.637 <0.0001
+
+    P value adjustment: tukey method for comparing a family of 3 estimates 
+
+                         Predictor  Df  Sum_Sq Mean_Sq F_value P_value
+    1      Conspecific Pollen (CP)   1  39.035  39.035   15.04  <0.001
+    2                         Year   2 552.940 276.470  106.51  <0.001
+    3 Conspecific Pollen (CP):Year   2  72.937  36.468   14.05  <0.001
+    4                    Residuals 231 599.614   2.596              NA
+
+                 Contrast Estimate    SE  Df t_ratio P_value
+    1 Year2022 - Year2023   -0.023 0.025 231   -0.93 0.62408
+    2 Year2022 - Year2024    0.062 0.020 231    3.13 0.00553
+    3 Year2023 - Year2024    0.085 0.018 231    4.64 < 0.001
+
+    Analysis of Variance Table
+
+    Response: mean_HP
+                            Df  Sum Sq Mean Sq F value Pr(>F)
+    mean_CP                  1   220.9  220.85  2.1880 0.1410
+    as.factor(day)           5   750.7  150.14  1.4874 0.1965
+    mean_CP:as.factor(day)   5   551.4  110.28  1.0926 0.3664
+    Residuals              166 16756.1  100.94               
+
+<div id="fig-slope-showdown">
+
+![](MS_FML_files/figure-commonmark/fig-slope-showdown-1.png)
+
+Figure 7: CP-HP Accumulation slopes. A) Fitted Type 1 model. B) Emmeans
+extracted slope parameter comparison.
+
+</div>
 
 ### Monte Carlo Simulation: The Interannual Variance Filter
 
@@ -502,6 +702,128 @@ heavy reproductive interference from shared networks, the increased
 conspecific floral abundance in 2024 actively mitigated HP accumulation,
 suppressing it back toward the mechanical minimum.
 
+
+    --- Monte Carlo Year-by-Year Validation (Global SVD Pool) ---
+
+       Year Estimated_Visits Obs_Mean_CP Sim_Mean_CP KS_CP_D  KS_CP_p OVL_CP
+    D  2022                6        20.5        20.2   0.166 2.06e-02  0.779
+    D1 2023                6        20.5        20.6   0.150 3.85e-02  0.801
+    D2 2024                8        27.4        26.8   0.103 5.48e-05  0.820
+       Obs_Mean_HP Sim_Mean_HP KS_HP_D KS_HP_p OVL_HP
+    D         35.2         3.4   0.771       0  0.182
+    D1        50.4         3.4   0.777       0  0.155
+    D2         9.6         4.5   0.265       0  0.669
+
+
+    --- Dilution Effect Model Summary (log-log) ---
+
+
+    Call:
+    lm(formula = log(rate_per_plant) ~ log(plot_abundance), data = visitation_per_plant_all)
+
+    Residuals:
+         Min       1Q   Median       3Q      Max 
+    -1.35512 -0.22373 -0.02776  0.24671  1.53190 
+
+    Coefficients:
+                        Estimate Std. Error t value Pr(>|t|)    
+    (Intercept)          2.52200    0.16257  15.513  < 2e-16 ***
+    log(plot_abundance) -0.14206    0.05173  -2.746  0.00852 ** 
+    ---
+    Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+    Residual standard error: 0.5087 on 47 degrees of freedom
+    Multiple R-squared:  0.1383,    Adjusted R-squared:  0.1199 
+    F-statistic: 7.541 on 1 and 47 DF,  p-value: 0.00852
+
+
+    --- Visitation Rate (Per Plot) by Year ---
+
+
+        Kruskal-Wallis rank sum test
+
+    data:  total_rate by as.factor(year)
+    Kruskal-Wallis chi-squared = 2.8651, df = 2, p-value = 0.2387
+
+
+    --- Per-Capita Visitation Rate (Per Plant) by Year ---
+
+
+        Kruskal-Wallis rank sum test
+
+    data:  rate_per_plant by as.factor(year)
+    Kruskal-Wallis chi-squared = 0.39872, df = 2, p-value = 0.8193
+
+
+    --- Pollen Accumulation Model (Does the slope change by year?) ---
+
+
+    Call:
+    lm(formula = heterospecific_pollen ~ conspecific_pollen * year, 
+        data = stigma_accumulation)
+
+    Residuals:
+        Min      1Q  Median      3Q     Max 
+    -76.085  -8.035  -4.881   4.552 161.462 
+
+    Coefficients:
+                                Estimate Std. Error t value Pr(>|t|)    
+    (Intercept)                  13.6645     4.0331   3.388 0.000744 ***
+    conspecific_pollen            1.0511     0.1640   6.410 2.70e-10 ***
+    year2023                     13.1458     5.4448   2.414 0.016023 *  
+    year2024                     -5.8466     4.3393  -1.347 0.178311    
+    conspecific_pollen:year2023   0.1004     0.2182   0.460 0.645440    
+    conspecific_pollen:year2024  -0.9878     0.1710  -5.777 1.16e-08 ***
+    ---
+    Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+    Residual standard error: 20.34 on 687 degrees of freedom
+    Multiple R-squared:  0.4129,    Adjusted R-squared:  0.4087 
+    F-statistic: 96.65 on 5 and 687 DF,  p-value: < 2.2e-16
+
+
+    --- Overlap between Empirical and Simulated Global CP ---
+
+    [1] 0.8434117
+
+
+    --- Overlap between Empirical and Simulated Global HP ---
+
+    [1] 0.5263817
+
+<div id="fig-monte-carlo-svd-1">
+
+![](MS_FML_files/figure-commonmark/fig-monte-carlo-svd-1.png)
+
+Figure 8: Monte Carlo Simulation: SVD Averaging. A, B) Global
+comparisons. C-H) Yearly comparisons. Densities compare observed final
+stigma pollen loads and the expected distribution if stigmas accumulate
+randomized single visits.
+
+</div>
+
+<div id="fig-monte-carlo-svd-2">
+
+![](MS_FML_files/figure-commonmark/fig-monte-carlo-svd-2.png)
+
+Figure 9: Monte Carlo Simulation: SVD Averaging. A, B) Global
+comparisons. C-H) Yearly comparisons. Densities compare observed final
+stigma pollen loads and the expected distribution if stigmas accumulate
+randomized single visits.
+
+</div>
+
+<div id="fig-monte-carlo-svd-3">
+
+![](MS_FML_files/figure-commonmark/fig-monte-carlo-svd-3.png)
+
+Figure 10: Monte Carlo Simulation: SVD Averaging. A, B) Global
+comparisons. C-H) Yearly comparisons. Densities compare observed final
+stigma pollen loads and the expected distribution if stigmas accumulate
+randomized single visits.
+
+</div>
+
 ## Discussion
 
 Generalist pollination systems present a paradox: animal vectors are
@@ -537,7 +859,8 @@ al., 2020](#ref-ye2020)).
 Our single-visit deposition (SVD) analysis revealed no significant
 differences in CP or HP transfer across the dominant pollinator taxa; a
 single visit from a *Bombus* was functionally indistinguishable from a
-visit by an *Eristalis* syrphid fly (**?@fig-body-svd** C). While
+visit by an *Eristalis* syrphid fly
+(<a href="#fig-body-svd" class="quarto-xref">Figure 4</a> C). While
 failing to detect differences between morphological groups may be caused
 by insufficient sampling, the high stochasticity of individual visits
 may play a more significant role in pollen deposition than the
@@ -562,30 +885,30 @@ However, while the deposition of CP remains relatively stable across
 years, HP deposition exhibits high year-to-year variability
 (<a href="#fig-plots-2" class="quarto-xref">Figure 2</a> B),
 highlighting the high unpredictability of HP and its potential negative
-impact on plant reproduction. Our results underscore that, unlike the
-mathematically determined stability of CP, HP deposition is highly
-context-dependent. The extent of heterospecific contamination is likely
-dictated by a complex, shifting interplay of co-flowering phenology,
-relative neighbourhood abundances, and active pollinator foraging
-decisions at the exact time of visitation ([Ye et al.,
-2020](#ref-ye2020)). In years with dense heterospecific neighbourhoods,
-the attractive pull of co-flowering competitors alters the fidelity of
-shared vectors ([Morales and Traveset,
-2008](#ref-morales2008interspecific); [Flanagan et al.,
+impact on plant reproduction ([Ashman and Arceo-Gómez,
+2013](#ref-Ashman2013); [Briggs et al., 2016](#ref-Briggs2016)). Our
+results underscore that, unlike the mathematically determined stability
+of CP, HP deposition is highly context-dependent. The extent of HP
+contamination is likely influenced by a complex and dynamic interplay of
+co-flowering phenology, relative neighbourhood abundances, and
+pollinator behaviour at the exact time of visitation ([Ye et al.,
+2020](#ref-ye2020); [Arceo-Gómez, 2021](#ref-arceo2021spatial); [Labonté
+et al., 2023](#ref-labonte2023individual)). In years with increased
+density of co-flowering heterospecific neighbours, the attractive pull
+of competitors alters the fidelity of shared pollinators ([Morales and
+Traveset, 2008](#ref-morales2008interspecific); [Flanagan et al.,
 2010](#ref-flanagan2022pollinator)), driving interspecific transitions
 and increasing HP loads ([Bell et al.,
 2005](#ref-bell2005interspecific)). Therefore, mitigating HP deposition
-likely requires the focal plant to leverage context-altering traits,
-such as extreme localised floral density or fine-scale temporal
-stratification ([Štenc et al., 2025](#ref-stenc2025pollen)), to
-effectively override the neighbourhood effect and maintain vector
+likely requires the focal plant to employ other traits, such as high
+floral density or fine-scale temporal stratification ([Štenc et al.,
+2025](#ref-stenc2025pollen)), to effectively maintain pollinator
 constancy. Furthermore, as demonstrated by Venjakob et al.
 ([2016](#ref-venjakob2016plant)), higher plant diversity within the
 community can actively promote spatio-temporal niche complementarity
 among pollinators. By partitioning their foraging across different times
-of day and vegetation heights, distinct pollinator groups can reduce
-their interspecific overlap, functioning as an additional
-community-level buffer against heterospecific pollen transfer.
+of day, distinct pollinator groups can reduce their interspecific
+overlap, mitigating HP transfer.
 
 Nevertheless, our study possesses limitations that must be addressed in
 future research. First, while we found no significant differences among
@@ -674,6 +997,14 @@ diversity mediate network structure along an elevational gradient.
 
 </div>
 
+<div id="ref-arceo2021spatial" class="csl-entry">
+
+Arceo-Gómez, G. 2021. Spatial variation in the intensity of interactions
+via heterospecific pollen transfer may contribute to local and global
+patterns of plant diversity. *Annals of Botany* 128: 383–394.
+
+</div>
+
 <div id="ref-arceo2016patterns" class="csl-entry">
 
 Arceo-Gómez, G., C. Alonso, L. Abdala-Roberts, and V. Parra-Tabla. 2016.
@@ -689,6 +1020,16 @@ Arceo-Gómez, G., and T. L. Ashman. 2011. [Heterospecific pollen
 deposition: Does diversity alter the
 consequences?](https://doi.org/10.1111/J.1469-8137.2011.03831.X) *New
 Phytologist* 192: 738–746.
+
+</div>
+
+<div id="ref-Ashman2013" class="csl-entry">
+
+Ashman, T. L., and G. Arceo-Gómez. 2013. [Toward a predictive
+understanding of the fitness costs of heterospecific pollen receipt and
+its importance in co-flowering
+communities](https://doi.org/10.3732/AJB.1200496). *American Journal of
+Botany* 100: 1061–1070.
 
 </div>
 
@@ -713,6 +1054,16 @@ Pan-Pacific Entomologist* 47: 82.
 Bell, J. M., J. D. Karron, and R. J. Mitchell. 2005. Interspecific
 competition for pollination lowers seed production and outcrossing in
 mimulus ringens. *Ecology* 86: 762–771.
+
+</div>
+
+<div id="ref-Briggs2016" class="csl-entry">
+
+Briggs, H. M., L. M. Anderson, L. M. Atalla, A. M. Delva, E. K. Dobbs,
+and B. J. Brosi. 2016. [Heterospecific pollen deposition in delphinium
+barbeyi: Linking stigmatic pollen loads to reproductive output in the
+field](https://doi.org/10.1093/AOB/MCV175). *Annals of Botany* 117:
+341–347.
 
 </div>
 
@@ -844,6 +1195,15 @@ is a poor proxy for pollination: Measuring single-visit pollen
 deposition, with implications for pollination networks and
 conservation](https://doi.org/10.1111/2041-210X.12074). *Methods in
 Ecology and Evolution* 4: 811818.
+
+</div>
+
+<div id="ref-labonte2023individual" class="csl-entry">
+
+Labonté, A., L. S. Monticelli, M. Turpin, E. Felten, E. Laurent, A.
+Matejicek, L. Biju-Duval, et al. 2023. Individual flowering phenology
+shapes plant–pollinator interactions across ecological scales affecting
+plant reproduction. *Ecology and Evolution* 13: e9707.
 
 </div>
 
