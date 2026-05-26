@@ -1,7 +1,6 @@
 ---
-title: "From Single Visit Stochasticity to Long-Term Stability of Pollen Stigmatic Deposition:"
-subtitle: "A Multi-Scale Study on *Succisa pratensis*"
-author: "Jakub Štenc"
+title: "The law of large numbers explains stable conspecific pollen deposition, but floral density mitigates heterospecific pollen deposition"
+author: ""
 bibliography: "tech_docs/bibliography.bib"
 link-citations: true
 csl:  "tech_docs/ajb.csl"
@@ -228,15 +227,15 @@ However, while the deposition of CP remains relatively stable across years, HP d
 
 Nevertheless, our study possesses limitations that must be addressed in future research. First, while we found no significant differences among morphological groups of pollinators in their single-visit pollen deposition (SVD), this lack of difference may be partly due to the stochastic nature of individual depositions, potentially requiring more sampling to detect the subtle effects of pollinator traits on pollen deposition [@ne2010framework; @king2013]. Second, our SVD methodology provides an evidence of pollen transfer, but it does not explicitly track the previous foraging history or complex pollen carryover dynamics of individual pollinators prior to capture [@thomson1980; @cullen2021diversity]. Consequently, while our data demonstrate that multiple SVD events mathematically aggregate into stable CP loads, we currently lack the genetic parentage data, as well as the data on stigma receptivity and pollen tube germination required to confirm whether this high visitation redundancy translates into a highly diverse pollen donor pool and subsequent pollen-pollen competition along the pathway to paternity [@karron2012effects; @Minnaar2019; @stavert2020pollen].
 
-Despite the limitations, the fact that the pollen deposited on stigmas is the result of multiple SVD events suggests that the composition of pollen competing for ovule fertilisation is potentially formed by pollen from several distinct donors. This has crucial implications for pollen-pollen competition, male reproductive success, and ultimately, population genetic variability. A vital remaining question is whether the pollen delivered during the first visits has a decisive competitive advantage over later-delivered pollen [@lankinen2011enhancing], or if this advantage is limited by the timing of stigma receptivity acting as a synchronised starting gate [@herrero2003male] . Beyond this micro-scale pollen-pollen competition, the macro-scale genetic implications of these stochastic visits remain entirely unknown. Because vector foraging behaviour and heterospecific carryover fluctuate wildly with local floral density [@ArceoGomez2011], the hidden donor-acceptor “mating network” may undergo radical year-to-year rewiring [@Fortuna2006]. Determining whether these dynamic micro-competitive mechanisms and macro-level network shifts are unique responses to the high-density anomaly of *S. pratensis*, or whether they represent a broadly generalisable feature of high-redundancy generalist systems, stands as a vital frontier for future ecological and evolutionary research.
+Despite the limitations, the fact that the pollen deposited on stigmas is the result of multiple SVD events suggests that the composition of pollen competing for ovule fertilisation is potentially formed by pollen from several distinct donors. This has crucial implications for pollen-pollen competition, male reproductive success, and ultimately, population genetic variability [@bernasconi2004evolutionary]. A vital remaining question is whether the pollen delivered during the first visits has a decisive competitive advantage over later-delivered pollen [@lankinen2011enhancing], or if this advantage is limited by the timing of stigma receptivity acting as a synchronised starting gate [@herrero2003male]. Beyond this micro-scale pollen-pollen competition, the macro-scale genetic implications of these stochastic visits remain entirely unknown. Because vector foraging behaviour and heterospecific carryover fluctuate with local floral density [@ArceoGomez2011], the hidden donor-acceptor mating network may undergo radical year-to-year rewiring [@gomez2011pollinator; @caradonna2017interaction]. Determining whether these dynamic micro-competitive mechanisms and macro-level network shifts are unique responses to the high-density increase of *S. pratensis* in our study, or whether they represent a broadly generalisable feature ofsi systems, remains as a vital question for future ecological and evolutionary research.
 
 #### Conclusions
 
 Ultimately, our multi-scale analysis demonstrates that stable pollen transfer in generalised networks is driven by distinct, scale-dependent mechanisms. While individual generalist vectors exhibit extreme depositional stochasticity, plants achieve reliable conspecific pollen receipt through the statistical averaging of redundant visits. However, this visitation redundancy alone is functionally insufficient to prevent reproductive interference from the co-flowering community, and variations in community composition may influence HP transfer. Instead, the mitigation of heterospecific pollen accumulation relies on the local spatial structure of the focal population and possibly pollinator temporal specialisation [@Brosi2016; @stenc2025pollen].
 
 ## Data Availability
+ The raw and processed datasets supporting the conclusions of this article, along with a comprehensive data dictionary (`Publication_Metadata.html`), are available in the [Dryad/Figshare] repository at [DOI TO BE ADDED]. The complete analytical pipeline (R code) used to generate the figures and statistics in this study is available via the project's GitHub repository [URL TO BE ADDED] and as part of the Supplementary Material.
 
-The datasets used in this study are available in the supplementary material and have been exported for archiving.
 
 ```{r}
 #| label: export-publication-data
@@ -245,6 +244,10 @@ The datasets used in this study are available in the supplementary material and 
 #| message: false
 #| warning: false
 ```
+
+## Authors' contributions 
+
+
 
 ## Acknowledgements
 
