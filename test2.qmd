@@ -1,0 +1,15 @@
+---
+title: "Test 2"
+format: html
+---
+@fig-my-plot
+
+```{r}
+#| label: init
+#| include: false
+knitr::read_chunk("test.R")
+```
+```{r}
+#| label: fig-my-plot
+#| fig-cap: "Test"
+```

@@ -155,9 +155,7 @@ run_transformation_diagnostics(model_data, "conspecific_pollen", "Conspecific Po
 run_transformation_diagnostics(model_data, "prop_HP", "Proportion HP")
 ```
 
-**Selection**: Proportions are bounded [0,1]. While Binomial/Beta models are theoretically superior, for the purpose of VCA (partitioning variance), the Square-Root transformation provides a reasonable approximation of normality for the residuals.
-
-
+**Selection**: Proportions are bounded \[0,1\]. While Binomial/Beta models are theoretically superior, for the purpose of VCA (partitioning variance), the Square-Root transformation provides a reasonable approximation of normality for the residuals.
 
 # Section S2: Data Distribution
 
@@ -184,7 +182,7 @@ To determine the functional form of the relationship between Conspecific (CP) an
 
 **Data Aggregation**: We aggregated pollen counts to the plant level (mean per plant) to account for multiple stigmas sampled from the same individual.
 
-**Model Selection Criteria**: If the Exponential model provided a significantly better fit ($\Delta > 2) compared to the Linear model, it was selected. Otherwise, the simpler Linear model was preferred.
+**Model Selection Criteria**: If the Exponential model provided a significantly better fit (\$\Delta \> 2) compared to the Linear model, it was selected. Otherwise, the simpler Linear model was preferred.
 
 ```{r}
 #| label: model-diagnostics-selection
@@ -322,8 +320,7 @@ par(mfrow = c(1, 1))
 
 # Section S5: Pollinator Community Composition
 
-Table S3 presents the abundance and relative abundance of all pollinator taxa recorded across the three study years.
-**Note on Abundance**: "Abundance" (Count) represents the raw number of recorded interaction events (unstandardized). Relative abundance (%) is calculated as the species' count divided by the total number of visits for that year.
+Table S3 presents the abundance and relative abundance of all pollinator taxa recorded across the three study years. **Note on Abundance**: "Abundance" (Count) represents the raw number of recorded interaction events (unstandardized). Relative abundance (%) is calculated as the species' count divided by the total number of visits for that year.
 
 ```{r}
 #| label: table-s3-abundance
@@ -414,7 +411,6 @@ table_s3 %>%
     ) %>%
     opt_align_table_header(align = "left")
 ```
-
 
 # Section S6: Data Descriptions
 
@@ -879,6 +875,85 @@ ks_results %>%
         table.border.top.width = px(2),
         table.border.bottom.color = "black",
         table.border.bottom.width = px(2)
+    ) %>%
+    opt_align_table_header(align = "left")
+```
+
+# Section S12: Overview of Pollen Load Sampled Individuals
+
+The following table provides an overview of all individually sampled pollinators for the pollen load analysis.
+
+```{r}
+#| label: table-s12-pollen-load-individuals
+#| echo: false
+#| message: false
+#| warning: false
+library(dplyr)
+library(tidyr)
+library(gt)
+
+# Ensure pollen load data is loaded
+pollen_load_data <- read.csv("data/pollen_load_and_guts_2024_Succisa_pratensis.csv")
+pollen_load_clean <- pollen_load_data %>%
+    mutate(
+        year = as.numeric(year),
+        morphogroup = case_when(
+            grepl("Eristalis", pollinator_species) ~ "Eristalis spp.",
+            grepl("Bombus", pollinator_species) ~ "Bombus spp.",
+            pollinator_species %in% c("Apis_mellifera", "Apis mellifera") ~ "Apis mellifera",
+            grepl("Syrphus", pollinator_species) ~ "Syrphus spp.",
+            grepl("Helophilus", pollinator_species) ~ "Helophilus spp.",
+            TRUE ~ "Other"
+        )
+    ) %>%
+    filter(!is.na(year))
+
+pollen_load_summary <- pollen_load_clean %>%
+    mutate(
+        Date = format(as.Date(date, format = "%m/%d/%Y"), "%b %d"),
+        Species = gsub("_", " ", pollinator_species)
+    ) %>%
+    group_by(
+        `Pollinator Morphogroup` = morphogroup,
+        `Pollinator Species` = Species,
+        Date
+    ) %>%
+    summarise(
+        Count = n(),
+        .groups = "drop"
+    ) %>%
+    pivot_wider(
+        names_from = Date,
+        values_from = Count,
+        values_fill = 0
+    ) %>%
+    mutate(Total = rowSums(across(where(is.numeric)))) %>%
+    arrange(`Pollinator Morphogroup`, desc(Total))
+
+pollen_load_summary %>%
+    gt(groupname_col = "Pollinator Morphogroup") %>%
+    tab_header(
+        title = md("**Table S12**: Overview of Pollen Load Sampled Individuals (2024)"),
+        subtitle = "Number of sampled individuals per pollinator species and collection date."
+    ) %>%
+    cols_label(
+        `Pollinator Species` = "Pollinator Species",
+        Total = "Total"
+    ) %>%
+    tab_style(
+        style = cell_text(style = "italic"),
+        locations = cells_body(columns = `Pollinator Species`)
+    ) %>%
+    tab_options(
+        column_labels.background.color = "#F0F0F0",
+        column_labels.font.weight = "bold",
+        row_group.background.color = "#E0E0E0",
+        row_group.font.weight = "bold",
+        table.border.top.color = "black",
+        table.border.top.width = px(2),
+        table.border.bottom.color = "black",
+        table.border.bottom.width = px(2),
+        data_row.padding = px(6)
     ) %>%
     opt_align_table_header(align = "left")
 ```

@@ -15,29 +15,23 @@
 # ==============================================================================
 
 # ==============================================================================
+## ---- global-setup
 # MARK: 0. SETUP & LIBRARIES
 # ==============================================================================
-# Load required packages
-if (!require("devtools")) install.packages("devtools")
-library(ggplot2)
-library(dplyr)
-library(tidyr)
-library(nlme)
-library(lme4)
-library(stringr)
-library(cowplot)
-library(magick)
-library(sf)
-library(ggpubr)
-library(emmeans)
-library(patchwork)
-library(knitr)
-library(vegan)
-library(gt)
-library(dunn.test)
-library(gridExtra)
-library(lmerTest)
-library(igraph)
+## Load required packages
+packages <- c(
+  "ggplot2", "dplyr", "tidyr", "nlme", "lme4", "stringr", "cowplot", 
+  "magick", "sf", "ggpubr", "emmeans", "patchwork", "knitr", "vegan", 
+  "gt", "dunn.test", "gridExtra", "lmerTest", "igraph", "overlapping", "bipartite", "OpenImageR", "iNEXT", "purrr", "sva"
+)
+
+# Install missing packages automatically
+new_packages <- packages[!(packages %in% installed.packages()[,"Package"])]
+if(length(new_packages)) install.packages(new_packages)
+
+# Load all packages
+invisible(lapply(packages, library, character.only = TRUE))
+
 
 # Data is now loaded directly from CSV/RDS files in the local 'data/' directory.
 # The dependency on the HanPolNet package has been removed for standalone sharing.
@@ -67,6 +61,17 @@ pollen_deposition <- pollen_deposition %>%
 # Remove rows with NA values in conspecific_pollen or heterospecific_pollen
 pollen_deposition <- subset(pollen_deposition, (!is.na(conspecific_pollen)) & (!is.na(heterospecific_pollen)))
 
+# Define vca_data globally because fig-plots-2 requires it before fig-plots-3 runs in Quarto
+vca_data <- pollen_deposition %>%
+    filter(!is.na(heterospecific_pollen) & !is.na(conspecific_pollen)) %>%
+    mutate(
+        sqrt_HP = sqrt(heterospecific_pollen),
+        sqrt_CP = sqrt(conspecific_pollen),
+        year_fac = as.factor(year), 
+        date_fac = as.factor(paste(year, day, sep = "_")), 
+        plant_id = inflorescence_id 
+    )
+
 summary(pollen_deposition)
 table(pollen_deposition$year)
 length(unique(pollen_deposition$plant_id))
@@ -77,12 +82,14 @@ interaction_data_Succisa_22_24 <- read.csv(file.path("data", "interaction_data_S
 
 # 1.4 Interaction Data (Whole Community for context - Exported from HanPolNet)
 interaction_data_all_22_24 <- read.csv(file.path("data", "interaction_data_all_22_24.csv"))
+table(interaction_data_all_22_24$day, interaction_data_all_22_24$year)
 
 # 1.5 Plant Abundance Data (Standardized - Exported from HanPolNet)
 plant_abundance_22_24 <- read.csv(file.path("data", "plant_abundance_22_24.csv"))
 # Note: Standardization details:
 # Sublot Counts / 64 -> Proportion
 # Stalk Counts / Max(Dataset) -> Relative Abundance
+
 
 # 1.6 Single Visit Deposition (SVD) Data
 SVD_Succisa_22_24 <- read.csv(file.path("data", "SVD_Succisa_pratensis.csv"))
@@ -341,6 +348,7 @@ message("Diagnostics Complete. Proceeding to Main Analyses.")
 # ==============================================================================
 
 # ------------------------------------------------------------------------------
+## ---- fig-spatial-temporal-abundance
 # 2.0 Succisa pratensis Abundance and Presence
 # This section evaluates the spatial distribution and abundance of Succisa
 # pratensis across the study area. We first map the presence of the species
@@ -470,7 +478,7 @@ p_visitation_per_plant <- ggplot(visitation_per_plant, aes(x = year, y = rate_pe
 
 
 # --- COMBINE ---
-ggarrange(p_map, p_abundance, p_visitation, p_visitation_per_plant,
+ggpubr::ggarrange(p_map, p_abundance, p_visitation, p_visitation_per_plant,
     ncol = 1,
     labels = c("A", "B", "C", "D"),
     heights = c(2, 2, 2, 2)
@@ -478,6 +486,7 @@ ggarrange(p_map, p_abundance, p_visitation, p_visitation_per_plant,
 
 
 # ------------------------------------------------------------------------------
+## ---- fig-community-stability
 # MARK: 2.1 Pollinator Spectra Composition (Analysis of Stability)
 # ------------------------------------------------------------------------------
 # This analysis evaluates the relative abundance (visitation rate) of different
@@ -763,6 +772,7 @@ ggpubr::ggarrange(row1, row2, nrow = 2, heights = c(1.5, 1))
 
 
 # ------------------------------------------------------------------------------
+## ---- fig-slope-showdown
 # MARK: 2.2 Slope Showdown (Aggregated Data Analysis)
 # ------------------------------------------------------------------------------
 # Comparing the slopes of HP vs CP across years using aggregated (plant-level) data.
@@ -887,6 +897,7 @@ print(anova(fit_daily))
 
 
 # ------------------------------------------------------------------------------
+## ---- fig-plots-3
 # MARK: 2.4 Variance Partitioning (VCA)
 # ------------------------------------------------------------------------------
 # We quantify how much variation in pollen deposition occurs at different
@@ -1021,6 +1032,7 @@ print(p_var)
 
 
 # ------------------------------------------------------------------------------
+## ---- fig-body-svd
 # MARK: 2.5 Single Visit Deposition (SVD) Analysis
 # ------------------------------------------------------------------------------
 # Comparing efficiency (CP) and messiness (HP) across morphogroups.
@@ -1067,6 +1079,7 @@ if (kw_hp$p.value < 0.05) {
 
 
 # ------------------------------------------------------------------------------
+## ---- fig-plots-2
 # MARK: 2.6 Pollen CP/HP relationship & CV Analysis
 # ------------------------------------------------------------------------------
 # Calculating Coefficients of Variation for robustness check.
@@ -1263,6 +1276,7 @@ print(test_intra_hp)
 # ==============================================================================
 
 # ------------------------------------------------------------------------------
+## ---- fig-monte-carlo-svd
 # MARK: 3.1 Monte Carlo SVD Bootstrapping (Year-by-Year with Global Pool)
 # ------------------------------------------------------------------------------
 message("Running Monte Carlo Simulation per year (Global SVD Pool)...")
@@ -1470,22 +1484,22 @@ print(summary(dilution_model))
 
 # 1. Test for differences in Total Visitation Rate (Per Plot) across years
 cat("\n--- Visitation Rate (Per Plot) by Year ---\n")
-kw_plot <- kruskal.test(rate_per_plot ~ as.factor(Year), data = visitation_per_plot_all)
+kw_plot <- kruskal.test(total_rate ~ as.factor(year), data = visitation_per_plot_all)
 print(kw_plot)
 
 if (kw_plot$p.value < 0.05) {
     cat("\nPairwise Differences (Per Plot):\n")
-    dunn.test(visitation_per_plot_all$rate_per_plot, as.factor(visitation_per_plot_all$Year), method = "bh")
+    dunn.test(visitation_per_plot_all$total_rate, as.factor(visitation_per_plot_all$year), method = "bh")
 }
 
 # 2. Test for differences in Per-Capita Visitation Rate (Per Plant) across years
 cat("\n--- Per-Capita Visitation Rate (Per Plant) by Year ---\n")
-kw_plant <- kruskal.test(rate_per_plant ~ as.factor(Year), data = visitation_per_plant_all)
+kw_plant <- kruskal.test(rate_per_plant ~ as.factor(year), data = visitation_per_plant_all)
 print(kw_plant)
 
 if (kw_plant$p.value < 0.05) {
     cat("\nPairwise Differences (Per Plant):\n")
-    dunn.test(visitation_per_plant_all$rate_per_plant, as.factor(visitation_per_plant_all$Year), method = "bh")
+    dunn.test(visitation_per_plant_all$rate_per_plant, as.factor(visitation_per_plant_all$year), method = "bh")
 }
 
 # 5. Visualization: The Density Shield (2-Panel Figure)
@@ -1588,3 +1602,104 @@ print(overlap_result_hp$OV)
 
 # Remove everything and clear environment
 rm(list = ls())
+
+
+
+## ---- fig-plant-pollinator-panel
+# Read and process images
+# image_trim() removes the surrounding whitespace
+
+img_A <- image_read("images/IMG_2335_small.jpg") %>% image_trim() # visitation
+img_B <- image_read("images/P8197678.jpg") %>% image_trim() # Anther Detail
+img_C <- image_read("images/P8197736.jpg") %>% image_trim() # Stigma
+img_D <- image_read("images/Blizna_Suc_pra_2.jpg") %>% image_trim() # Stigma pollen
+
+# Create plot objects
+# fitting the image into the draw area, scale down to prevent overlap with labels
+p_A <- ggdraw() + draw_image(img_A, scale = 0.9)
+p_B <- ggdraw() + draw_image(img_B, scale = 0.8)
+p_C <- ggdraw() + draw_image(img_C, scale = 1)
+p_D <- ggdraw() + draw_image(img_D, scale = 1)
+
+# Arrange in a grid
+# Using labels="AUTO" creates A, B, C, D automatically
+# Adjusted label size and placement with margins for labels
+plot_grid(p_A, p_B, p_C, p_D,
+    labels = "AUTO",
+    label_size = 18,
+    label_x = 0.02,
+    label_y = 0.98,
+    label_fontface = "bold",
+    ncol = 2,
+    align = "hv",
+    axis = "tb"
+)
+
+
+## ---- export-publication-data
+# --- 1. Define Metadata (Data Dictionary) ---
+
+data_dictionary <- data.frame(
+    Dataset = character(),
+    Variable = character(),
+    Description = character(),
+    Unit = character(),
+    stringsAsFactors = FALSE
+)
+
+# Helper to append rows
+add_meta <- function(df, dataset, var, desc, unit) {
+    rbind(df, data.frame(Dataset = dataset, Variable = var, Description = desc, Unit = unit))
+}
+
+# Pollen Deposition Metadata
+data_dictionary <- data_dictionary %>%
+    add_meta("pollen_deposition", "year", "Year of sampling", "Year (2022-2024)") %>%
+    add_meta("pollen_deposition", "plot_id", "Unique identifier for the study plot", "Categorical") %>%
+    add_meta("pollen_deposition", "inflorescence_id", "Unique identifier for the sampled inflorescence", "Categorical") %>%
+    add_meta("pollen_deposition", "conspecific_pollen", "Count of conspecific (Succisa) pollen grains on stigma", "Count") %>%
+    add_meta("pollen_deposition", "heterospecific_pollen", "Count of heterospecific (non-Succisa) pollen grains on stigma", "Count") %>%
+    add_meta("pollen_deposition", "total_pollen", "Sum of conspecific and heterospecific pollen", "Count")
+
+# SVD Metadata
+data_dictionary <- data_dictionary %>%
+    add_meta("SVD", "year", "Year of observation", "Year") %>%
+    add_meta("SVD", "morphogroup", "Functional group of the visitor (e.g., Eristalis, Bombus)", "Categorical") %>%
+    add_meta("SVD", "duration_sec", "Duration of the single visit", "Seconds") %>%
+    add_meta("SVD", "conspecific_pollen", "Conspecific pollen deposited during single visit", "Count") %>%
+    add_meta("SVD", "heterospecific_pollen", "Heterospecific pollen deposited during single visit", "Count")
+
+# Network Metrics Metadata
+data_dictionary <- data_dictionary %>%
+    add_meta("network_metrics", "Year", "Year of sampling", "Year") %>%
+    add_meta("network_metrics", "H2", "Network Specialization index (H2')", "Index [0-1]") %>%
+    add_meta("network_metrics", "Evenness", "Interaction Evenness (Shannon's)", "Index [0-1]") %>%
+    add_meta("network_metrics", "Slope", "Slope (Beta) of the CP-HP relationship (Type 1 dynamics)", "Coefficient") %>%
+    add_meta("network_metrics", "Mean_HP", "Mean Heterospecific Pollen per stigma", "Count") %>%
+    add_meta("network_metrics", "Succisa_Abundance", "Mean abundance of Succisa pratensis per plot", "Count / Patch") %>%
+    add_meta("network_metrics", "Total_Abundance", "Total floral abundance in the community", "Count")
+
+
+# --- 2. Export Data ---
+
+# Create output directory if it doesn't exist
+output_dir <- file.path("output", "publication_data")
+if (!dir.exists(output_dir)) {
+    dir.create(output_dir, recursive = TRUE)
+}
+
+# Export Dataframes
+# Note using the dataframes available in the global environment from previous chunks
+
+write.csv(pollen_deposition, file.path(output_dir, "pollen_deposition.csv"), row.names = FALSE)
+# Use SVD_Succisa_22_24 which fits the description of SVD data
+if (exists("SVD_Succisa_22_24")) {
+    write.csv(SVD_Succisa_22_24, file.path(output_dir, "SVD.csv"), row.names = FALSE)
+}
+# Use final_table (unformatted) for metrics
+if (exists("final_table")) {
+    write.csv(final_table, file.path(output_dir, "network_metrics.csv"), row.names = FALSE)
+}
+
+# Export Metadata
+write.csv(data_dictionary, file.path(output_dir, "data_dictionary.csv"), row.names = FALSE)
