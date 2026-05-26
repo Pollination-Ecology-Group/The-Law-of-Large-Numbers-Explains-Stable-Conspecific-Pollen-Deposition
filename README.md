@@ -722,73 +722,6 @@ suppressing it back toward the mechanical minimum.
     D2         9.6         4.5   0.265       0  0.669
 
 
-    --- Dilution Effect Model Summary (log-log) ---
-
-
-    Call:
-    lm(formula = log(rate_per_plant) ~ log(plot_abundance), data = visitation_per_plant_all)
-
-    Residuals:
-         Min       1Q   Median       3Q      Max 
-    -1.35512 -0.22373 -0.02776  0.24671  1.53190 
-
-    Coefficients:
-                        Estimate Std. Error t value Pr(>|t|)    
-    (Intercept)          2.52200    0.16257  15.513  < 2e-16 ***
-    log(plot_abundance) -0.14206    0.05173  -2.746  0.00852 ** 
-    ---
-    Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
-
-    Residual standard error: 0.5087 on 47 degrees of freedom
-    Multiple R-squared:  0.1383,    Adjusted R-squared:  0.1199 
-    F-statistic: 7.541 on 1 and 47 DF,  p-value: 0.00852
-
-
-    --- Visitation Rate (Per Plot) by Year ---
-
-
-        Kruskal-Wallis rank sum test
-
-    data:  total_rate by as.factor(year)
-    Kruskal-Wallis chi-squared = 2.8651, df = 2, p-value = 0.2387
-
-
-    --- Per-Capita Visitation Rate (Per Plant) by Year ---
-
-
-        Kruskal-Wallis rank sum test
-
-    data:  rate_per_plant by as.factor(year)
-    Kruskal-Wallis chi-squared = 0.39872, df = 2, p-value = 0.8193
-
-
-    --- Pollen Accumulation Model (Does the slope change by year?) ---
-
-
-    Call:
-    lm(formula = heterospecific_pollen ~ conspecific_pollen * year, 
-        data = stigma_accumulation)
-
-    Residuals:
-        Min      1Q  Median      3Q     Max 
-    -76.085  -8.035  -4.881   4.552 161.462 
-
-    Coefficients:
-                                Estimate Std. Error t value Pr(>|t|)    
-    (Intercept)                  13.6645     4.0331   3.388 0.000744 ***
-    conspecific_pollen            1.0511     0.1640   6.410 2.70e-10 ***
-    year2023                     13.1458     5.4448   2.414 0.016023 *  
-    year2024                     -5.8466     4.3393  -1.347 0.178311    
-    conspecific_pollen:year2023   0.1004     0.2182   0.460 0.645440    
-    conspecific_pollen:year2024  -0.9878     0.1710  -5.777 1.16e-08 ***
-    ---
-    Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
-
-    Residual standard error: 20.34 on 687 degrees of freedom
-    Multiple R-squared:  0.4129,    Adjusted R-squared:  0.4087 
-    F-statistic: 96.65 on 5 and 687 DF,  p-value: < 2.2e-16
-
-
     --- Overlap between Empirical and Simulated Global CP ---
 
     [1] 0.8434117
@@ -798,33 +731,11 @@ suppressing it back toward the mechanical minimum.
 
     [1] 0.5263817
 
-<div id="fig-monte-carlo-svd-1">
+<div id="fig-monte-carlo-svd">
 
 ![](MS_FML_files/figure-commonmark/fig-monte-carlo-svd-1.png)
 
 Figure 8: Monte Carlo Simulation: SVD Averaging. A, B) Global
-comparisons. C-H) Yearly comparisons. Densities compare observed final
-stigma pollen loads and the expected distribution if stigmas accumulate
-randomized single visits.
-
-</div>
-
-<div id="fig-monte-carlo-svd-2">
-
-![](MS_FML_files/figure-commonmark/fig-monte-carlo-svd-2.png)
-
-Figure 9: Monte Carlo Simulation: SVD Averaging. A, B) Global
-comparisons. C-H) Yearly comparisons. Densities compare observed final
-stigma pollen loads and the expected distribution if stigmas accumulate
-randomized single visits.
-
-</div>
-
-<div id="fig-monte-carlo-svd-3">
-
-![](MS_FML_files/figure-commonmark/fig-monte-carlo-svd-3.png)
-
-Figure 10: Monte Carlo Simulation: SVD Averaging. A, B) Global
 comparisons. C-H) Yearly comparisons. Densities compare observed final
 stigma pollen loads and the expected distribution if stigmas accumulate
 randomized single visits.

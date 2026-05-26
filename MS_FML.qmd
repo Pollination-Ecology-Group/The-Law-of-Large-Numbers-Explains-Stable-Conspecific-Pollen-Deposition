@@ -134,11 +134,7 @@ Notably, intra-annual analysis of the 2024 season showed that daily temporal var
 #| message: false
 #| fig-cap: "Coefficient of Variation (CV) and Mean of Conspecific (CP) and Heterospecific (HP) pollen counts. A–B) CV of pollen counts; C–D) Mean pollen counts + SE."
 #| fig-height: 8
-#| fig-subcap:
-#|   - "A"
-#|   - "B" 
-#|   - "C"
-#|   - "D"
+#| fig-width: 10
 ```
 
 ```{r}
@@ -146,7 +142,7 @@ Notably, intra-annual analysis of the 2024 season showed that daily temporal var
 #| echo: false
 #| warning: false
 #| message: false
-#| fig-cap: "Pollen Deposition Model and Variance Partitioning. A) Model depicting Heterospecific vs Conspecific Pollen deposition. The dashed grey line represents the 1:1 expected relationship. B) Hierarchical Variance Partitioning of pollen deposited on stigmas."
+#| fig-cap: "Pollen Deposition Model and Variance Partitioning. A) Model depicting Heterospecific vs Conspecific Pollen deposition. The dashed gray line represents the 1:1 expected relationship. B) Hierarchical Variance Partitioning of pollen deposited on stigmas."
 #| fig-height: 10
 ```
 
@@ -168,7 +164,7 @@ To determine if specific pollinator taxa drive the depositional variance observe
 
 ### Pollinator Visitation Spectra and Co-flowering Community Stability
 
-To assess the temporal stability of the pollinator visitation spectra of *S. pratensis* and the co-flowering plant community, we compared species composition across years using the Morisita-Horn similarity index [@horn1966measurement]. The pollinator spectra showed high compositional overlap across the years, ranging from 0.78 to 0.96 similarity. The flowering plant community composition showed lower overlap, ranging from 0.69 to 0.71 (@fig-community-stability).
+To assess the temporal stability of the pollinator visitation spectra of *S. pratensis* and the co-flowering plant community, we compared species composition across years using the Morisita-Horn similarity index [@horn1966measurement]. The pollinator spectra showed high compositional overlap across the years, ranging from 0.78 to 0.96 similarity. The flowering plant community composition showed lower overlap, ranging from 0.69 to 0.71.
 
 ```{r}
 #| label: fig-community-stability
@@ -182,7 +178,7 @@ To assess the temporal stability of the pollinator visitation spectra of *S. pra
 
 ### Floral Density and Visitations
 
-Despite the increase in *S. pratensis* abundance in 2024, sampling-effort-standardised visitation rates per plot and per plant did not differ significantly between years (@fig-spatial-temporal-abundance).
+Despite the increase in *S. pratensis* abundance in 2024, sampling-effort-standardised visitation rates per plot and per plant did not differ significantly between years.
 
 ```{r}
 #| label: fig-spatial-temporal-abundance
@@ -190,7 +186,8 @@ Despite the increase in *S. pratensis* abundance in 2024, sampling-effort-standa
 #| echo: false
 #| warning: false
 #| message: false
-#| fig-height: 8
+#| fig-height: 12
+#| fig-width: 12
 ```
 
 ### Total Pollen Deposition (TPD)
@@ -200,7 +197,7 @@ Despite the increase in *S. pratensis* abundance in 2024, sampling-effort-standa
 #| echo: false
 #| warning: false
 #| message: false
-#| fig-cap: "CP-HP Accumulation slopes. A) Fitted Type 1 model. B) Emmeans extracted slope parameter comparison."
+#| tbl-cap: "CP-HP Accumulation. A) ANOVA Results. B) Pairwise Slope Contrasts."
 #| fig-height: 7
 ```
 

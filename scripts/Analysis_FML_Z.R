@@ -433,22 +433,7 @@ visitation_per_plot <- interaction_data_Succisa_22_24 %>%
     mutate(year = factor(paste0("20", year)))
 
 
-# Plot
-p_visitation <- ggplot(visitation_per_plot, aes(x = year, y = total_rate, fill = year)) +
-    geom_boxplot(alpha = 0.6, outlier.shape = NA) +
-    geom_jitter(width = 0.2, alpha = 0.5) +
-    labs(
-        title = "Visitation Rates per Plot",
-        x = "Year",
-        y = "Standardized Visitation Rate\n (interactions/sampling effort)"
-    ) +
-    scale_fill_viridis_d(begin = 0.3, end = 0.7) +
-    theme_classic() +
-    theme(legend.position = "none")
-
-# === PART D: VISITATION PER PLANT ABUNDACE ===
-
-# Sum rates per plot to get total visitation intensity per plot
+# === PART D: VISITATION PER PLANT ABUNDANCE ===
 plant_abundance_per_plot <- plant_abundance_22_24 %>%
     group_by(year, plot_id) %>%
     summarise(plot_abundance = sum(Suc_pra, na.rm = TRUE), .groups = "drop") %>%
@@ -459,30 +444,75 @@ plant_abundance_per_plot <- plant_abundance_22_24 %>%
     )
 
 visitation_per_plant <- visitation_per_plot %>%
-    left_join(plant_abundance_per_plot %>% mutate(plot_id = as.character(plot_id)), by = c("year", "plot_id")) %>%
+    left_join(plant_abundance_per_plot, by = c("year", "plot_id")) %>%
     mutate(rate_per_plant = ifelse(plot_abundance > 0, total_rate / plot_abundance, NA))
 
+# --- STATISTICAL TESTS (run first so results can be used in plot subtitles) ---
+kw_plot <- kruskal.test(total_rate ~ year, data = visitation_per_plot)
+kw_plot_label <- sprintf(
+    "Kruskal-Wallis: \u03c7\u00b2_{%d} = %.2f, p %s",
+    kw_plot$parameter, kw_plot$statistic,
+    ifelse(kw_plot$p.value < 0.001, "< 0.001", sprintf("= %.3f", kw_plot$p.value))
+)
 
-# Plot
+kw_plant <- kruskal.test(rate_per_plant ~ year, data = visitation_per_plant)
+kw_plant_label <- sprintf(
+    "Kruskal-Wallis: \u03c7\u00b2_{%d} = %.2f, p %s",
+    kw_plant$parameter, kw_plant$statistic,
+    ifelse(kw_plant$p.value < 0.001, "< 0.001", sprintf("= %.3f", kw_plant$p.value))
+)
+
+if (kw_plot$p.value < 0.05) {
+    cat("\nPairwise Differences (Per Plot):\n")
+    dunn.test(visitation_per_plot$total_rate, visitation_per_plot$year, method = "bh")
+}
+
+if (kw_plant$p.value < 0.05) {
+    cat("\nPairwise Differences (Per Plant):\n")
+    dunn.test(visitation_per_plant$rate_per_plant, visitation_per_plant$year, method = "bh")
+}
+
+# Plot B
+p_visitation <- ggplot(visitation_per_plot, aes(x = year, y = total_rate, fill = year)) +
+    geom_boxplot(alpha = 0.6, outlier.shape = NA) +
+    geom_jitter(width = 0.2, alpha = 0.5) +
+    labs(
+        title = "Visitation Rates per Plot",
+        subtitle = kw_plot_label,
+        x = "Year",
+        y = "Standardized Visitation Rate\n (interactions/sampling effort)"
+    ) +
+    scale_fill_viridis_d(begin = 0.3, end = 0.7) +
+    theme_classic() +
+    theme(
+        legend.position = "none",
+        plot.subtitle = element_text(size = 9, color = "gray30")
+    )
+
+# Plot C
 p_visitation_per_plant <- ggplot(visitation_per_plant, aes(x = year, y = rate_per_plant, fill = year)) +
     geom_boxplot(alpha = 0.6, outlier.shape = NA) +
     geom_jitter(width = 0.2, alpha = 0.5) +
     labs(
         title = "Visitation Rates per Plant",
+        subtitle = kw_plant_label,
         x = "Year",
         y = "Standardized Visitation Rate\n (interactions/sampling effort/plant abundance)"
     ) +
     scale_fill_viridis_d(begin = 0.3, end = 0.7) +
     theme_classic() +
-    theme(legend.position = "none")
+    theme(
+        legend.position = "none",
+        plot.subtitle = element_text(size = 9, color = "gray30")
+    )
 
-
-# === COMBINE ===
-ggpubr::ggarrange(p_map, p_abundance, p_visitation, p_visitation_per_plant,
+# --- COMBINE ---
+spatial_temporal_plot <- ggpubr::ggarrange(p_abundance, p_visitation, p_visitation_per_plant,
     ncol = 1,
-    labels = c("A", "B", "C", "D"),
-    heights = c(2, 2, 2, 2)
+    labels = c("A", "B", "C"),
+    heights = c(2, 2, 2)
 )
+print(spatial_temporal_plot)
 
 
 # ==============================================================================
@@ -837,7 +867,6 @@ p_model <- ggplot() +
     theme(
         legend.position = "right"
     )
-print(p_model)
 
 # Table for Manuscript (ANOVA Results)
 message("Generating Model Results Table (ANOVA)...")
@@ -1025,8 +1054,12 @@ p_var <- ggplot(all_results, aes(x = Metric, y = percent, fill = level)) +
         legend.position = "bottom"
     )
 
-print(p_var)
+library(patchwork)
+p_combined_fig <- p_model / p_var +
+    plot_annotation(tag_levels = "A") +
+    plot_layout(heights = c(1, 1))
 
+print(p_combined_fig)
 
 ### Otestovat!!
 
@@ -1288,12 +1321,12 @@ print(cv_by_year)
 
 
 # ==============================================================================
-# MARK: 2.7 Detailed Coefficient of Variation (CV) Breakdown
+## ---- fig-plots-2
+# MARK: 2.7 Detailed Coefficient of Variation (CV) and Means Breakdown
 # ==============================================================================
-# Further analysis of CV for Body, SVD and TPD compartments + TPD in years.
+# Further analysis of CV and Mean/SE for Body, SVD and TPD compartments + TPD in years.
 
-
-# 1. Stigma CV
+# 1. Stigma
 cv_stigma <- pollen_deposition %>%
     summarise(
         CP = sd(conspecific_pollen, na.rm = TRUE) / mean(conspecific_pollen, na.rm = TRUE) * 100,
@@ -1301,10 +1334,17 @@ cv_stigma <- pollen_deposition %>%
     ) %>%
     mutate(Compartment = "Stigma")
 
-# 2. Body CV
-# Ensure pollen_load_guts_24 is available (loaded in previous chunks or package)
+mean_se_stigma <- pollen_deposition %>%
+    summarise(
+        CP_mean = mean(conspecific_pollen, na.rm = TRUE),
+        CP_se = sd(conspecific_pollen, na.rm = TRUE) / sqrt(sum(!is.na(conspecific_pollen))),
+        HP_mean = mean(heterospecific_pollen, na.rm = TRUE),
+        HP_se = sd(heterospecific_pollen, na.rm = TRUE) / sqrt(sum(!is.na(heterospecific_pollen)))
+    ) %>%
+    mutate(Compartment = "Stigma")
+
+# 2. Body
 if (!exists("pollen_load_guts_24")) {
-    # Fallback to loading if not in env
     data("pollen_load_guts_24", package = "HanPolNet")
 }
 
@@ -1315,14 +1355,16 @@ cv_body <- pollen_load_guts_24 %>%
     ) %>%
     mutate(Compartment = "Body")
 
-# 3. Gut CV
-cv_gut <- pollen_load_guts_24 %>%
+mean_se_body <- pollen_load_guts_24 %>%
     summarise(
-        CP = sd(suc_pra_guts, na.rm = TRUE) / mean(suc_pra_guts, na.rm = TRUE) * 100,
-        HP = sd(other_pollen_guts, na.rm = TRUE) / mean(other_pollen_guts, na.rm = TRUE) * 100
+        CP_mean = mean(suc_pra_load, na.rm = TRUE),
+        CP_se = sd(suc_pra_load, na.rm = TRUE) / sqrt(sum(!is.na(suc_pra_load))),
+        HP_mean = mean(other_pollen_load, na.rm = TRUE),
+        HP_se = sd(other_pollen_load, na.rm = TRUE) / sqrt(sum(!is.na(other_pollen_load)))
     ) %>%
-    mutate(Compartment = "Gut")
+    mutate(Compartment = "Body")
 
+# 3. SVD
 cv_SVD <- SVD_Succisa_22_24 %>%
     summarise(
         CP = sd(conspecific_pollen, na.rm = TRUE) / mean(conspecific_pollen, na.rm = TRUE) * 100,
@@ -1330,12 +1372,31 @@ cv_SVD <- SVD_Succisa_22_24 %>%
     ) %>%
     mutate(Compartment = "SVD")
 
+mean_se_SVD <- SVD_Succisa_22_24 %>%
+    summarise(
+        CP_mean = mean(conspecific_pollen, na.rm = TRUE),
+        CP_se = sd(conspecific_pollen, na.rm = TRUE) / sqrt(sum(!is.na(conspecific_pollen))),
+        HP_mean = mean(heterospecific_pollen, na.rm = TRUE),
+        HP_se = sd(heterospecific_pollen, na.rm = TRUE) / sqrt(sum(!is.na(heterospecific_pollen)))
+    ) %>%
+    mutate(Compartment = "SVD")
 
-# Combine and Reshape
-cv_data <- bind_rows(cv_stigma, cv_body, cv_gut, cv_SVD) %>%
+# Combine and Reshape CV
+cv_data <- bind_rows(cv_stigma, cv_body, cv_SVD) %>%
     pivot_longer(cols = c(CP, HP), names_to = "Pollen_Type", values_to = "CV")
 
-# CV by year
+# Combine and Reshape Mean/SE
+mean_se_data_cp <- bind_rows(mean_se_stigma, mean_se_body, mean_se_SVD) %>%
+    select(Compartment, mean = CP_mean, se = CP_se) %>%
+    mutate(Pollen_Type = "CP")
+
+mean_se_data_hp <- bind_rows(mean_se_stigma, mean_se_body, mean_se_SVD) %>%
+    select(Compartment, mean = HP_mean, se = HP_se) %>%
+    mutate(Pollen_Type = "HP")
+
+mean_se_data <- bind_rows(mean_se_data_cp, mean_se_data_hp)
+
+# CV by year (Stigma)
 cv_by_year <- pollen_deposition %>%
     filter(!is.na(year)) %>%
     group_by(year) %>%
@@ -1345,16 +1406,43 @@ cv_by_year <- pollen_deposition %>%
         .groups = "drop"
     ) %>%
     pivot_longer(cols = c(CP, HP), names_to = "Pollen_Type", values_to = "CV") %>%
-    mutate(Year = factor(paste0("20", year)))
+    mutate(Year = factor(as.character(year)))
 
-# Determine shared Y-axis limit
+# Mean/SE by year (Stigma)
+mean_se_by_year_raw <- pollen_deposition %>%
+    filter(!is.na(year)) %>%
+    group_by(year) %>%
+    summarise(
+        CP_mean = mean(conspecific_pollen, na.rm = TRUE),
+        CP_se = sd(conspecific_pollen, na.rm = TRUE) / sqrt(sum(!is.na(conspecific_pollen))),
+        HP_mean = mean(heterospecific_pollen, na.rm = TRUE),
+        HP_se = sd(heterospecific_pollen, na.rm = TRUE) / sqrt(sum(!is.na(heterospecific_pollen))),
+        .groups = "drop"
+    ) %>%
+    mutate(Year = factor(as.character(year)))
+
+mean_se_year_cp <- mean_se_by_year_raw %>%
+    select(Year, mean = CP_mean, se = CP_se) %>%
+    mutate(Pollen_Type = "CP")
+
+mean_se_year_hp <- mean_se_by_year_raw %>%
+    select(Year, mean = HP_mean, se = HP_se) %>%
+    mutate(Pollen_Type = "HP")
+
+mean_se_by_year <- bind_rows(mean_se_year_cp, mean_se_year_hp)
+
+# Determine shared Y-axis limit for CV
 max_cv <- max(c(cv_data$CV, cv_by_year$CV), na.rm = TRUE)
 y_limit_max <- max_cv * 1.15
 
 # Set Factor Levels
-cv_data$Compartment <- factor(cv_data$Compartment, levels = c("Body", "Gut", "SVD", "Stigma"))
+comp_levels <- c("Body", "SVD", "Stigma")
+cv_data$Compartment <- factor(cv_data$Compartment, levels = comp_levels)
+mean_se_data$Compartment <- factor(mean_se_data$Compartment, levels = comp_levels)
 
-# Plot 1: Compartments
+library(patchwork)
+
+# Plot A: Compartments CV
 p_cv <- ggplot(cv_data, aes(x = Compartment, y = CV, fill = Pollen_Type)) +
     geom_bar(stat = "identity", position = position_dodge(width = 0.9), color = "black", width = 0.8) +
     geom_text(aes(label = round(CV, 1)), position = position_dodge(width = 0.9), vjust = -0.5, size = 4) +
@@ -1364,28 +1452,7 @@ p_cv <- ggplot(cv_data, aes(x = Compartment, y = CV, fill = Pollen_Type)) +
     ) +
     scale_y_continuous(limits = c(0, y_limit_max)) +
     labs(
-        title = "A) Compartments",
-        y = "CV (%)",
-        fill = "Pollen Type"
-    ) +
-    theme_classic() +
-    theme(
-        axis.text.x = element_text(size = 12, face = "bold"),
-        axis.text.y = element_text(size = 12),
-        legend.position = "none"
-    )
-
-# Plot 2: Stigma per year
-p_cv_year <- ggplot(cv_by_year, aes(x = Year, y = CV, fill = Pollen_Type)) +
-    geom_bar(stat = "identity", position = position_dodge(width = 0.9), color = "black", width = 0.8) +
-    geom_text(aes(label = round(CV, 1)), position = position_dodge(width = 0.9), vjust = -0.5, size = 4) +
-    scale_fill_manual(
-        values = c("CP" = "#1ABC9C", "HP" = "#F1948A"),
-        labels = c("CP" = "Conspecific", "HP" = "Heterospecific")
-    ) +
-    scale_y_continuous(limits = c(0, y_limit_max)) +
-    labs(
-        title = "B) Stigma per Year",
+        title = "A) Compartments (CV)",
         y = "CV (%)",
         x = "",
         fill = "Pollen Type"
@@ -1397,10 +1464,76 @@ p_cv_year <- ggplot(cv_by_year, aes(x = Year, y = CV, fill = Pollen_Type)) +
         legend.position = "none"
     )
 
+# Plot B: Stigma per year CV
+p_cv_year <- ggplot(cv_by_year, aes(x = Year, y = CV, fill = Pollen_Type)) +
+    geom_bar(stat = "identity", position = position_dodge(width = 0.9), color = "black", width = 0.8) +
+    geom_text(aes(label = round(CV, 1)), position = position_dodge(width = 0.9), vjust = -0.5, size = 4) +
+    scale_fill_manual(
+        values = c("CP" = "#1ABC9C", "HP" = "#F1948A"),
+        labels = c("CP" = "Conspecific", "HP" = "Heterospecific")
+    ) +
+    scale_y_continuous(limits = c(0, y_limit_max)) +
+    labs(
+        title = "B) Stigma per Year (CV)",
+        y = "",
+        x = "",
+        fill = "Pollen Type"
+    ) +
+    theme_classic() +
+    theme(
+        axis.text.x = element_text(size = 12, face = "bold"),
+        axis.text.y = element_text(size = 12),
+        legend.position = "none"
+    )
+
+# Plot C: Compartments Mean + SE
+p_mean_comp <- ggplot(mean_se_data, aes(x = Compartment, y = mean, fill = Pollen_Type)) +
+    geom_bar(stat = "identity", position = position_dodge(width = 0.9), color = "black", width = 0.8) +
+    geom_errorbar(aes(ymin = pmax(0, mean - se), ymax = mean + se), position = position_dodge(width = 0.9), width = 0.25) +
+    scale_fill_manual(
+        values = c("CP" = "#1ABC9C", "HP" = "#F1948A"),
+        labels = c("CP" = "Conspecific", "HP" = "Heterospecific")
+    ) +
+    labs(
+        title = "C) Compartments (Mean)",
+        y = "Mean Pollen Count",
+        x = "Compartment",
+        fill = "Pollen Type"
+    ) +
+    theme_classic() +
+    theme(
+        axis.text.x = element_text(size = 12, face = "bold"),
+        axis.text.y = element_text(size = 12),
+        legend.position = "none"
+    )
+
+# Plot D: Stigma per year Mean + SE
+p_mean_year <- ggplot(mean_se_by_year, aes(x = Year, y = mean, fill = Pollen_Type)) +
+    geom_bar(stat = "identity", position = position_dodge(width = 0.9), color = "black", width = 0.8) +
+    geom_errorbar(aes(ymin = pmax(0, mean - se), ymax = mean + se), position = position_dodge(width = 0.9), width = 0.25) +
+    scale_fill_manual(
+        values = c("CP" = "#1ABC9C", "HP" = "#F1948A"),
+        labels = c("CP" = "Conspecific", "HP" = "Heterospecific")
+    ) +
+    labs(
+        title = "D) Stigma per Year (Mean)",
+        y = "",
+        x = "Year",
+        fill = "Pollen Type"
+    ) +
+    theme_classic() +
+    theme(
+        axis.text.x = element_text(size = 12, face = "bold"),
+        axis.text.y = element_text(size = 12),
+        legend.position = "none"
+    )
+
 # Combine
-p_cv + p_cv_year + plot_layout(ncol = 2, guides = "collect") &
+final_cv_plot <- (p_cv + p_cv_year) / (p_mean_comp + p_mean_year) +
+    plot_layout(guides = "collect") &
     theme(legend.position = "top") &
-    plot_annotation(title = "Variability of Pollen Counts")
+    plot_annotation(title = "Variability and Means of Pollen Counts")
+print(final_cv_plot)
 
 
 
@@ -1606,153 +1739,6 @@ pH <- make_mc_plot(emp_HP_24, global_emp_svd_hp, n_vis_24, "H. 2024 Heterospecif
 p_combined_mc <- (pA + pB) / (pC + pD) / (pE + pF) / (pG + pH)
 print(p_combined_mc)
 
-
-
-# ==============================================================================
-# 4. THE DENSITY SHIELD (Per-Capita Visitation & The Dilution Effect)
-# ==============================================================================
-message("Analyzing the Density Shield (Dilution Effect)...")
-
-library(patchwork)
-
-# 0. Load data for all years
-interaction_data_all_years <- interaction_data_Succisa_22_24
-plant_abundance_all_years <- plant_abundance_22_24
-
-# 1. Calculate floral abundance per plot for all years
-plant_abundance_per_plot_all <- plant_abundance_all_years %>%
-    group_by(year, plot_id) %>%
-    summarise(plot_abundance = sum(Suc_pra, na.rm = TRUE), .groups = "drop") %>%
-    filter(!is.na(year)) %>%
-    mutate(
-        year_str = as.character(year),
-        year = factor(ifelse(nchar(year_str) == 2, paste0("20", year_str), year_str)),
-        plot_id = as.character(plot_id)
-    )
-
-# 2. Calculate plot-level visitation for all years
-visitation_per_plot_all <- interaction_data_all_years %>%
-    group_by(year, plot_id) %>%
-    summarise(total_rate = sum(rate, na.rm = TRUE), .groups = "drop") %>%
-    filter(!is.na(year)) %>%
-    mutate(
-        year_str = as.character(year),
-        year = factor(ifelse(nchar(year_str) == 2, paste0("20", year_str), year_str)),
-        plot_id = as.character(plot_id)
-    )
-
-# 3. Calculate Per-Capita Visitation Rate (rate_per_plant)
-visitation_per_plant_all <- visitation_per_plot_all %>%
-    left_join(plant_abundance_per_plot_all, by = c("year", "plot_id")) %>%
-    mutate(
-        rate_per_plant = ifelse(plot_abundance > 0, total_rate / plot_abundance, NA)
-    ) %>%
-    filter(!is.na(rate_per_plant) & !is.na(plot_abundance))
-
-# 4. Statistical Test: Does abundance predict per-plant visitation?
-# A simple linear model to get the p-value and R-squared for your Results section
-dilution_model <- lm(log(rate_per_plant) ~ log(plot_abundance), data = visitation_per_plant_all)
-cat("\n--- Dilution Effect Model Summary (log-log) ---\n")
-print(summary(dilution_model))
-
-# 1. Test for differences in Total Visitation Rate (Per Plot) across years
-cat("\n--- Visitation Rate (Per Plot) by Year ---\n")
-kw_plot <- kruskal.test(total_rate ~ as.factor(year), data = visitation_per_plot_all)
-print(kw_plot)
-
-if (kw_plot$p.value < 0.05) {
-    cat("\nPairwise Differences (Per Plot):\n")
-    dunn.test(visitation_per_plot_all$total_rate, as.factor(visitation_per_plot_all$year), method = "bh")
-}
-
-# 2. Test for differences in Per-Capita Visitation Rate (Per Plant) across years
-cat("\n--- Per-Capita Visitation Rate (Per Plant) by Year ---\n")
-kw_plant <- kruskal.test(rate_per_plant ~ as.factor(year), data = visitation_per_plant_all)
-print(kw_plant)
-
-if (kw_plant$p.value < 0.05) {
-    cat("\nPairwise Differences (Per Plant):\n")
-    dunn.test(visitation_per_plant_all$rate_per_plant, as.factor(visitation_per_plant_all$year), method = "bh")
-}
-
-# 5. Visualization: The Density Shield (2-Panel Figure)
-
-# Panel A: The general dilution rule (Scatterplot)
-p_dilution <- ggplot(visitation_per_plant_all, aes(x = plot_abundance, y = rate_per_plant)) +
-    geom_point(aes(color = year), size = 3, alpha = 0.7) +
-    geom_smooth(aes(color = year, group = year), method = "lm", se = FALSE, linewidth = 0.8, alpha = 0.5) +
-    geom_smooth(method = "lm", color = "black", linetype = "dashed", se = TRUE) +
-    scale_x_continuous(trans = "log1p") +
-    scale_y_continuous(trans = "log1p") +
-    theme_classic() +
-    labs(
-        title = "A) The Dilution Effect",
-        subtitle = "Higher floral density dilutes per-capita visitation",
-        x = "Local Floral Abundance (log scale)",
-        y = "Visits per Plant (log scale)",
-        color = "Year"
-    ) +
-    scale_color_viridis_d(option = "plasma", end = 0.8)
-
-# Panel B: The Anomaly (Boxplot)
-p_anomaly <- ggplot(visitation_per_plant_all, aes(x = year, y = rate_per_plant, fill = year)) +
-    geom_boxplot(alpha = 0.8, outlier.shape = 21, outlier.size = 2) +
-    theme_classic() +
-    labs(
-        title = "B) Interannual Shift in Per-Capita Rate",
-        subtitle = "Comparison across all surveyed years",
-        x = "Year",
-        y = "Visits per Plant"
-    ) +
-    scale_fill_viridis_d(option = "plasma", end = 0.8) +
-    theme(legend.position = "none", axis.text.x = element_text(angle = 45, hjust = 1))
-
-# Combine panels
-final_shield_plot <- p_dilution + p_anomaly + plot_layout(widths = c(1.5, 1))
-print(final_shield_plot)
-
-
-# ==============================================================================
-# 4. THE DENSITY SHIELD (Pollen Accumulation on Final Stigmas)
-# ==============================================================================
-message("Analyzing HP vs CP Accumulation on Stigmas across Years...")
-
-# 1. Clean the pollen deposition data for the plot
-stigma_accumulation <- pollen_deposition %>%
-    filter(!is.na(conspecific_pollen) & !is.na(heterospecific_pollen) & !is.na(year)) %>%
-    mutate(year = factor(year))
-
-# 2. Statistical Test: Does the year change the rate of HP accumulation?
-# We use a linear model with an interaction term (CP * Year)
-accumulation_model <- lm(heterospecific_pollen ~ conspecific_pollen * year, data = stigma_accumulation)
-cat("\n--- Pollen Accumulation Model (Does the slope change by year?) ---\n")
-print(summary(accumulation_model))
-
-# 3. Visualization: The "Slope Showdown"
-p_accumulation <- ggplot(stigma_accumulation, aes(x = conspecific_pollen, y = heterospecific_pollen, color = year, fill = year)) +
-    geom_point(alpha = 0.4, size = 2, shape = 21, color = "black") +
-    geom_smooth(method = "lm", se = TRUE, alpha = 0.2, linewidth = 1.2) +
-    # Using a log1p scale for HP because it is usually highly skewed towards zero
-    scale_y_continuous(trans = "log1p", breaks = c(0, 1, 5, 10, 50, 100)) +
-    theme_classic() +
-    theme(
-        legend.position = "top",
-        strip.background = element_blank(),
-        strip.text = element_text(size = 12, face = "bold")
-    ) +
-    labs(
-        title = "Heterospecific Pollen Accumulation Rates",
-        subtitle = "How CP receipt drives HP accumulation across varying density years",
-        x = "Conspecific Pollen on Stigma",
-        y = "Heterospecific Pollen on Stigma (log scale)",
-        color = "Year",
-        fill = "Year"
-    ) +
-    scale_color_viridis_d(option = "plasma", end = 0.8) +
-    scale_fill_viridis_d(option = "plasma", end = 0.8) +
-    facet_wrap(~year) # Separating by year makes the slope changes obvious
-
-print(p_accumulation)
 
 
 library(overlapping)
