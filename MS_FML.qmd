@@ -138,6 +138,11 @@ Notably, intra-annual analysis of the 2024 season showed that daily temporal var
 ```
 
 ```{r}
+#| label: slope-model-setup
+#| include: false
+```
+
+```{r}
 #| label: fig-plots-3
 #| echo: false
 #| warning: false

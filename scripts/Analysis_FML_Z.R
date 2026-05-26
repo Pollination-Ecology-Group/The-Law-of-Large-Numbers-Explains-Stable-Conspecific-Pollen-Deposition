@@ -802,7 +802,7 @@ ggpubr::ggarrange(row1, row2, nrow = 2, heights = c(1.5, 1))
 
 
 # ==============================================================================
-## ---- fig-slope-showdown
+## ---- slope-model-setup
 # MARK: 2.2 Slope Showdown (Aggregated Data Analysis)
 # ==============================================================================
 # Comparing the slopes of HP vs CP across years using aggregated (plant-level) data.
@@ -868,6 +868,7 @@ p_model <- ggplot() +
         legend.position = "right"
     )
 
+## ---- fig-slope-showdown
 # Table for Manuscript (ANOVA Results)
 message("Generating Model Results Table (ANOVA)...")
 aov_res <- as.data.frame(anova(fit_sqrt))
@@ -898,6 +899,7 @@ contrasts_table <- data.frame(
 print(contrasts_table)
 
 
+## ---- stability-test
 # ==============================================================================
 # MARK: 2.3 Daily Stability Test (2024 Data)
 # ==============================================================================
