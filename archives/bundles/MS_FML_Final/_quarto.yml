@@ -1,0 +1,23 @@
+project:
+  type: website
+  output-dir: docs
+  # The post-render script must be indented here, under 'project'
+  post-render:
+    - ./post-render.sh
+  render:
+    - "!local_packages/"
+    - "!hanpolnet_temp/"
+    # - index.qmd
+    #- labmeeting_presentation/index.qmd
+    #- MS_Succisa_deposition.qmd
+    - MS_FML.qmd
+    - Supplementary_Material.qmd
+
+format:
+  html:
+    theme: cosmo
+    toc: true
+    self-contained: true
+  gfm:
+    preview-mode: webtex
+

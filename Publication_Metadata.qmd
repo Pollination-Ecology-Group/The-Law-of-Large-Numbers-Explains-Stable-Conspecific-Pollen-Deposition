@@ -1,6 +1,6 @@
 ---
-title: "Data Publication Metadata"
-subtitle: "From Single Visit Stochasticity to Long-Term Stability of Pollen Stigmatic Deposition: A Multi-Scale Study on *Succisa pratensis*"
+title: "Data Description"
+subtitle: "The law of large numbers explains stable conspecific pollen deposition"
 author: "Jakub Štenc"
 date: last-modified
 format:
@@ -13,6 +13,21 @@ format:
 
 ## Overview
 This document provides metadata, variable dictionaries, and summary statistics for the datasets associated with the manuscript. These datasets are archived for reproducibility and public access.
+
+## Data Description
+These datasets contain empirical data collected to investigate the mechanisms linking pollinator visitation networks to stigmatic pollen deposition on *Succisa pratensis*. The study investigates how community-level network structure (specialization, interaction evenness) and single-visit pollen deposition stochastics scale to population-level pollination outcomes across three years (2022-2024).
+
+The provided files are:
+- `pollen_deposition.csv`: Total pollen loads on stigmas collected from the field.
+- `SVD.csv`: Single-visit deposition experimental data.
+- `network_metrics.csv`: Aggregated yearly metrics constructed from three primary data sources: 
+  1. **Plant-pollinator visitation networks**: Used to calculate network-level specialization ($H_2'$) and species-level specialization/interaction evenness for *Succisa pratensis* using the `bipartite` R package.
+  2. **Stigmatic pollen deposition**: Used to calculate the linear slope of Conspecific (CP) vs. Heterospecific (HP) pollen accumulation, and mean HP loads.
+  3. **Floral abundance transects**: Used to calculate the mean *Succisa pratensis* abundance per plot and total community floral abundance.
+- `interaction_data_all_22_24.csv`: Full plant-pollinator visitation observation data for the entire community across all years.
+- `interaction_data_Succisa_22_24.csv`: Subset of the visitation data containing only observations for *Succisa pratensis*.
+- `plant_abundance_22_24.csv`: Floral abundance transect data for all plots across years.
+- `pollen_load_and_guts_2024_Succisa_pratensis.csv`: Raw pollen load and gut content data for individual pollinators.
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = FALSE, message = FALSE, warning = FALSE)
@@ -27,6 +42,11 @@ data_dir <- "output/publication_data"
 df_pollen <- read.csv(file.path(data_dir, "pollen_deposition.csv"))
 df_svd <- read.csv(file.path(data_dir, "SVD.csv"))
 df_network <- read.csv(file.path(data_dir, "network_metrics.csv"))
+
+df_int_all <- read.csv(file.path(data_dir, "interaction_data_all_22_24.csv"))
+df_int_succ <- read.csv(file.path(data_dir, "interaction_data_Succisa_22_24.csv"))
+df_abund <- read.csv(file.path(data_dir, "plant_abundance_22_24.csv"))
+df_pload <- read.csv(file.path(data_dir, "pollen_load_and_guts_2024_Succisa_pratensis.csv"))
 ```
 
 ---
@@ -36,10 +56,12 @@ This dataset contains information regarding pollen deposition on individual stig
 
 ### Data Dictionary
 ```{r dict-pollen}
-var_label(df_pollen$year) <- "Year of sampling (2022-2024)"
 var_label(df_pollen$id) <- "Unique sample identifier (Stigma ID)"
+var_label(df_pollen$year) <- "Year of sampling (2022-2024)"
+var_label(df_pollen$plant_id) <- "Unique plant/patch identifier"
 var_label(df_pollen$conspecific_pollen) <- "Count of conspecific (Succisa) pollen grains on stigma"
 var_label(df_pollen$heterospecific_pollen) <- "Count of heterospecific (non-Succisa) pollen grains on stigma"
+var_label(df_pollen$pollen_total) <- "Total pollen count on stigma"
 
 look_for(df_pollen, details = FALSE) %>%
   select(variable, label) %>%
@@ -51,9 +73,16 @@ look_for(df_pollen, details = FALSE) %>%
 ### Summary Statistics
 ```{r summary-pollen}
 df_pollen %>%
-  select(year, conspecific_pollen, heterospecific_pollen) %>%
-  summary() %>%
-  knitr::kable()
+  group_by(year) %>%
+  summarise(
+    N_Stigmas = n(),
+    Unique_Plants = n_distinct(plant_id),
+    Mean_CP = round(mean(conspecific_pollen, na.rm = TRUE), 1),
+    Mean_HP = round(mean(heterospecific_pollen, na.rm = TRUE), 1)
+  ) %>%
+  gt() %>%
+  tab_header(title = "Pollen Deposition Sample Sizes & Means") %>%
+  opt_stylize(style = 1, color = "blue")
 ```
 
 ---
@@ -63,12 +92,13 @@ This dataset contains experimental observations of pollen deposition resulting f
 
 ### Data Dictionary
 ```{r dict-svd}
-var_label(df_svd$year) <- "Year of observation"
 var_label(df_svd$id) <- "Unique sample identifier (Stigma ID)"
-var_label(df_svd$morphogroup) <- "Functional group of the visitor (e.g., Eristalis spp., Bombus spp.)"
+var_label(df_svd$year) <- "Year of observation"
+var_label(df_svd$morphogroup) <- "Functional group of the visitor (e.g., Eristalis spp.)"
+var_label(df_svd$species) <- "Taxonomic species of the pollinator"
 var_label(df_svd$duration_sec) <- "Duration of the single visit (seconds)"
-var_label(df_svd$conspecific_pollen) <- "Conspecific pollen deposited during single visit (Count)"
-var_label(df_svd$heterospecific_pollen) <- "Heterospecific pollen deposited during single visit (Count)"
+var_label(df_svd$conspecific_pollen) <- "Conspecific pollen deposited during single visit"
+var_label(df_svd$heterospecific_pollen) <- "Heterospecific pollen deposited during single visit"
 
 look_for(df_svd, details = FALSE) %>%
   select(variable, label) %>%
@@ -80,9 +110,16 @@ look_for(df_svd, details = FALSE) %>%
 ### Summary Statistics
 ```{r summary-svd}
 df_svd %>%
-  select(morphogroup, conspecific_pollen, heterospecific_pollen, duration_sec) %>%
-  summary() %>%
-  knitr::kable()
+  group_by(morphogroup) %>%
+  summarise(
+    N_Visits = n(),
+    Mean_Duration_sec = round(mean(duration_sec, na.rm = TRUE), 1),
+    Mean_CP_Deposited = round(mean(conspecific_pollen, na.rm = TRUE), 1),
+    Mean_HP_Deposited = round(mean(heterospecific_pollen, na.rm = TRUE), 1)
+  ) %>%
+  gt() %>%
+  tab_header(title = "Single Visit Deposition (SVD) Sample Sizes") %>%
+  opt_stylize(style = 1, color = "green")
 ```
 
 ---
@@ -111,7 +148,157 @@ look_for(df_network, details = FALSE) %>%
 ### Summary Statistics
 ```{r summary-network}
 df_network %>%
-  select(Year, H2, Succisa_H, Slope, Mean_HP, Succisa_Abundance) %>%
-  summary() %>%
-  knitr::kable()
+  group_by(Year) %>%
+  summarise(
+    Plots = n(),
+    Mean_H2 = round(mean(H2, na.rm = TRUE), 3),
+    Mean_Evenness = round(mean(Succisa_H, na.rm = TRUE), 3),
+    Mean_Total_Abundance = round(mean(Total_Abundance, na.rm = TRUE), 1)
+  ) %>%
+  gt() %>%
+  tab_header(title = "Network Metrics Summary per Year") %>%
+  opt_stylize(style = 1, color = "gray")
+```
+
+---
+
+## 4. Full Interaction Dataset (`interaction_data_all_22_24.csv`)
+This dataset contains the complete plant-pollinator visitation observation data for the entire community across all years (2022-2024).
+
+### Data Dictionary
+```{r dict-int-all}
+var_label(df_int_all$sampling_id) <- "Unique sampling event ID"
+var_label(df_int_all$year) <- "Year of observation"
+var_label(df_int_all$plot_id) <- "Plot identifier"
+var_label(df_int_all$plant_name) <- "Visited plant species"
+var_label(df_int_all$network_species) <- "Harmonized pollinator species name"
+var_label(df_int_all$order) <- "Pollinator taxonomic order"
+var_label(df_int_all$n_visits) <- "Number of observed visits"
+var_label(df_int_all$rate) <- "Visitation rate"
+
+look_for(df_int_all, details = FALSE) %>%
+  filter(variable %in% c("sampling_id", "year", "plot_id", "plant_name", "network_species", "order", "n_visits", "rate")) %>%
+  select(variable, label) %>%
+  gt() %>%
+  tab_header(title = "Selected Variables in Full Interaction Dataset") %>%
+  opt_stylize(style = 1, color = "pink")
+```
+
+### Summary Statistics
+```{r summary-int-all}
+df_int_all %>%
+  group_by(year) %>%
+  summarise(
+    Total_Visits = sum(n_visits, na.rm = TRUE),
+    Unique_Pollinator_Species = n_distinct(network_species),
+    Unique_Plant_Species = n_distinct(plant_name)
+  ) %>%
+  gt() %>%
+  tab_header(title = "Community Visitation Summary") %>%
+  opt_stylize(style = 1, color = "pink")
+```
+
+---
+
+## 5. Succisa Interaction Dataset (`interaction_data_Succisa_22_24.csv`)
+This dataset is a subset of the full interaction dataset, focusing specifically on pollinator visitations to *Succisa pratensis*.
+
+### Data Dictionary
+```{r dict-int-succ}
+var_label(df_int_succ$sampling_id) <- "Unique sampling event ID"
+var_label(df_int_succ$year) <- "Year of observation"
+var_label(df_int_succ$plot_id) <- "Plot identifier"
+var_label(df_int_succ$plant_name) <- "Visited plant species (Succisa pratensis)"
+var_label(df_int_succ$network_species) <- "Harmonized pollinator species name"
+var_label(df_int_succ$n_visits) <- "Number of observed visits"
+
+look_for(df_int_succ, details = FALSE) %>%
+  filter(variable %in% c("sampling_id", "year", "plot_id", "plant_name", "network_species", "n_visits")) %>%
+  select(variable, label) %>%
+  gt() %>%
+  tab_header(title = "Selected Variables in Succisa Interaction Dataset") %>%
+  opt_stylize(style = 1, color = "red")
+```
+
+### Summary Statistics
+```{r summary-int-succ}
+df_int_succ %>%
+  group_by(year) %>%
+  summarise(
+    Total_Succisa_Visits = sum(n_visits, na.rm = TRUE),
+    Unique_Pollinators = n_distinct(network_species)
+  ) %>%
+  gt() %>%
+  tab_header(title = "Succisa pratensis Visitation Summary") %>%
+  opt_stylize(style = 1, color = "red")
+```
+
+---
+
+## 6. Plant Abundance Dataset (`plant_abundance_22_24.csv`)
+This dataset contains floral abundance counts for all plant species across the study plots over three years.
+
+### Data Dictionary
+```{r dict-abund}
+var_label(df_abund$year) <- "Year of sampling"
+var_label(df_abund$plot_id) <- "Plot identifier"
+var_label(df_abund$Suc_pra) <- "Abundance of Succisa pratensis (inflorescences)"
+
+look_for(df_abund, details = FALSE) %>%
+  filter(variable %in% c("year", "plot_id", "Suc_pra")) %>%
+  select(variable, label) %>%
+  gt() %>%
+  tab_header(title = "Key Variables in Plant Abundance Dataset") %>%
+  opt_stylize(style = 1, color = "cyan")
+```
+
+### Summary Statistics
+```{r summary-abund}
+df_abund %>%
+  group_by(year) %>%
+  summarise(
+    N_Plots = n_distinct(plot_id),
+    Mean_Succisa_Abundance = round(mean(Suc_pra, na.rm = TRUE), 1),
+    Max_Succisa_Abundance = max(Suc_pra, na.rm = TRUE)
+  ) %>%
+  gt() %>%
+  tab_header(title = "Succisa pratensis Abundance Summary") %>%
+  opt_stylize(style = 1, color = "cyan")
+```
+
+---
+
+## 7. Pollinator Pollen Load Dataset (`pollen_load_and_guts_2024_Succisa_pratensis.csv`)
+This dataset contains raw pollen loads carried on the bodies and within the guts of individual pollinators captured on *Succisa pratensis* in 2024.
+
+### Data Dictionary
+```{r dict-pload}
+var_label(df_pload$id) <- "Unique pollinator specimen ID"
+var_label(df_pload$pollinator_species) <- "Pollinator species name"
+var_label(df_pload$suc_pra_load) <- "Count of Succisa pratensis pollen on body"
+var_label(df_pload$other_pollen_load) <- "Count of heterospecific pollen on body"
+var_label(df_pload$suc_pra_guts) <- "Count of Succisa pratensis pollen in gut"
+
+look_for(df_pload, details = FALSE) %>%
+  filter(variable %in% c("id", "pollinator_species", "suc_pra_load", "other_pollen_load", "suc_pra_guts")) %>%
+  select(variable, label) %>%
+  gt() %>%
+  tab_header(title = "Key Variables in Pollen Load Dataset") %>%
+  opt_stylize(style = 1, color = "blue")
+```
+
+### Summary Statistics
+```{r summary-pload}
+df_pload %>%
+  group_by(pollinator_species) %>%
+  summarise(
+    N_Specimens = n(),
+    Mean_Body_CP = round(mean(suc_pra_load, na.rm = TRUE), 1),
+    Mean_Body_HP = round(mean(other_pollen_load, na.rm = TRUE), 1)
+  ) %>%
+  arrange(desc(N_Specimens)) %>%
+  slice_head(n = 5) %>%
+  gt() %>%
+  tab_header(title = "Top 5 Pollinators by Sample Size (2024 Body Loads)") %>%
+  opt_stylize(style = 1, color = "blue")
 ```

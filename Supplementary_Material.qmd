@@ -1,6 +1,6 @@
 ---
 title: "Supplementary Material"
-subtitle: "Linking Pollen Deposition Dynamics to Plant-Pollinator Network Structure"
+subtitle: "The law of large numbers explains stable conspecific TPD"
 author: "Jakub Štenc"
 date: last-modified
 format: 
@@ -64,7 +64,8 @@ Model Structure: `variable ~ 1 + (1 | year_fac / plant_id)`
 
 ```{r}
 #| label: diagnostics-helper
-#| echo: true
+#| echo: false
+#| results: hide
 #| warning: false
 #| message: false
 # Helper function to fit 3 models and plot diagnostics
@@ -122,6 +123,7 @@ run_transformation_diagnostics <- function(data, variable_name, title_prefix) {
 #| fig-cap: "Diagnostics for Heterospecific Pollen (HP)."
 #| fig-height: 8
 #| fig-width: 12
+#| echo: false
 #| warning: false
 #| message: false
 run_transformation_diagnostics(model_data, "heterospecific_pollen", "Heterospecific Pollen")
@@ -136,6 +138,7 @@ run_transformation_diagnostics(model_data, "heterospecific_pollen", "Heterospeci
 #| fig-cap: "Diagnostics for Conspecific Pollen (CP)."
 #| fig-height: 8
 #| fig-width: 12
+#| echo: false
 #| warning: false
 #| message: false
 run_transformation_diagnostics(model_data, "conspecific_pollen", "Conspecific Pollen")
@@ -150,6 +153,7 @@ run_transformation_diagnostics(model_data, "conspecific_pollen", "Conspecific Po
 #| fig-cap: "Diagnostics for Proportion HP (HP / (CP+HP))."
 #| fig-height: 8
 #| fig-width: 12
+#| echo: false
 #| warning: false
 #| message: false
 run_transformation_diagnostics(model_data, "prop_HP", "Proportion HP")
@@ -157,26 +161,7 @@ run_transformation_diagnostics(model_data, "prop_HP", "Proportion HP")
 
 **Selection**: Proportions are bounded \[0,1\]. While Binomial/Beta models are theoretically superior, for the purpose of VCA (partitioning variance), the Square-Root transformation provides a reasonable approximation of normality for the residuals.
 
-# Section S2: Data Distribution
-
-The distribution of heterospecific pollen deposition counts is highly skewed, with many low values and a long tail of high deposition events.
-
-```{r}
-#| label: fig-distribution
-#| fig-cap: "Distribution of Heterospecific Pollen Counts on Stigmas."
-#| warning: false
-ggplot(model_data, aes(x = heterospecific_pollen)) +
-    geom_histogram(binwidth = 5, fill = "darkgreen", color = "white", alpha = 0.7) +
-    labs(
-        title = "Distribution of Heterospecific Pollen",
-        subtitle = "Raw counts per stigma (n = 714)",
-        x = "Heterospecific Pollen Count",
-        y = "Frequency"
-    ) +
-    theme_minimal()
-```
-
-# Section S3: Model Selection for CP-HP Relationship
+# Section S2: Model Selection for CP-HP Relationship
 
 To determine the functional form of the relationship between Conspecific (CP) and Heterospecific (HP) pollen deposition, we compared Linear (Type 1) and Exponential (Type 3) models using Akaike Information Criterion (AIC).
 
@@ -187,7 +172,7 @@ To determine the functional form of the relationship between Conspecific (CP) an
 ```{r}
 #| label: model-diagnostics-selection
 #| fig-cap: "Diagnostic plots for the selected models (Linear or Exponential) for each year. Comparisons based on AIC."
-#| echo: true
+#| echo: false
 #| warning: false
 #| message: false
 #| fig-height: 12
@@ -282,7 +267,7 @@ grid.arrange(
 )
 ```
 
-# Section S4: Diagnostic Plots for Slope Comparison Model
+# Section S3: Diagnostic Plots for Slope Comparison Model
 
 To validate the use of the square-root transformation for the "Slope Showdown" analysis (aggregated plant-level data), we examined the residual diagnostics of the linear model.
 
@@ -291,6 +276,7 @@ To validate the use of the square-root transformation for the "Slope Showdown" a
 ```{r}
 #| label: fig-sqrt-diagnostics
 #| fig-cap: "Diagnostic plots for the Square-Root Transformed Model. A) Residuals vs Fitted showing no obvious patterns (homoscedasticity). B) Q-Q Plot showing reasonable normality."
+#| echo: false
 #| warning: false
 #| message: false
 #| fig-height: 5
@@ -312,15 +298,228 @@ model_data_agg <- pollen_deposition %>%
 fit_sqrt_supp <- lm(sqrt(mean_HP) ~ mean_CP * Year, data = model_data_agg)
 
 # Diagnostic Plots
+fig_dir <- file.path("output", "figures")
+if (!dir.exists(fig_dir)) dir.create(fig_dir, recursive = TRUE)
+
+png(file.path(fig_dir, "fig_sqrt_diagnostics.png"), width = 10, height = 5, units = "in", res = 300)
+par(mfrow = c(1, 2))
+plot(fit_sqrt_supp, which = 1, main = "A. Residuals vs Fitted")
+plot(fit_sqrt_supp, which = 2, main = "B. Normal Q-Q")
+invisible(dev.off())
+
+if (!requireNamespace("svglite", quietly = TRUE)) install.packages("svglite", repos = "http://cran.us.r-project.org")
+svglite::svglite(file.path(fig_dir, "fig_sqrt_diagnostics.svg"), width = 10, height = 5)
+par(mfrow = c(1, 2))
+plot(fit_sqrt_supp, which = 1, main = "A. Residuals vs Fitted")
+plot(fit_sqrt_supp, which = 2, main = "B. Normal Q-Q")
+invisible(dev.off())
+
 par(mfrow = c(1, 2))
 plot(fit_sqrt_supp, which = 1, main = "A. Residuals vs Fitted")
 plot(fit_sqrt_supp, which = 2, main = "B. Normal Q-Q")
 par(mfrow = c(1, 1))
 ```
 
-# Section S5: Pollinator Community Composition
+<br>
 
-Table S3 presents the abundance and relative abundance of all pollinator taxa recorded across the three study years. **Note on Abundance**: "Abundance" (Count) represents the raw number of recorded interaction events (unstandardized). Relative abundance (%) is calculated as the species' count divided by the total number of visits for that year.
+**Table S1. Analysis of Variance (ANOVA) and estimated marginal means for pairwise slope contrasts. (A) ANOVA results evaluating the interactive effects of Conspecific TPD and Year on Heterospecific Pollen (HP) accumulation. (B) Pairwise slope contrasts quantifying interannual differences in the rates of HP accumulation across standard-density (2022, 2023) and high-density (2024) years.**
+
+```{r}
+#| label: slope-showdown
+#| echo: false
+#| warning: false
+#| message: false
+
+library(flextable)
+library(emmeans)
+
+aov_res <- as.data.frame(anova(fit_sqrt_supp))
+aov_table <- data.frame(
+    Predictor = gsub("sqrt\\(mean_CP\\)", "Conspecific Pollen (CP)", rownames(aov_res)),
+    Df = aov_res$Df,
+    Sum_Sq = round(aov_res$`Sum Sq`, 3),
+    Mean_Sq = round(aov_res$`Mean Sq`, 3),
+    F_value = round(aov_res$`F value`, 2),
+    P_value = format.pval(aov_res$`Pr(>F)`, eps = 0.001, digits = 3),
+    stringsAsFactors = FALSE
+)
+aov_table[is.na(aov_table)] <- ""
+
+slopes_em <- emtrends(fit_sqrt_supp, pairwise ~ Year, var = "mean_CP")
+contrasts_res <- as.data.frame(slopes_em$contrasts)
+contrasts_table <- data.frame(
+    Contrast = contrasts_res$contrast,
+    Estimate = round(contrasts_res$estimate, 3),
+    SE = round(contrasts_res$SE, 3),
+    Df = round(contrasts_res$df, 1),
+    t_ratio = round(contrasts_res$t.ratio, 2),
+    P_value = format.pval(contrasts_res$p.value, eps = 0.001, digits = 3),
+    stringsAsFactors = FALSE
+)
+
+flextable(aov_table) %>%
+    set_header_labels(
+        Predictor = "Predictor",
+        Df = "df",
+        Sum_Sq = "Sum Sq",
+        Mean_Sq = "Mean Sq",
+        F_value = "F",
+        P_value = "p-value"
+    ) %>%
+    add_header_lines(values = "A) ANOVA Results") %>%
+    autofit() %>%
+    theme_vanilla()
+
+flextable(contrasts_table) %>%
+    set_header_labels(
+        Contrast = "Contrast",
+        Estimate = "Estimate",
+        SE = "SE",
+        Df = "df",
+        t_ratio = "t-ratio",
+        P_value = "p-value"
+    ) %>%
+    add_header_lines(values = "B) Pairwise Slope Contrasts") %>%
+    autofit() %>%
+    theme_vanilla()
+```
+
+# Section S4: Overview of Pollen Load Sampled Individuals
+
+The following table provides an overview of all individually sampled pollinators for the pollen load analysis.
+
+<br>
+
+**Table S2**: Overview of Pollen Load Sampled Individuals (2024)  
+*Number of sampled individuals per pollinator species and collection date.*
+
+```{r}
+#| label: table-s2-pollen-load-individuals
+#| echo: false
+#| message: false
+#| warning: false
+library(dplyr)
+library(tidyr)
+library(gt)
+
+# Ensure pollen load data is loaded
+pollen_load_data <- read.csv("data/pollen_load_and_guts_2024_Succisa_pratensis.csv")
+pollen_load_clean <- pollen_load_data %>%
+    mutate(
+        year = as.numeric(year),
+        morphogroup = case_when(
+            grepl("Eristalis", pollinator_species) ~ "Eristalis spp.",
+            grepl("Bombus", pollinator_species) ~ "Bombus spp.",
+            pollinator_species %in% c("Apis_mellifera", "Apis mellifera") ~ "Apis mellifera",
+            grepl("Syrphus", pollinator_species) ~ "Syrphus spp.",
+            grepl("Helophilus", pollinator_species) ~ "Helophilus spp.",
+            TRUE ~ "Other"
+        )
+    ) %>%
+    filter(!is.na(year))
+
+pollen_load_summary <- pollen_load_clean %>%
+    mutate(
+        Date = format(as.Date(date, format = "%m/%d/%Y"), "%b %d"),
+        Species = gsub("_", " ", pollinator_species)
+    ) %>%
+    group_by(
+        `Pollinator Morphogroup` = morphogroup,
+        `Pollinator Species` = Species,
+        Date
+    ) %>%
+    summarise(
+        Count = n(),
+        .groups = "drop"
+    ) %>%
+    pivot_wider(
+        names_from = Date,
+        values_from = Count,
+        values_fill = 0
+    ) %>%
+    mutate(Total = rowSums(across(where(is.numeric)))) %>%
+    arrange(`Pollinator Morphogroup`, desc(Total))
+
+library(flextable)
+flextable(as_grouped_data(pollen_load_summary, groups = "Pollinator Morphogroup")) %>%
+    set_header_labels(
+        `Pollinator Species` = "Pollinator Species",
+        Total = "Total"
+    ) %>%
+    theme_vanilla() %>%
+    set_table_properties(layout = "autofit", width = 1) %>%
+    italic(j = "Pollinator Species", part = "body") %>%
+    fontsize(size = 9, part = "all")
+```
+# Section S4: Single-Visit Deposition (SVD) Sample Sizes
+
+<br>
+
+**Table S3: SVD Sample Sizes**  
+*Number of SVD observations recorded per pollinator species and year.*
+
+```{r}
+#| label: table-svd-species-counts
+#| echo: false
+#| warning: false
+#| message: false
+library(dplyr)
+library(tidyr)
+library(gt)
+
+# Generate table of SVD occurrences per species
+if (!exists("SVD_Succisa_22_24")) {
+    SVD_Succisa_22_24 <- read.csv("data/SVD_Succisa_pratensis.csv")
+}
+
+SVD_clean <- SVD_Succisa_22_24 %>%
+    mutate(
+        year = if ("rok" %in% names(.)) as.numeric(rok) else as.numeric(year),
+        morphogroup = case_when(
+            grepl("Eristalis", pollinator_species) ~ "Eristalis spp.",
+            grepl("Bombus", pollinator_species) ~ "Bombus spp.",
+            pollinator_species %in% c("Apis_mellifera", "Apis mellifera") ~ "Apis mellifera",
+            grepl("Syrphus", pollinator_species) ~ "Syrphus spp.",
+            grepl("Helophilus", pollinator_species) ~ "Helophilus spp.",
+            TRUE ~ "Other"
+        )
+    ) %>%
+    filter(!is.na(year))
+
+svd_summary <- SVD_clean %>%
+    count(morphogroup, pollinator_species, year, name = "count") %>%
+    pivot_wider(
+        id_cols = c(morphogroup, pollinator_species),
+        names_from = year,
+        values_from = count,
+        values_fill = 0
+    )
+
+# Safely calculate Total (handling variable year columns)
+year_cols <- as.character(sort(unique(SVD_clean$year)))
+svd_summary <- svd_summary %>%
+    mutate(Total = rowSums(across(all_of(year_cols)))) %>%
+    arrange(morphogroup, desc(Total))
+
+library(flextable)
+flextable(as_grouped_data(svd_summary, groups = "morphogroup")) %>%
+    set_header_labels(
+        pollinator_species = "Species",
+        Total = "Grand Total"
+    ) %>%
+    theme_vanilla() %>%
+    set_table_properties(layout = "autofit", width = 1) %>%
+    italic(j = "pollinator_species", part = "body") %>%
+    fontsize(size = 9, part = "all")
+```
+
+# Section S4: Pollinator Community Composition
+
+Table S4 presents the abundance and relative abundance of all pollinator taxa recorded across the three study years. **Note on Abundance**: "Abundance" (Count) represents the raw number of recorded interaction events (unstandardized). Relative abundance (%) is calculated as the species' count divided by the total number of visits for that year.
+
+<br>
+
+**Table S4**: Raw abundance (Count) and relative abundance (%) of all pollinator taxa across study years
 
 ```{r}
 #| label: table-s3-abundance
@@ -379,12 +578,10 @@ table_s3 <- rel_abund %>%
 
 # Print Table
 # Print Table
+library(flextable)
 table_s3 %>%
-    gt() %>%
-    tab_header(
-        title = md("**Table S3**: Raw abundance (Count) and relative abundance (%) of all pollinator taxa across study years")
-    ) %>%
-    cols_label(
+    flextable() %>%
+    set_header_labels(
         Species = "Species",
         `2022 (Count)` = "Count 2022",
         `2022 (%)` = "% 2022",
@@ -393,241 +590,48 @@ table_s3 %>%
         `2024 (Count)` = "Count 2024",
         `2024 (%)` = "% 2024"
     ) %>%
-    tab_options(
-        column_labels.background.color = "#F0F0F0",
-        column_labels.font.weight = "bold",
-        table.border.top.color = "black",
-        table.border.top.width = px(2),
-        table.border.bottom.color = "black",
-        table.border.bottom.width = px(2),
-        table_body.hlines.color = "#E5E5E5",
-        data_row.padding = px(6)
-    ) %>%
-    tab_style(
-        style = list(
-            cell_text(color = "black", weight = "bold")
-        ),
-        locations = cells_column_labels()
-    ) %>%
-    opt_align_table_header(align = "left")
+    theme_vanilla() %>%
+    bg(part = "header", bg = "#F0F0F0") %>%
+    bold(part = "header") %>%
+    set_table_properties(layout = "autofit", width = 1) %>%
+    fontsize(size = 9, part = "all")
 ```
 
-# Section S6: Data Descriptions
+# Section S4: Data Distribution
 
-The following table describes the variables contained in the archived datasets (`pollen_deposition.csv`, `SVD.csv`, `network_metrics.csv`).
+The distribution of heterospecific TPD counts is highly skewed, with many low values and a long tail of high deposition events.
 
 ```{r}
-#| label: table-s6-metadata
-#| echo: false
-#| message: false
-#| warning: false
-# Read Metadata
-# Assuming output/publication_data is relative to the project root
-# If rendering from this file, path should be valid if working dir is project root
-dict_path <- file.path("output", "publication_data", "data_dictionary.csv")
-
-if (file.exists(dict_path)) {
-    data_dict <- read.csv(dict_path, stringsAsFactors = FALSE)
-
-    data_dict %>%
-        group_by(Dataset) %>%
-        gt() %>%
-        tab_header(
-            title = md("**Table S6**: Description of variables in the published datasets")
-        ) %>%
-        cols_label(
-            Variable = "Variable Name",
-            Description = "Description",
-            Unit = "Unit/Type"
-        ) %>%
-        tab_options(
-            row_group.background.color = "#E0E0E0",
-            row_group.font.weight = "bold",
-            column_labels.font.weight = "bold",
-            table.width = pct(100)
-        ) %>%
-        tab_style(
-            style = list(
-                cell_text(color = "black", weight = "bold")
-            ),
-            locations = cells_column_labels()
-        )
-} else {
-    print("Data dictionary not found. Please render the main manuscript to generate it.")
-}
-```
-
-# Section S7: Single Visit Efficiency (SVD) Sample Sizes
-
-```{r}
-#| label: table-svd-species-counts
+#| label: fig-distribution
+#| fig-cap: "Distribution of Heterospecific Pollen Counts on Stigmas."
 #| echo: false
 #| warning: false
-#| message: false
-library(dplyr)
-library(tidyr)
-library(gt)
+p_dist_supp <- ggplot(model_data, aes(x = heterospecific_pollen)) +
+    geom_histogram(binwidth = 5, fill = "darkgreen", color = "white", alpha = 0.7) +
+    labs(
+        title = "Distribution of Heterospecific Pollen",
+        subtitle = "Raw counts per stigma (n = 714)",
+        x = "Heterospecific Pollen Count",
+        y = "Frequency"
+    ) +
+    theme_minimal()
 
-# Generate table of SVD occurrences per species
-if (!exists("SVD_Succisa_22_24")) {
-    SVD_Succisa_22_24 <- read.csv("data/SVD_Succisa_pratensis.csv")
-}
+fig_dir <- file.path("output", "figures")
+if (!dir.exists(fig_dir)) dir.create(fig_dir, recursive = TRUE)
+ggsave(file.path(fig_dir, "fig_distribution.png"), plot = p_dist_supp, width = 7, height = 5, dpi = 300, bg = "white")
+ggsave(file.path(fig_dir, "fig_distribution.svg"), plot = p_dist_supp, width = 7, height = 5, bg = "white")
 
-SVD_clean <- SVD_Succisa_22_24 %>%
-    mutate(
-        year = if ("rok" %in% names(.)) as.numeric(rok) else as.numeric(year),
-        morphogroup = case_when(
-            grepl("Eristalis", pollinator_species) ~ "Eristalis spp.",
-            grepl("Bombus", pollinator_species) ~ "Bombus spp.",
-            pollinator_species %in% c("Apis_mellifera", "Apis mellifera") ~ "Apis mellifera",
-            grepl("Syrphus", pollinator_species) ~ "Syrphus spp.",
-            grepl("Helophilus", pollinator_species) ~ "Helophilus spp.",
-            TRUE ~ "Other"
-        )
-    ) %>%
-    filter(!is.na(year))
-
-svd_summary <- SVD_clean %>%
-    count(morphogroup, pollinator_species, year, name = "count") %>%
-    pivot_wider(
-        id_cols = c(morphogroup, pollinator_species),
-        names_from = year,
-        values_from = count,
-        values_fill = 0
-    )
-
-# Safely calculate Total (handling variable year columns)
-year_cols <- as.character(sort(unique(SVD_clean$year)))
-svd_summary <- svd_summary %>%
-    mutate(Total = rowSums(across(all_of(year_cols)))) %>%
-    arrange(morphogroup, desc(Total))
-
-svd_summary %>%
-    gt(groupname_col = "morphogroup") %>%
-    tab_header(
-        title = "Table S1: SVD Sample Sizes",
-        subtitle = "Number of single-visit deposition observations recorded per pollinator species and year."
-    ) %>%
-    cols_label(
-        pollinator_species = "Species",
-        Total = "Grand Total"
-    ) %>%
-    tab_style(
-        style = cell_text(style = "italic"),
-        locations = cells_body(columns = pollinator_species)
-    ) %>%
-    tab_options(
-        table.width = pct(70),
-        column_labels.background.color = "#F0F0F0",
-        table.border.top.color = "black",
-        table.border.bottom.color = "black",
-        row_group.font.weight = "bold",
-        row_group.background.color = "#F9F9F9"
-    ) %>%
-    opt_align_table_header(align = "left")
+print(p_dist_supp)
 ```
 
-# Section S8: Significance Testing of Variance Partitioning
+# Section S4: Variance Partitioning Components
 
-To test the statistical significance of the variance components (Year, Date, and Plant) for both Heterospecific (HP) and Conspecific (CP) pollen deposition, we performed Likelihood Ratio Tests (LRT) using the `ranova()` function from the `lmerTest` package.
+The following tables detail the variance components (Inter-Annual and Intra-Annual) for Conspecific (Table S5) and Heterospecific (Table S6) pollen deposition models.
 
-```{r}
-#| label: table-s8-ranova
-#| echo: false
-#| warning: false
-#| message: false
-library(lmerTest)
-library(dplyr)
-library(gt)
+<br>
 
-# Prepare VCA data
-vca_data <- pollen_deposition %>%
-    filter(!is.na(heterospecific_pollen) & !is.na(conspecific_pollen)) %>%
-    mutate(
-        sqrt_HP = sqrt(heterospecific_pollen),
-        sqrt_CP = sqrt(conspecific_pollen),
-        year_fac = as.factor(year),
-        date_fac = as.factor(paste(year, day, sep = "_")),
-        plant_id = inflorescence_id
-    )
-
-# Inter-Annual Model Testing (Years 2022-2024)
-m_inter_hp <- lmer(sqrt_HP ~ 1 + (1 | year_fac / plant_id), data = vca_data)
-test_inter_hp <- ranova(m_inter_hp)
-m_inter_cp <- lmer(sqrt_CP ~ 1 + (1 | year_fac / plant_id), data = vca_data)
-test_inter_cp <- ranova(m_inter_cp)
-
-# Intra-Annual Model Testing (2024 Only)
-data_24 <- filter(vca_data, year == 2024)
-m_intra_hp <- lmer(sqrt_HP ~ 1 + (1 | date_fac / plant_id), data = data_24)
-test_intra_hp <- ranova(m_intra_hp)
-m_intra_cp <- lmer(sqrt_CP ~ 1 + (1 | date_fac / plant_id), data = data_24)
-test_intra_cp <- ranova(m_intra_cp)
-
-# Formatting function
-format_ranova <- function(ranova_res, model_type, pollen_type) {
-    df <- as.data.frame(ranova_res)
-    df$Term <- rownames(df)
-
-    df <- df %>%
-        filter(!is.na(LRT)) %>%
-        mutate(
-            Model = model_type,
-            Pollen = pollen_type,
-            Term = gsub("\\(1 \\\\| ", "", Term),
-            Term = gsub("\\\\)", "", Term)
-        ) %>%
-        select(Model, Pollen, Term, npar, logLik, AIC, LRT, Df, `Pr(>Chisq)`)
-
-    return(df)
-}
-
-res_list <- list(
-    format_ranova(test_inter_hp, "Inter-Annual (2022-2024)", "Heterospecific"),
-    format_ranova(test_inter_cp, "Inter-Annual (2022-2024)", "Conspecific"),
-    format_ranova(test_intra_hp, "Intra-Annual (2024)", "Heterospecific"),
-    format_ranova(test_intra_cp, "Intra-Annual (2024)", "Conspecific")
-)
-
-all_ranova <- do.call(rbind, res_list)
-
-all_ranova %>%
-    gt() %>%
-    tab_header(
-        title = "Table S8: Significance Testing of Variance Components",
-        subtitle = "Likelihood Ratio Tests for Inter-Annual and Intra-Annual nested models."
-    ) %>%
-    cols_label(
-        Model = "Model Scope",
-        Pollen = "Pollen Type",
-        Term = "Random Effect",
-        npar = "Parameters",
-        logLik = "Log-Likelihood",
-        AIC = "AIC",
-        LRT = "LRT Statistic",
-        Df = "df",
-        `Pr(>Chisq)` = "P-value"
-    ) %>%
-    fmt_number(
-        columns = c(logLik, AIC, LRT),
-        decimals = 2
-    ) %>%
-    fmt_scientific(
-        columns = c(`Pr(>Chisq)`),
-        decimals = 3
-    ) %>%
-    tab_options(
-        column_labels.background.color = "#F0F0F0",
-        table.border.top.color = "black",
-        table.border.bottom.color = "black",
-        row_group.font.weight = "bold"
-    ) %>%
-    opt_row_striping()
-```
-
-# Section S9: Variance Partitioning Components
-
-The following tables detail the variance components (Inter-Annual and Intra-Annual) for Conspecific (Table S9) and Heterospecific (Table S10) pollen deposition models.
+**Table S5**: Variance partitioning of square-root transformed conspecific TPD  
+*Results for Global (Inter-Annual) and 2024 (Intra-Annual) analyses.*
 
 ```{r}
 #| label: table-s9-s10-vca-components
@@ -702,7 +706,7 @@ all_results_supp <- rbind(res_HP_supp, res_CP_supp)
 all_results_supp$level <- factor(all_results_supp$level, levels = c("Year", "Date", "Plant", "Stigma"))
 
 # 3. Helper to format the GT table
-make_vca_table <- function(data_subset, title, subtitle_text) {
+make_vca_table <- function(data_subset) {
     table_detailed <- data_subset %>%
         select(Part, level, vcov, sdcor, percent) %>%
         rename(
@@ -721,239 +725,417 @@ make_vca_table <- function(data_subset, title, subtitle_text) {
 
     last_inter_row <- max(which(table_detailed$Analysis == "Inter-Annual"))
 
-    table_detailed %>%
-        gt() %>%
-        tab_header(
-            title = md(title),
-            subtitle = subtitle_text
-        ) %>%
-        cols_label(
+    library(flextable)
+    flextable(table_detailed) %>%
+        set_header_labels(
             Analysis = "Analysis Scope",
             Source = "Variance Source",
             Variance = "Variance Component",
             Std_Dev = "SD",
             Percent_Total = "% Total"
         ) %>%
-        tab_style(
-            style = cell_text(weight = "bold"),
-            locations = cells_column_labels()
-        ) %>%
-        tab_options(
-            column_labels.background.color = "#F0F0F0",
-            table.border.top.color = "black",
-            table.border.top.width = px(2),
-            table.border.bottom.color = "black",
-            table.border.bottom.width = px(2),
-            data_row.padding = px(6)
-        ) %>%
-        tab_style(
-            style = cell_borders(
-                sides = "bottom",
-                color = "black",
-                weight = px(1),
-                style = "solid"
-            ),
-            locations = cells_body(
-                rows = last_inter_row
-            )
-        ) %>%
-        opt_align_table_header(align = "left")
+        hline(i = last_inter_row) %>%
+        theme_vanilla() %>%
+        set_table_properties(layout = "autofit", width = 1) %>%
+        fontsize(size = 9, part = "all")
 }
 
 # Conspecific Pollen Table (First)
-make_vca_table(
-    filter(all_results_supp, Metric == "Conspecific pollen"),
-    "**Table S9**: Variance partitioning of square-root transformed conspecific pollen deposition",
-    "Results for Global (Inter-Annual) and 2024 (Intra-Annual) analyses."
-)
-
-# Heterospecific Pollen Table (Second)
-make_vca_table(
-    filter(all_results_supp, Metric == "Heterospecific pollen"),
-    "**Table S10**: Variance partitioning of square-root transformed heterospecific pollen deposition",
-    "Results for Global (Inter-Annual) and 2024 (Intra-Annual) analyses."
-)
+make_vca_table(filter(all_results_supp, Metric == "Conspecific pollen"))
 ```
 
-# Section S11: Monte Carlo Simulation Parameters and Year-by-Year Validation Statistics
+<br>
 
-To investigate inter-annual differences in the effect of visitation redundancy, we applied the Monte Carlo Single Visit Deposition (SVD) averaging simulation strictly to each study year. Using a robust Global SVD pool, we estimated yearly required visitation rates and modeled the accumulation of conspecific and heterospecific pollen.
+**Table S6**: Variance partitioning of square-root transformed heterospecific TPD  
+*Results for Global (Inter-Annual) and 2024 (Intra-Annual) analyses.*
 
 ```{r}
-#| label: monte-carlo-stats-new
+#| label: table-s10-vca-components
+#| echo: false
+#| message: false
+#| warning: false
+# Heterospecific Pollen Table (Second)
+make_vca_table(filter(all_results_supp, Metric == "Heterospecific pollen"))
+```
+
+# Section S4: Significance Testing of Variance Partitioning
+
+To test the statistical significance of the variance components (Year, Date, and Plant) for both Heterospecific (HP) and Conspecific (CP) pollen deposition, we performed Likelihood Ratio Tests (LRT) using the `ranova()` function from the `lmerTest` package.
+
+<br>
+
+**Table S7: Significance Testing of Variance Components**  
+*Likelihood Ratio Tests for Inter-Annual and Intra-Annual nested models.*
+
+```{r}
+#| label: table-s8-ranova
 #| echo: false
 #| warning: false
 #| message: false
+library(lmerTest)
 library(dplyr)
 library(gt)
 
-set.seed(42)
-n_sim <- 10000
+# Prepare VCA data
+vca_data <- pollen_deposition %>%
+    filter(!is.na(heterospecific_pollen) & !is.na(conspecific_pollen)) %>%
+    mutate(
+        sqrt_HP = sqrt(heterospecific_pollen),
+        sqrt_CP = sqrt(conspecific_pollen),
+        year_fac = as.factor(year),
+        date_fac = as.factor(paste(year, day, sep = "_")),
+        plant_id = inflorescence_id
+    )
 
-# 1. Establish the Global SVD Pool
-global_emp_svd_cp <- SVD_Succisa_22_24$conspecific_pollen[!is.na(SVD_Succisa_22_24$conspecific_pollen)]
-global_emp_svd_hp <- SVD_Succisa_22_24$heterospecific_pollen[!is.na(SVD_Succisa_22_24$heterospecific_pollen)]
+# Inter-Annual Model Testing (Years 2022-2024)
+m_inter_hp <- lmer(sqrt_HP ~ 1 + (1 | year_fac / plant_id), data = vca_data)
+test_inter_hp <- ranova(m_inter_hp)
+m_inter_cp <- lmer(sqrt_CP ~ 1 + (1 | year_fac / plant_id), data = vca_data)
+test_inter_cp <- ranova(m_inter_cp)
 
-ks_results <- data.frame()
+# Intra-Annual Model Testing (2024 Only)
+data_24 <- filter(vca_data, year == 2024)
+m_intra_hp <- lmer(sqrt_HP ~ 1 + (1 | date_fac / plant_id), data = data_24)
+test_intra_hp <- ranova(m_intra_hp)
+m_intra_cp <- lmer(sqrt_CP ~ 1 + (1 | date_fac / plant_id), data = data_24)
+test_intra_cp <- ranova(m_intra_cp)
 
-years <- c(2022, 2023, 2024)
+# Formatting function
+format_ranova <- function(ranova_res, model_type, pollen_type) {
+    df <- as.data.frame(ranova_res)
+    df$Term <- rownames(df)
 
-for (y in years) {
-    # Extract year-specific final stigmas
-    stigma_y <- pollen_deposition %>% filter(year == y)
-    emp_stigma_cp <- stigma_y$conspecific_pollen[!is.na(stigma_y$conspecific_pollen)]
-    emp_stigma_hp <- stigma_y$heterospecific_pollen[!is.na(stigma_y$heterospecific_pollen)]
-    
-    # Calculate year-specific visitation rate (N)
-    N_visits <- max(1, round(mean(emp_stigma_cp) / mean(global_emp_svd_cp)))
-    
-    # Run the simulation using the GLOBAL SVD pool
-    sim_cp <- replicate(n_sim, sum(sample(global_emp_svd_cp, size = N_visits, replace = TRUE)))
-    sim_hp <- replicate(n_sim, sum(sample(global_emp_svd_hp, size = N_visits, replace = TRUE)))
-    
-    # Run K-S statistical tests
-    ks_cp <- ks.test(emp_stigma_cp, sim_cp)
-    ks_hp <- ks.test(emp_stigma_hp, sim_hp)
-    
-    # Run overlapping tests
-    ov_cp <- overlapping::overlap(list(emp_stigma_cp, sim_cp))
-    ov_hp <- overlapping::overlap(list(emp_stigma_hp, sim_hp))
-    
-    # Save statistics
-    ks_results <- rbind(ks_results, data.frame(
-        Year = y, 
-        Estimated_Visits = N_visits,
-        Obs_Mean_CP = mean(emp_stigma_cp), 
-        Sim_Mean_CP = mean(sim_cp),
-        KS_CP_D = ks_cp$statistic, 
-        KS_CP_P = ks_cp$p.value,
-        OVL_CP = ov_cp$OV,
-        Obs_Mean_HP = mean(emp_stigma_hp), 
-        Sim_Mean_HP = mean(sim_hp),
-        KS_HP_D = ks_hp$statistic, 
-        KS_HP_P = ks_hp$p.value,
-        OVL_HP = ov_hp$OV
-    ))
+    df <- df %>%
+        filter(!is.na(LRT)) %>%
+        mutate(
+            Model = model_type,
+            Pollen = pollen_type,
+            Term = gsub("\\(1 \\\\| ", "", Term),
+            Term = gsub("\\\\)", "", Term)
+        ) %>%
+        select(Model, Pollen, Term, npar, logLik, AIC, LRT, Df, `Pr(>Chisq)`)
+
+    return(df)
 }
 
-ks_results %>%
-    gt() %>%
-    tab_header(
-        title = md("**Table S11**: Monte Carlo Simulation Parameters and Year-by-Year Validation Statistics"),
-        subtitle = "K-S test results and means comparing empirical final stigmas to the simulated null model generated from the global SVD pool."
+res_list <- list(
+    format_ranova(test_inter_hp, "Inter-Annual (2022-2024)", "Heterospecific"),
+    format_ranova(test_inter_cp, "Inter-Annual (2022-2024)", "Conspecific"),
+    format_ranova(test_intra_hp, "Intra-Annual (2024)", "Heterospecific"),
+    format_ranova(test_intra_cp, "Intra-Annual (2024)", "Conspecific")
+)
+
+all_ranova <- do.call(rbind, res_list)
+
+library(flextable)
+flextable(all_ranova) %>%
+    set_header_labels(
+        Model = "Model Scope",
+        Pollen = "Pollen Type",
+        Term = "Random Effect",
+        npar = "Parameters",
+        logLik = "Log-Likelihood",
+        AIC = "AIC",
+        LRT = "LRT Statistic",
+        Df = "df",
+        `Pr(>Chisq)` = "P-value"
     ) %>%
-    cols_label(
-        Year = "Year",
-        Estimated_Visits = "Visits (N)",
-        Obs_Mean_CP = "Obs. Mean (CP)",
-        Sim_Mean_CP = "Sim. Mean (CP)",
-        KS_CP_D = "K-S D (CP)",
-        KS_CP_P = "P-value (CP)",
-        OVL_CP = "OVL (CP)",
-        Obs_Mean_HP = "Obs. Mean (HP)",
-        Sim_Mean_HP = "Sim. Mean (HP)",
-        KS_HP_D = "K-S D (HP)",
-        KS_HP_P = "P-value (HP)",
-        OVL_HP = "OVL (HP)"
-    ) %>%
-    fmt_number(
-        columns = c(Obs_Mean_CP, Sim_Mean_CP, Obs_Mean_HP, Sim_Mean_HP),
-        decimals = 1
-    ) %>%
-    fmt_number(
-        columns = c(KS_CP_D, KS_HP_D, OVL_CP, OVL_HP),
-        decimals = 3
-    ) %>%
-    fmt_scientific(
-        columns = c(KS_CP_P, KS_HP_P),
-        decimals = 3
-    ) %>%
-    tab_options(
-        column_labels.background.color = "#F0F0F0",
-        column_labels.font.weight = "bold",
-        table.border.top.color = "black",
-        table.border.top.width = px(2),
-        table.border.bottom.color = "black",
-        table.border.bottom.width = px(2)
-    ) %>%
-    opt_align_table_header(align = "left")
+    colformat_double(j = c("logLik", "AIC", "LRT"), digits = 2) %>%
+    colformat_double(j = "Pr(>Chisq)", digits = 3) %>%
+    theme_vanilla() %>%
+    set_table_properties(layout = "autofit", width = 1) %>%
+    fontsize(size = 9, part = "all")
 ```
 
-# Section S12: Overview of Pollen Load Sampled Individuals
+# Section S4: Data Descriptions
+## Overview
+This document provides metadata, variable dictionaries, and summary statistics for the datasets associated with the manuscript. These datasets are archived for reproducibility and public access.
 
-The following table provides an overview of all individually sampled pollinators for the pollen load analysis.
+## Data Description
+These datasets contain empirical data collected to investigate the mechanisms linking pollinator visitation networks to stigmatic pollen deposition on *Succisa pratensis*. The study investigates how community-level network structure (specialization, interaction evenness) and single-visit pollen deposition stochastics scale to population-level pollination outcomes across three years (2022-2024).
 
-```{r}
-#| label: table-s12-pollen-load-individuals
-#| echo: false
-#| message: false
-#| warning: false
-library(dplyr)
-library(tidyr)
+The provided files are:
+- `pollen_deposition.csv`: Total pollen loads on stigmas collected from the field.
+- `SVD.csv`: Single-visit deposition experimental data.
+- `network_metrics.csv`: Aggregated yearly metrics constructed from three primary data sources: 
+  1. **Plant-pollinator visitation networks**: Used to calculate network-level specialization ($H_2'$) and species-level specialization/interaction evenness for *Succisa pratensis* using the `bipartite` R package.
+  2. **Stigmatic pollen deposition**: Used to calculate the linear slope of Conspecific (CP) vs. Heterospecific (HP) pollen accumulation, and mean HP loads.
+  3. **Floral abundance transects**: Used to calculate the mean *Succisa pratensis* abundance per plot and total community floral abundance.
+- `interaction_data_all_22_24.csv`: Full plant-pollinator visitation observation data for the entire community across all years.
+- `interaction_data_Succisa_22_24.csv`: Subset of the visitation data containing only observations for *Succisa pratensis*.
+- `plant_abundance_22_24.csv`: Floral abundance transect data for all plots across years.
+- `pollen_load_and_guts_2024_Succisa_pratensis.csv`: Raw pollen load and gut content data for individual pollinators.
+
+```{r setup-metadata, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE, message = FALSE, warning = FALSE)
+library(tidyverse)
 library(gt)
+library(labelled)
+```
 
-# Ensure pollen load data is loaded
-pollen_load_data <- read.csv("data/pollen_load_and_guts_2024_Succisa_pratensis.csv")
-pollen_load_clean <- pollen_load_data %>%
-    mutate(
-        year = as.numeric(year),
-        morphogroup = case_when(
-            grepl("Eristalis", pollinator_species) ~ "Eristalis spp.",
-            grepl("Bombus", pollinator_species) ~ "Bombus spp.",
-            pollinator_species %in% c("Apis_mellifera", "Apis mellifera") ~ "Apis mellifera",
-            grepl("Syrphus", pollinator_species) ~ "Syrphus spp.",
-            grepl("Helophilus", pollinator_species) ~ "Helophilus spp.",
-            TRUE ~ "Other"
-        )
-    ) %>%
-    filter(!is.na(year))
+```{r load-data}
+# Load the exported datasets
+data_dir <- "output/publication_data"
+df_pollen <- read.csv(file.path(data_dir, "pollen_deposition.csv"))
+df_svd <- read.csv(file.path(data_dir, "SVD.csv"))
+df_network <- read.csv(file.path(data_dir, "network_metrics.csv"))
 
-pollen_load_summary <- pollen_load_clean %>%
-    mutate(
-        Date = format(as.Date(date, format = "%m/%d/%Y"), "%b %d"),
-        Species = gsub("_", " ", pollinator_species)
-    ) %>%
-    group_by(
-        `Pollinator Morphogroup` = morphogroup,
-        `Pollinator Species` = Species,
-        Date
-    ) %>%
-    summarise(
-        Count = n(),
-        .groups = "drop"
-    ) %>%
-    pivot_wider(
-        names_from = Date,
-        values_from = Count,
-        values_fill = 0
-    ) %>%
-    mutate(Total = rowSums(across(where(is.numeric)))) %>%
-    arrange(`Pollinator Morphogroup`, desc(Total))
+df_int_all <- read.csv(file.path(data_dir, "interaction_data_all_22_24.csv"))
+df_int_succ <- read.csv(file.path(data_dir, "interaction_data_Succisa_22_24.csv"))
+df_abund <- read.csv(file.path(data_dir, "plant_abundance_22_24.csv"))
+df_pload <- read.csv(file.path(data_dir, "pollen_load_and_guts_2024_Succisa_pratensis.csv"))
+```
 
-pollen_load_summary %>%
-    gt(groupname_col = "Pollinator Morphogroup") %>%
-    tab_header(
-        title = md("**Table S12**: Overview of Pollen Load Sampled Individuals (2024)"),
-        subtitle = "Number of sampled individuals per pollinator species and collection date."
-    ) %>%
-    cols_label(
-        `Pollinator Species` = "Pollinator Species",
-        Total = "Total"
-    ) %>%
-    tab_style(
-        style = cell_text(style = "italic"),
-        locations = cells_body(columns = `Pollinator Species`)
-    ) %>%
-    tab_options(
-        column_labels.background.color = "#F0F0F0",
-        column_labels.font.weight = "bold",
-        row_group.background.color = "#E0E0E0",
-        row_group.font.weight = "bold",
-        table.border.top.color = "black",
-        table.border.top.width = px(2),
-        table.border.bottom.color = "black",
-        table.border.bottom.width = px(2),
-        data_row.padding = px(6)
-    ) %>%
-    opt_align_table_header(align = "left")
+---
+
+## 1. Pollen Deposition Dataset (`pollen_deposition.csv`)
+This dataset contains information regarding pollen deposition on individual stigmas of *Succisa pratensis* over three consecutive years.
+
+### Data Dictionary
+```{r dict-pollen}
+var_label(df_pollen$id) <- "Unique sample identifier (Stigma ID)"
+var_label(df_pollen$year) <- "Year of sampling (2022-2024)"
+var_label(df_pollen$plant_id) <- "Unique plant/patch identifier"
+var_label(df_pollen$conspecific_pollen) <- "Count of conspecific (Succisa) pollen grains on stigma"
+var_label(df_pollen$heterospecific_pollen) <- "Count of heterospecific (non-Succisa) pollen grains on stigma"
+var_label(df_pollen$pollen_total) <- "Total pollen count on stigma"
+
+look_for(df_pollen, details = FALSE) %>%
+  select(variable, label) %>%
+  gt() %>%
+  tab_header(title = "Variables in Pollen Deposition Dataset") %>%
+  opt_stylize(style = 1, color = "blue")
+```
+
+### Summary Statistics
+```{r summary-pollen}
+df_pollen %>%
+  group_by(year) %>%
+  summarise(
+    N_Stigmas = n(),
+    Unique_Plants = n_distinct(plant_id),
+    Mean_CP = round(mean(conspecific_pollen, na.rm = TRUE), 1),
+    Mean_HP = round(mean(heterospecific_pollen, na.rm = TRUE), 1)
+  ) %>%
+  gt() %>%
+  tab_header(title = "Pollen Deposition Sample Sizes & Means") %>%
+  opt_stylize(style = 1, color = "blue")
+```
+
+---
+
+## 2. Single Visit Deposition (SVD) Dataset (`SVD.csv`)
+This dataset contains experimental observations of pollen deposition resulting from a single, uninterrupted visit by various pollinator morphogroups to virgin *Succisa pratensis* inflorescences.
+
+### Data Dictionary
+```{r dict-svd}
+var_label(df_svd$id) <- "Unique sample identifier (Stigma ID)"
+var_label(df_svd$year) <- "Year of observation"
+var_label(df_svd$morphogroup) <- "Functional group of the visitor (e.g., Eristalis spp.)"
+var_label(df_svd$species) <- "Taxonomic species of the pollinator"
+var_label(df_svd$duration_sec) <- "Duration of the single visit (seconds)"
+var_label(df_svd$conspecific_pollen) <- "Conspecific pollen deposited during single visit"
+var_label(df_svd$heterospecific_pollen) <- "Heterospecific pollen deposited during single visit"
+
+look_for(df_svd, details = FALSE) %>%
+  select(variable, label) %>%
+  gt() %>%
+  tab_header(title = "Variables in SVD Dataset") %>%
+  opt_stylize(style = 1, color = "green")
+```
+
+### Summary Statistics
+```{r summary-svd}
+df_svd %>%
+  group_by(morphogroup) %>%
+  summarise(
+    N_Visits = n(),
+    Mean_Duration_sec = round(mean(duration_sec, na.rm = TRUE), 1),
+    Mean_CP_Deposited = round(mean(conspecific_pollen, na.rm = TRUE), 1),
+    Mean_HP_Deposited = round(mean(heterospecific_pollen, na.rm = TRUE), 1)
+  ) %>%
+  gt() %>%
+  tab_header(title = "Single Visit Deposition (SVD) Sample Sizes") %>%
+  opt_stylize(style = 1, color = "green")
+```
+
+---
+
+## 3. Network Metrics Dataset (`network_metrics.csv`)
+This dataset aggregates plot-level and community-level metrics calculated from plant-pollinator interaction networks, floral abundance surveys, and overall stigmatic pollen loads.
+
+### Data Dictionary
+```{r dict-network}
+var_label(df_network$Year) <- "Year of sampling"
+var_label(df_network$H2) <- "Network Specialization index (H2')"
+var_label(df_network$Succisa_H) <- "Interaction Evenness (Shannon's H)"
+var_label(df_network$Succisa_d) <- "Interaction Specialization (d')"
+var_label(df_network$Slope) <- "Slope (Beta) of the CP-HP relationship (Type 1 dynamics)"
+var_label(df_network$Mean_HP) <- "Mean Heterospecific Pollen per stigma"
+var_label(df_network$Succisa_Abundance) <- "Mean abundance of Succisa pratensis per plot"
+var_label(df_network$Total_Abundance) <- "Total floral abundance in the community"
+
+look_for(df_network, details = FALSE) %>%
+  select(variable, label) %>%
+  gt() %>%
+  tab_header(title = "Variables in Network Metrics Dataset") %>%
+  opt_stylize(style = 1, color = "gray")
+```
+
+### Summary Statistics
+```{r summary-network}
+df_network %>%
+  group_by(Year) %>%
+  summarise(
+    Plots = n(),
+    Mean_H2 = round(mean(H2, na.rm = TRUE), 3),
+    Mean_Evenness = round(mean(Succisa_H, na.rm = TRUE), 3),
+    Mean_Total_Abundance = round(mean(Total_Abundance, na.rm = TRUE), 1)
+  ) %>%
+  gt() %>%
+  tab_header(title = "Network Metrics Summary per Year") %>%
+  opt_stylize(style = 1, color = "gray")
+```
+
+---
+
+## 4. Full Interaction Dataset (`interaction_data_all_22_24.csv`)
+This dataset contains the complete plant-pollinator visitation observation data for the entire community across all years (2022-2024).
+
+### Data Dictionary
+```{r dict-int-all}
+var_label(df_int_all$sampling_id) <- "Unique sampling event ID"
+var_label(df_int_all$year) <- "Year of observation"
+var_label(df_int_all$plot_id) <- "Plot identifier"
+var_label(df_int_all$plant_name) <- "Visited plant species"
+var_label(df_int_all$network_species) <- "Harmonized pollinator species name"
+var_label(df_int_all$order) <- "Pollinator taxonomic order"
+var_label(df_int_all$n_visits) <- "Number of observed visits"
+var_label(df_int_all$rate) <- "Visitation rate"
+
+look_for(df_int_all, details = FALSE) %>%
+  filter(variable %in% c("sampling_id", "year", "plot_id", "plant_name", "network_species", "order", "n_visits", "rate")) %>%
+  select(variable, label) %>%
+  gt() %>%
+  tab_header(title = "Selected Variables in Full Interaction Dataset") %>%
+  opt_stylize(style = 1, color = "pink")
+```
+
+### Summary Statistics
+```{r summary-int-all}
+df_int_all %>%
+  group_by(year) %>%
+  summarise(
+    Total_Visits = sum(n_visits, na.rm = TRUE),
+    Unique_Pollinator_Species = n_distinct(network_species),
+    Unique_Plant_Species = n_distinct(plant_name)
+  ) %>%
+  gt() %>%
+  tab_header(title = "Community Visitation Summary") %>%
+  opt_stylize(style = 1, color = "pink")
+```
+
+---
+
+## 5. Succisa Interaction Dataset (`interaction_data_Succisa_22_24.csv`)
+This dataset is a subset of the full interaction dataset, focusing specifically on pollinator visitations to *Succisa pratensis*.
+
+### Data Dictionary
+```{r dict-int-succ}
+var_label(df_int_succ$sampling_id) <- "Unique sampling event ID"
+var_label(df_int_succ$year) <- "Year of observation"
+var_label(df_int_succ$plot_id) <- "Plot identifier"
+var_label(df_int_succ$plant_name) <- "Visited plant species (Succisa pratensis)"
+var_label(df_int_succ$network_species) <- "Harmonized pollinator species name"
+var_label(df_int_succ$n_visits) <- "Number of observed visits"
+
+look_for(df_int_succ, details = FALSE) %>%
+  filter(variable %in% c("sampling_id", "year", "plot_id", "plant_name", "network_species", "n_visits")) %>%
+  select(variable, label) %>%
+  gt() %>%
+  tab_header(title = "Selected Variables in Succisa Interaction Dataset") %>%
+  opt_stylize(style = 1, color = "red")
+```
+
+### Summary Statistics
+```{r summary-int-succ}
+df_int_succ %>%
+  group_by(year) %>%
+  summarise(
+    Total_Succisa_Visits = sum(n_visits, na.rm = TRUE),
+    Unique_Pollinators = n_distinct(network_species)
+  ) %>%
+  gt() %>%
+  tab_header(title = "Succisa pratensis Visitation Summary") %>%
+  opt_stylize(style = 1, color = "red")
+```
+
+---
+
+## 6. Plant Abundance Dataset (`plant_abundance_22_24.csv`)
+This dataset contains floral abundance counts for all plant species across the study plots over three years.
+
+### Data Dictionary
+```{r dict-abund}
+var_label(df_abund$year) <- "Year of sampling"
+var_label(df_abund$plot_id) <- "Plot identifier"
+var_label(df_abund$Suc_pra) <- "Abundance of Succisa pratensis (inflorescences)"
+
+look_for(df_abund, details = FALSE) %>%
+  filter(variable %in% c("year", "plot_id", "Suc_pra")) %>%
+  select(variable, label) %>%
+  gt() %>%
+  tab_header(title = "Key Variables in Plant Abundance Dataset") %>%
+  opt_stylize(style = 1, color = "cyan")
+```
+
+### Summary Statistics
+```{r summary-abund}
+df_abund %>%
+  group_by(year) %>%
+  summarise(
+    N_Plots = n_distinct(plot_id),
+    Mean_Succisa_Abundance = round(mean(Suc_pra, na.rm = TRUE), 1),
+    Max_Succisa_Abundance = max(Suc_pra, na.rm = TRUE)
+  ) %>%
+  gt() %>%
+  tab_header(title = "Succisa pratensis Abundance Summary") %>%
+  opt_stylize(style = 1, color = "cyan")
+```
+
+---
+
+## 7. Pollinator Pollen Load Dataset (`pollen_load_and_guts_2024_Succisa_pratensis.csv`)
+This dataset contains raw pollen loads carried on the bodies and within the guts of individual pollinators captured on *Succisa pratensis* in 2024.
+
+### Data Dictionary
+```{r dict-pload}
+var_label(df_pload$id) <- "Unique pollinator specimen ID"
+var_label(df_pload$pollinator_species) <- "Pollinator species name"
+var_label(df_pload$suc_pra_load) <- "Count of Succisa pratensis pollen on body"
+var_label(df_pload$other_pollen_load) <- "Count of heterospecific pollen on body"
+var_label(df_pload$suc_pra_guts) <- "Count of Succisa pratensis pollen in gut"
+
+look_for(df_pload, details = FALSE) %>%
+  filter(variable %in% c("id", "pollinator_species", "suc_pra_load", "other_pollen_load", "suc_pra_guts")) %>%
+  select(variable, label) %>%
+  gt() %>%
+  tab_header(title = "Key Variables in Pollen Load Dataset") %>%
+  opt_stylize(style = 1, color = "blue")
+```
+
+### Summary Statistics
+```{r summary-pload}
+df_pload %>%
+  group_by(pollinator_species) %>%
+  summarise(
+    N_Specimens = n(),
+    Mean_Body_CP = round(mean(suc_pra_load, na.rm = TRUE), 1),
+    Mean_Body_HP = round(mean(other_pollen_load, na.rm = TRUE), 1)
+  ) %>%
+  arrange(desc(N_Specimens)) %>%
+  slice_head(n = 5) %>%
+  gt() %>%
+  tab_header(title = "Top 5 Pollinators by Sample Size (2024 Body Loads)") %>%
+  opt_stylize(style = 1, color = "blue")
 ```

@@ -1,0 +1,7 @@
+This is a paragraph referring to (@fig-test).
+
+```{r}
+#| label: fig-test
+#| fig-cap: "Test caption"
+plot(1)
+```
