@@ -8,3 +8,9 @@
 
 labmeeting_presentation/
 *.zip
+
+# Auto-generated R and Quarto outputs
+Rplots.pdf
+output/Rplots.pdf
+_site/
+*.native
