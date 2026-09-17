@@ -7,7 +7,8 @@ Jakub Štenc<sup>1,2,3</sup>\*, Martin Freudenfeld<sup>1</sup>, Petr
 Švanda<sup>1</sup>, Eva Matoušková<sup>1</sup>, Jiří
 Hadrava<sup>2</sup>, Michael Mikát<sup>2</sup>, Tadeáš
 Ryšan<sup>2</sup>, Helena Pijálková<sup>2</sup> , Eva
-Horčičková<sup>4</sup>, Zdeněk Janovský<sup>5</sup>
+Horčičková<sup>4</sup>, Zdeněk Janovský<sup>5</sup>, Jakub
+Straka<sup>2</sup>
 
 <sup>1</sup> Department of Botany, Faculty of Science, Charles
 University, Benátská 2, 128 41 Prague, Czech Republic
@@ -15,15 +16,14 @@ University, Benátská 2, 128 41 Prague, Czech Republic
 <sup>2</sup> Department of Zoology, Faculty of Science, Charles
 University, Viničná 7, 128 41 Prague, Czech Republic
 
-<sup>15</sup> Department of Environment, Faculty of Environment, Jan
+<sup>3</sup> CREAF - Centre de Recerca Ecològica i Aplicacions
+Forestals, 08193 Bellaterra, Barcelona
+
+<sup>4</sup> Department of Environment, Faculty of Environment, Jan
 Evangelista Purkyně University in Ústí nad Labem, Pasteurova 3632/15,
 400 96, Ústí nad Labem, Czech Republic
 
-<sup>16</sup> Department of Ecology, Faculty of Environmental Sciences,
-Czech University of Life Sciences, Kamýcká 129, 165 00, Prague , Czech
-Republic
-
-<sup>19</sup> Svatý Jan t. Krsovice 1, 285 04 Uhlířské Janovice, Czech
+<sup>5</sup> Svatý Jan t. Krsovice 1, 285 04 Uhlířské Janovice, Czech
 Republic
 
 \*Contact and corresponding author, e-mail address:
@@ -80,59 +80,50 @@ Figure 1: Graphical Abstract
 
 ## Introduction
 
-Pollen transfer by animal vectors is inherently stochastic at the
-micro-level (reviewed in [Minnaar et al., 2019](#ref-Minnaar2019)),
-characterised by highly variable, heterogeneous pollen loads delivered
-during individual foraging events ([Richards et al.,
-2009](#ref-richards2009variation); [King et al., 2013](#ref-king2013)).
-Despite this unpredictability, population-level studies demonstrate that
-terminal pollen deposition (TPD)—the final stigmatic pollen load prior
-to senescence—remains stable across multiple years (e.g., [Fang et al.,
-2019](#ref-fang2019multi), [2022](#ref-Fang2022)). This stability
-provides reproductive assurance, driven by the accumulation of
-conspecific pollen (CP). Conversely, the receipt of heterospecific
-pollen (HP) from co-flowering species may cause reproductive
+Pollen transfer by animal vectors is an inherently stochastic process
+(reviewed in [Minnaar et al., 2019](#ref-Minnaar2019)), where the number
+of pollen grains delivered during one pollinator visit (Single-Visit
+Deposition; SVD) exhibits high variance ([Richards et al.,
+2009](#ref-richards2009variation); [King et al., 2013a](#ref-king2013)).
+Despite this micro-scale unpredictability, population-level studies
+demonstrate that terminal pollen deposition (TPD)—the final stigmatic
+pollen load prior to senescence—remains stable across multiple years
+(e.g., [Fang et al., 2019](#ref-fang2019multi), [2022](#ref-Fang2022)).
+This stability provides reproductive assurance, driven by the
+accumulation of conspecific pollen (CP). Conversely, the receipt of
+heterospecific pollen (HP) from co-flowering species causes reproductive
 interference that negatively impacts plant fitness ([Arceo-Gómez and
-Ashman, 2011](#ref-ArceoGomez2011)). Resolving how plants compensate for
-high variance in single-visit deposition (SVD), the absolute number of
-pollen grains delivered during one pollinator visit, to secure CP
-receipt while mitigating HP accumulation remains a central problem in
-pollination ecology.
+Ashman, 2011](#ref-ArceoGomez2011)). Determining how plants mitigate the
+high variance of SVD to secure CP receipt while mitigating HP
+accumulation remains a pending objective in pollination ecology.
 
-To resolve this paradox, it is critical to examine pollen transfer
-dynamics across hierarchical scales, from single-visit deposition (SVD)
-of pollen on stigma to terminal pollen deposition (TPD). At the scale of
-an SVD, the delivery of conspecific pollen is highly unpredictable, and
-pollen transfer is markedly inefficient. Even among legitimate
-pollinators, the quantity of pollen transferred fluctuates dramatically
-due to highly variable individual pollen l Figure 6: Pollen Load and
-Single Visit Deposition (SVD). A) Conspecific Body Pollen Load, B)
-Heterospecific Body Pollen Load, C) Conspecific Single Visit Deposition,
-D) Heterospecific Single Visit Deposition. oads ([King et al.,
-2013](#ref-king2013); [Freudenfeld et al.,
-2025](#ref-freudenfeld2025interannual)). This micro-scale stochasticity
-is further compounded by taxon-specific differences in pollinator
-behaviour, such as grooming ([Holmquist et al.,
-2012](#ref-holmquist2012influence)), insect morphological traits that
-drive pollen load composition ([Cullen et al.,
-2021](#ref-cullen2021diversity)), pollen carryover dynamics across
-successive flower visits ([Thomson and Plowright,
+At the SVD scale, the delivery of conspecific pollen is highly
+unpredictable, and pollen transfer is markedly inefficient. Even among
+legitimate pollinators, the quantity of pollen transferred fluctuates
+dramatically due to highly variable individual pollen loads ([King et
+al., 2013b](#ref-king2013flower); [Freudenfeld et al.,
+2025](#ref-freudenfeld2025interannual)). This stochasticity is
+compounded by taxon-specific differences in pollinator behaviour, such
+as grooming ([Holmquist et al., 2012](#ref-holmquist2012influence)),
+insect morphological traits that drive pollen load composition ([Cullen
+et al., 2021](#ref-cullen2021diversity)), pollen carryover dynamics
+across successive flower visits ([Thomson and Plowright,
 1980](#ref-thomson1980)), and changing foraging decisions within the
 plant-pollinator community ([Valdovinos,
-2025](#ref-valdovinos2025effect)). Consequently, from the perspective of
-an individual receptive stigma, the number of CP grains received during
-any single visit exhibits significant variance King et al.
-([2013](#ref-king2013)), requiring plants to rely on broader ecological
-mechanisms to aggregate these variable events into a stable reproductive
-outcome ([Richards et al., 2009](#ref-richards2009variation)).
+2025](#ref-valdovinos2025effect)). Because the quantity and purity of
+deposited pollen directly dictate ovule fertilization and plant fitness,
+this high SVD variance exerts strong selective pressure on plants.
+Consequently, plants must evolve ecological and morphological mechanisms
+to aggregate these variable events into a stable reproductive outcome
+([Richards et al., 2009](#ref-richards2009variation)).
 
-To overcome the high unpredictability of individual visits, some plants
+To overcome the unpredictability of individual visits, some plants may
 rely on high visitation rates, accumulating a sufficient volume of
 visits to average out the variance of individual vectors and ensure
 reliable CP receipt. The attraction of numerous pollinators is often
 facilitated by dense local floral displays ([Vázquez,
 2005](#ref-vazquez2005degree); [Janovský and Štenc,
-2023](#ref-Janovsky2023)) and/or rich flowering communities that draw
+2023](#ref-Janovsky2023)) or rich flowering communities that draw
 diverse pollinator assemblages ([Venjakob et al.,
 2016](#ref-venjakob2016plant); [Aguirre and Junker,
 2024](#ref-aguirre2024floral)). However, accumulating pollinator visits
@@ -142,53 +133,51 @@ pollinators within the community ([Morales and Traveset,
 2008](#ref-morales2008interspecific),
 [2013](#ref-morales2013heterospecific); [Arceo-Gómez and Ashman,
 2011](#ref-ArceoGomez2011)). Co-flowering heterospecific neighbouring
-plant species not only act as sources of HP, but they also potentially
-alter the composition and fidelity of the pollinator assemblage visiting
-the focal plant ([Lázaro et al., 2009](#ref-Lazaro2009); [Ye et al.,
-2020](#ref-ye2020)). Thus, inter-annual changes in the co-flowering
-plant community may alter pollinator composition and behaviour, leading
-to both direct and indirect effects on CP and HP transfer. Therefore,
-plants are under evolutionary pressure to secure stable CP delivery
-while buffering against unpredictable pollinator behaviour.
+plant species act as sources of HP and alter the composition and
+fidelity of the pollinator assemblage visiting the focal plant ([Lázaro
+et al., 2009](#ref-Lazaro2009); [Ye et al., 2020](#ref-ye2020)).
+Therefore, plants face conflicting evolutionary pressures: maximizing
+visitation redundancy to ensure CP delivery while mitigating the
+associated influx of HP. High conspecific floral density serves as one
+density-dependent buffering mechanism, diluting the proportion of
+deposited HP by pulling pollinators from co-flowering neighbours
+\[Arceo-Gómez et al. ([2016](#ref-arceo2016patterns))\].
 
-However, high conspecific floral density may mitigate the proportion of
-deposited HP by pullin g pollinators from co-flowering neighbours
-([Arceo-Gómez et al., 2016](#ref-arceo2016patterns)), providing
-density-dependent buffering. Furthermore, the effect of plant density on
-pollination can be significantly enhanced by the temporal stratification
-of plant-pollinator interactions within the community ([Stone et al.,
-1998](#ref-Stone1998); [Schwarz et al., 2021](#ref-Schwarz2021)). For
-example, the diurnal pollen release schedules previously observed in
-*Succisa pratensis* allow the plant to establish temporal dominance by
-attracting pollinators primary early in the day ([Štenc et al.,
-2023](#ref-stenc2023pollinator)). By releasing pollen and attracting
-vectors before co-flowering competitors do, a plant can secure
-substantial CP delivery prior to the accumulation of heterogeneous
-pollen loads on shared vectors, functioning as a form of temporal
-specialisation ([Brosi, 2016](#ref-Brosi2016)). This temporal
+Other mechanisms may be involved as well. For example, the
+density-dependent buffering can be significantly enhanced by the
+temporal stratification of plant-pollinator interactions within the
+community ([Stone et al., 1998](#ref-Stone1998); [Schwarz et al.,
+2021](#ref-Schwarz2021)). For example, the diurnal pollen release
+schedules previously observed in *Succisa pratensis* allow the plant to
+establish temporal dominance by attracting pollinators primarily early
+in the day ([Štenc et al., 2023a](#ref-Stenc2023)). By releasing pollen
+and attracting vectors before co-flowering competitors do, a plant can
+secure substantial CP delivery prior to the accumulation of
+heterogeneous pollen loads on shared vectors, functioning as a form of
+temporal specialisation ([Brosi, 2016](#ref-Brosi2016)). This temporal
 stratification ensures that the highest-frequency visits occur within a
 specific time window, mitigating the subsequent accumulation of HP
 ([Schwarz et al., 2021](#ref-Schwarz2021); [Štenc et al.,
-2023](#ref-stenc2023pollinator)).
+2023a](#ref-Stenc2023)).
 
 While the variability of individual visits and the theoretical
 frameworks for pollen accumulation are well known, empirical studies
 rarely measure these processes across multiple scales in a natural
-system to study them simultaneously. In this study, we evaluate pollen
-transfer using a three-year dataset (2022–2024) for the highly visited
-plant *Succisa pratensis*. We address the following objectives: (1) to
-quantify the hierarchical variance in pollen deposition across years,
-days, individual plants, and individual stigmas; (2) to compare the
-mechanistic efficiency of CP and HP transfer across dominant vector taxa
-at the single-visit (SVD) scale; (3) to mathematically test whether
-visitation redundancy drives stable CP deposition using Monte Carlo
-simulations; and (4) to determine how year-to-year changes in local
-conspecific floral abundance influence the accumulation of HP. We
-hypothesise that despite the high variability of individual generalist
-visits, *S. pratensis* achieves stable CP deposition because high local
-floral abundance and early morning pollen release ([Štenc et al.,
-2023](#ref-stenc2023pollinator), [2025](#ref-stenc2025pollen)) buffer
-the plant against unpredictable single-visit deliveries.
+system. In this study, we evaluate pollen transfer using a three-year
+dataset (2022–2024) for the highly visited plant *Succisa pratensis*. We
+address the following objectives: (1) to quantify the hierarchical
+variance in pollen deposition across years, days, individual plants, and
+individual stigmas; (2) to compare the mechanistic efficiency of CP and
+HP transfer across dominant vector taxa at the SVD scale; (3) to
+mathematically test whether visitation redundancy drives stable CP
+deposition using Monte Carlo simulations; and (4) to determine how
+year-to-year changes in local conspecific floral abundance influence the
+accumulation of HP. We hypothesise that despite the high variability of
+individual generalist visits, *S. pratensis* achieves stable CP
+deposition because its high local floral abundance and early morning
+pollen release ([Štenc et al., 2023a](#ref-Stenc2023),
+[2025](#ref-stenc2025pollen)) evolved as traits that buffer the plant
+against unpredictable single-visit deliveries.
 
 ## Methods
 
@@ -215,7 +204,7 @@ pollination include distinctive open inflorescences accessible to most
 pollinators, protandry to prevent self-pollination ([Bartoš et al.,
 2020](#ref-bartos2020self)), and a diurnal pollen release schedule
 occurring in the morning hours ([Štenc et al.,
-2023](#ref-stenc2023pollinator)).
+2023b](#ref-stenc2023pollinator)).
 
  
 
@@ -286,7 +275,7 @@ species.
 
 To estimate the pollinator single-visit deposition (SVD), we followed
 protocols adapted from previous studies ([King et al.,
-2013](#ref-king2013); [Valverde et al., 2019](#ref-valverde2019)). To
+2013a](#ref-king2013); [Valverde et al., 2019](#ref-valverde2019)). To
 prevent prior pollinator access, we enclosed selected inflorescences in
 fine-mesh tulle bags before the plants entered the male phase and opened
 their anthers. Once a plant entered the female phase with receptive
@@ -610,8 +599,6 @@ Despite the increase in *S. pratensis* abundance in 2024,
 sampling-effort-standardised visitation rates per plot and per plant did
 not differ significantly between years.
 
- 
-
 <div id="fig-spatial-temporal-abundance">
 
 ![](MS_FML_files/figure-commonmark/fig-spatial-temporal-abundance-1.png)
@@ -696,91 +683,72 @@ alignment between simulated and observed deposition.
 
 ## Discussion
 
-Generalist pollination systems present a paradox: animal vectors are
-inherently unpredictable at the micro-level ([Richards et al.,
-2009](#ref-richards2009variation); [King et al., 2013](#ref-king2013)),
-yet population-level pollen deposition often remains remarkably stable
-([Fang et al., 2019](#ref-fang2019multi)). Our results demonstrate that
-even plants subject to highly stochastic single-visit pollen delivery
-can achieve stable terminal conspecific deposition. Specifically, our
-analysis confirms that visitation redundancy mathematically neutralises
-conspecific variance. However, this stabilising effect is asymmetric;
-while conspecific pollen (CP) receipt is heavily buffered,
-heterospecific pollen (HP) accumulation remains highly variable and
-probably influenced by environmental fluctuations ([Arceo-Gómez et al.,
+Generalist pollination systems operate under high micro-scale
+unpredictability ([Richards et al., 2009](#ref-richards2009variation);
+[King et al., 2013a](#ref-king2013)), yet population-level conspecific
+pollen deposition often remains stable ([Fang et al.,
+2019](#ref-fang2019multi)). Our results demonstrate that plants subject
+to highly stochastic single-visit pollen delivery achieve stable
+terminal conspecific deposition simply through mathematical averaging.
+Visitation redundancy neutralizes conspecific variance. Variance
+partitioning revealed that CP receipt is stable against inter-annual
+shifts, restricting variance in TPD almost entirely to individual
+stigmas and plants. The Monte Carlo simulation supports this mechanism,
+demonstrating that the statistical law of large numbers translates
+highly variable single visits into population-level CP stability. This
+stabilizing effect is asymmetric; while CP receipt is buffered by
+visitation frequency, HP accumulation remains highly variable and
+environment-dependent ([Arceo-Gómez et al.,
 2016](#ref-arceo2016patterns)).
 
-Crucially, our variance partitioning revealed how this asymmetry
-functions across scales. CP receipt is stable against inter-annual
-shifts due to interaction frequency, restricting variance in terminal
-pollen deposition (TPD) almost entirely to the individual stigmas and
-plants. Our Monte Carlo simulation supports this mechanism,
-demonstrating that the statistical law of large numbers naturally
-translates highly variable single visits into guaranteed
-population-level CP stability. Conversely, HP accumulation on *Susccisa
-pratensis* stigmas was not successfully predicted by the Monte Carlo
-simulation. This likely reflects the highly dynamic behaviour of the
-pollinators, which is not accounted for in the simulation; the amount of
-heterospecific pollen an insect deposits is not a fixed mechanical
-baseline, but is dynamically changing by the previous visits to the
-surrounding co-flowering plants and the local floral density of the
-focal plant at the exact time of the visit ([Ye et al.,
-2020](#ref-ye2020)).
-
-Our single-visit deposition (SVD) analysis revealed no significant
-differences in CP or HP transfer across the dominant pollinator taxa; a
-single visit from a *Bombus* was functionally indistinguishable from a
-visit by an *Eristalis* syrphid fly
-(<a href="#fig-body-svd" class="quarto-xref">Figure 5</a> C). While
-failing to detect differences between morphological groups may be caused
-by insufficient sampling, the high stochasticity of individual visits
-may play a more significant role in pollen deposition than the
-morphological traits of the visitors. Consequently, highly stochastic
-pollen delivery poses a potentially high risk for plant reproduction
-([Richards et al., 2009](#ref-richards2009variation)). In the case of
-*S. pratensis*, this risk is mitigated by the high visitation rates we
-observed, which provides reproductive assurance and may maximise the
-genetic diversity of pollen donors. Because *S. pratensis* possesses
-only a single ovule, successful fertilisation theoretically requires
-only one viable grain. However, accumulating CP loads that vastly exceed
-this minimum requirement shifts the reproductive bottleneck from the
-pollinator’s body to the plant’s stigmas. As highlighted by Minnaar et
-al. ([2019](#ref-Minnaar2019)), such high-volume deposition triggers
-intense pollen-pollen competition. Consequently, high pollen deposition
-possibly serves as a mechanism to collect pollen from various donors,
-allowing for selection based on pollen quality ([Hildesheim et al.,
+Achieving stable TPD through visitation redundancy directly influences
+plant fitness and sexual selection. *Succisa pratensis* possesses a
+single ovule; successful fertilization theoretically requires one viable
+grain. Accumulating CP loads that vastly exceed this minimum requirement
+shifts the reproductive bottleneck from the pollinator’s body to the
+plant’s stigmas. High-volume CP deposition triggers intense
+pollen-pollen competition ([Minnaar et al., 2019](#ref-Minnaar2019)). By
+securing excessive CP loads despite highly variable individual
+deliveries, high visitation rates act as a mechanism to sample multiple
+pollen donors, enabling post-pollination selection based on pollen
+competitive ability ([Hildesheim et al.,
 2019](#ref-hildesheim2019quantitative); [Madjidian et al.,
-2020](#ref-madjidian2020direct)).
+2020](#ref-madjidian2020direct)). The micro-scale unpredictability of
+individual visits potentially acts as a selective pressure driving
+floral traits that maximize pollinator attraction and visitation
+redundancy.
 
-However, while the deposition of CP remains relatively stable across
-years, HP deposition exhibits high year-to-year variability
-(<a href="#fig-plots-2" class="quarto-xref">Figure 3</a> B),
-highlighting the high unpredictability of HP and its potential negative
-impact on plant reproduction ([Ashman and Arceo-Gómez,
-2013](#ref-Ashman2013); [Briggs et al., 2016](#ref-Briggs2016)). Our
-results underscore that, unlike the mathematically determined stability
-of CP, HP deposition is highly context-dependent, i.e., depending on
-changes in plant and pollinator densities. The extent of HP deposition
-is likely influenced by a complex and dynamic interplay of co-flowering
-phenology, relative neighbourhood abundances, and pollinator behaviour
-at the exact time of visitation ([Ye et al., 2020](#ref-ye2020);
-[Arceo-Gómez, 2021](#ref-arceo2021spatial); [Labonté et al.,
-2023](#ref-labonte2023individual)). In years with increased density of
-co-flowering heterospecific neighbours, the higher density of
-co-flowering species may alter the fidelity of shared pollinators
+Single-visit deposition (SVD) analysis revealed no significant
+differences in CP or HP transfer across dominant pollinator taxa.
+Functionally, a single visit from a *Bombus* bee was indistinguishable
+from a visit by an *Eristalis* syrphid fly
+(<a href="#fig-body-svd" class="quarto-xref">Figure 5</a> C). While
+previous frameworks emphasize morphological specialization, our data
+show that the extreme stochasticity of individual visits overrides
+taxonomic differences in mechanical transfer efficiency. Reproductive
+success in this system is driven by vector abundance rather than
+morphological specialization. These results support recent findings that
+large hoverflies and bees exhibit functional equivalence in pollen
+transfer capacity ([Freudenfeld et al.,
+2025](#ref-freudenfeld2025interannual)).
+
+Unlike the mathematically determined stability of CP, HP deposition is
+context-dependent and exhibits high inter-annual variability. The extent
+of HP contamination represents reproductive interference driven by
+environmental fluctuations rather than mechanical redundancy. HP
+accumulation is not successfully predicted by simple visitation models
+because pollinator fidelity fluctuates dynamically based on co-flowering
+phenology and local floral density. In years with increased density of
+co-flowering heterospecific neighbors, the attractive pull of
+competitors alters the fidelity of shared generalist pollinators
 ([Morales and Traveset, 2008](#ref-morales2008interspecific); [Flanagan
 et al., 2010](#ref-flanagan2022pollinator)), driving interspecific
 transitions and increasing HP loads ([Bell et al.,
-2005](#ref-bell2005interspecific)). Therefore, mitigating HP deposition
-likely requires the focal plant to employ other traits, such as high
-floral density or fine-scale temporal stratification ([Štenc et al.,
-2025](#ref-stenc2025pollen)), to effectively maintain pollinator
-constancy. Furthermore, as demonstrated by Venjakob et al.
-([2016](#ref-venjakob2016plant)), higher plant diversity within the
-community can actively promote spatio-temporal niche complementarity
-among pollinators. By partitioning their foraging across different times
-of day, distinct pollinator groups can reduce their interspecific
-overlap, mitigating HP transfer.
+2005](#ref-bell2005interspecific)). To mitigate environmentally driven
+HP accumulation, focal plants are under selective pressure to employ
+spatial or temporal isolation traits. High conspecific floral density
+acts as a spatial buffer against HP transfer, while diurnal pollen
+release schedules establish temporal dominance over shared vectors.
 
 Nevertheless, our study possesses limitations that must be addressed in
 future research. First, while we found no significant differences among
@@ -789,7 +757,7 @@ deposition (SVD), this lack of difference may be partly due to the
 stochastic nature of individual depositions, potentially requiring more
 sampling to detect the subtle effects of pollinator traits on pollen
 deposition ([Ne’eman et al., 2010](#ref-ne2010framework); [King et al.,
-2013](#ref-king2013)). Second, our SVD methodology provides an evidence
+2013a](#ref-king2013)). Second, our SVD methodology provides an evidence
 of pollen transfer, but it does not explicitly track the previous
 foraging history or complex pollen carryover dynamics of individual
 pollinators prior to capture ([Thomson and Plowright,
@@ -804,49 +772,41 @@ competition along the pathway to paternity ([Karron and Mitchell,
 2012](#ref-karron2012effects); [Minnaar et al., 2019](#ref-Minnaar2019);
 [Stavert et al., 2020](#ref-stavert2020pollen)).
 
-Despite the limitations, the fact that the pollen deposited on stigmas
-is the result of multiple SVD events suggests that the composition of
-pollen competing for ovule fertilisation is potentially formed by pollen
-from several distinct donors. This has crucial implications for
-pollen-pollen competition, male reproductive success, and ultimately,
-population genetic variability ([Bernasconi et al.,
-2004](#ref-bernasconi2004evolutionary)). A vital remaining question is
-whether the pollen delivered during the first visits has a decisive
-competitive advantage over later-delivered pollen ([Lankinen and
-Madjidian, 2011](#ref-lankinen2011enhancing)), or if this advantage is
-limited by the timing of stigma receptivity acting as a synchronised
-starting gate ([Herrero, 2003](#ref-herrero2003male)). Beyond this
-micro-scale pollen-pollen competition, the macro-scale genetic
-implications of these stochastic visits remain entirely unknown. Because
-vector foraging behaviour and heterospecific carryover fluctuate with
-local floral density ([Arceo-Gómez and Ashman,
-2011](#ref-ArceoGomez2011)), the hidden donor-acceptor mating network
-may undergo radical year-to-year rewiring ([Arceo-Gómez and Ashman,
-2011](#ref-ArceoGomez2011); [CaraDonna et al.,
-2017](#ref-caradonna2017interaction)). Determining whether these dynamic
-micro-competitive mechanisms and macro-level network shifts are unique
-responses to the high-density increase of *S. pratensis* in our study,
-or whether they represent a broadly generalisable feature of such
-plant-pollinator systems, remains as a vital question for future
-ecological and evolutionary research which needs to be addressed.
+The fact that the pollen deposited on stigmas is the result of multiple
+SVD events suggests that the composition of pollen competing for ovule
+fertilization is formed by pollen from several distinct donors. This has
+direct implications for pollen-pollen competition, male reproductive
+success, and population genetic variability ([Bernasconi et al.,
+2004](#ref-bernasconi2004evolutionary)). A remaining question is whether
+the pollen delivered during the first visits has a decisive competitive
+advantage over later-delivered pollen ([Lankinen and Madjidian,
+2011](#ref-lankinen2011enhancing)), or if this advantage is limited by
+the timing of stigma receptivity acting as a synchronized starting gate
+([Herrero, 2003](#ref-herrero2003male)). Beyond this micro-scale
+pollen-pollen competition, the macro-scale genetic implications of
+stochastic visits remain unknown. Because vector foraging behavior and
+heterospecific carryover fluctuate with local floral density
+([Arceo-Gómez and Ashman, 2011](#ref-ArceoGomez2011)), the hidden
+donor-acceptor mating network may undergo radical year-to-year rewiring
+CaraDonna et al. ([2017](#ref-caradonna2017interaction))\]. Determining
+whether these dynamic micro-competitive mechanisms and macro-level
+network shifts represent a generalizable feature of plant-pollinator
+systems remains an open question for future ecological and evolutionary
+research.
 
 #### Conclusions
 
-Ultimately, our multi-scale analysis demonstrates that stable pollen
-transfer in generalised networks is driven by distinct, scale-dependent
-mechanisms. While individual generalist vectors exhibit extreme
-depositional stochasticity, plants achieve reliable conspecific pollen
-receipt through the statistical averaging of redundant visits. However,
-this visitation redundancy alone is functionally insufficient to prevent
+Stable pollen transfer in generalized networks is driven by distinct,
+scale-dependent mechanisms. While individual generalist vectors exhibit
+extreme depositional stochasticity, plants achieve reliable conspecific
+pollen receipt through the statistical averaging of redundant visits.
+Visitation redundancy alone is functionally insufficient to prevent
 reproductive interference from the co-flowering community, and
-variations in community composition may influence HP transfer. Instead,
-the mitigation of heterospecific pollen accumulation relies on the local
-spatial structure of the focal populatio Aggregated plot-level
-visitation network and stability metrics, derived from a combination of
-plant-pollinator visitation observations, stigmatic pollen load
-analyses, and floral abundance surveys.n and possibly pollinator
-temporal specialisation ([Brosi, 2016](#ref-Brosi2016); [Štenc et al.,
-2025](#ref-stenc2025pollen)).
+variations in community composition influence HP transfer. The
+mitigation of heterospecific pollen accumulation then possibly relies on
+several mechanisms such as the local spatial structure of the focal
+population and pollinator temporal specialization ([Brosi,
+2016](#ref-Brosi2016); [Štenc et al., 2025](#ref-stenc2025pollen))
 
 ## Data Availability
 
@@ -906,14 +866,6 @@ diversity mediate network structure along an elevational gradient.
 
 </div>
 
-<div id="ref-arceo2021spatial" class="csl-entry">
-
-Arceo-Gómez, G. 2021. Spatial variation in the intensity of interactions
-via heterospecific pollen transfer may contribute to local and global
-patterns of plant diversity. *Annals of Botany* 128: 383–394.
-
-</div>
-
 <div id="ref-arceo2016patterns" class="csl-entry">
 
 Arceo-Gómez, G., C. Alonso, L. Abdala-Roberts, and V. Parra-Tabla. 2016.
@@ -929,16 +881,6 @@ Arceo-Gómez, G., and T. L. Ashman. 2011. [Heterospecific pollen
 deposition: Does diversity alter the
 consequences?](https://doi.org/10.1111/J.1469-8137.2011.03831.X) *New
 Phytologist* 192: 738–746.
-
-</div>
-
-<div id="ref-Ashman2013" class="csl-entry">
-
-Ashman, T. L., and G. Arceo-Gómez. 2013. [Toward a predictive
-understanding of the fitness costs of heterospecific pollen receipt and
-its importance in co-flowering
-communities](https://doi.org/10.3732/AJB.1200496). *American Journal of
-Botany* 100: 1061–1070.
 
 </div>
 
@@ -971,16 +913,6 @@ mimulus ringens. *Ecology* 86: 762–771.
 Bernasconi, G., T.-L. Ashman, T. Birkhead, J. Bishop, U. Grossniklaus,
 E. Kubli, D. Marshall, et al. 2004. Evolutionary ecology of the
 prezygotic stage. *science* 303: 971–975.
-
-</div>
-
-<div id="ref-Briggs2016" class="csl-entry">
-
-Briggs, H. M., L. M. Anderson, L. M. Atalla, A. M. Delva, E. K. Dobbs,
-and B. J. Brosi. 2016. [Heterospecific pollen deposition in delphinium
-barbeyi: Linking stigmatic pollen loads to reproductive output in the
-field](https://doi.org/10.1093/AOB/MCV175). *Annals of Botany* 117:
-341–347.
 
 </div>
 
@@ -1047,14 +979,6 @@ pollinator abundance. *AoB Plants* 17: plaf009.
 
 </div>
 
-<div id="ref-herrera1987" class="csl-entry">
-
-Herrera, C. M. 1987. [Components of pollinator "quality": Comparative
-analysis of a diverse insect
-assemblage](https://doi.org/10.2307/3565403). *Oikos* 50: 79.
-
-</div>
-
 <div id="ref-herrero2003male" class="csl-entry">
 
 Herrero, M. 2003. Male and female synchrony and the regulation of mating
@@ -1113,22 +1037,22 @@ botany* 109: 563–570.
 
 </div>
 
-<div id="ref-king2013" class="csl-entry">
+<div id="ref-king2013flower" class="csl-entry">
 
-King, C., G. Ballantyne, and P. G. Willmer. 2013. [Why flower visitation
+King, C., G. Ballantyne, and P. G. Willmer. 2013b. Why flower visitation
 is a poor proxy for pollination: Measuring single-visit pollen
-deposition, with implications for pollination networks and
-conservation](https://doi.org/10.1111/2041-210X.12074). *Methods in
-Ecology and Evolution* 4: 811818.
+deposition, with implications for pollination networks and conservation.
+*Methods in Ecology and Evolution* 4: 811–818.
 
 </div>
 
-<div id="ref-labonte2023individual" class="csl-entry">
+<div id="ref-king2013" class="csl-entry">
 
-Labonté, A., L. S. Monticelli, M. Turpin, E. Felten, E. Laurent, A.
-Matejicek, L. Biju-Duval, et al. 2023. Individual flowering phenology
-shapes plant–pollinator interactions across ecological scales affecting
-plant reproduction. *Ecology and Evolution* 13: e9707.
+King, C., G. Ballantyne, and P. G. Willmer. 2013a. [Why flower
+visitation is a poor proxy for pollination: Measuring single-visit
+pollen deposition, with implications for pollination networks and
+conservation](https://doi.org/10.1111/2041-210X.12074). *Methods in
+Ecology and Evolution* 4: 811818.
 
 </div>
 
@@ -1193,15 +1117,6 @@ and efficiency. *Biological Reviews* 85: 435–451.
 
 </div>
 
-<div id="ref-neeman2001" class="csl-entry">
-
-Ne’eman, G., and P. G. Kevan. 2001. [The effect of shape parameters on
-maximal detection distance of model targets by honeybee
-workers](https://doi.org/10.1007/s003590100237). *Journal of Comparative
-Physiology - A Sensory, Neural, and Behavioral Physiology* 187: 653660.
-
-</div>
-
 <div id="ref-pastore2019measuring" class="csl-entry">
 
 Pastore, M., and A. Calcagnı̀. 2019. Measuring distribution similarities
@@ -1248,8 +1163,17 @@ pollinator performance and plant reproduction. *Scientific Reports* 10:
 <div id="ref-stenc2023pollinator" class="csl-entry">
 
 Štenc, J., L. Janošík, E. Matoušková, J. Hadrava, M. Mikát, and Z.
-Janovský. 2023. Pollinator visitation closely tracks diurnal patterns in
-pollen release. *American Journal of Botany* 110: e16179.
+Janovský. 2023b. Pollinator visitation closely tracks diurnal patterns
+in pollen release. *American Journal of Botany* 110: e16179.
+
+</div>
+
+<div id="ref-Stenc2023" class="csl-entry">
+
+Štenc, J., L. Janošík, E. Matoušková, J. Hadrava, M. Mikát, and Z.
+Janovský. 2023a. [Pollinator visitation closely tracks diurnal patterns
+in pollen release](https://doi.org/10.1002/AJB2.16179). *American
+Journal of Botany*: e16179.
 
 </div>
 
