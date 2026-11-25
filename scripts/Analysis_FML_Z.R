@@ -62,7 +62,7 @@ pollen_deposition <- pollen_deposition %>%
 # Remove rows with NA values in conspecific_pollen or heterospecific_pollen
 pollen_deposition <- subset(pollen_deposition, (!is.na(conspecific_pollen)) & (!is.na(heterospecific_pollen)))
 
-# Define vca_data globally because fig-plots-2 requires it before fig-plots-3 runs in Quarto
+# Define vca_data globally because fig-plots-3 requires it before fig-plots-4 runs in Quarto
 vca_data <- pollen_deposition %>%
     filter(!is.na(heterospecific_pollen) & !is.na(conspecific_pollen)) %>%
     mutate(
@@ -95,14 +95,12 @@ plant_abundance_22_24 <- read.csv(file.path("data", "plant_abundance_22_24.csv")
 # 1.6 Single Visit Deposition (SVD) Data
 SVD_Succisa_22_24 <- read.csv(file.path("data", "SVD_Succisa_pratensis.csv"))
 
-table(SVD_Succisa_22_24$rok, SVD_Succisa_22_24$pollinator_species)
+table(SVD_Succisa_22_24$year, SVD_Succisa_22_24$pollinator_species)
 
 
-# 1.7 Plot Coordinates (HanPolNet -> RDS Format)
-# Assuming 'hanpolnet_plots' comes from the package or is loaded in environment
-if (file.exists(file.path("data", "hanpolnet_plots.rds"))) {
-    hanpolnet_plots <- readRDS(file.path("data", "hanpolnet_plots.rds"))
-}
+# 1.7 Plot Coordinates (WGS84 longitude/latitude of the permanent plots)
+hanpolnet_plots <- read.csv(file.path("data", "plot_coordinates.csv")) %>%
+    sf::st_as_sf(coords = c("longitude", "latitude"), crs = 4326, remove = FALSE)
 
 
 # ==============================================================================
@@ -622,7 +620,7 @@ pollinator_colors <- c(
     "Helophilus_trivittatus" = "#D9F121", "Helophilus_hybridus" = "#D9F121",
     "Myathropa_florea" = "#F9B614", "Apis_mellifera" = "#F9B614",
     "Bombus_lapidarius" = "#EB520E", "Sarcophaga_sp" = "#A42C17",
-    "Zygena_sp" = "#D2204C", "Sericomyia" = "#D2204C",
+    "Zygaena_sp" = "#D2204C", "Sericomyia" = "#D2204C",
     "Tachinidae" = "grey50", "Other" = "grey80"
 )
 
@@ -1059,7 +1057,9 @@ p_var <- ggplot(all_results, aes(x = Metric, y = percent, fill = level)) +
     theme(
         axis.text.x = element_text(face = "bold", angle = 45, hjust = 1, size = 11),
         strip.text = element_text(size = 12, face = "bold"),
-        legend.position = "bottom"
+        legend.position = "bottom",
+        legend.box.margin = margin(t = 2, b = 6),
+        plot.margin = margin(t = 5, r = 5, b = 12, l = 5)
     )
 
 library(patchwork)
@@ -1067,7 +1067,6 @@ library(cowplot)
 
 # Add TPD HP icon to the y-axis and TPD CP icon to the x-axis
 p_model_icon <- ggdraw(p_model) +
-    draw_image("images/Stigma.png", x = 0.11, y = 0.27, hjust = 0.5, vjust = 0.5, width = 0.15, height = 0.15) +
     draw_image("images/TPD_HP.png", x = 0.13, y = 0.88, hjust = 0.5, vjust = 0.5, width = 0.18, height = 0.18) +
     draw_image("images/TPD.png", x = 0.82, y = 0.27, hjust = 0.5, vjust = 0.5, width = 0.18, height = 0.18)
 
@@ -1228,8 +1227,7 @@ p_mess_body <- ggplot(Body_final, aes(x = morphogroup, y = other_pollen_load, fi
 # 2. Data Cleaning & Grouping for SVD
 SVD_clean <- SVD_Succisa_22_24 %>%
     rename(
-        duration_sec = delka_navstevy,
-        year = rok,
+        duration_sec = visit_duration_s,
         species = pollinator_species
     ) %>%
     mutate(
@@ -1903,10 +1901,10 @@ print(spatial_temporal_plot)
 ## ---- fig-community-stability
 print(ggpubr::ggarrange(row1, row2, nrow = 2, heights = c(1.5, 1)))
 
-## ---- fig-plots-2
+## ---- fig-plots-3
 print(final_cv_plot)
 
-## ---- fig-plots-3
+## ---- fig-plots-4
 print(p_combined_fig)
 
 ## ---- fig-body-svd
@@ -1953,34 +1951,8 @@ print(plant_pollinator_panel)
 # ==============================================================================
 # Export Data for Publication
 
-output_dir <- file.path("output", "publication_data")
-if (!dir.exists(output_dir)) {
-    dir.create(output_dir, recursive = TRUE)
-}
-
-# Clean and export pollen deposition dataset
-pollen_deposition_export <- pollen_deposition %>%
-    select(id, year, plant_id, conspecific_pollen, heterospecific_pollen, pollen_total)
-
-write.csv(pollen_deposition_export, file.path(output_dir, "pollen_deposition.csv"), row.names = FALSE)
-
-if (exists("SVD_clean")) {
-    SVD_export <- SVD_clean %>%
-        select(id, year, morphogroup, species, duration_sec, conspecific_pollen, heterospecific_pollen)
-    write.csv(SVD_export, file.path(output_dir, "SVD.csv"), row.names = FALSE)
-}
-
-if (exists("final_table")) {
-    network_export <- final_table %>%
-        select(Year, H2, Succisa_d, Succisa_H, Slope, Mean_HP, Succisa_Abundance, Total_Abundance)
-    write.csv(network_export, file.path(output_dir, "network_metrics.csv"), row.names = FALSE)
-}
-
-# Copy raw data files that are used for the analyses into the publication_data folder
-invisible(file.copy(file.path("data", "interaction_data_all_22_24.csv"), file.path(output_dir, "interaction_data_all_22_24.csv"), overwrite = TRUE))
-invisible(file.copy(file.path("data", "interaction_data_Succisa_22_24.csv"), file.path(output_dir, "interaction_data_Succisa_22_24.csv"), overwrite = TRUE))
-invisible(file.copy(file.path("data", "plant_abundance_22_24.csv"), file.path(output_dir, "plant_abundance_22_24.csv"), overwrite = TRUE))
-invisible(file.copy(file.path("data", "pollen_load_and_guts_2024_Succisa_pratensis.csv"), file.path(output_dir, "pollen_load_and_guts_2024_Succisa_pratensis.csv"), overwrite = TRUE))
+# The archived dataset is the 'data/' folder itself (see README.md in the
+# Figshare package); no separate copies are exported here.
 
 # Export Figures
 fig_dir <- file.path("output", "figures")

@@ -1,0 +1,42 @@
+---
+title: "Symposium Abstract"
+format:
+  html:
+    toc: false
+  docx:
+    reference-doc: tech_docs/template.docx
+---
+
+## Title
+
+The law of large numbers explains stable conspecific pollen deposition
+
+## Authors
+
+**Jakub Štenc**^1,2,3^, Martin Freudenfeld^1^, Petr Švanda^1,2^, Eva Matoušková^1^, Tadeáš Ryšan^2,4^, Helena Pijálková^2^, Jiří Hadrava^2^, Michael Mikát^2^, Eva Horčičková^5^, Zdeněk Janovský^6^
+
+## Affiliations
+
+^1^ Department of Botany, Faculty of Science, Charles University, Benátská 2, 128 41 Prague, Czech Republic
+
+^2^ Department of Zoology, Faculty of Science, Charles University, Viničná 7, 128 41 Prague, Czech Republic
+
+^3^ CREAF – Centre de Recerca Ecològica i Aplicacions Forestals, 08193 Bellaterra, Barcelona, Spain
+
+^4^ Institute of Entomology, Biology Centre of Czech Academy of Sciences, Branišovská 1160/31, 370 05 České Budějovice, Czech Republic
+
+^5^ Department of Environment, Faculty of Environment, Jan Evangelista Purkyně University in Ústí nad Labem, Pasteurova 3632/15, 400 96 Ústí nad Labem, Czech Republic
+
+^6^ Svatý Jan t. Krsovice 1, 285 04 Uhlířské Janovice, Czech Republic
+
+## Abstract
+
+Animal-mediated pollen transfer is inherently stochastic: single-visit deposition (SVD) yields highly variable pollen loads, yet terminal pollen deposition (TPD), the final stigmatic load, often remains stable at the population level. The mechanisms buffering this visit-level unpredictability while mitigating reproductive interference from heterospecific pollen (HP) remain unresolved.
+
+Using a three-year dataset (2022–2024) for *Succisa pratensis*, we combined variance partitioning of TPD with SVD experiments across dominant pollinator taxa and Monte Carlo simulations parameterized with empirical SVD and visitation frequency data.
+
+Variance partitioning revealed that temporal shifts explained negligible variation in conspecific pollen (CP) deposition; the vast majority of variance occurred at the micro-scale among individual stigmas. SVD experiments confirmed that individual visits are highly stochastic and mechanically inefficient. Monte Carlo simulations demonstrated that accumulation across multiple visits effectively neutralises this unpredictability, translating into stable terminal CP loads. In contrast, HP accumulation was substantially more variable and depended on inter-annual variation in the floral neighbourhood.
+
+Despite the mechanical unpredictability of individual pollinator visits, plants secure stable conspecific pollen receipt through the law of large numbers: visit accumulation converts stochastic single-visit events into reliable terminal loads. The potential for reproductive interference via heterospecific pollen depends largely on ecological context.
+
+**Keywords:** *Succisa pratensis*; conspecific pollen deposition; heterospecific pollen; law of large numbers; plant–pollinator networks; reproductive interference; single-visit deposition

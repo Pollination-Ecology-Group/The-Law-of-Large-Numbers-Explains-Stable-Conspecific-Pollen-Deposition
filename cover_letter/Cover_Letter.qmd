@@ -1,0 +1,56 @@
+---
+format:
+  html:
+    toc: false
+    theme: cosmo
+  docx:
+    reference-doc: ../tech_docs/template.docx
+  pdf:
+    pdf-engine: xelatex
+    papersize: a4
+    geometry:
+      - margin=1.9cm
+    fontsize: 10.5pt
+    linestretch: 1.06
+    mainfont: "Liberation Serif"
+    colorlinks: true
+    urlcolor: NavyBlue
+    include-in-header:
+      text: |
+        \pagenumbering{gobble}
+---
+
+Jakub Štenc  
+Department of Botany, Faculty of Science, Charles University  
+Benátská 2, 128 41 Prague, Czech Republic  
+jakub.stenc@natur.cuni.cz
+
+25 November 2026
+
+Dear Editors,
+
+please consider our manuscript "The law of large numbers explains stable conspecific pollen deposition" for publication as an Original Article in *Annals of Botany*.
+
+A single pollinator visit delivers a very variable and usually small amount of pollen, yet the final pollen load on stigmas is often similar from year to year. We asked how this happens in *Succisa pratensis*, a generalist plant visited mostly by hoverflies, and whether the same holds for heterospecific pollen. Over three years we combined field observations of pollinator visits, pollen loads on pollinator bodies, single-visit deposition experiments and terminal stigma loads, and compared the field data with simple simulations built from the single-visit data.
+
+Most of the variation in conspecific pollen on stigmas was among individual stigmas and plants, not among years or days. Single visits transferred only a small fraction of the pollen carried on the insect's body, and the main pollinator groups did not differ in how much they deposited. When we let simulated stigmas accumulate randomly drawn single visits, they matched the observed conspecific loads well. Heterospecific pollen behaved differently: it was far higher than the simulations predicted in two years and dropped closer to the prediction in the year when *S. pratensis* flowered at high density.
+
+Single-visit variability and stable stigma loads are both well known, but the link between them has been assumed rather than tested. The novelty of our study is that we measured the whole chain, from pollen on pollinators to single visits to final stigma loads, in one population over three years, and used it to test whether visit accumulation explains field loads. It does for conspecific but not for heterospecific pollen, which shows when factors beyond visit number, such as the flowering community, come into play.
+
+In short, a plant with many generalist visitors can get a reliable conspecific pollen load simply because many visits average out, while heterospecific pollen depends on the surrounding flowering community. We think this fits well with the journal's interest in pollination biology and the pathway from pollen transfer to reproduction.
+
+The data and R code are archived on Figshare and will be made publicly available on acceptance. All authors have approved the manuscript, it is not under consideration elsewhere, and we declare no conflicts of interest.
+
+Suggested reviewers:
+
+- Gerardo Arceo-Gómez — Department of Biological Sciences, East Tennessee State University, USA (gomezg@etsu.edu); heterospecific pollen deposition and stigma load variation.
+- Mario Vallejo-Marín — Department of Ecology and Genetics, Uppsala University, Sweden (mario.vallejo-marin@ebc.uu.se); plant reproductive biology and pollination ecology.
+- Brad Howlett — The New Zealand Institute for Plant and Food Research Limited, New Zealand (brad.howlett@plantandfood.co.nz); hoverfly and bee pollination and single-visit pollen transfer.
+- Chloé Delmas — SAVE, INRAE, Bordeaux Sciences Agro, France (chloe.delmas@inrae.fr); pollination ecology and floral trait evolution.
+- Rita Földesi — Institute of Crop Science and Resource Conservation, University of Bonn, Germany (foldesri@gmail.com); single-visit pollen deposition and pollinator effectiveness.
+
+Thank you for your consideration.
+
+Yours sincerely,
+
+Jakub Štenc, on behalf of all co-authors

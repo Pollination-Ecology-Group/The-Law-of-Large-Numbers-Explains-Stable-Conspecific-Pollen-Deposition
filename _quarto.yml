@@ -12,6 +12,7 @@ project:
     #- MS_Succisa_deposition.qmd
     - MS_FML.qmd
     - Supplementary_Material.qmd
+    - cover_letter/Cover_Letter.qmd
 
 format:
   html:
