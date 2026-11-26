@@ -152,7 +152,14 @@
             </group>
             <text variable="page" prefix=": "/>
           </group>
-          <text variable="DOI" prefix=" doi:" suffix="."/>
+          <choose>
+            <if variable="DOI">
+              <text variable="DOI" prefix=" doi:" suffix="."/>
+            </if>
+            <else-if variable="URL">
+              <text variable="URL" prefix=" "/>
+            </else-if>
+          </choose>
         </else>
       </choose>
     </layout>
